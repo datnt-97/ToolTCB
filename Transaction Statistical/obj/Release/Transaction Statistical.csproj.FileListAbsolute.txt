@@ -1,0 +1,18 @@
+D:\05-TEMP\Source\Transaction Statistical\Transaction Statistical\Transaction Statistical\bin\Release\Transaction Statistical.exe.config
+D:\05-TEMP\Source\Transaction Statistical\Transaction Statistical\Transaction Statistical\bin\Release\Transaction Statistical.exe
+D:\05-TEMP\Source\Transaction Statistical\Transaction Statistical\Transaction Statistical\bin\Release\Transaction Statistical.pdb
+D:\05-TEMP\Source\Transaction Statistical\Transaction Statistical\Transaction Statistical\bin\Release\MetroFramework.Design.dll
+D:\05-TEMP\Source\Transaction Statistical\Transaction Statistical\Transaction Statistical\bin\Release\MetroFramework.dll
+D:\05-TEMP\Source\Transaction Statistical\Transaction Statistical\Transaction Statistical\bin\Release\MetroFramework.Fonts.dll
+D:\05-TEMP\Source\Transaction Statistical\Transaction Statistical\Transaction Statistical\obj\Release\Transaction Statistical.csprojAssemblyReference.cache
+D:\05-TEMP\Source\Transaction Statistical\Transaction Statistical\Transaction Statistical\obj\Release\Transaction_Statistical.AddOn.TabControlX.resources
+D:\05-TEMP\Source\Transaction Statistical\Transaction Statistical\Transaction Statistical\obj\Release\Transaction_Statistical.AddOn.TabPanelControl.resources
+D:\05-TEMP\Source\Transaction Statistical\Transaction Statistical\Transaction Statistical\obj\Release\Transaction_Statistical.Frm_Main.resources
+D:\05-TEMP\Source\Transaction Statistical\Transaction Statistical\Transaction Statistical\obj\Release\Transaction_Statistical.Frm_LoadingApp.resources
+D:\05-TEMP\Source\Transaction Statistical\Transaction Statistical\Transaction Statistical\obj\Release\Transaction_Statistical.Frm.test.resources
+D:\05-TEMP\Source\Transaction Statistical\Transaction Statistical\Transaction Statistical\obj\Release\Transaction_Statistical.Properties.Resources.resources
+D:\05-TEMP\Source\Transaction Statistical\Transaction Statistical\Transaction Statistical\obj\Release\Transaction_Statistical.UControl.UC_Transaction.resources
+D:\05-TEMP\Source\Transaction Statistical\Transaction Statistical\Transaction Statistical\obj\Release\Transaction Statistical.csproj.GenerateResource.cache
+D:\05-TEMP\Source\Transaction Statistical\Transaction Statistical\Transaction Statistical\obj\Release\Transaction Statistical.csproj.CopyComplete
+D:\05-TEMP\Source\Transaction Statistical\Transaction Statistical\Transaction Statistical\obj\Release\Transaction Statistical.exe
+D:\05-TEMP\Source\Transaction Statistical\Transaction Statistical\Transaction Statistical\obj\Release\Transaction Statistical.pdb
