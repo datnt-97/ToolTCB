@@ -19,17 +19,21 @@ namespace Transaction_Statistical
 
             InitParametar.Init();
 
+            //UC_CfgTemplate uc_TemplateCfg = new UC_CfgTemplate();
+            //uc_TemplateCfg.Dock = DockStyle.Fill;
+            //Frm_TemplateDefault frm_templateCfg = new Frm_TemplateDefault(uc_TemplateCfg);
+            //frm_templateCfg.titleCustom.Text = "Template Config";
+            //frm_templateCfg.ShowDialog();
+
             TabPanelControl tpc = new TabPanelControl();
             tpc.Dock = DockStyle.Fill;
             UControl.UC_Transaction uc_Transaction = new UControl.UC_Transaction();
             uc_Transaction.Dock = DockStyle.Fill;
             tpc.Controls.Add(uc_Transaction);
             tabControlX1.AddTab("Transaction Statistical", tpc,false);
-           // tabControlX1.AddTab("Transaction 1", tpc, true);
-           // tabControlX1.AddTab("Transaction 2", tpc, true);
 
         }
-
+        #region Design GUI
         bool isTopPanelDragged = false;
         bool isLeftPanelDragged = false;
         bool isRightPanelDragged = false;
@@ -115,8 +119,8 @@ namespace Transaction_Statistical
                     {
                         this.Location = _normalWindowLocation;
                         this.Size = _normalWindowSize;
-                        toolTip1.SetToolTip(bt_MaxButton, "Maximize");
-                        bt_MaxButton.CFormState = MinMaxButton.CustomFormState.Normal;
+                        toolTip1.SetToolTip(btn_MaxButton, "Maximize");
+                        btn_MaxButton.CFormState = MinMaxButton.CustomFormState.Normal;
                         isWindowMaximized = false;
                     }
                 }
@@ -136,8 +140,8 @@ namespace Transaction_Statistical
                     Rectangle rect = Screen.PrimaryScreen.WorkingArea;
                     this.Location = new Point(0, 0);
                     this.Size = new System.Drawing.Size(rect.Width, rect.Height);
-                    toolTip1.SetToolTip(bt_MaxButton, "Restore Down");
-                    bt_MaxButton.CFormState = AddOn.MinMaxButton.CustomFormState.Maximize;
+                    toolTip1.SetToolTip(btn_MaxButton, "Restore Down");
+                    btn_MaxButton.CFormState = AddOn.MinMaxButton.CustomFormState.Maximize;
                     isWindowMaximized = true;
                 }
             }
@@ -277,8 +281,8 @@ namespace Transaction_Statistical
             {
                 this.Location = _normalWindowLocation;
                 this.Size = _normalWindowSize;
-                toolTip1.SetToolTip(bt_MaxButton, "Maximize");
-                bt_MaxButton.CFormState = MinMaxButton.CustomFormState.Normal;
+                toolTip1.SetToolTip(btn_MaxButton, "Maximize");
+                btn_MaxButton.CFormState = MinMaxButton.CustomFormState.Normal;
                 isWindowMaximized = false;
             }
             else
@@ -289,26 +293,13 @@ namespace Transaction_Statistical
                 Rectangle rect = Screen.PrimaryScreen.WorkingArea;
                 this.Location = new Point(0, 0);
                 this.Size = new System.Drawing.Size(rect.Width, rect.Height);
-                toolTip1.SetToolTip(bt_MaxButton, "Restore Down");
-               bt_MaxButton.CFormState = MinMaxButton.CustomFormState.Maximize;
+                toolTip1.SetToolTip(btn_MaxButton, "Restore Down");
+               btn_MaxButton.CFormState = MinMaxButton.CustomFormState.Maximize;
                 isWindowMaximized = true;
             }
         }
+        #endregion
 
-        private void visualStudioTabControl1_DrawItem(object sender, DrawItemEventArgs e)
-        {
-            
-        }
 
-        private void Frm_Main_MouseDown(object sender, MouseEventArgs e)
-        {
-            
-        }
-
-        private void tabPage3_MouseDown(object sender, MouseEventArgs e)
-        {
-
-        }
-      
     }
 }

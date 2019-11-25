@@ -16,3 +16,33 @@ D:\05-TEMP\Source\Transaction Statistical\Transaction Statistical\Transaction St
 D:\05-TEMP\Source\Transaction Statistical\Transaction Statistical\Transaction Statistical\obj\Release\Transaction Statistical.csproj.CopyComplete
 D:\05-TEMP\Source\Transaction Statistical\Transaction Statistical\Transaction Statistical\obj\Release\Transaction Statistical.exe
 D:\05-TEMP\Source\Transaction Statistical\Transaction Statistical\Transaction Statistical\obj\Release\Transaction Statistical.pdb
+D:\05-TEMP\Source\GitHub\ToolTCB\Transaction Statistical\bin\Release\Transaction Statistical.exe.config
+D:\05-TEMP\Source\GitHub\ToolTCB\Transaction Statistical\bin\Release\Transaction Statistical.exe
+D:\05-TEMP\Source\GitHub\ToolTCB\Transaction Statistical\bin\Release\Transaction Statistical.pdb
+D:\05-TEMP\Source\GitHub\ToolTCB\Transaction Statistical\bin\Release\MetroFramework.Design.dll
+D:\05-TEMP\Source\GitHub\ToolTCB\Transaction Statistical\bin\Release\MetroFramework.dll
+D:\05-TEMP\Source\GitHub\ToolTCB\Transaction Statistical\bin\Release\MetroFramework.Fonts.dll
+D:\05-TEMP\Source\GitHub\ToolTCB\Transaction Statistical\obj\Release\Transaction Statistical.csprojAssemblyReference.cache
+D:\05-TEMP\Source\GitHub\ToolTCB\Transaction Statistical\obj\Release\Transaction_Statistical.AddOn.TabControlX.resources
+D:\05-TEMP\Source\GitHub\ToolTCB\Transaction Statistical\obj\Release\Transaction_Statistical.AddOn.TabPanelControl.resources
+D:\05-TEMP\Source\GitHub\ToolTCB\Transaction Statistical\obj\Release\Transaction_Statistical.Frm_Main.resources
+D:\05-TEMP\Source\GitHub\ToolTCB\Transaction Statistical\obj\Release\Transaction_Statistical.Frm_LoadingApp.resources
+D:\05-TEMP\Source\GitHub\ToolTCB\Transaction Statistical\obj\Release\Transaction_Statistical.Frm.test.resources
+D:\05-TEMP\Source\GitHub\ToolTCB\Transaction Statistical\obj\Release\Transaction_Statistical.Properties.Resources.resources
+D:\05-TEMP\Source\GitHub\ToolTCB\Transaction Statistical\obj\Release\Transaction_Statistical.UControl.UC_Transaction.resources
+D:\05-TEMP\Source\GitHub\ToolTCB\Transaction Statistical\obj\Release\Transaction Statistical.csproj.GenerateResource.cache
+D:\05-TEMP\Source\GitHub\ToolTCB\Transaction Statistical\obj\Release\Transaction Statistical.csproj.CopyComplete
+D:\05-TEMP\Source\GitHub\ToolTCB\Transaction Statistical\obj\Release\Transaction Statistical.exe
+D:\05-TEMP\Source\GitHub\ToolTCB\Transaction Statistical\obj\Release\Transaction Statistical.pdb
+D:\05-TEMP\Source\GitHub\ToolTCB\Transaction Statistical\obj\Release\Transaction_Statistical.Frm_TemplateDefault.resources
+D:\05-TEMP\Source\GitHub\ToolTCB\Transaction Statistical\bin\Release\DevComponents.DotNetBar2.dll
+D:\05-TEMP\Source\GitHub\ToolTCB\Transaction Statistical\bin\Release\FastColoredTextBox.dll
+D:\05-TEMP\Source\GitHub\ToolTCB\Transaction Statistical\bin\Release\FastColoredTextBox.pdb
+D:\05-TEMP\Source\GitHub\ToolTCB\Transaction Statistical\bin\Release\DevComponents.DotNetBar2.xml
+D:\05-TEMP\Source\GitHub\ToolTCB\Transaction Statistical\obj\Release\Transaction_Statistical.UC_CfgTemplate.resources
+D:\05-TEMP\Source\GitHub\ToolTCB\Transaction Statistical\obj\Release\Transaction_Statistical.UC_Info.resources
+D:\05-TEMP\Source\GitHub\ToolTCB\Transaction Statistical\obj\Release\Transaction_Statistical.AddOn.ButtonMenu.resources
+D:\05-TEMP\Source\GitHub\ToolTCB\Transaction Statistical\obj\Release\Transaction_Statistical.UControl.UC_Menu.resources
+D:\05-TEMP\Source\GitHub\ToolTCB\Transaction Statistical\obj\Release\Transaction_Statistical.UControl.UC_Menu_Overview.resources
+D:\05-TEMP\Source\GitHub\ToolTCB\Transaction Statistical\obj\Release\Transaction_Statistical.UControl.UC_Menu_Dashboard.resources
+D:\05-TEMP\Source\GitHub\ToolTCB\Transaction Statistical\obj\Release\Transaction_Statistical.UControl.UC_Menu_Startup.resources

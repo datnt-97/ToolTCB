@@ -138,7 +138,6 @@ namespace Transaction_Statistical
                 if (DataBaseConnnection.State == System.Data.ConnectionState.Open)
                 {
                     return;
-                    DbDisconnect();
                 }
                 if (Password != null)
                 {
@@ -152,7 +151,9 @@ namespace Transaction_Statistical
                 }
             }
             catch (Exception ex)
-            { }
+            {
+                InitParametar.Send_Error(ex.ToString(), MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name);
+            }
         }
         public void DbDisconnect()
         {
@@ -971,6 +972,7 @@ namespace Transaction_Statistical
             {
 
                 DbDisconnect();
+                InitParametar.Send_Error(ex.ToString(), MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name);
                 // MsgInfo.MessageBoxError("Class SQLite", "SQLite", "SearchTableDataSet", "Parameter1: " + TableName + "\n Parameter2: " + ColumnName + "\n Parameter3: " + SearchKeyWord + "\n" + ex.ToString());
                 //MessageBox.Show("Error: " + ex.Message.ToString(), "Error", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
                 return null;
@@ -1002,7 +1004,6 @@ namespace Transaction_Statistical
                 //MessageBox.Show("Error: " + ex.Message.ToString(), "Error", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
                 return false;
             }
-            return false;
         }
         public DataTable GetTableDataWithColumnName(string TableName, string ColumnName, string Equals)
         {
@@ -1373,7 +1374,6 @@ namespace Transaction_Statistical
                 // DbDisconnect();
                 return ex.Message.ToString();
             }
-            return null;
         }
         public object QueryReturn(string query)
         {

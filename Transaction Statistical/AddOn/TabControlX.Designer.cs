@@ -47,7 +47,7 @@
             this.BackTopPanel.Controls.Add(this.TabButtonPanel);
             this.BackTopPanel.Dock = System.Windows.Forms.DockStyle.Top;
             this.BackTopPanel.Location = new System.Drawing.Point(0, 0);
-            this.BackTopPanel.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.BackTopPanel.Margin = new System.Windows.Forms.Padding(4);
             this.BackTopPanel.Name = "BackTopPanel";
             this.BackTopPanel.Size = new System.Drawing.Size(557, 49);
             this.BackTopPanel.TabIndex = 0;
@@ -57,7 +57,7 @@
             this.RibbonPanel.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(120)))), ((int)(((byte)(240)))));
             this.RibbonPanel.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.RibbonPanel.Location = new System.Drawing.Point(0, 47);
-            this.RibbonPanel.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.RibbonPanel.Margin = new System.Windows.Forms.Padding(4);
             this.RibbonPanel.Name = "RibbonPanel";
             this.RibbonPanel.Size = new System.Drawing.Size(557, 2);
             this.RibbonPanel.TabIndex = 0;
@@ -69,9 +69,9 @@
             this.toolStripZ1.ImageScalingSize = new System.Drawing.Size(20, 20);
             this.toolStripZ1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripDropDownButton1});
-            this.toolStripZ1.Location = new System.Drawing.Point(511, 2);
+            this.toolStripZ1.Location = new System.Drawing.Point(472, 2);
             this.toolStripZ1.Name = "toolStripZ1";
-            this.toolStripZ1.Size = new System.Drawing.Size(46, 27);
+            this.toolStripZ1.Size = new System.Drawing.Size(85, 27);
             this.toolStripZ1.TabIndex = 0;
             this.toolStripZ1.Text = "toolStripZ1";
             // 
@@ -91,7 +91,7 @@
             this.TabButtonPanel.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.TabButtonPanel.Location = new System.Drawing.Point(0, 0);
-            this.TabButtonPanel.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.TabButtonPanel.Margin = new System.Windows.Forms.Padding(4);
             this.TabButtonPanel.Name = "TabButtonPanel";
             this.TabButtonPanel.Size = new System.Drawing.Size(461, 46);
             this.TabButtonPanel.TabIndex = 1;
@@ -101,7 +101,7 @@
             this.TabPanel.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(40)))), ((int)(((byte)(40)))));
             this.TabPanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.TabPanel.Location = new System.Drawing.Point(0, 49);
-            this.TabPanel.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.TabPanel.Margin = new System.Windows.Forms.Padding(4);
             this.TabPanel.Name = "TabPanel";
             this.TabPanel.Size = new System.Drawing.Size(557, 288);
             this.TabPanel.TabIndex = 1;
@@ -112,7 +112,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.TabPanel);
             this.Controls.Add(this.BackTopPanel);
-            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.Margin = new System.Windows.Forms.Padding(4);
             this.Name = "TabControlX";
             this.Size = new System.Drawing.Size(557, 337);
             this.BackTopPanel.ResumeLayout(false);

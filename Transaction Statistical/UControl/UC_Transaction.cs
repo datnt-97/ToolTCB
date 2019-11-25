@@ -10,6 +10,7 @@ using System.Windows.Forms;
 using System.IO;
 using System.Globalization;
 using System.Text.RegularExpressions;
+using System.Reflection;
 
 namespace Transaction_Statistical.UControl
 {
@@ -18,7 +19,7 @@ namespace Transaction_Statistical.UControl
         SQLiteHelper sqlite;
         DateTime StartDate=DateTime.MinValue;
         DateTime EndDate=DateTime.MaxValue;
- Dictionary<string, int> ListTransactionType;
+        Dictionary<string, int> ListTransactionType;
         List<Transaction> transactions = new List<Transaction>();
         Dictionary<DateTime, Cycle> ListCycle;
         Dictionary<DateTime, Cycle> ListCycleOld;
@@ -59,7 +60,7 @@ namespace Transaction_Statistical.UControl
             sqlite = new SQLiteHelper();
             InitializeComponent();
             Add_GUI();
-            
+            uc_Menu.Location = new Point(-uc_Menu.Width, uc_Menu.Location.Y);
         }
         private void Add_GUI()
         {
@@ -110,7 +111,7 @@ namespace Transaction_Statistical.UControl
         {
             string[] extension = { "*.txt", "*.log"};
             DirectoryFileUtilities df = new DirectoryFileUtilities();
-            FileInfo[] files = df.GetAllFilePath(tb_Path.Text,extension);
+            FileInfo[] files = df.GetAllFilePath(txt_Path.Text,extension);
             JournalAnalyze(files);
             
         }
@@ -125,7 +126,7 @@ namespace Transaction_Statistical.UControl
             }
             catch (Exception ex)
             {
-                //InitParametar.Send_Error(ex.ToString(), MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name); 
+                InitParametar.Send_Error(ex.ToString(), MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name); 
             }
         }
         private void ReadAnalyzeJournal(List<string> files)
@@ -345,7 +346,7 @@ namespace Transaction_Statistical.UControl
             }
             catch (Exception ex)
             {
-               // InitParametar.Send_Error(ex.ToString(), MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name);
+               InitParametar.Send_Error(ex.ToString(), MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name);
             }
             return false;
         }
@@ -376,7 +377,7 @@ namespace Transaction_Statistical.UControl
             }
             catch (Exception ex)
             { 
-                //InitParametar.Send_Error(ex.ToString(), MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name); 
+                InitParametar.Send_Error(ex.ToString(), MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name); 
             }
         }
         private Transaction ReadAnalyzeJournal_TransactionInfo(Transaction trn)
@@ -432,7 +433,7 @@ namespace Transaction_Statistical.UControl
             }
             catch (Exception ex)
             { 
-                //InitParametar.Send_Error(ex.ToString(), MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name); 
+                InitParametar.Send_Error(ex.ToString(), MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name); 
             }
             return trn;
         }
@@ -465,6 +466,11 @@ namespace Transaction_Statistical.UControl
             }
             catch { }
             return false;
+        }
+
+        private void btn_Menu_OnMouseDownHandler(object sender, EventArgs e)
+        {
+            this.SlideMenuShow();
         }
     }
 }
