@@ -1,0 +1,47 @@
+D:\05-TEMP\Source\SwitchDemo\Analyze\Analyze\FastColoredTextBox\bin\Release\FastColoredTextBox.dll
+D:\05-TEMP\Source\SwitchDemo\Analyze\Analyze\FastColoredTextBox\bin\Release\FastColoredTextBox.pdb
+D:\05-TEMP\Source\SwitchDemo\Analyze\Analyze\FastColoredTextBox\obj\Release\FastColoredTextBox.csprojResolveAssemblyReference.cache
+D:\05-TEMP\Source\SwitchDemo\Analyze\Analyze\FastColoredTextBox\obj\Release\FastColoredTextBoxNS.FastColoredTextBox.resources
+D:\05-TEMP\Source\SwitchDemo\Analyze\Analyze\FastColoredTextBox\obj\Release\FastColoredTextBoxNS.FindForm.resources
+D:\05-TEMP\Source\SwitchDemo\Analyze\Analyze\FastColoredTextBox\obj\Release\FastColoredTextBoxNS.GoToForm.resources
+D:\05-TEMP\Source\SwitchDemo\Analyze\Analyze\FastColoredTextBox\obj\Release\FastColoredTextBoxNS.HotkeysEditorForm.resources
+D:\05-TEMP\Source\SwitchDemo\Analyze\Analyze\FastColoredTextBox\obj\Release\FastColoredTextBoxNS.ReplaceForm.resources
+D:\05-TEMP\Source\SwitchDemo\Analyze\Analyze\FastColoredTextBox\obj\Release\FastColoredTextBox.csproj.GenerateResource.Cache
+D:\05-TEMP\Source\SwitchDemo\Analyze\Analyze\FastColoredTextBox\obj\Release\FastColoredTextBox.dll
+D:\05-TEMP\Source\SwitchDemo\Analyze\Analyze\FastColoredTextBox\obj\Release\FastColoredTextBox.pdb
+D:\05-TEMP\Source\SwitchDemo\Analyze - Copy (2)\Analyze\FastColoredTextBox\bin\Release\FastColoredTextBox.dll
+D:\05-TEMP\Source\SwitchDemo\Analyze - Copy (2)\Analyze\FastColoredTextBox\bin\Release\FastColoredTextBox.pdb
+D:\05-TEMP\Source\SwitchDemo\Analyze - Copy (2)\Analyze\FastColoredTextBox\obj\Release\FastColoredTextBoxNS.FastColoredTextBox.resources
+D:\05-TEMP\Source\SwitchDemo\Analyze - Copy (2)\Analyze\FastColoredTextBox\obj\Release\FastColoredTextBoxNS.FindForm.resources
+D:\05-TEMP\Source\SwitchDemo\Analyze - Copy (2)\Analyze\FastColoredTextBox\obj\Release\FastColoredTextBoxNS.GoToForm.resources
+D:\05-TEMP\Source\SwitchDemo\Analyze - Copy (2)\Analyze\FastColoredTextBox\obj\Release\FastColoredTextBoxNS.HotkeysEditorForm.resources
+D:\05-TEMP\Source\SwitchDemo\Analyze - Copy (2)\Analyze\FastColoredTextBox\obj\Release\FastColoredTextBoxNS.ReplaceForm.resources
+D:\05-TEMP\Source\SwitchDemo\Analyze - Copy (2)\Analyze\FastColoredTextBox\obj\Release\FastColoredTextBox.csproj.GenerateResource.Cache
+D:\05-TEMP\Source\SwitchDemo\Analyze - Copy (2)\Analyze\FastColoredTextBox\obj\Release\FastColoredTextBox.dll
+D:\05-TEMP\Source\SwitchDemo\Analyze - Copy (2)\Analyze\FastColoredTextBox\obj\Release\FastColoredTextBox.pdb
+D:\05-TEMP\Source\SwitchDemo\Analyze - Copy (2)\Analyze\FastColoredTextBox\obj\Release\FastColoredTextBox.csprojResolveAssemblyReference.cache
+D:\05-TEMP\Source\SwitchDemo\Analyze - final\Analyze\FastColoredTextBox\bin\Release\FastColoredTextBox.dll
+D:\05-TEMP\Source\SwitchDemo\Analyze - final\Analyze\FastColoredTextBox\bin\Release\FastColoredTextBox.pdb
+D:\05-TEMP\Source\SwitchDemo\Analyze - final\Analyze\FastColoredTextBox\obj\Release\FastColoredTextBoxNS.FastColoredTextBox.resources
+D:\05-TEMP\Source\SwitchDemo\Analyze - final\Analyze\FastColoredTextBox\obj\Release\FastColoredTextBoxNS.FindForm.resources
+D:\05-TEMP\Source\SwitchDemo\Analyze - final\Analyze\FastColoredTextBox\obj\Release\FastColoredTextBoxNS.GoToForm.resources
+D:\05-TEMP\Source\SwitchDemo\Analyze - final\Analyze\FastColoredTextBox\obj\Release\FastColoredTextBoxNS.HotkeysEditorForm.resources
+D:\05-TEMP\Source\SwitchDemo\Analyze - final\Analyze\FastColoredTextBox\obj\Release\FastColoredTextBoxNS.ReplaceForm.resources
+D:\05-TEMP\Source\SwitchDemo\Analyze - final\Analyze\FastColoredTextBox\obj\Release\FastColoredTextBox.csproj.GenerateResource.Cache
+D:\05-TEMP\Source\SwitchDemo\Analyze - final\Analyze\FastColoredTextBox\obj\Release\FastColoredTextBox.dll
+D:\05-TEMP\Source\SwitchDemo\Analyze - final\Analyze\FastColoredTextBox\obj\Release\FastColoredTextBox.pdb
+D:\05-TEMP\Source\SwitchDemo\Analyze - final\Analyze\FastColoredTextBox\obj\Release\FastColoredTextBox.csprojAssemblyReference.cache
+D:\05-TEMP\Source\SwitchDemo\Analyze - final\Analyze\FastColoredTextBox\bin\Release\DevComponents.DotNetBar2.dll
+D:\05-TEMP\Source\SwitchDemo\Analyze - final\Analyze\FastColoredTextBox\bin\Release\DevComponents.DotNetBar2.xml
+D:\05-TEMP\Source\SwitchDemo\Analyze - final\Analyze\FastColoredTextBox\obj\Release\FastColoredTextBox.csproj.CopyComplete
+D:\05-TEMP\Source\GitHub\ToolTCB\Transaction Statistical\FastColoredTextBox\bin\Release\FastColoredTextBox.dll
+D:\05-TEMP\Source\GitHub\ToolTCB\Transaction Statistical\FastColoredTextBox\bin\Release\FastColoredTextBox.pdb
+D:\05-TEMP\Source\GitHub\ToolTCB\Transaction Statistical\FastColoredTextBox\obj\Release\FastColoredTextBox.csprojAssemblyReference.cache
+D:\05-TEMP\Source\GitHub\ToolTCB\Transaction Statistical\FastColoredTextBox\obj\Release\FastColoredTextBoxNS.FastColoredTextBox.resources
+D:\05-TEMP\Source\GitHub\ToolTCB\Transaction Statistical\FastColoredTextBox\obj\Release\FastColoredTextBoxNS.GoToForm.resources
+D:\05-TEMP\Source\GitHub\ToolTCB\Transaction Statistical\FastColoredTextBox\obj\Release\FastColoredTextBoxNS.HotkeysEditorForm.resources
+D:\05-TEMP\Source\GitHub\ToolTCB\Transaction Statistical\FastColoredTextBox\obj\Release\FastColoredTextBoxNS.ReplaceForm.resources
+D:\05-TEMP\Source\GitHub\ToolTCB\Transaction Statistical\FastColoredTextBox\obj\Release\FastColoredTextBox.csproj.GenerateResource.cache
+D:\05-TEMP\Source\GitHub\ToolTCB\Transaction Statistical\FastColoredTextBox\obj\Release\FastColoredTextBox.dll
+D:\05-TEMP\Source\GitHub\ToolTCB\Transaction Statistical\FastColoredTextBox\obj\Release\FastColoredTextBox.pdb
+D:\05-TEMP\Source\GitHub\ToolTCB\Transaction Statistical\FastColoredTextBox\obj\Release\FastColoredTextBoxNS.FindForm.resources

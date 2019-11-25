@@ -32,15 +32,15 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Frm_Main));
             this.TopBorderPanel = new System.Windows.Forms.Panel();
             this.TopPanel = new System.Windows.Forms.Panel();
-            this.bt_MaxButton = new Transaction_Statistical.AddOn.MinMaxButton();
-            this.bt_MinButton = new Transaction_Statistical.AddOn.ButtonZ();
-            this.bt_Close = new Transaction_Statistical.AddOn.ButtonZ();
+            this.pictureBox1 = new System.Windows.Forms.PictureBox();
+            this.btn_MaxButton = new Transaction_Statistical.AddOn.MinMaxButton();
+            this.btn_MinButton = new Transaction_Statistical.AddOn.ButtonZ();
+            this.btn_Close = new Transaction_Statistical.AddOn.ButtonZ();
             this.LeftPanel = new System.Windows.Forms.Panel();
             this.RightPanel = new System.Windows.Forms.Panel();
             this.BottomPanel = new System.Windows.Forms.Panel();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.tabControlX1 = new Transaction_Statistical.AddOn.TabControlX();
-            this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.TopPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
@@ -64,9 +64,9 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.TopPanel.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(37)))), ((int)(((byte)(37)))), ((int)(((byte)(38)))));
             this.TopPanel.Controls.Add(this.pictureBox1);
-            this.TopPanel.Controls.Add(this.bt_MaxButton);
-            this.TopPanel.Controls.Add(this.bt_MinButton);
-            this.TopPanel.Controls.Add(this.bt_Close);
+            this.TopPanel.Controls.Add(this.btn_MaxButton);
+            this.TopPanel.Controls.Add(this.btn_MinButton);
+            this.TopPanel.Controls.Add(this.btn_Close);
             this.TopPanel.Location = new System.Drawing.Point(0, 1);
             this.TopPanel.Name = "TopPanel";
             this.TopPanel.Size = new System.Drawing.Size(1333, 30);
@@ -75,68 +75,82 @@
             this.TopPanel.MouseMove += new System.Windows.Forms.MouseEventHandler(this.TopPanel_MouseMove);
             this.TopPanel.MouseUp += new System.Windows.Forms.MouseEventHandler(this.TopPanel_MouseUp);
             // 
-            // bt_MaxButton
+            // pictureBox1
             // 
-            this.bt_MaxButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.bt_MaxButton.BZBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(37)))), ((int)(((byte)(37)))), ((int)(((byte)(38)))));
-            this.bt_MaxButton.CFormState = Transaction_Statistical.AddOn.MinMaxButton.CustomFormState.Normal;
-            this.bt_MaxButton.DisplayText = "_";
-            this.bt_MaxButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.bt_MaxButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.bt_MaxButton.ForeColor = System.Drawing.Color.White;
-            this.bt_MaxButton.Location = new System.Drawing.Point(1253, 0);
-            this.bt_MaxButton.MouseClickColor1 = System.Drawing.Color.Silver;
-            this.bt_MaxButton.MouseHoverColor = System.Drawing.Color.Gray;
-            this.bt_MaxButton.Name = "bt_MaxButton";
-            this.bt_MaxButton.Size = new System.Drawing.Size(40, 30);
-            this.bt_MaxButton.TabIndex = 5;
-            this.bt_MaxButton.Text = "minMaxButton1";
-            this.bt_MaxButton.TextLocation_X = 6;
-            this.bt_MaxButton.TextLocation_Y = 5;
-            this.bt_MaxButton.UseVisualStyleBackColor = true;
-            this.bt_MaxButton.Click += new System.EventHandler(this.bt_MaxButton_Click);
+            this.pictureBox1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(37)))), ((int)(((byte)(37)))), ((int)(((byte)(38)))));
+            this.pictureBox1.BackgroundImage = global::Transaction_Statistical.Properties.Resources.favticon;
+            this.pictureBox1.ErrorImage = global::Transaction_Statistical.Properties.Resources.favticon;
+            this.pictureBox1.Image = global::Transaction_Statistical.Properties.Resources.favticon;
+            this.pictureBox1.InitialImage = global::Transaction_Statistical.Properties.Resources.favticon;
+            this.pictureBox1.Location = new System.Drawing.Point(4, 0);
+            this.pictureBox1.Name = "pictureBox1";
+            this.pictureBox1.Size = new System.Drawing.Size(30, 30);
+            this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.pictureBox1.TabIndex = 7;
+            this.pictureBox1.TabStop = false;
             // 
-            // bt_MinButton
+            // btn_MaxButton
             // 
-            this.bt_MinButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.bt_MinButton.BZBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(37)))), ((int)(((byte)(37)))), ((int)(((byte)(38)))));
-            this.bt_MinButton.DisplayText = "_";
-            this.bt_MinButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.bt_MinButton.Font = new System.Drawing.Font("Microsoft YaHei UI", 18F, System.Drawing.FontStyle.Bold);
-            this.bt_MinButton.ForeColor = System.Drawing.Color.White;
-            this.bt_MinButton.Location = new System.Drawing.Point(1213, 0);
-            this.bt_MinButton.MouseClickColor1 = System.Drawing.Color.Silver;
-            this.bt_MinButton.MouseHoverColor = System.Drawing.Color.Gray;
-            this.bt_MinButton.Name = "bt_MinButton";
-            this.bt_MinButton.Size = new System.Drawing.Size(40, 30);
-            this.bt_MinButton.TabIndex = 1;
-            this.bt_MinButton.Text = "_";
-            this.bt_MinButton.TextLocation_X = 4;
-            this.bt_MinButton.TextLocation_Y = -20;
-            this.toolTip1.SetToolTip(this.bt_MinButton, "Minimize");
-            this.bt_MinButton.UseVisualStyleBackColor = true;
-            this.bt_MinButton.Click += new System.EventHandler(this.bt_MinButton_Click);
+            this.btn_MaxButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.btn_MaxButton.BZBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(37)))), ((int)(((byte)(37)))), ((int)(((byte)(38)))));
+            this.btn_MaxButton.CFormState = Transaction_Statistical.AddOn.MinMaxButton.CustomFormState.Normal;
+            this.btn_MaxButton.DisplayText = "_";
+            this.btn_MaxButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btn_MaxButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btn_MaxButton.ForeColor = System.Drawing.Color.White;
+            this.btn_MaxButton.Location = new System.Drawing.Point(1253, 0);
+            this.btn_MaxButton.MouseClickColor1 = System.Drawing.Color.Silver;
+            this.btn_MaxButton.MouseHoverColor = System.Drawing.Color.Gray;
+            this.btn_MaxButton.Name = "btn_MaxButton";
+            this.btn_MaxButton.Size = new System.Drawing.Size(40, 30);
+            this.btn_MaxButton.TabIndex = 5;
+            this.btn_MaxButton.Text = "minMaxButton1";
+            this.btn_MaxButton.TextLocation_X = 6;
+            this.btn_MaxButton.TextLocation_Y = 5;
+            this.btn_MaxButton.UseVisualStyleBackColor = true;
+            this.btn_MaxButton.Click += new System.EventHandler(this.bt_MaxButton_Click);
             // 
-            // bt_Close
+            // btn_MinButton
             // 
-            this.bt_Close.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.bt_Close.BZBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(37)))), ((int)(((byte)(37)))), ((int)(((byte)(38)))));
-            this.bt_Close.DisplayText = "X";
-            this.bt_Close.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.bt_Close.Font = new System.Drawing.Font("Microsoft YaHei UI", 11.25F, System.Drawing.FontStyle.Bold);
-            this.bt_Close.ForeColor = System.Drawing.Color.White;
-            this.bt_Close.Location = new System.Drawing.Point(1293, 0);
-            this.bt_Close.MouseClickColor1 = System.Drawing.Color.FromArgb(((int)(((byte)(150)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.bt_Close.MouseHoverColor = System.Drawing.Color.Gray;
-            this.bt_Close.Name = "bt_Close";
-            this.bt_Close.Size = new System.Drawing.Size(40, 30);
-            this.bt_Close.TabIndex = 0;
-            this.bt_Close.Text = "X";
-            this.bt_Close.TextLocation_X = 6;
-            this.bt_Close.TextLocation_Y = 0;
-            this.toolTip1.SetToolTip(this.bt_Close, "Close");
-            this.bt_Close.UseVisualStyleBackColor = true;
-            this.bt_Close.Click += new System.EventHandler(this.bt_Close_Click);
+            this.btn_MinButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.btn_MinButton.BZBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(37)))), ((int)(((byte)(37)))), ((int)(((byte)(38)))));
+            this.btn_MinButton.DisplayText = "_";
+            this.btn_MinButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btn_MinButton.Font = new System.Drawing.Font("Microsoft YaHei UI", 18F, System.Drawing.FontStyle.Bold);
+            this.btn_MinButton.ForeColor = System.Drawing.Color.White;
+            this.btn_MinButton.Location = new System.Drawing.Point(1213, 0);
+            this.btn_MinButton.MouseClickColor1 = System.Drawing.Color.Silver;
+            this.btn_MinButton.MouseHoverColor = System.Drawing.Color.Gray;
+            this.btn_MinButton.Name = "btn_MinButton";
+            this.btn_MinButton.Size = new System.Drawing.Size(40, 30);
+            this.btn_MinButton.TabIndex = 1;
+            this.btn_MinButton.Text = "_";
+            this.btn_MinButton.TextLocation_X = 4;
+            this.btn_MinButton.TextLocation_Y = -20;
+            this.toolTip1.SetToolTip(this.btn_MinButton, "Minimize");
+            this.btn_MinButton.UseVisualStyleBackColor = true;
+            this.btn_MinButton.Click += new System.EventHandler(this.bt_MinButton_Click);
+            // 
+            // btn_Close
+            // 
+            this.btn_Close.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.btn_Close.BZBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(37)))), ((int)(((byte)(37)))), ((int)(((byte)(38)))));
+            this.btn_Close.DisplayText = "X";
+            this.btn_Close.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btn_Close.Font = new System.Drawing.Font("Microsoft YaHei UI", 11.25F, System.Drawing.FontStyle.Bold);
+            this.btn_Close.ForeColor = System.Drawing.Color.White;
+            this.btn_Close.Location = new System.Drawing.Point(1293, 0);
+            this.btn_Close.MouseClickColor1 = System.Drawing.Color.FromArgb(((int)(((byte)(150)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.btn_Close.MouseHoverColor = System.Drawing.Color.Gray;
+            this.btn_Close.Name = "btn_Close";
+            this.btn_Close.Size = new System.Drawing.Size(40, 30);
+            this.btn_Close.TabIndex = 0;
+            this.btn_Close.Text = "X";
+            this.btn_Close.TextLocation_X = 6;
+            this.btn_Close.TextLocation_Y = 0;
+            this.toolTip1.SetToolTip(this.btn_Close, "Close");
+            this.btn_Close.UseVisualStyleBackColor = true;
+            this.btn_Close.Click += new System.EventHandler(this.bt_Close_Click);
             // 
             // LeftPanel
             // 
@@ -156,7 +170,7 @@
             this.RightPanel.BackColor = System.Drawing.Color.Blue;
             this.RightPanel.Cursor = System.Windows.Forms.Cursors.SizeWE;
             this.RightPanel.Dock = System.Windows.Forms.DockStyle.Right;
-            this.RightPanel.Location = new System.Drawing.Point(1331, 1);
+            this.RightPanel.Location = new System.Drawing.Point(1332, 1);
             this.RightPanel.Name = "RightPanel";
             this.RightPanel.Size = new System.Drawing.Size(1, 531);
             this.RightPanel.TabIndex = 3;
@@ -169,9 +183,9 @@
             this.BottomPanel.BackColor = System.Drawing.Color.Blue;
             this.BottomPanel.Cursor = System.Windows.Forms.Cursors.SizeNS;
             this.BottomPanel.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.BottomPanel.Location = new System.Drawing.Point(2, 530);
+            this.BottomPanel.Location = new System.Drawing.Point(1, 531);
             this.BottomPanel.Name = "BottomPanel";
-            this.BottomPanel.Size = new System.Drawing.Size(1329, 1);
+            this.BottomPanel.Size = new System.Drawing.Size(1331, 1);
             this.BottomPanel.TabIndex = 4;
             this.BottomPanel.MouseDown += new System.Windows.Forms.MouseEventHandler(this.BottomPanel_MouseDown);
             this.BottomPanel.MouseMove += new System.Windows.Forms.MouseEventHandler(this.BottomPanel_MouseMove);
@@ -200,20 +214,6 @@
             this.tabControlX1.X_TextLoc = 10;
             this.tabControlX1.Y_TextLoc = 5;
             // 
-            // pictureBox1
-            // 
-            this.pictureBox1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(37)))), ((int)(((byte)(37)))), ((int)(((byte)(38)))));
-            this.pictureBox1.BackgroundImage = global::Transaction_Statistical.Properties.Resources.favticon;
-            this.pictureBox1.ErrorImage = global::Transaction_Statistical.Properties.Resources.favticon;
-            this.pictureBox1.Image = global::Transaction_Statistical.Properties.Resources.favticon;
-            this.pictureBox1.InitialImage = global::Transaction_Statistical.Properties.Resources.favticon;
-            this.pictureBox1.Location = new System.Drawing.Point(4, 0);
-            this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(30, 30);
-            this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.pictureBox1.TabIndex = 7;
-            this.pictureBox1.TabStop = false;
-            // 
             // Frm_Main
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
@@ -231,7 +231,6 @@
             this.Name = "Frm_Main";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Transaction Statistical";
-            this.MouseDown += new System.Windows.Forms.MouseEventHandler(this.Frm_Main_MouseDown);
             this.TopPanel.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.ResumeLayout(false);
@@ -242,12 +241,12 @@
 
         private System.Windows.Forms.Panel TopBorderPanel;
         private System.Windows.Forms.Panel TopPanel;
-        private AddOn.ButtonZ bt_Close;
+        private AddOn.ButtonZ btn_Close;
         private System.Windows.Forms.Panel LeftPanel;
         private System.Windows.Forms.Panel RightPanel;
         private System.Windows.Forms.Panel BottomPanel;
-        private AddOn.MinMaxButton bt_MaxButton;
-        private AddOn.ButtonZ bt_MinButton;
+        private AddOn.MinMaxButton btn_MaxButton;
+        private AddOn.ButtonZ btn_MinButton;
         private System.Windows.Forms.ToolTip toolTip1;
         private System.Windows.Forms.PictureBox pictureBox1;
         private AddOn.TabControlX tabControlX1;

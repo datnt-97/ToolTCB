@@ -1,12 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Drawing;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using FastColoredTextBoxNS;
 
 namespace Transaction_Statistical
 {
@@ -26,8 +29,7 @@ namespace Transaction_Statistical
         public static string configFileTraceDefault;
         public static List<string> ListFileDeleteStartup;
         public static string PathFileRecordDeletetStartup;
-      
-     
+           
         //form enu
         public static bool ActiveFormMain;
         public static bool ExitApp = false;
@@ -36,6 +38,8 @@ namespace Transaction_Statistical
         public static string IpSupport;
         public static string PathUpdateSupport;
         public static string PathUpdateSupportError;
+
+        public static int TemplateTransaction = 65;
         public static void Init()
         {
             try
@@ -73,17 +77,50 @@ namespace Transaction_Statistical
                 DatabaseFile = InitParametar.pathDirectoryDocumentsUsrConfigData + "\\DB.s3db";
                 if (!File.Exists(DatabaseFile)) File.Copy(PathDirectoryCurrentAppConfigData + "\\DB.s3db", DatabaseFile, true);
                 // Chesk file cfg
-
-              
-               
+                            
             }
             catch (Exception ex)
             {
-                //InitParametar.Send_Error(ex.ToString(), MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name); ;
+                InitParametar.Send_Error(ex.ToString(), MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name); ;
             }
         }
         //
- 
+        public static void Send_Error(string MsgError, string ClassName, string MethodName)
+        {
+            try
+            {
+                
+                UC_Info msg = new UC_Info();
+
+                msg.TextCustom.ReadOnly = false;
+                msg.TextCustom.Text = "Host name: " + Environment.MachineName;
+                msg.TextCustom.AppendText(Environment.NewLine + "Class: " + ClassName);
+                msg.TextCustom.AppendText(Environment.NewLine + "Method: " + MethodName);
+                msg.TextCustom.AppendText(Environment.NewLine + "Date: " + String.Format("{0:yyyy/MM/dd-HH:mm:ss ffff}", DateTime.Now));
+                //  msg.TextCustom.Select( );
+                msg.TextCustom.Font = new System.Drawing.Font("Times New Roman", 13, FontStyle.Bold);
+                msg.TextCustom.SelectionColor = Color.Green;
+
+                Frm_TemplateDefault frm = new Frm_TemplateDefault(msg);
+                    frm.titleCustom.Text = "Error Message";
+                frm.Height = 300;
+                frm.Show();
+
+                msg.TextCustom.AppendText(Environment.NewLine + "Error Message:");
+              //  int indexline = msg.Messager.TextLength;
+             //   msg.TextCustom.Select(indexline, (Environment.NewLine + "Error Message:").Length);
+                msg.TextCustom.Font = new System.Drawing.Font("Times New Roman", 12, FontStyle.Italic);
+                msg.TextCustom.SelectionColor = Color.Black;
+
+                msg.TextCustom.AppendText(Environment.NewLine + MsgError);
+                msg.TextCustom.Update();
+                msg.Dock = DockStyle.Fill;              
+            }
+            catch (Exception ex)
+            {
+                Send_Error(ex.ToString(), MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name);
+            }
+        }
     }
     public class TransactionType
     {
@@ -134,11 +171,11 @@ namespace Transaction_Statistical
         public string TransactionTypeList { get; set; }
         string _tdate = "";
         [CategoryAttribute("Transaction"), DescriptionAttribute("Date of the transaction")]
-        //public string TDate
-        //{
-        //    get { return _tdate; }
-        //    set { _tdate = value; }
-        //}
+        public string TDate
+        {
+            get { return _tdate; }
+            set { _tdate = value; }
+        }
         public DateTime DateBegin;
         public DateTime DateEnd;
         public string TTimeBegin;
@@ -427,7 +464,7 @@ namespace Transaction_Statistical
             { }
             catch (Exception ex)
             { 
-                //InitParametar.Send_Error(ex.ToString(), MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name);
+                InitParametar.Send_Error(ex.ToString(), MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name);
             }
             return false;
         }
@@ -455,39 +492,14 @@ namespace Transaction_Statistical
             throw new NotImplementedException();
         }
     }
-    public class CCBoxItem
+    public class ComboBoxItem
     {
-        private int val;
-        public int Value
-        {
-            get { return val; }
-            set { val = value; }
-        }
-
-        private string name;
-        public string Name
-        {
-            get { return name; }
-            set { name = value; }
-        }
-
-        public CCBoxItem()
-        {
-        }
-        public CCBoxItem(string name)
-        {
-            this.name = name;
-        }
-        public CCBoxItem(string name, int val)
-        {
-            this.name = name;
-            this.val = val;
-        }
+        public string Text { get; set; }
+        public object Value { get; set; }
 
         public override string ToString()
         {
-            //   return string.Format("name: '{0}', value: {1}", name, val);
-            return name;
+            return Text;
         }
     }
     public class Cycle

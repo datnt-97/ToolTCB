@@ -33,6 +33,7 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="DevComponents.DotNetBar2, Version=14.1.0.18, Culture=neutral, PublicKeyToken=7eb7c3a35b91de04" />
     <Reference Include="MetroFramework, Version=1.4.0.0, Culture=neutral, PublicKeyToken=5f91a84759bf584a, processorArchitecture=MSIL">
       <HintPath>..\packages\MetroModernUI.1.4.0.0\lib\net\MetroFramework.dll</HintPath>
     </Reference>
@@ -47,6 +48,7 @@
     <Reference Include="System.Data.SQLite">
       <HintPath>bin\Release\System.Data.SQLite.dll</HintPath>
     </Reference>
+    <Reference Include="System.Design" />
     <Reference Include="System.DirectoryServices" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -59,6 +61,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AddOn\buttonMenu.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
     <Compile Include="AddOn\buttonX.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -89,6 +94,12 @@
     <Compile Include="Class\Defind.cs" />
     <Compile Include="Class\SQLiteHelper.cs" />
     <Compile Include="Class\Utility.cs" />
+    <Compile Include="Frm\Frm_TemplateDefault.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Frm\Frm_TemplateDefault.Designer.cs">
+      <DependentUpon>Frm_TemplateDefault.cs</DependentUpon>
+    </Compile>
     <Compile Include="Frm\Frm_Main.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -109,17 +120,59 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="UControl\UC_CfgTemplate.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UControl\UC_CfgTemplate.Designer.cs">
+      <DependentUpon>UC_CfgTemplate.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UControl\UC_Info.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UControl\UC_Info.Designer.cs">
+      <DependentUpon>UC_Info.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UControl\UC_Menu.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UControl\UC_Menu.Designer.cs">
+      <DependentUpon>UC_Menu.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UControl\UC_Menu_Dashboard.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UControl\UC_Menu_Dashboard.Designer.cs">
+      <DependentUpon>UC_Menu_Dashboard.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UControl\UC_Menu_Overview.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UControl\UC_Menu_Overview.Designer.cs">
+      <DependentUpon>UC_Menu_Overview.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UControl\UC_Menu_Startup.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UControl\UC_Menu_Startup.Designer.cs">
+      <DependentUpon>UC_Menu_Startup.cs</DependentUpon>
+    </Compile>
     <Compile Include="UControl\UC_Transaction.cs">
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="UControl\UC_Transaction.Designer.cs">
       <DependentUpon>UC_Transaction.cs</DependentUpon>
     </Compile>
+    <EmbeddedResource Include="AddOn\buttonMenu.resx">
+      <DependentUpon>buttonMenu.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="AddOn\TabControlX.resx">
       <DependentUpon>TabControlX.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="AddOn\TabPanelControl.resx">
       <DependentUpon>TabPanelControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Frm\Frm_TemplateDefault.resx">
+      <DependentUpon>Frm_TemplateDefault.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Frm\Frm_Main.resx">
       <DependentUpon>Frm_Main.cs</DependentUpon>
@@ -140,6 +193,24 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
+    <EmbeddedResource Include="UControl\UC_CfgTemplate.resx">
+      <DependentUpon>UC_CfgTemplate.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UControl\UC_Info.resx">
+      <DependentUpon>UC_Info.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UControl\UC_Menu.resx">
+      <DependentUpon>UC_Menu.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UControl\UC_Menu_Dashboard.resx">
+      <DependentUpon>UC_Menu_Dashboard.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UControl\UC_Menu_Overview.resx">
+      <DependentUpon>UC_Menu_Overview.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UControl\UC_Menu_Startup.resx">
+      <DependentUpon>UC_Menu_Startup.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="UControl\UC_Transaction.resx">
       <DependentUpon>UC_Transaction.cs</DependentUpon>
     </EmbeddedResource>
@@ -160,6 +231,17 @@
   <ItemGroup>
     <None Include="Resources\favticon.png" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="FastColoredTextBox\FastColoredTextBox.csproj">
+      <Project>{6DD14A85-CCFC-4774-BD26-0F5772512319}</Project>
+      <Name>FastColoredTextBox</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Menu1.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Menu2.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -34,3 +34,15 @@ D:\05-TEMP\Source\GitHub\ToolTCB\Transaction Statistical\obj\Release\Transaction
 D:\05-TEMP\Source\GitHub\ToolTCB\Transaction Statistical\obj\Release\Transaction Statistical.csproj.CopyComplete
 D:\05-TEMP\Source\GitHub\ToolTCB\Transaction Statistical\obj\Release\Transaction Statistical.exe
 D:\05-TEMP\Source\GitHub\ToolTCB\Transaction Statistical\obj\Release\Transaction Statistical.pdb
+D:\05-TEMP\Source\GitHub\ToolTCB\Transaction Statistical\obj\Release\Transaction_Statistical.Frm_TemplateDefault.resources
+D:\05-TEMP\Source\GitHub\ToolTCB\Transaction Statistical\bin\Release\DevComponents.DotNetBar2.dll
+D:\05-TEMP\Source\GitHub\ToolTCB\Transaction Statistical\bin\Release\FastColoredTextBox.dll
+D:\05-TEMP\Source\GitHub\ToolTCB\Transaction Statistical\bin\Release\FastColoredTextBox.pdb
+D:\05-TEMP\Source\GitHub\ToolTCB\Transaction Statistical\bin\Release\DevComponents.DotNetBar2.xml
+D:\05-TEMP\Source\GitHub\ToolTCB\Transaction Statistical\obj\Release\Transaction_Statistical.UC_CfgTemplate.resources
+D:\05-TEMP\Source\GitHub\ToolTCB\Transaction Statistical\obj\Release\Transaction_Statistical.UC_Info.resources
+D:\05-TEMP\Source\GitHub\ToolTCB\Transaction Statistical\obj\Release\Transaction_Statistical.AddOn.ButtonMenu.resources
+D:\05-TEMP\Source\GitHub\ToolTCB\Transaction Statistical\obj\Release\Transaction_Statistical.UControl.UC_Menu.resources
+D:\05-TEMP\Source\GitHub\ToolTCB\Transaction Statistical\obj\Release\Transaction_Statistical.UControl.UC_Menu_Overview.resources
+D:\05-TEMP\Source\GitHub\ToolTCB\Transaction Statistical\obj\Release\Transaction_Statistical.UControl.UC_Menu_Dashboard.resources
+D:\05-TEMP\Source\GitHub\ToolTCB\Transaction Statistical\obj\Release\Transaction_Statistical.UControl.UC_Menu_Startup.resources
