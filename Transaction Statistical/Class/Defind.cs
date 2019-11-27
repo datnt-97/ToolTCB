@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Data;
 using System.Drawing;
 using System.IO;
 using System.Linq;
@@ -39,7 +40,12 @@ namespace Transaction_Statistical
         public static string PathUpdateSupport;
         public static string PathUpdateSupportError;
 
-        public static int TemplateTransaction = 65;
+       
+        /// Transaction Template
+        public static string TemplateTransactionID = "65";
+        public static Dictionary<TransactionEvent.Events, string> transactionTemplate;
+        public static Dictionary<string, TransactionType> listTransType;
+        public static Dictionary<string, string> listDateFormat;
         public static void Init()
         {
             try
@@ -76,13 +82,96 @@ namespace Transaction_Statistical
               
                 DatabaseFile = InitParametar.pathDirectoryDocumentsUsrConfigData + "\\DB.s3db";
                 if (!File.Exists(DatabaseFile)) File.Copy(PathDirectoryCurrentAppConfigData + "\\DB.s3db", DatabaseFile, true);
+                sqlite = new SQLiteHelper();
                 // Chesk file cfg
-                            
+                LoadTemplateInfo();         
             }
             catch (Exception ex)
             {
                 InitParametar.Send_Error(ex.ToString(), MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name); ;
             }
+        }
+
+        public static void LoadTemplateInfo()
+        {
+            if (transactionTemplate == null) transactionTemplate = new Dictionary<TransactionEvent.Events, string>();
+            if (listTransType == null) listTransType = new Dictionary<string, TransactionType>(); else listTransType.Clear();
+            DataTable cfg_data = sqlite.GetTableDataWith2ColumnName("CfgData", "Type_ID", "67", "Parent_ID", InitParametar.TemplateTransactionID);
+            if (listDateFormat == null) listDateFormat = new Dictionary<string, string>(); else listDateFormat.Clear();
+
+            #region Read template
+            foreach (DataRow r in cfg_data.Rows)
+            {
+                foreach (TransactionEvent.Events name in (TransactionEvent.Events[])Enum.GetValues(typeof(TransactionEvent.Events)))
+                {
+                    if (r["Field"].Equals(name.ToString())) transactionTemplate[name] = r["Data"].ToString();
+                }
+                
+                //switch (r["Field"].ToString())
+                //{
+                //    case "DateFormat":
+                //        string[] listtime = r["Data"].ToString().Split(new string[] { "||" }, StringSplitOptions.RemoveEmptyEntries);                      
+                //        foreach (string s in listtime)
+                //        {
+                //            string[] item = s.Split('|');
+                //            listDateFormat[item[0]] = item[1];
+                //        }
+                //        break;
+                //    case "FileNameFormat":
+                //        transactionTemplate.FileNameFormat = r["Data"].ToString();
+                //        break;
+                //    case "TransactionStart":
+                //        transactionTemplate.TransactionStart = r["Data"].ToString();
+                //        break;
+                //    case "AmountEnter":
+                //        transactionTemplate.AmountEnter = r["Data"].ToString();
+                //        break;          
+                //    case "CardTaken":
+                //        transactionTemplate.CardInserted = r["Data"].ToString();
+                //        break;
+                //    case "TransactionEnd":
+                //        transactionTemplate.TransactionEnd = r["Data"].ToString();
+                //        break;
+                //    case "Track1":
+                //        transactionTemplate.Track1 = r["Data"].ToString();
+                //        break;
+                //    case "Track2":
+                //        transactionTemplate.Track2 = r["Data"].ToString();
+                //        break;
+                //    case "Track3":
+                //        transactionTemplate.Track3 = r["Data"].ToString();
+                //        break;
+                //    case "OperationCode":
+                //        transactionTemplate.OperationCode = r["Data"].ToString();
+                //        break;                   
+                //    case "NewFormatCounter":
+                //        transactionTemplate.NewCounter = r["Data"].ToString();
+                //        break;
+                //    case "OldFormatCounter":
+                //        transactionTemplate.OldCounter = r["Data"].ToString();
+                //        break;
+                //    case "SplitTransaction":
+                //        transactionTemplate.SplitTransaction = r["Data"].ToString();
+                //        break;
+                //    case "PinEnter":
+                //        transactionTemplate.PinEnter = r["Data"].ToString();
+                //        break;
+                //    default:
+                //        break;
+                //}
+            }            
+            listTransType = new Dictionary<string, TransactionType>();
+            DataTable tb_transtype = sqlite.GetTableDataWithColumnName("Transactions", "TemplateID", InitParametar.TemplateTransactionID);
+            foreach (DataRow r in tb_transtype.Rows)
+            {
+                TransactionType type = new TransactionType();
+                type.Name = r["Name"].ToString();
+                type.Identification = r["IdentificationTxt"].ToString();
+                type.Successful = r["SuccessfulTxt"].ToString();
+                type.Unsuccessful = r["UnsuccessfulTxt"].ToString();
+                listTransType[type.Name] = type;
+            }
+            #endregion
         }
         //
         public static void Send_Error(string MsgError, string ClassName, string MethodName)
@@ -136,14 +225,23 @@ namespace Transaction_Statistical
         {
             Alls,
             Withdrawal,
+            Deposit,
             BalanceInquiry,
             MiniStatement,
             ChangePin
-        }
+        }       
+        public List<TransactionEvent> CasebyCase;
         public int Result;
+        string _datainput=string.Empty;
+        [CategoryAttribute("Customer"), DescriptionAttribute("Data input")]       
+        public string DataInput
+        {
+            get { return _datainput; }
+            set { _datainput = value; }
+        }
         string _card = "";
         [CategoryAttribute("Customer"), DescriptionAttribute("Card number")]
-        public string Card
+        public string CardNumber
         {
             get { return _card; }
             set { _card = value; }
@@ -196,8 +294,13 @@ namespace Transaction_Statistical
             set { _amount = value; }
         }
 
+        [CategoryAttribute("CRM"), DescriptionAttribute("Cassette 1")]
+        public string Terminal;
+        [CategoryAttribute("CRM"), DescriptionAttribute("Cassette 1")]
+        public string MachineNo;
+
         string _cassette1 = string.Empty;
-        [CategoryAttribute("ATM"), DescriptionAttribute("Cassette 1")]
+        [CategoryAttribute("CRM"), DescriptionAttribute("Cassette 1")]
         public string Cassette1
         {
             get { return _cassette1; }
@@ -205,7 +308,7 @@ namespace Transaction_Statistical
         }
 
         string _cassette2 = string.Empty;
-        [CategoryAttribute("ATM"), DescriptionAttribute("Cassette 2")]
+        [CategoryAttribute("CRM"), DescriptionAttribute("Cassette 2")]
         public string Cassette2
         {
             get { return _cassette2; }
@@ -213,7 +316,7 @@ namespace Transaction_Statistical
         }
 
         string _cassette3 = string.Empty;
-        [CategoryAttribute("ATM"), DescriptionAttribute("Cassette 3")]
+        [CategoryAttribute("CRM"), DescriptionAttribute("Cassette 3")]
         public string Cassette3
         {
             get { return _cassette3; }
@@ -221,7 +324,7 @@ namespace Transaction_Statistical
         }
 
         string _cassette4 = string.Empty;
-        [CategoryAttribute("ATM"), DescriptionAttribute("Cassette 4")]
+        [CategoryAttribute("CRM"), DescriptionAttribute("Cassette 4")]
         public string Cassette4
         {
             get { return _cassette4; }
@@ -229,7 +332,7 @@ namespace Transaction_Statistical
         }
 
         string _cassette5 = string.Empty;
-        [CategoryAttribute("ATM"), DescriptionAttribute("Cassette 5")]
+        [CategoryAttribute("CRM"), DescriptionAttribute("Cassette 5")]
         public string Cassette5
         {
             get { return _cassette5; }
@@ -237,7 +340,7 @@ namespace Transaction_Statistical
         }
 
         string _cassette6 = string.Empty;
-        [CategoryAttribute("ATM"), DescriptionAttribute("Cassette 6")]
+        [CategoryAttribute("CRM"), DescriptionAttribute("Cassette 6")]
         public string Cassette6
         {
             get { return _cassette6; }
@@ -245,7 +348,7 @@ namespace Transaction_Statistical
         }
 
         string _cassette7 = string.Empty;
-        [CategoryAttribute("ATM"), DescriptionAttribute("Cassette 7")]
+        [CategoryAttribute("CRM"), DescriptionAttribute("Cassette 7")]
         public string Cassette7
         {
             get { return _cassette7; }
@@ -253,7 +356,7 @@ namespace Transaction_Statistical
         }
 
         string _cassette8 = string.Empty;
-        [CategoryAttribute("ATM"), DescriptionAttribute("Cassette 8")]
+        [CategoryAttribute("CRM"), DescriptionAttribute("Cassette 8")]
         public string Cassette8
         {
             get { return _cassette8; }
@@ -261,7 +364,7 @@ namespace Transaction_Statistical
         }
 
         string _status = "";
-        [CategoryAttribute("ATM"), DescriptionAttribute("Status")]
+        [CategoryAttribute("CRM"), DescriptionAttribute("Status")]
         public string Status
         {
             get { return _status; }
@@ -285,11 +388,50 @@ namespace Transaction_Statistical
         public override string ToString()
         {
             if (Type == TransactionType.Withdrawal)
-                return Day + "," + TTime + "," + Name + "," + Card + "," + Cassette1.ToString() + "," + Cassette2.ToString() + "," + Cassette3.ToString() + "," + Cassette4.ToString();
+                return Day + "," + TTime + "," + Name + "," + CardNumber + "," + Cassette1.ToString() + "," + Cassette2.ToString() + "," + Cassette3.ToString() + "," + Cassette4.ToString();
             return "";
         }
     }
-    public class RegesValue
+
+    public class TransactionEvent
+    {
+        public enum Events
+        {
+            TransactionStart,
+            CardInserted,
+            Track1,
+            Track2,
+            Track3,
+            PINEntered,
+            AmountEnter,
+            TransactionReqSend,
+            TransactionResReceive,
+            NotesInserted,
+            ShutterOpen,
+            NotesRemoved,
+            AddMoreDeposit,
+            TransactionEnd,
+            Transaction
+        }
+    
+        public Events Name;
+        public enum StatusS
+        {
+            Succeeded,
+            UnSucceeded,
+            Warning,
+            Error
+        }
+        public StatusS Status;
+        [CategoryAttribute("Transaction"), DescriptionAttribute("Date of the transaction")]
+        public string TDate;
+
+        [CategoryAttribute("Transaction"), DescriptionAttribute("Time of the transaction")]
+        public string TTime;
+        [CategoryAttribute("Transaction"), DescriptionAttribute("Content of the transaction")]
+        public string TContent;
+    }
+        public class RegesValue
     {
         public int index;
         public Dictionary<string, string> value = new Dictionary<string, string>();
@@ -435,12 +577,10 @@ namespace Transaction_Statistical
         //}
         public static bool RunPatternRegular(string sString, string sReg, out Dictionary<int, RegesValue> listResult)
         {
-            string[] resultss = Regex.Split(sString, sReg, RegexOptions.Multiline);
-
-            string a = resultss.ToString();
+            
             listResult = new Dictionary<int, RegesValue>();
             try
-            {
+            {   
                 Regex myRegex = new Regex(sReg, RegexOptions.ExplicitCapture, TimeSpan.FromSeconds(5));
                 MatchCollection m = myRegex.Matches(sString);
                 if (m.Count != 0)
@@ -448,7 +588,7 @@ namespace Transaction_Statistical
                     foreach (Match n in m)
                     {
                         RegesValue results = new RegesValue();
-                        results.stringfind = n.ToString();
+                        results.stringfind = n.ToString(); sString = sString.Replace(n.ToString(), string.Empty);
                         results.index = n.Index;
                         foreach (string groupName in myRegex.GetGroupNames())
                         {
@@ -463,7 +603,7 @@ namespace Transaction_Statistical
             catch (TimeoutException)
             { }
             catch (Exception ex)
-            { 
+            {
                 InitParametar.Send_Error(ex.ToString(), MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name);
             }
             return false;
