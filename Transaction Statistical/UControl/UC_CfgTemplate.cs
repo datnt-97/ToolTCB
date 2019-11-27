@@ -29,7 +29,7 @@ namespace Transaction_Statistical
             {
                 DataTable cfg_data = sqlite.GetTableDataWith2ColumnName("CfgData", "Type_ID", "8", "Parent_ID", "9");
 
-                UC_Info uc = new UC_Info("CfgData", cfg_data.Rows[0]["ID"].ToString(), "Data");              
+                UC_Info uc = new UC_Info("CfgData", cfg_data.Rows[0]["ID"].ToString(), "Data");
                 uc.Dock = DockStyle.Fill;
                 Frm_TemplateDefault frm = new Frm_TemplateDefault(uc);
                 frm.titleCustom.Text = "Regular Expression trong C#";
@@ -76,7 +76,7 @@ namespace Transaction_Statistical
                         MessageBox.Show("Delete transaction [" + item.Text + "] info successful", "Delete transaction info", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     else
                         MessageBox.Show("Delete transaction [" + item.Text + "] info fail", "Delete transaction info", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                    btn_Transaction_Refresh_Click(null,null);
+                    btn_Transaction_Refresh_Click(null, null);
                     return;
                 }
                 else
@@ -108,7 +108,7 @@ namespace Transaction_Statistical
                     entr.Content.Add(fctxt_Unsuccessful.Text);
                     sqlite.UpdateEntry("Transactions", entr, "ID", item.Value.ToString());
                     MessageBox.Show("Save transaction [" + item.Text + "] info successful", "Save transaction info", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                    btn_Transaction_Refresh_Click(null,null);
+                    btn_Transaction_Refresh_Click(null, null);
                     return;
                 }
                 else
@@ -152,7 +152,7 @@ namespace Transaction_Statistical
             MessageBox.Show("Add transaction [" + cbo_Transactions.Text + "] info fail", "Add transaction info", MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
 
-        
+
 
         private void grp_Keyword_Enter(object sender, EventArgs e)
         {
@@ -189,7 +189,7 @@ namespace Transaction_Statistical
         {
             try
             {
-              ComboBoxItem  cb = cbo_Keyword_LstKeyword.SelectedItem as ComboBoxItem;
+                ComboBoxItem cb = cbo_Keyword_LstKeyword.SelectedItem as ComboBoxItem;
                 if (cb != null && cb.Value is DataRow) { MessageBox.Show("Data existed !!", "Add data", MessageBoxButtons.OK, MessageBoxIcon.Warning); return; }
                 if (cbo_Keyword_LstKeyword.Text == string.Empty) { MessageBox.Show("Map Contents not empty !!", "Add data", MessageBoxButtons.OK, MessageBoxIcon.Information); return; }
                 if (fctxt_Pattern.Text == string.Empty) { MessageBox.Show("Pattern string not empty !!", "Add data", MessageBoxButtons.OK, MessageBoxIcon.Information); return; }
@@ -284,7 +284,7 @@ namespace Transaction_Statistical
             if (chk_Keywork_Test.Checked) fctxt_Test.WordWrap = true;
             else fctxt_Test.WordWrap = false;
         }
-    
+
 
         private void btn_Keyword_Import_Click(object sender, EventArgs e)
         {
@@ -309,9 +309,12 @@ namespace Transaction_Statistical
                 {
                     Style fontTitle = new TextStyle(Brushes.Blue, null, FontStyle.Bold);
                     Style fontBody = new TextStyle(Brushes.Green, null, FontStyle.Bold);
-                    string sReg = fctxt_Pattern.Text;
+                    string sReg = fctxt_Pattern.SelectedText;
                     string sString = fctxt_Test.Text;
+                    if (string.IsNullOrEmpty(sReg)) sReg = fctxt_Pattern.Text;
                     Dictionary<int, RegesValue> listResult = new Dictionary<int, RegesValue>();
+                    uc.TextCustom.AppendText("Pattern: ", fontTitle);
+                    uc.TextCustom.AppendText(sReg + Environment.NewLine, new TextStyle(Brushes.Red, null, FontStyle.Bold));
                     if (Regexs.RunPatternRegular(sString, sReg, out listResult))
                     {
                         uc.TextCustom.AppendText("Time: " + (DateTime.Now - timeStart).TotalMilliseconds + " milliseconds ~ " + (DateTime.Now - timeStart).TotalSeconds + " seconds\n", fontTitle);
@@ -319,7 +322,7 @@ namespace Transaction_Statistical
                         foreach (KeyValuePair<int, RegesValue> group in listResult)
                         {
                             k++;
-                            uc.TextCustom.AppendText(Environment.NewLine + "Found map: " + k.ToString() + "/" + listResult.Count.ToString() + Environment.NewLine +  "-----------Group var map-----------" + Environment.NewLine, fontTitle);
+                            uc.TextCustom.AppendText(Environment.NewLine + "Found map: " + k.ToString() + "/" + listResult.Count.ToString() + Environment.NewLine + "-----------Group var map-----------" + Environment.NewLine, fontTitle);
                             foreach (KeyValuePair<string, string> var in group.Value.value)
                             {
                                 uc.TextCustom.AppendText(var.Key + "=" + var.Value + Environment.NewLine, fontTitle);
@@ -386,7 +389,7 @@ namespace Transaction_Statistical
             {
                 InitParametar.Send_Error(ex.ToString(), MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name);
             }
-            }
+        }
 
         private void cbo_Keyword_LstKeyword_MouseDown(object sender, MouseEventArgs e)
         {

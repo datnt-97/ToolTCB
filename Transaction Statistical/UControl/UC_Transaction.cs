@@ -17,8 +17,8 @@ namespace Transaction_Statistical.UControl
     public partial class UC_Transaction : UserControl
     {
         SQLiteHelper sqlite;
-        DateTime StartDate=DateTime.MinValue;
-        DateTime EndDate=DateTime.MaxValue;
+        DateTime StartDate = DateTime.MinValue;
+        DateTime EndDate = DateTime.MaxValue;
         Dictionary<string, int> ListTransactionType;
         List<Transaction> transactions = new List<Transaction>();
         Dictionary<DateTime, Cycle> ListCycle;
@@ -53,7 +53,7 @@ namespace Transaction_Statistical.UControl
         string sTRANSACTIONREPLY = string.Empty;
         string sNewCounter = string.Empty;
         string sOldCounter = string.Empty;
-        Dictionary<string, TransactionType> listTransType;
+
         #endregion
         public UC_Transaction()
         {
@@ -93,12 +93,12 @@ namespace Transaction_Statistical.UControl
         {
             if (cb_FullTime.Checked)
             {
-                dateTimePicker_Start.Enabled = false; 
+                dateTimePicker_Start.Enabled = false;
                 dateTimePicker_End.Enabled = false;
                 StartDate = DateTime.MinValue;
                 EndDate = DateTime.MaxValue;
             }
-            else 
+            else
             {
                 dateTimePicker_Start.Enabled = true;
                 dateTimePicker_End.Enabled = true;
@@ -109,11 +109,11 @@ namespace Transaction_Statistical.UControl
 
         private void bt_Read_Click(object sender, EventArgs e)
         {
-            string[] extension = { "*.txt", "*.log"};
+            string[] extension = { "*.txt", "*.log" };
             DirectoryFileUtilities df = new DirectoryFileUtilities();
-            FileInfo[] files = df.GetAllFilePath(txt_Path.Text,extension);
+            FileInfo[] files = df.GetAllFilePath(txt_Path.Text, extension);
             JournalAnalyze(files);
-            
+
         }
         private void JournalAnalyze(FileInfo[] File_Journal)
         {
@@ -122,166 +122,52 @@ namespace Transaction_Statistical.UControl
                 FileComparer comp = new FileComparer(FileComparer.CompareBy.Name);
                 List<string> filesReadJournal = File_Journal.Select(f => f.FullName).ToList();
                 filesReadJournal.Sort(comp);
-                ReadAnalyzeJournal(filesReadJournal);
+                Reads(filesReadJournal);
             }
             catch (Exception ex)
             {
-                InitParametar.Send_Error(ex.ToString(), MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name); 
+                InitParametar.Send_Error(ex.ToString(), MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name);
             }
         }
-        private void ReadAnalyzeJournal(List<string> files)
+        private void Reads(List<string> files)
         {
             try
             {
-                string idTemplate = "65";
-                DataTable cfg_data = sqlite.GetTableDataWith2ColumnName("CfgData", "Type_ID", "67", "Parent_ID", idTemplate);
-                Dictionary<string, string> listDateFormat = new Dictionary<string, string>();
-                //  ListCycle.Clear();
-               /// ListCycleOld.Clear();
-               /// ListCycleClear.Clear();
-                #region Read template
-                foreach (DataRow r in cfg_data.Rows)
-                {
-                    switch (r["Field"].ToString())
-                    {
-                        case "DateFormat":
-                            string[] listtime = r["Data"].ToString().Split(new string[] { "||" }, StringSplitOptions.RemoveEmptyEntries);
-                            listDateFormat = new Dictionary<string, string>();
-                            foreach (string s in listtime)
-                            {
-                                string[] item = s.Split('|');
-                                listDateFormat[item[0]] = item[1];
-                            }
-                            break;
-                        case "CycleReadFrom":
-                            string cycleReadFrom = r["Data"].ToString();
-                            Int32.TryParse(cycleReadFrom, out CodeCycleReadFrom);
-                            break;
-                        case "CycleBegin":
-                            sCycleBegin = r["Data"].ToString();
-                            break;
-                        case "CycleEnd":
-                            sCycleEnd = r["Data"].ToString();
-                            break;
-                        case "FORMATFILENAME":
-                            sFileNameFormat = r["Data"].ToString();
-                            break;
-                        case "TRANSACTIONSTART":
-                            sTRANSACTIONSTART = r["Data"].ToString();
-                            break;
-                        case "AMOUNTENTERED":
-                            sAMOUNTENTERED = r["Data"].ToString();
-                            break;
-                        case "CASHREQUEST":
-                            sCASHREQUEST = r["Data"].ToString();
-                            break;
-                        case "CASHDISPENSE":
-                            sCASHDISPENSE = r["Data"].ToString();
-                            break;
-                        case "CASHPRESENTED":
-                            sCASHPRESENTED = r["Data"].ToString();
-                            break;
-                        case "DEVICEERROR":
-                            sDEVICEERROR = r["Data"].ToString();
-                            break;
-                        case "CASHTAKEN":
-                            sCASHTAKEN = r["Data"].ToString();
-                            break;
-                        case "CASHRETRACT":
-                            sCASHRETRACT = r["Data"].ToString();
-                            break;
-                        case "TRANSACTIONFAIL":
-                            sTRANSACTIONFAIL = r["Data"].ToString();
-                            break;
-                        case "TRANSACTIONSUCCESSFUL":
-                            sTRANSACTIONSUCCESSFUL = r["Data"].ToString();
-                            break;
-                        case "CARDTAKEN":
-                            sCARDTAKEN = r["Data"].ToString();
-                            break;
-                        case "TRANSACTIONEND":
-                            sTRANSACTIONEND = r["Data"].ToString();
-                            break;
-                        case "TRACK1":
-                            sTRACK1 = r["Data"].ToString();
-                            break;
-                        case "TRACK2":
-                            sTRACK2 = r["Data"].ToString();
-                            break;
-                        case "TRACK3":
-                            sTRACK3 = r["Data"].ToString();
-                            break;
-                        case "TRANSACTIONREQUEST":
-                            sTRANSACTIONREQUEST = r["Data"].ToString();
-                            break;
-                        case "TRANSACTIONREPLY":
-                            sTRANSACTIONREPLY = r["Data"].ToString();
-                            break;
-                        case "NewFormatCounter":
-                            sNewCounter = r["Data"].ToString();
-                            break;
-                        case "OldFormatCounter":
-                            sOldCounter = r["Data"].ToString();
-                            break;
-                        case "SplitTransaction":
-                            sSplitTransaction = r["Data"].ToString();
-                            break;
-                        default:
-                            break;
-                    }
-                }
 
-
-
+                //   List<string> listDataDay = new List<string>();
                 ///
                 DateTime dateBegin = DateTime.MinValue;
                 DateTime dateEnd = DateTime.Now;
                 DateTime currentDate = DateTime.MinValue;
-                listTransType = new Dictionary<string, TransactionType>();
-                DataTable tb_transtype = sqlite.GetTableDataWithColumnName("Transactions", "TemplateID", idTemplate);
-                foreach (DataRow r in tb_transtype.Rows)
-                {
-                    TransactionType type = new TransactionType();
-                    type.Name = r["Name"].ToString();
-                    type.Identification = r["IdentificationTxt"].ToString();
-                    type.Successful = r["SuccessfulTxt"].ToString();
-                    type.Unsuccessful = r["UnsuccessfulTxt"].ToString();
-                    listTransType[type.Name] = type;
-
-                }
-                #endregion
-             
-                //   List<string> listDataDay = new List<string>();
 
                 Dictionary<string, Transaction> listDataDay = new Dictionary<string, Transaction>();
                 foreach (string file in files)
                 {
+                    string day = file.Substring(file.Length - 12, 8);
                     string contenFile = File.ReadAllText(file);
                     DateTime.TryParseExact(file.Substring(file.Length - 12, 8), "yyyyMMdd", CultureInfo.InvariantCulture, DateTimeStyles.None, out currentDate);
-                    if (CodeCycleReadFrom == 2 || CodeCycleReadFrom == 3) Journal_ReadCycleCash(contenFile, sCycleBegin, sCycleEnd, listDateFormat, currentDate);
-                    SplitTransactionEJ(contenFile, sSplitTransaction, file.Substring(file.Length - 12, 8), listDataDay);
-                  //  Journal_ReadCycleCash(contenFile, sNewCounter, currentDate);
-                  //  Journal_ReadCycleCash(contenFile, sOldCounter, currentDate);
+                    contenFile = SplitTransactionEJ(contenFile, InitParametar.transactionTemplate[TransactionEvent.Events.Transaction], listDataDay);
+                   
                 }
 
                 string start = StartDate.ToString("HH:mm:ss");
                 string end = EndDate.ToString("HH:mm:ss");
+                ListTransactionType = new Dictionary<string, int>();
                 foreach (KeyValuePair<string, Transaction> KeyValue in listDataDay)
                 {
-                    Transaction trn = ReadAnalyzeJournal_TransactionInfo(KeyValue.Value);
-                  
+                    Transaction trn = Reads_TransInfo(KeyValue.Value);
                     //    if (!(((trn.Day == StartDate.ToString(sFileNameFormat)) && String.Compare(trn.TTime, start) < 0) || ((trn.Day == EndDate.ToString(sFileNameFormat)) && String.Compare(trn.TTime, end) > 0)))
                     if (trn.DateEnd > StartDate && trn.DateBegin < EndDate)
                     {
                         if (trn.TransactionTypeList == string.Empty) trn.TransactionTypeList = "Unknow";
                         foreach (string s in trn.TransactionTypeList.Split(new string[] { "||" }, StringSplitOptions.RemoveEmptyEntries))
                         {
-                            if (!ListTransactionType.Keys.Contains(s))
+                            if (!InitParametar.listTransType.Keys.Contains(s))
                             {
                                 ListTransactionType[s] = 1;
                                 UIHelper.UIThread(pl_Actions, delegate
                                 {
-                                   CheckBox item = new CheckBox();
+                                    CheckBox item = new CheckBox();
                                     item.Name = s;
                                     pl_Actions.Controls.Add(item);
                                     //     checkedComboBox_TransType1.Items.Add(s); checkedComboBox_TransType1.CheckBoxItems[s].Checked = true; 
@@ -297,8 +183,7 @@ namespace Transaction_Statistical.UControl
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message, "Error");
-                //InitParametar.Send_Error(ex.ToString(), MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name);
+                InitParametar.Send_Error(ex.ToString(), MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name);
             }
 
         }
@@ -346,44 +231,56 @@ namespace Transaction_Statistical.UControl
             }
             catch (Exception ex)
             {
-               InitParametar.Send_Error(ex.ToString(), MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name);
+                InitParametar.Send_Error(ex.ToString(), MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name);
             }
             return false;
         }
-        private void SplitTransactionEJ(string sString, string sReg, string DateDay, Dictionary<string, Transaction> listDataDay)
+        private string SplitTransactionEJ(string sString, string sReg, Dictionary<string, Transaction> listDataDay)
         {
+            string sAfter = sString;
             try
             {
+                
                 Dictionary<int, RegesValue> lst = new Dictionary<int, RegesValue>();
                 if (Regexs.RunPatternRegular(sString, sReg, out lst))
                 {
                     Transaction trans;
                     foreach (KeyValuePair<int, RegesValue> key in lst)
                     {
-                        trans = new Transaction();
-                        trans.TTimeBegin = key.Value.value["TimeBegin"];
+                        trans = new Transaction();                      
+                        trans.TTimeBegin = key.Value.value["DateBegin"];
                         trans.TTimeEnd = key.Value.value["TimeEnd"];
-                        DateTime.TryParseExact(DateDay + trans.TTimeBegin, "yyyyMMddHH:mm:ss", CultureInfo.InvariantCulture, DateTimeStyles.None, out trans.DateBegin);
-                        DateTime.TryParseExact(DateDay + trans.TTimeEnd, "yyyyMMddHH:mm:ss", CultureInfo.InvariantCulture, DateTimeStyles.None, out trans.DateEnd);
-                        trans.Card = key.Value.value["Track2"];
-                        trans.Name = key.Value.value["Track1"];
+                        DateTime.TryParseExact(trans.TTimeBegin, "MM-dd-yyyy HH:mm:ss", CultureInfo.InvariantCulture, DateTimeStyles.None, out trans.DateBegin);
+                        trans.DateEnd = trans.DateBegin;
+                        DateTime.TryParseExact(trans.TTimeEnd, "HH:mm:ss", CultureInfo.InvariantCulture, DateTimeStyles.None, out trans.DateEnd);
+                        trans.Terminal = key.Value.value["TerminalID"];
+                        trans.MachineNo = key.Value.value["MachineNo"];
+                        trans.CardNumber = key.Value.value["CardNo"];
+                        trans.DataInput = key.Value.value["DataInput"];
                         trans.TraceJournalTxt = key.Value.stringfind;
                         trans.TransactionTypeList = string.Empty;
-                        trans.Day = DateDay;
-                        listDataDay[DateDay + trans.TTimeBegin] = trans;
-
+                        trans.Day = String.Format("{0:yyyyMMdd}", trans.DateBegin);
+                        listDataDay[key.Value.value["DateBegin"]] = trans;
+                        sAfter = sAfter.Replace(key.Value.stringfind, null);
                     }
                 }
             }
             catch (Exception ex)
-            { 
-                InitParametar.Send_Error(ex.ToString(), MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name); 
+            {
+                InitParametar.Send_Error(ex.ToString(), MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name);
             }
+            return sAfter;
         }
-        private Transaction ReadAnalyzeJournal_TransactionInfo(Transaction trn)
+        private Transaction Reads_TransInfo(Transaction trn)
         {
             try
             {
+                using (StringReader reader = new StringReader(trn.TraceJournalTxt))
+                {
+
+                    trn = Read_TransSub(trn, reader);
+                }
+
                 Dictionary<int, RegesValue> tkeytmp;
                 //Amount
                 Dictionary<int, RegesValue> dc_amount = new Dictionary<int, RegesValue>();
@@ -391,49 +288,52 @@ namespace Transaction_Statistical.UControl
                 {
                     trn.Amount = dc_amount.FirstOrDefault().Value.value.FirstOrDefault().Value;
                 }
-               // MapTransactionsType(listTransType, trn.TraceJournalTxt, trn);
-                if (Regexs.RunPatternRegular(trn.TraceJournalTxt, sCASHREQUEST, out tkeytmp))
-                {
-                    foreach (KeyValuePair<string, string> s in tkeytmp.Values.FirstOrDefault().value)
-                    {
-                        if (s.Key.Equals("Tc1")) trn.Cassette1 = s.Value;
-                        if (s.Key.Equals("Tc2")) trn.Cassette2 = s.Value;
-                        if (s.Key.Equals("Tc3")) trn.Cassette3 = s.Value;
-                        if (s.Key.Equals("Tc4")) trn.Cassette4 = s.Value;
-                        if (s.Key.Equals("Tc5")) trn.Cassette5 = s.Value;
-                        if (s.Key.Equals("Tc6")) trn.Cassette6 = s.Value;
-                        if (s.Key.Equals("Tc7")) trn.Cassette7 = s.Value;
-                        if (s.Key.Equals("Tc8")) trn.Cassette8 = s.Value;
-                    }
-                }
-                else
-                {
-                    if (Regexs.RunPatternRegular(trn.TraceJournalTxt, sCASHDISPENSE, out tkeytmp))
-                    {
-                        string cs = tkeytmp.Values.FirstOrDefault().value.FirstOrDefault().Value;
-                        string[] dis = cs.Split(';');
-                        string[] cassettes = new string[4];
-
-                        for (int j = 0; j < cassettes.Length; j++) cassettes[j] = "0";
-
-                        for (int j = 0; j < dis.Length - 1; j++)
-                        {
-                            string[] c = dis[j].Split(',');
-                            cassettes[int.Parse(dis[j].Substring(0, 1)) - 1] = c[1];
-                        }
-                        trn.Cassette1 = cassettes[0];
-                        trn.Cassette2 = cassettes[1];
-                        trn.Cassette3 = cassettes[2];
-                        trn.Cassette4 = cassettes[3];
-                    }
-                }
-               
-              
-
             }
             catch (Exception ex)
-            { 
-                InitParametar.Send_Error(ex.ToString(), MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name); 
+            {
+                InitParametar.Send_Error(ex.ToString(), MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name);
+            }
+            return trn;
+        }
+
+        private Transaction Read_TransSub(Transaction trn, StringReader reader)
+        {
+            try
+            {
+                TransactionEvent ev;
+                string line = reader.ReadLine();
+                if (trn.CasebyCase == null)
+                {
+                    trn.CasebyCase = new List<TransactionEvent>();
+                     ev = new TransactionEvent();
+                    ev.Name = TransactionEvent.Events.TransactionStart;
+                    ev.TTime = trn.TTime;
+                    ev.Status = TransactionEvent.StatusS.Succeeded;
+                    trn.CasebyCase.Add(ev);
+                   
+                }
+                while (!string.IsNullOrEmpty(line))
+                {
+                    Dictionary<int, RegesValue> tkeytmp = new Dictionary<int, RegesValue>();
+                    foreach(KeyValuePair<TransactionEvent.Events,string> tmp in InitParametar.transactionTemplate)
+                    {
+                        if (Regexs.RunPatternRegular(line, tmp.Value, out tkeytmp))
+                        {
+                            ev = new TransactionEvent();
+                            ev.Name = tmp.Key;
+                            ev.TTime = tkeytmp.FirstOrDefault().Value.value["Time"] ?? string.Empty;
+                            ev.TContent = tkeytmp.FirstOrDefault().Value.stringfind;
+                            ev.Status = TransactionEvent.StatusS.Succeeded;
+                            trn.CasebyCase.Add(ev);
+                            break;
+                        }
+                    }
+                    line = reader.ReadLine();
+                }
+            }
+            catch (Exception ex)
+            {
+                InitParametar.Send_Error(ex.ToString(), MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name);
             }
             return trn;
         }

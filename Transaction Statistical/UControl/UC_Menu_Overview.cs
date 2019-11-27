@@ -17,7 +17,7 @@ namespace Transaction_Statistical.UControl
         public UC_Menu_Overview()
         {
             InitializeComponent();
-            sqlite = new SQLiteHelper();
+           sqlite = new SQLiteHelper();
             LoadInfo();
         }
         public void LoadInfo()
@@ -33,7 +33,7 @@ namespace Transaction_Statistical.UControl
                     cb.Text = R["Field"].ToString();
                     cb.Value = R["ID"].ToString();
                     cbo_LstTemplate.Items.Add(cb);
-                    if (cb.Value.Equals(InitParametar.TemplateTransaction.ToString())) cbo_LstTemplate.SelectedItem = cb;
+                    if (cb.Value.Equals(InitParametar.TemplateTransactionID.ToString())) cbo_LstTemplate.SelectedItem = cb;
                 }
 
             }
@@ -53,6 +53,20 @@ namespace Transaction_Statistical.UControl
                 Frm_TemplateDefault frm = new Frm_TemplateDefault(ucCfgTemplate);
                 frm.Show();
 
+            }
+            catch (Exception ex)
+            {
+                InitParametar.Send_Error(ex.ToString(), MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name);
+            }
+        }
+
+        private void btn_Apply_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                ComboBoxItem cb_tmp = cbo_LstTemplate.SelectedItem as ComboBoxItem;
+                InitParametar.TemplateTransactionID = cb_tmp.Value.ToString();
+                InitParametar.LoadTemplateInfo();
             }
             catch (Exception ex)
             {

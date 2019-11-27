@@ -1,11 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using Transaction_Statistical.AddOn;
 
@@ -19,7 +13,7 @@ namespace Transaction_Statistical
 
             InitParametar.Init();
 
-            //UC_CfgTemplate uc_TemplateCfg = new UC_CfgTemplate();
+            //UC_CfgTemplate uc_TemplateCfg = new UC_CfgTemplate("65");
             //uc_TemplateCfg.Dock = DockStyle.Fill;
             //Frm_TemplateDefault frm_templateCfg = new Frm_TemplateDefault(uc_TemplateCfg);
             //frm_templateCfg.titleCustom.Text = "Template Config";
@@ -30,7 +24,7 @@ namespace Transaction_Statistical
             UControl.UC_Transaction uc_Transaction = new UControl.UC_Transaction();
             uc_Transaction.Dock = DockStyle.Fill;
             tpc.Controls.Add(uc_Transaction);
-            tabControlX1.AddTab("Transaction Statistical", tpc,false);
+            tabControlX1.AddTab("Transaction Statistical", tpc, false);
 
         }
         #region Design GUI
@@ -294,7 +288,7 @@ namespace Transaction_Statistical
                 this.Location = new Point(0, 0);
                 this.Size = new System.Drawing.Size(rect.Width, rect.Height);
                 toolTip1.SetToolTip(btn_MaxButton, "Restore Down");
-               btn_MaxButton.CFormState = MinMaxButton.CustomFormState.Maximize;
+                btn_MaxButton.CFormState = MinMaxButton.CustomFormState.Maximize;
                 isWindowMaximized = true;
             }
         }

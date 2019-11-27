@@ -32,6 +32,7 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(UC_Info));
             this.TextCustom = new FastColoredTextBoxNS.FastColoredTextBox();
             this.OkCustom = new System.Windows.Forms.Button();
+            this.btn_Save = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.TextCustom)).BeginInit();
             this.SuspendLayout();
             // 
@@ -63,6 +64,7 @@
             this.TextCustom.CharWidth = 10;
             this.TextCustom.Cursor = System.Windows.Forms.Cursors.IBeam;
             this.TextCustom.DisabledColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))));
+            this.TextCustom.Font = new System.Drawing.Font("Courier New", 9.75F);
             this.TextCustom.ForeColor = System.Drawing.SystemColors.HotTrack;
             this.TextCustom.IndentBackColor = System.Drawing.Color.DimGray;
             this.TextCustom.IsReplaceMode = false;
@@ -97,12 +99,32 @@
             this.OkCustom.TabIndex = 7;
             this.OkCustom.Text = "OK";
             this.OkCustom.UseVisualStyleBackColor = true;
+            this.OkCustom.Click += new System.EventHandler(this.OkCustom_Click);
+            // 
+            // btn_Save
+            // 
+            this.btn_Save.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.btn_Save.FlatAppearance.BorderColor = System.Drawing.Color.Silver;
+            this.btn_Save.FlatAppearance.MouseDownBackColor = System.Drawing.Color.DimGray;
+            this.btn_Save.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Blue;
+            this.btn_Save.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btn_Save.ForeColor = System.Drawing.Color.White;
+            this.btn_Save.Location = new System.Drawing.Point(327, 489);
+            this.btn_Save.Name = "btn_Save";
+            this.btn_Save.Size = new System.Drawing.Size(105, 31);
+            this.btn_Save.TabIndex = 8;
+            this.btn_Save.Text = "Save";
+            this.btn_Save.UseVisualStyleBackColor = true;
+            this.btn_Save.Visible = false;
+            this.btn_Save.Click += new System.EventHandler(this.btn_Save_Click);
             // 
             // UC_Info
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(37)))), ((int)(((byte)(37)))), ((int)(((byte)(38)))));
+            this.Controls.Add(this.btn_Save);
             this.Controls.Add(this.OkCustom);
             this.Controls.Add(this.TextCustom);
             this.Name = "UC_Info";
@@ -116,5 +138,6 @@
 
         public FastColoredTextBoxNS.FastColoredTextBox TextCustom;
         private System.Windows.Forms.Button OkCustom;
+        private System.Windows.Forms.Button btn_Save;
     }
 }
