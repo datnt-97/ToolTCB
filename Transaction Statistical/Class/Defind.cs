@@ -30,7 +30,7 @@ namespace Transaction_Statistical
         public static string configFileTraceDefault;
         public static List<string> ListFileDeleteStartup;
         public static string PathFileRecordDeletetStartup;
-           
+
         //form enu
         public static bool ActiveFormMain;
         public static bool ExitApp = false;
@@ -40,7 +40,7 @@ namespace Transaction_Statistical
         public static string PathUpdateSupport;
         public static string PathUpdateSupportError;
 
-       
+
         /// Transaction Template
         public static string TemplateTransactionID = "65";
         public static Dictionary<TransactionEvent.Events, string> transactionTemplate;
@@ -57,13 +57,13 @@ namespace Transaction_Statistical
                 PathUpdateSupport = "/UsrUpdate/Analyze";
                 PathUpdateSupportError = "/UsrUpdate/Analyze/Error";
                 //version
-           
+
                 //VersionAnalyze.Date = DateTime.ParseExact("2013-04-07 16:40:52", "yyyy-MM-dd HH:mm:ss",System.Globalization.CultureInfo.InvariantCulture);
-               
+
                 //USB
 
                 ///
-              
+
                 //Init directory and file config
                 PathDirectoryCurrentApp = Path.GetDirectoryName(Application.ExecutablePath);
                 PathDirectoryUtilities = (PathDirectoryCurrentApp + "\\Utilities").Replace(@"\\", @"\");
@@ -79,12 +79,12 @@ namespace Transaction_Statistical
                 configFileTraceDefault = PathDirectoryCurrentApp + @"\config\ConfigTraceFile.ini";
                 configFileTrace = (pathDirectoryDocumentsUsrConfigData + "\\ConfigTraceFile.ini").Replace(@"\\", @"\"); if (!File.Exists(configFileTrace)) File.Copy(configFileTraceDefault, configFileTrace);
                 PathFileRecordDeletetStartup = (PathDirectoryDocumentsUsr + "\\ListFileDeletetStartup.txt").Replace(@"\\", @"\"); if (!File.Exists(PathFileRecordDeletetStartup)) File.Create(PathFileRecordDeletetStartup);
-              
+
                 DatabaseFile = InitParametar.pathDirectoryDocumentsUsrConfigData + "\\DB.s3db";
                 if (!File.Exists(DatabaseFile)) File.Copy(PathDirectoryCurrentAppConfigData + "\\DB.s3db", DatabaseFile, true);
                 sqlite = new SQLiteHelper();
                 // Chesk file cfg
-                LoadTemplateInfo();         
+                LoadTemplateInfo();
             }
             catch (Exception ex)
             {
@@ -106,7 +106,7 @@ namespace Transaction_Statistical
                 {
                     if (r["Field"].Equals(name.ToString())) transactionTemplate[name] = r["Data"].ToString();
                 }
-                
+
                 //switch (r["Field"].ToString())
                 //{
                 //    case "DateFormat":
@@ -159,7 +159,7 @@ namespace Transaction_Statistical
                 //    default:
                 //        break;
                 //}
-            }            
+            }
             listTransType = new Dictionary<string, TransactionType>();
             DataTable tb_transtype = sqlite.GetTableDataWithColumnName("Transactions", "TemplateID", InitParametar.TemplateTransactionID);
             foreach (DataRow r in tb_transtype.Rows)
@@ -178,7 +178,7 @@ namespace Transaction_Statistical
         {
             try
             {
-                
+
                 UC_Info msg = new UC_Info();
 
                 msg.TextCustom.ReadOnly = false;
@@ -191,19 +191,19 @@ namespace Transaction_Statistical
                 msg.TextCustom.SelectionColor = Color.Green;
 
                 Frm_TemplateDefault frm = new Frm_TemplateDefault(msg);
-                    frm.titleCustom.Text = "Error Message";
+                frm.titleCustom.Text = "Error Message";
                 frm.Height = 300;
                 frm.Show();
 
                 msg.TextCustom.AppendText(Environment.NewLine + "Error Message:");
-              //  int indexline = msg.Messager.TextLength;
-             //   msg.TextCustom.Select(indexline, (Environment.NewLine + "Error Message:").Length);
+                //  int indexline = msg.Messager.TextLength;
+                //   msg.TextCustom.Select(indexline, (Environment.NewLine + "Error Message:").Length);
                 msg.TextCustom.Font = new System.Drawing.Font("Times New Roman", 12, FontStyle.Italic);
                 msg.TextCustom.SelectionColor = Color.Black;
 
                 msg.TextCustom.AppendText(Environment.NewLine + MsgError);
                 msg.TextCustom.Update();
-                msg.Dock = DockStyle.Fill;              
+                msg.Dock = DockStyle.Fill;
             }
             catch (Exception ex)
             {
@@ -229,11 +229,11 @@ namespace Transaction_Statistical
             BalanceInquiry,
             MiniStatement,
             ChangePin
-        }       
+        }
         public List<TransactionEvent> CasebyCase;
         public int Result;
-        string _datainput=string.Empty;
-        [CategoryAttribute("Customer"), DescriptionAttribute("Data input")]       
+        string _datainput = string.Empty;
+        [CategoryAttribute("Customer"), DescriptionAttribute("Data input")]
         public string DataInput
         {
             get { return _datainput; }
@@ -413,7 +413,7 @@ namespace Transaction_Statistical
             TransactionEnd,
             Transaction
         }
-    
+
         public Events Name;
         public enum StatusS
         {
@@ -431,12 +431,21 @@ namespace Transaction_Statistical
         [CategoryAttribute("Transaction"), DescriptionAttribute("Content of the transaction")]
         public string TContent;
     }
-        public class RegesValue
+    public class RegesValue
     {
         public int index;
         public Dictionary<string, string> value = new Dictionary<string, string>();
         public string stringfind;
         public RegesValue()
+        { }
+
+    }
+    public class RegesValue_2
+    {
+        public int index;
+        public Dictionary<string, Dictionary<int, string>> value = new Dictionary<string, Dictionary<int, string>>();
+        public string stringfind;
+        public RegesValue_2()
         { }
 
     }
@@ -577,12 +586,13 @@ namespace Transaction_Statistical
         //}
         public static bool RunPatternRegular(string sString, string sReg, out Dictionary<int, RegesValue> listResult)
         {
-            
+
             listResult = new Dictionary<int, RegesValue>();
             try
-            {   
+            {
                 Regex myRegex = new Regex(sReg, RegexOptions.ExplicitCapture, TimeSpan.FromSeconds(5));
                 MatchCollection m = myRegex.Matches(sString);
+                Match ma = myRegex.Match(sString);
                 if (m.Count != 0)
                 {
                     foreach (Match n in m)
@@ -600,6 +610,49 @@ namespace Transaction_Statistical
                     return true;
                 }
             }
+
+            catch (TimeoutException)
+            { }
+            catch (Exception ex)
+            {
+                InitParametar.Send_Error(ex.ToString(), MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name);
+            }
+            return false;
+        }
+        public static bool RunPatternRegular_2(string sString, string sReg, out Dictionary<int, RegesValue_2> listResult)
+        {
+
+            listResult = new Dictionary<int, RegesValue_2>();
+            try
+            {
+                Regex myRegex = new Regex(sReg, RegexOptions.ExplicitCapture, TimeSpan.FromSeconds(5));
+                MatchCollection m = myRegex.Matches(sString);
+                Match ma = myRegex.Match(sString);
+                if (m.Count != 0)
+                {
+                    foreach (Match n in m)
+                    {
+                        RegesValue_2 results = new RegesValue_2();
+                        results.stringfind = n.ToString(); sString = sString.Replace(n.ToString(), string.Empty);
+                        results.index = n.Index;
+                        foreach (string groupName in myRegex.GetGroupNames())
+                        {
+                            if (groupName.Equals("0")) continue;
+                            CaptureCollection captureCollection = n.Groups[groupName].Captures;
+                            Dictionary<int, string> keyValues = new Dictionary<int, string>();
+                            foreach (Capture capture in captureCollection)
+                            {
+
+                                keyValues.Add(capture.Index, capture.Value);
+                            }
+                            results.value[groupName] = keyValues;
+                        }
+                        listResult[n.Index] = results;
+                    }
+                    return true;
+                }
+            }
+
             catch (TimeoutException)
             { }
             catch (Exception ex)
