@@ -41,7 +41,7 @@ namespace Transaction_Statistical
         public static string PathUpdateSupportError;
 
 
-        /// Transaction
+        /// Transaction Template
         public static string TemplateTransactionID = "65";
         public static Dictionary<TransactionEvent.Events, string> transactionTemplate;
         public static Dictionary<string, TransactionType> listTransType;
@@ -712,6 +712,15 @@ namespace Transaction_Statistical
         { }
 
     }
+    public class RegesValue_2
+    {
+        public int index;
+        public Dictionary<string, Dictionary<int, string>> value = new Dictionary<string, Dictionary<int, string>>();
+        public string stringfind;
+        public RegesValue_2()
+        { }
+
+    }
     public class Regexs
     {
         //public static Dictionary<int, RegesValue> RunPatternRegular(string sString, string sReg, bool ShowMessage)
@@ -855,6 +864,7 @@ namespace Transaction_Statistical
             {
                 Regex myRegex = new Regex(sReg, RegexOptions.ExplicitCapture, TimeSpan.FromSeconds(5));
                 MatchCollection m = myRegex.Matches(sString);
+                Match ma = myRegex.Match(sString);
                 if (m.Count != 0)
                 {
                     foreach (Match n in m)
@@ -872,6 +882,49 @@ namespace Transaction_Statistical
                     return true;
                 }
             }
+
+            catch (TimeoutException)
+            { }
+            catch (Exception ex)
+            {
+                InitParametar.Send_Error(ex.ToString(), MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name);
+            }
+            return false;
+        }
+        public static bool RunPatternRegular_2(string sString, string sReg, out Dictionary<int, RegesValue_2> listResult)
+        {
+
+            listResult = new Dictionary<int, RegesValue_2>();
+            try
+            {
+                Regex myRegex = new Regex(sReg, RegexOptions.ExplicitCapture, TimeSpan.FromSeconds(5));
+                MatchCollection m = myRegex.Matches(sString);
+                Match ma = myRegex.Match(sString);
+                if (m.Count != 0)
+                {
+                    foreach (Match n in m)
+                    {
+                        RegesValue_2 results = new RegesValue_2();
+                        results.stringfind = n.ToString(); sString = sString.Replace(n.ToString(), string.Empty);
+                        results.index = n.Index;
+                        foreach (string groupName in myRegex.GetGroupNames())
+                        {
+                            if (groupName.Equals("0")) continue;
+                            CaptureCollection captureCollection = n.Groups[groupName].Captures;
+                            Dictionary<int, string> keyValues = new Dictionary<int, string>();
+                            foreach (Capture capture in captureCollection)
+                            {
+
+                                keyValues.Add(capture.Index, capture.Value);
+                            }
+                            results.value[groupName] = keyValues;
+                        }
+                        listResult[n.Index] = results;
+                    }
+                    return true;
+                }
+            }
+
             catch (TimeoutException)
             { }
             catch (Exception ex)

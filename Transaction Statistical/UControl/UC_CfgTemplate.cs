@@ -262,19 +262,22 @@ namespace Transaction_Statistical
                     string sString = fctxt_Test.Text;
                     if (string.IsNullOrEmpty(sReg)) sReg = fctxt_Pattern.Text;
                     Dictionary<int, RegesValue> listResult = new Dictionary<int, RegesValue>();
+                    Dictionary<int, RegesValue_2> listResult2 = new Dictionary<int, RegesValue_2>();
                     uc.TextCustom.AppendText("Pattern: ", fontTitle);
                     uc.TextCustom.AppendText(sReg + Environment.NewLine, new TextStyle(Brushes.White, null, FontStyle.Bold));
-                    if (Regexs.RunPatternRegular(sString, sReg, out listResult))
+
+                    if (Regexs.RunPatternRegular_2(sString, sReg, out listResult2))
                     {
                         uc.TextCustom.AppendText("Time: " + (DateTime.Now - timeStart).TotalMilliseconds + " milliseconds ~ " + (DateTime.Now - timeStart).TotalSeconds + " seconds\n", fontTitle);
                         int k = 0;
-                        foreach (KeyValuePair<int, RegesValue> group in listResult)
+                        foreach (KeyValuePair<int, RegesValue_2> group in listResult2)
                         {
                             k++;
-                            uc.TextCustom.AppendText(Environment.NewLine + "Found map: " + k.ToString() + "/" + listResult.Count.ToString() + Environment.NewLine + "-----------Group var map-----------" + Environment.NewLine, fontTitle);
-                            foreach (KeyValuePair<string, string> var in group.Value.value)
+                            uc.TextCustom.AppendText(Environment.NewLine + "Found map: " + k.ToString() + "/" + listResult2.Count.ToString() + Environment.NewLine + "-----------Group var map-----------" + Environment.NewLine, fontTitle);
+                            foreach (KeyValuePair<string, Dictionary<int, string>> var in group.Value.value)
                             {
-                                uc.TextCustom.AppendText(var.Key + "=" + var.Value + Environment.NewLine, fontTitle);
+                                uc.TextCustom.AppendText(var.Key + " : " + string.Join(" | ", var.Value.Values.ToArray()) + Environment.NewLine, fontTitle);
+
                             }
                             uc.TextCustom.AppendText("-----------Map string--------------" + Environment.NewLine, fontTitle);
                             uc.TextCustom.AppendText(group.Value.stringfind + Environment.NewLine, fontBody);
