@@ -21,8 +21,25 @@ namespace Transaction_Statistical
             InitializeComponent();
             sqlite = new SQLiteHelper();
             template_ID = Template_ID;
+            LoadTypeLog();
         }
-
+        private void LoadTypeLog()
+        {
+                try
+                {
+                    DataTable cfg_data = sqlite.GetTableDataWithColumnName("CfgData", "Type_ID", "67");
+                    cbo_Keyword_Typelog.Items.Clear();
+                    foreach (DataRow R in cfg_data.Rows)
+                    {
+                        ComboBoxItem cb = new ComboBoxItem();
+                        cb.Text = R["Data"].ToString();
+                        cb.Value = R["ID"].ToString(); 
+                    cbo_Keyword_Typelog.Items.Add(cb);
+                    }
+                    if (cbo_Keyword_Typelog.Items.Count != 0) cbo_Keyword_Typelog.SelectedIndex = 0;
+                }
+                catch { }
+        }
         private void btn_Keyword_Help_Click(object sender, EventArgs e)
         {
             try
@@ -38,32 +55,6 @@ namespace Transaction_Statistical
             catch
             { }
         }
-
-        private void spc_Main_SplitterMoved(object sender, SplitterEventArgs e)
-        {
-
-        }
-
-        private void spc_Keyword_Main_SplitterMoved(object sender, SplitterEventArgs e)
-        {
-
-        }
-
-        private void fctxt_Unsuccessful_Load(object sender, EventArgs e)
-        {
-
-        }
-
-        private void fctxt_Successful_Load(object sender, EventArgs e)
-        {
-
-        }
-
-        private void fctxt_Identification_Load(object sender, EventArgs e)
-        {
-
-        }
-
         private void btn_Transaction_Remove_Click(object sender, EventArgs e)
         {
 
@@ -152,33 +143,6 @@ namespace Transaction_Statistical
             MessageBox.Show("Add transaction [" + cbo_Transactions.Text + "] info fail", "Add transaction info", MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
 
-
-
-        private void grp_Keyword_Enter(object sender, EventArgs e)
-        {
-
-        }
-
-        private void spc_Keyword_Level_SplitterMoved(object sender, SplitterEventArgs e)
-        {
-
-        }
-
-        private void spc_Keyword_Pattern_SplitterMoved(object sender, SplitterEventArgs e)
-        {
-
-        }
-
-        private void spc_Keyword_Test_SplitterMoved(object sender, SplitterEventArgs e)
-        {
-
-        }
-
-        private void label1_Click(object sender, EventArgs e)
-        {
-
-        }
-
         private void chk_Keywork_Pattern_CheckedChanged(object sender, EventArgs e)
         {
             if (chk_Keywork_Pattern.Checked) fctxt_Pattern.WordWrap = true;
@@ -193,19 +157,20 @@ namespace Transaction_Statistical
                 if (cb != null && cb.Value is DataRow) { MessageBox.Show("Data existed !!", "Add data", MessageBoxButtons.OK, MessageBoxIcon.Warning); return; }
                 if (cbo_Keyword_LstKeyword.Text == string.Empty) { MessageBox.Show("Map Contents not empty !!", "Add data", MessageBoxButtons.OK, MessageBoxIcon.Information); return; }
                 if (fctxt_Pattern.Text == string.Empty) { MessageBox.Show("Pattern string not empty !!", "Add data", MessageBoxButtons.OK, MessageBoxIcon.Information); return; }
+                ComboBoxItem item = cbo_Keyword_Typelog.SelectedItem as ComboBoxItem;
                 EntryList entry = new EntryList();
                 entry.ColumnName.Add("Field");
                 entry.Content.Add(cbo_Keyword_LstKeyword.Text);
                 entry.ColumnName.Add("Data");
                 entry.Content.Add(fctxt_Pattern.Text);
                 entry.ColumnName.Add("Type_ID");
-                entry.Content.Add("67");
+                entry.Content.Add(item.Value.ToString());
                 entry.ColumnName.Add("Parent_ID");
                 entry.Content.Add(template_ID);
                 if (sqlite.CreateEntry("CfgData", entry))
                 {
                     MessageBox.Show("Add data successful", "Add data", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                    btn_Keyword_Resfresh_Click(sender, e);
+                    cbo_Keyword_Typelog_SelectedIndexChanged(sender, e);
                     return;
                 }
             }
@@ -228,7 +193,7 @@ namespace Transaction_Statistical
                     if (sqlite.DeleteEntry("CfgData", "ID", R["ID"].ToString()))
                     {
                         MessageBox.Show("Remove data successful", "Remove data", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                        btn_Keyword_Resfresh_Click(sender, e);
+                        cbo_Keyword_Typelog_SelectedIndexChanged(sender, e);
                         return;
                     }
                 }
@@ -269,28 +234,12 @@ namespace Transaction_Statistical
                 btn_Keyword_Save_Click(sender, e);
         }
 
-        private void grp_Transaction_Enter(object sender, EventArgs e)
-        {
-
-        }
-
-        private void label2_Click(object sender, EventArgs e)
-        {
-
-        }
-
         private void chk_Keywork_Test_CheckedChanged(object sender, EventArgs e)
         {
             if (chk_Keywork_Test.Checked) fctxt_Test.WordWrap = true;
             else fctxt_Test.WordWrap = false;
         }
-
-
-        private void btn_Keyword_Import_Click(object sender, EventArgs e)
-        {
-
-        }
-
+        
         private void btn_Keyword_Run_Click(object sender, EventArgs e)
         {
             try
@@ -344,35 +293,7 @@ namespace Transaction_Statistical
                 InitParametar.Send_Error(ex.ToString(), MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name);
             }
         }
-
-        private void fctxt_Pattern_Load(object sender, EventArgs e)
-        {
-
-        }
-
-        private void fctxt_Test_Load(object sender, EventArgs e)
-        {
-
-        }
-
-        private void btn_Keyword_Resfresh_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                DataTable cfg_data = sqlite.GetTableDataWith2ColumnName("CfgData", "Type_ID", "67", "Parent_ID", template_ID);
-                cbo_Keyword_LstKeyword.Items.Clear();
-                foreach (DataRow R in cfg_data.Rows)
-                {
-                    ComboBoxItem cb = new ComboBoxItem();
-                    cb.Text = R["Field"].ToString();
-                    cb.Value = R;
-                    cbo_Keyword_LstKeyword.Items.Add(cb);
-                }
-                if (cbo_Keyword_LstKeyword.Items.Count != 0) cbo_Keyword_LstKeyword.SelectedIndex = 0;
-            }
-            catch { }
-        }
-
+               
         private void cbo_Keyword_LstKeyword_SelectedIndexChanged(object sender, EventArgs e)
         {
             try
@@ -390,12 +311,6 @@ namespace Transaction_Statistical
                 InitParametar.Send_Error(ex.ToString(), MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name);
             }
         }
-
-        private void cbo_Keyword_LstKeyword_MouseDown(object sender, MouseEventArgs e)
-        {
-            if (cbo_Keyword_LstKeyword.Items.Count == 0) btn_Keyword_Resfresh_Click(sender, e);
-        }
-
         private void cbo_Transactions_MouseDown(object sender, MouseEventArgs e)
         {
             if (cbo_Transactions.Items.Count == 0) btn_Transaction_Refresh_Click(sender, e);
@@ -432,6 +347,7 @@ namespace Transaction_Statistical
         {
             try
             {
+                
                 cbo_Transactions.Items.Clear();
                 cbo_Transactions.Text = string.Empty;
                 DataTable tb_trans = sqlite.GetTableDataWithColumnName("Transactions", "TemplateID", template_ID);
@@ -444,6 +360,27 @@ namespace Transaction_Statistical
                 }
             }
             catch (Exception ex) { InitParametar.Send_Error(ex.ToString(), MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name); }
+        }       
+
+        private void cbo_Keyword_Typelog_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            try
+            {
+                ComboBoxItem item = cbo_Keyword_Typelog.SelectedItem as ComboBoxItem;
+                DataTable cfg_data = sqlite.GetTableDataWith2ColumnName("CfgData", "Type_ID", item.Value.ToString(), "Parent_ID", template_ID);
+                cbo_Keyword_LstKeyword.Items.Clear();
+                cbo_Keyword_LstKeyword.Text = string.Empty;
+                fctxt_Pattern.Clear();
+                foreach (DataRow R in cfg_data.Rows)
+                {
+                    ComboBoxItem cb = new ComboBoxItem();
+                    cb.Text = R["Field"].ToString();
+                    cb.Value = R;
+                    cbo_Keyword_LstKeyword.Items.Add(cb);
+                }
+                if (cbo_Keyword_LstKeyword.Items.Count != 0) cbo_Keyword_LstKeyword.SelectedIndex = 0;
+            }
+            catch { }
         }
     }
 }
