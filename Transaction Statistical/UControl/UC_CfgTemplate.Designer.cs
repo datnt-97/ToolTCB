@@ -33,6 +33,7 @@
             this.spc_Main = new System.Windows.Forms.SplitContainer();
             this.grp_Keyword = new System.Windows.Forms.GroupBox();
             this.spc_Keyword_Main = new System.Windows.Forms.SplitContainer();
+            this.cbo_Keyword_Typelog = new System.Windows.Forms.ComboBox();
             this.btn_Keyword_Resfresh = new System.Windows.Forms.Button();
             this.cbo_Keyword_LstKeyword = new System.Windows.Forms.ComboBox();
             this.spc_Keyword_Level = new System.Windows.Forms.SplitContainer();
@@ -51,6 +52,7 @@
             this.btn_Keyword_Import = new System.Windows.Forms.Button();
             this.btn_Keyword_Run = new System.Windows.Forms.Button();
             this.grp_Transaction = new System.Windows.Forms.GroupBox();
+            this.btn_Transaction_Refresh = new System.Windows.Forms.Button();
             this.fctxt_Unsuccessful = new FastColoredTextBoxNS.FastColoredTextBox();
             this.cbo_Transactions = new System.Windows.Forms.ComboBox();
             this.fctxt_Successful = new FastColoredTextBoxNS.FastColoredTextBox();
@@ -58,7 +60,6 @@
             this.fctxt_Identification = new FastColoredTextBoxNS.FastColoredTextBox();
             this.btn_Transaction_Save = new System.Windows.Forms.Button();
             this.btn_Transaction_Remove = new System.Windows.Forms.Button();
-            this.btn_Transaction_Refresh = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.spc_Main)).BeginInit();
             this.spc_Main.Panel1.SuspendLayout();
             this.spc_Main.Panel2.SuspendLayout();
@@ -104,7 +105,6 @@
             this.spc_Main.Size = new System.Drawing.Size(1500, 779);
             this.spc_Main.SplitterDistance = 809;
             this.spc_Main.TabIndex = 0;
-            this.spc_Main.SplitterMoved += new System.Windows.Forms.SplitterEventHandler(this.spc_Main_SplitterMoved);
             // 
             // grp_Keyword
             // 
@@ -117,7 +117,6 @@
             this.grp_Keyword.TabIndex = 0;
             this.grp_Keyword.TabStop = false;
             this.grp_Keyword.Text = "Key works";
-            this.grp_Keyword.Enter += new System.EventHandler(this.grp_Keyword_Enter);
             // 
             // spc_Keyword_Main
             // 
@@ -130,6 +129,7 @@
             // 
             // spc_Keyword_Main.Panel1
             // 
+            this.spc_Keyword_Main.Panel1.Controls.Add(this.cbo_Keyword_Typelog);
             this.spc_Keyword_Main.Panel1.Controls.Add(this.btn_Keyword_Resfresh);
             this.spc_Keyword_Main.Panel1.Controls.Add(this.cbo_Keyword_LstKeyword);
             // 
@@ -139,7 +139,20 @@
             this.spc_Keyword_Main.Size = new System.Drawing.Size(803, 758);
             this.spc_Keyword_Main.SplitterDistance = 53;
             this.spc_Keyword_Main.TabIndex = 0;
-            this.spc_Keyword_Main.SplitterMoved += new System.Windows.Forms.SplitterEventHandler(this.spc_Keyword_Main_SplitterMoved);
+            // 
+            // cbo_Keyword_Typelog
+            // 
+            this.cbo_Keyword_Typelog.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(37)))), ((int)(((byte)(37)))), ((int)(((byte)(38)))));
+            this.cbo_Keyword_Typelog.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbo_Keyword_Typelog.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.cbo_Keyword_Typelog.ForeColor = System.Drawing.Color.White;
+            this.cbo_Keyword_Typelog.FormattingEnabled = true;
+            this.cbo_Keyword_Typelog.Location = new System.Drawing.Point(3, 16);
+            this.cbo_Keyword_Typelog.Name = "cbo_Keyword_Typelog";
+            this.cbo_Keyword_Typelog.Size = new System.Drawing.Size(199, 24);
+            this.cbo_Keyword_Typelog.Sorted = true;
+            this.cbo_Keyword_Typelog.TabIndex = 15;
+            this.cbo_Keyword_Typelog.SelectedIndexChanged += new System.EventHandler(this.cbo_Keyword_Typelog_SelectedIndexChanged);
             // 
             // btn_Keyword_Resfresh
             // 
@@ -148,13 +161,12 @@
             this.btn_Keyword_Resfresh.FlatAppearance.MouseDownBackColor = System.Drawing.Color.DimGray;
             this.btn_Keyword_Resfresh.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Blue;
             this.btn_Keyword_Resfresh.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btn_Keyword_Resfresh.Location = new System.Drawing.Point(645, 9);
+            this.btn_Keyword_Resfresh.Location = new System.Drawing.Point(645, 14);
             this.btn_Keyword_Resfresh.Name = "btn_Keyword_Resfresh";
-            this.btn_Keyword_Resfresh.Size = new System.Drawing.Size(105, 34);
+            this.btn_Keyword_Resfresh.Size = new System.Drawing.Size(105, 29);
             this.btn_Keyword_Resfresh.TabIndex = 14;
             this.btn_Keyword_Resfresh.Text = "Resfresh";
             this.btn_Keyword_Resfresh.UseVisualStyleBackColor = true;
-            this.btn_Keyword_Resfresh.Click += new System.EventHandler(this.btn_Keyword_Resfresh_Click);
             // 
             // cbo_Keyword_LstKeyword
             // 
@@ -162,12 +174,12 @@
             this.cbo_Keyword_LstKeyword.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.cbo_Keyword_LstKeyword.ForeColor = System.Drawing.Color.White;
             this.cbo_Keyword_LstKeyword.FormattingEnabled = true;
-            this.cbo_Keyword_LstKeyword.Location = new System.Drawing.Point(25, 15);
+            this.cbo_Keyword_LstKeyword.Location = new System.Drawing.Point(208, 16);
             this.cbo_Keyword_LstKeyword.Name = "cbo_Keyword_LstKeyword";
-            this.cbo_Keyword_LstKeyword.Size = new System.Drawing.Size(587, 24);
+            this.cbo_Keyword_LstKeyword.Size = new System.Drawing.Size(431, 24);
+            this.cbo_Keyword_LstKeyword.Sorted = true;
             this.cbo_Keyword_LstKeyword.TabIndex = 13;
             this.cbo_Keyword_LstKeyword.SelectedIndexChanged += new System.EventHandler(this.cbo_Keyword_LstKeyword_SelectedIndexChanged);
-            this.cbo_Keyword_LstKeyword.MouseDown += new System.Windows.Forms.MouseEventHandler(this.cbo_Keyword_LstKeyword_MouseDown);
             // 
             // spc_Keyword_Level
             // 
@@ -186,7 +198,6 @@
             this.spc_Keyword_Level.Size = new System.Drawing.Size(803, 701);
             this.spc_Keyword_Level.SplitterDistance = 332;
             this.spc_Keyword_Level.TabIndex = 0;
-            this.spc_Keyword_Level.SplitterMoved += new System.Windows.Forms.SplitterEventHandler(this.spc_Keyword_Level_SplitterMoved);
             // 
             // spc_Keyword_Pattern
             // 
@@ -211,7 +222,6 @@
             this.spc_Keyword_Pattern.Size = new System.Drawing.Size(803, 332);
             this.spc_Keyword_Pattern.SplitterDistance = 641;
             this.spc_Keyword_Pattern.TabIndex = 0;
-            this.spc_Keyword_Pattern.SplitterMoved += new System.Windows.Forms.SplitterEventHandler(this.spc_Keyword_Pattern_SplitterMoved);
             // 
             // fctxt_Pattern
             // 
@@ -227,10 +237,13 @@
         '\"',
         '\'',
         '\''};
+            this.fctxt_Pattern.AutoIndentCharsPatterns = "\r\n^\\s*[\\w\\.]+(\\s\\w+)?\\s*(?<range>=)\\s*(?<range>[^;]+);\r\n^\\s*(case|default)\\s*[^:]" +
+    "*(?<range>:)\\s*(?<range>[^;]+);\r\n";
             this.fctxt_Pattern.AutoScrollMinSize = new System.Drawing.Size(0, 18);
             this.fctxt_Pattern.BackBrush = null;
             this.fctxt_Pattern.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(37)))), ((int)(((byte)(37)))), ((int)(((byte)(38)))));
             this.fctxt_Pattern.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.fctxt_Pattern.BracketsHighlightStrategy = FastColoredTextBoxNS.BracketsHighlightStrategy.Strategy2;
             this.fctxt_Pattern.CharHeight = 18;
             this.fctxt_Pattern.CharWidth = 10;
             this.fctxt_Pattern.Cursor = System.Windows.Forms.Cursors.IBeam;
@@ -239,9 +252,13 @@
             this.fctxt_Pattern.IndentBackColor = System.Drawing.Color.DimGray;
             this.fctxt_Pattern.IsReplaceMode = false;
             this.fctxt_Pattern.Language = FastColoredTextBoxNS.Language.CSharp;
+            this.fctxt_Pattern.LeftBracket = '(';
+            this.fctxt_Pattern.LeftBracket2 = '{';
             this.fctxt_Pattern.Location = new System.Drawing.Point(0, 0);
             this.fctxt_Pattern.Name = "fctxt_Pattern";
             this.fctxt_Pattern.Paddings = new System.Windows.Forms.Padding(0);
+            this.fctxt_Pattern.RightBracket = ')';
+            this.fctxt_Pattern.RightBracket2 = '}';
             this.fctxt_Pattern.SelectionColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(255)))));
             this.fctxt_Pattern.ServiceColors = ((FastColoredTextBoxNS.ServiceColors)(resources.GetObject("fctxt_Pattern.ServiceColors")));
             this.fctxt_Pattern.ServiceLinesColor = System.Drawing.Color.DimGray;
@@ -249,7 +266,6 @@
             this.fctxt_Pattern.TabIndex = 1;
             this.fctxt_Pattern.WordWrap = true;
             this.fctxt_Pattern.Zoom = 100;
-            this.fctxt_Pattern.Load += new System.EventHandler(this.fctxt_Pattern_Load);
             // 
             // label1
             // 
@@ -260,7 +276,6 @@
             this.label1.Size = new System.Drawing.Size(109, 17);
             this.label1.TabIndex = 13;
             this.label1.Text = "Pattern String";
-            this.label1.Click += new System.EventHandler(this.label1_Click);
             // 
             // chk_Keywork_Pattern
             // 
@@ -351,7 +366,6 @@
             this.spc_Keyword_Test.Size = new System.Drawing.Size(803, 365);
             this.spc_Keyword_Test.SplitterDistance = 641;
             this.spc_Keyword_Test.TabIndex = 0;
-            this.spc_Keyword_Test.SplitterMoved += new System.Windows.Forms.SplitterEventHandler(this.spc_Keyword_Test_SplitterMoved);
             // 
             // fctxt_Test
             // 
@@ -367,10 +381,13 @@
         '\"',
         '\'',
         '\''};
+            this.fctxt_Test.AutoIndentCharsPatterns = "\r\n^\\s*[\\w\\.]+(\\s\\w+)?\\s*(?<range>=)\\s*(?<range>[^;]+);\r\n^\\s*(case|default)\\s*[^:]" +
+    "*(?<range>:)\\s*(?<range>[^;]+);\r\n";
             this.fctxt_Test.AutoScrollMinSize = new System.Drawing.Size(0, 18);
             this.fctxt_Test.BackBrush = null;
             this.fctxt_Test.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(37)))), ((int)(((byte)(37)))), ((int)(((byte)(38)))));
             this.fctxt_Test.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.fctxt_Test.BracketsHighlightStrategy = FastColoredTextBoxNS.BracketsHighlightStrategy.Strategy2;
             this.fctxt_Test.CharHeight = 18;
             this.fctxt_Test.CharWidth = 10;
             this.fctxt_Test.Cursor = System.Windows.Forms.Cursors.IBeam;
@@ -379,9 +396,13 @@
             this.fctxt_Test.IndentBackColor = System.Drawing.Color.DimGray;
             this.fctxt_Test.IsReplaceMode = false;
             this.fctxt_Test.Language = FastColoredTextBoxNS.Language.CSharp;
+            this.fctxt_Test.LeftBracket = '(';
+            this.fctxt_Test.LeftBracket2 = '{';
             this.fctxt_Test.Location = new System.Drawing.Point(0, 0);
             this.fctxt_Test.Name = "fctxt_Test";
             this.fctxt_Test.Paddings = new System.Windows.Forms.Padding(0);
+            this.fctxt_Test.RightBracket = ')';
+            this.fctxt_Test.RightBracket2 = '}';
             this.fctxt_Test.SelectionColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(255)))));
             this.fctxt_Test.ServiceColors = ((FastColoredTextBoxNS.ServiceColors)(resources.GetObject("fctxt_Test.ServiceColors")));
             this.fctxt_Test.ServiceLinesColor = System.Drawing.Color.DimGray;
@@ -389,7 +410,6 @@
             this.fctxt_Test.TabIndex = 2;
             this.fctxt_Test.WordWrap = true;
             this.fctxt_Test.Zoom = 100;
-            this.fctxt_Test.Load += new System.EventHandler(this.fctxt_Test_Load);
             // 
             // label2
             // 
@@ -400,7 +420,6 @@
             this.label2.Size = new System.Drawing.Size(88, 17);
             this.label2.TabIndex = 13;
             this.label2.Text = "Test String";
-            this.label2.Click += new System.EventHandler(this.label2_Click);
             // 
             // chk_Keywork_Test
             // 
@@ -427,7 +446,6 @@
             this.btn_Keyword_Import.TabIndex = 15;
             this.btn_Keyword_Import.Text = "Import";
             this.btn_Keyword_Import.UseVisualStyleBackColor = true;
-            this.btn_Keyword_Import.Click += new System.EventHandler(this.btn_Keyword_Import_Click);
             // 
             // btn_Keyword_Run
             // 
@@ -461,7 +479,20 @@
             this.grp_Transaction.TabIndex = 1;
             this.grp_Transaction.TabStop = false;
             this.grp_Transaction.Text = "Transaction defind";
-            this.grp_Transaction.Enter += new System.EventHandler(this.grp_Transaction_Enter);
+            // 
+            // btn_Transaction_Refresh
+            // 
+            this.btn_Transaction_Refresh.FlatAppearance.BorderColor = System.Drawing.Color.Silver;
+            this.btn_Transaction_Refresh.FlatAppearance.MouseDownBackColor = System.Drawing.Color.DimGray;
+            this.btn_Transaction_Refresh.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Blue;
+            this.btn_Transaction_Refresh.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btn_Transaction_Refresh.Location = new System.Drawing.Point(488, 33);
+            this.btn_Transaction_Refresh.Name = "btn_Transaction_Refresh";
+            this.btn_Transaction_Refresh.Size = new System.Drawing.Size(105, 28);
+            this.btn_Transaction_Refresh.TabIndex = 25;
+            this.btn_Transaction_Refresh.Text = "Add";
+            this.btn_Transaction_Refresh.UseVisualStyleBackColor = true;
+            this.btn_Transaction_Refresh.Click += new System.EventHandler(this.btn_Transaction_Refresh_Click);
             // 
             // fctxt_Unsuccessful
             // 
@@ -477,10 +508,13 @@
         '\"',
         '\'',
         '\''};
+            this.fctxt_Unsuccessful.AutoIndentCharsPatterns = "\r\n^\\s*[\\w\\.]+(\\s\\w+)?\\s*(?<range>=)\\s*(?<range>[^;]+);\r\n^\\s*(case|default)\\s*[^:]" +
+    "*(?<range>:)\\s*(?<range>[^;]+);\r\n";
             this.fctxt_Unsuccessful.AutoScrollMinSize = new System.Drawing.Size(0, 18);
             this.fctxt_Unsuccessful.BackBrush = null;
             this.fctxt_Unsuccessful.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(37)))), ((int)(((byte)(37)))), ((int)(((byte)(38)))));
             this.fctxt_Unsuccessful.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.fctxt_Unsuccessful.BracketsHighlightStrategy = FastColoredTextBoxNS.BracketsHighlightStrategy.Strategy2;
             this.fctxt_Unsuccessful.CharHeight = 18;
             this.fctxt_Unsuccessful.CharWidth = 10;
             this.fctxt_Unsuccessful.Cursor = System.Windows.Forms.Cursors.IBeam;
@@ -488,9 +522,13 @@
             this.fctxt_Unsuccessful.IndentBackColor = System.Drawing.Color.DimGray;
             this.fctxt_Unsuccessful.IsReplaceMode = false;
             this.fctxt_Unsuccessful.Language = FastColoredTextBoxNS.Language.CSharp;
+            this.fctxt_Unsuccessful.LeftBracket = '(';
+            this.fctxt_Unsuccessful.LeftBracket2 = '{';
             this.fctxt_Unsuccessful.Location = new System.Drawing.Point(24, 335);
             this.fctxt_Unsuccessful.Name = "fctxt_Unsuccessful";
             this.fctxt_Unsuccessful.Paddings = new System.Windows.Forms.Padding(0);
+            this.fctxt_Unsuccessful.RightBracket = ')';
+            this.fctxt_Unsuccessful.RightBracket2 = '}';
             this.fctxt_Unsuccessful.SelectionColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(255)))));
             this.fctxt_Unsuccessful.ServiceColors = ((FastColoredTextBoxNS.ServiceColors)(resources.GetObject("fctxt_Unsuccessful.ServiceColors")));
             this.fctxt_Unsuccessful.ServiceLinesColor = System.Drawing.Color.DimGray;
@@ -498,7 +536,6 @@
             this.fctxt_Unsuccessful.TabIndex = 24;
             this.fctxt_Unsuccessful.WordWrap = true;
             this.fctxt_Unsuccessful.Zoom = 100;
-            this.fctxt_Unsuccessful.Load += new System.EventHandler(this.fctxt_Unsuccessful_Load);
             // 
             // cbo_Transactions
             // 
@@ -509,6 +546,7 @@
             this.cbo_Transactions.Location = new System.Drawing.Point(24, 34);
             this.cbo_Transactions.Name = "cbo_Transactions";
             this.cbo_Transactions.Size = new System.Drawing.Size(447, 24);
+            this.cbo_Transactions.Sorted = true;
             this.cbo_Transactions.TabIndex = 18;
             this.cbo_Transactions.SelectedIndexChanged += new System.EventHandler(this.cbo_Transactions_SelectedIndexChanged);
             this.cbo_Transactions.TextChanged += new System.EventHandler(this.cbo_Transactions_TextChanged);
@@ -528,10 +566,13 @@
         '\"',
         '\'',
         '\''};
+            this.fctxt_Successful.AutoIndentCharsPatterns = "\r\n^\\s*[\\w\\.]+(\\s\\w+)?\\s*(?<range>=)\\s*(?<range>[^;]+);\r\n^\\s*(case|default)\\s*[^:]" +
+    "*(?<range>:)\\s*(?<range>[^;]+);\r\n";
             this.fctxt_Successful.AutoScrollMinSize = new System.Drawing.Size(0, 18);
             this.fctxt_Successful.BackBrush = null;
             this.fctxt_Successful.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(37)))), ((int)(((byte)(37)))), ((int)(((byte)(38)))));
             this.fctxt_Successful.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.fctxt_Successful.BracketsHighlightStrategy = FastColoredTextBoxNS.BracketsHighlightStrategy.Strategy2;
             this.fctxt_Successful.CharHeight = 18;
             this.fctxt_Successful.CharWidth = 10;
             this.fctxt_Successful.Cursor = System.Windows.Forms.Cursors.IBeam;
@@ -539,9 +580,13 @@
             this.fctxt_Successful.IndentBackColor = System.Drawing.Color.DimGray;
             this.fctxt_Successful.IsReplaceMode = false;
             this.fctxt_Successful.Language = FastColoredTextBoxNS.Language.CSharp;
+            this.fctxt_Successful.LeftBracket = '(';
+            this.fctxt_Successful.LeftBracket2 = '{';
             this.fctxt_Successful.Location = new System.Drawing.Point(24, 202);
             this.fctxt_Successful.Name = "fctxt_Successful";
             this.fctxt_Successful.Paddings = new System.Windows.Forms.Padding(0);
+            this.fctxt_Successful.RightBracket = ')';
+            this.fctxt_Successful.RightBracket2 = '}';
             this.fctxt_Successful.SelectionColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(255)))));
             this.fctxt_Successful.ServiceColors = ((FastColoredTextBoxNS.ServiceColors)(resources.GetObject("fctxt_Successful.ServiceColors")));
             this.fctxt_Successful.ServiceLinesColor = System.Drawing.Color.DimGray;
@@ -549,7 +594,6 @@
             this.fctxt_Successful.TabIndex = 23;
             this.fctxt_Successful.WordWrap = true;
             this.fctxt_Successful.Zoom = 100;
-            this.fctxt_Successful.Load += new System.EventHandler(this.fctxt_Successful_Load);
             // 
             // btn_Transaction_Add
             // 
@@ -579,10 +623,13 @@
         '\"',
         '\'',
         '\''};
+            this.fctxt_Identification.AutoIndentCharsPatterns = "\r\n^\\s*[\\w\\.]+(\\s\\w+)?\\s*(?<range>=)\\s*(?<range>[^;]+);\r\n^\\s*(case|default)\\s*[^:]" +
+    "*(?<range>:)\\s*(?<range>[^;]+);\r\n";
             this.fctxt_Identification.AutoScrollMinSize = new System.Drawing.Size(0, 18);
             this.fctxt_Identification.BackBrush = null;
             this.fctxt_Identification.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(37)))), ((int)(((byte)(37)))), ((int)(((byte)(38)))));
             this.fctxt_Identification.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.fctxt_Identification.BracketsHighlightStrategy = FastColoredTextBoxNS.BracketsHighlightStrategy.Strategy2;
             this.fctxt_Identification.CharHeight = 18;
             this.fctxt_Identification.CharWidth = 10;
             this.fctxt_Identification.Cursor = System.Windows.Forms.Cursors.IBeam;
@@ -590,9 +637,13 @@
             this.fctxt_Identification.IndentBackColor = System.Drawing.Color.DimGray;
             this.fctxt_Identification.IsReplaceMode = false;
             this.fctxt_Identification.Language = FastColoredTextBoxNS.Language.CSharp;
+            this.fctxt_Identification.LeftBracket = '(';
+            this.fctxt_Identification.LeftBracket2 = '{';
             this.fctxt_Identification.Location = new System.Drawing.Point(24, 69);
             this.fctxt_Identification.Name = "fctxt_Identification";
             this.fctxt_Identification.Paddings = new System.Windows.Forms.Padding(0);
+            this.fctxt_Identification.RightBracket = ')';
+            this.fctxt_Identification.RightBracket2 = '}';
             this.fctxt_Identification.SelectionColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(255)))));
             this.fctxt_Identification.ServiceColors = ((FastColoredTextBoxNS.ServiceColors)(resources.GetObject("fctxt_Identification.ServiceColors")));
             this.fctxt_Identification.ServiceLinesColor = System.Drawing.Color.DimGray;
@@ -600,7 +651,6 @@
             this.fctxt_Identification.TabIndex = 22;
             this.fctxt_Identification.WordWrap = true;
             this.fctxt_Identification.Zoom = 100;
-            this.fctxt_Identification.Load += new System.EventHandler(this.fctxt_Identification_Load);
             // 
             // btn_Transaction_Save
             // 
@@ -629,20 +679,6 @@
             this.btn_Transaction_Remove.Text = "Remove";
             this.btn_Transaction_Remove.UseVisualStyleBackColor = true;
             this.btn_Transaction_Remove.Click += new System.EventHandler(this.btn_Transaction_Remove_Click);
-            // 
-            // btn_Transaction_Refresh
-            // 
-            this.btn_Transaction_Refresh.FlatAppearance.BorderColor = System.Drawing.Color.Silver;
-            this.btn_Transaction_Refresh.FlatAppearance.MouseDownBackColor = System.Drawing.Color.DimGray;
-            this.btn_Transaction_Refresh.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Blue;
-            this.btn_Transaction_Refresh.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btn_Transaction_Refresh.Location = new System.Drawing.Point(488, 33);
-            this.btn_Transaction_Refresh.Name = "btn_Transaction_Refresh";
-            this.btn_Transaction_Refresh.Size = new System.Drawing.Size(105, 28);
-            this.btn_Transaction_Refresh.TabIndex = 25;
-            this.btn_Transaction_Refresh.Text = "Add";
-            this.btn_Transaction_Refresh.UseVisualStyleBackColor = true;
-            this.btn_Transaction_Refresh.Click += new System.EventHandler(this.btn_Transaction_Refresh_Click);
             // 
             // UC_CfgTemplate
             // 
@@ -717,5 +753,6 @@
         private System.Windows.Forms.Button btn_Keyword_Resfresh;
         private System.Windows.Forms.ComboBox cbo_Keyword_LstKeyword;
         private System.Windows.Forms.Button btn_Transaction_Refresh;
+        private System.Windows.Forms.ComboBox cbo_Keyword_Typelog;
     }
 }
