@@ -23,7 +23,6 @@ E:\Project\NPS\ToolTCB\ToolTCB\Transaction Statistical\bin\Debug\Transaction Sta
 E:\Project\NPS\ToolTCB\ToolTCB\Transaction Statistical\bin\Debug\MetroFramework.Design.dll
 E:\Project\NPS\ToolTCB\ToolTCB\Transaction Statistical\bin\Debug\MetroFramework.dll
 E:\Project\NPS\ToolTCB\ToolTCB\Transaction Statistical\bin\Debug\MetroFramework.Fonts.dll
-E:\Project\NPS\ToolTCB\ToolTCB\Transaction Statistical\bin\Debug\System.Data.SQLite.dll
 E:\Project\NPS\ToolTCB\ToolTCB\Transaction Statistical\obj\Debug\Transaction Statistical.csprojAssemblyReference.cache
 E:\Project\NPS\ToolTCB\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.AddOn.TabControlX.resources
 E:\Project\NPS\ToolTCB\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.AddOn.TabPanelControl.resources
@@ -37,3 +36,14 @@ E:\Project\NPS\ToolTCB\ToolTCB\Transaction Statistical\obj\Debug\Transaction Sta
 E:\Project\NPS\ToolTCB\ToolTCB\Transaction Statistical\obj\Debug\Transaction Statistical.csproj.CopyComplete
 E:\Project\NPS\ToolTCB\ToolTCB\Transaction Statistical\obj\Debug\Transaction Statistical.exe
 E:\Project\NPS\ToolTCB\ToolTCB\Transaction Statistical\obj\Debug\Transaction Statistical.pdb
+E:\Project\NPS\ToolTCB\ToolTCB\Transaction Statistical\bin\Debug\FastColoredTextBox.dll
+E:\Project\NPS\ToolTCB\ToolTCB\Transaction Statistical\bin\Debug\FastColoredTextBox.pdb
+E:\Project\NPS\ToolTCB\ToolTCB\Transaction Statistical\bin\Debug\FastColoredTextBox.xml
+E:\Project\NPS\ToolTCB\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.AddOn.ButtonMenu.resources
+E:\Project\NPS\ToolTCB\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.Frm_TemplateDefault.resources
+E:\Project\NPS\ToolTCB\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.UC_CfgTemplate.resources
+E:\Project\NPS\ToolTCB\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.UC_Info.resources
+E:\Project\NPS\ToolTCB\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.UControl.UC_Menu.resources
+E:\Project\NPS\ToolTCB\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.UControl.UC_Menu_Dashboard.resources
+E:\Project\NPS\ToolTCB\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.UControl.UC_Menu_Overview.resources
+E:\Project\NPS\ToolTCB\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.UControl.UC_Menu_Startup.resources

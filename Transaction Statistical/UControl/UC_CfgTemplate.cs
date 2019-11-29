@@ -307,14 +307,14 @@ namespace Transaction_Statistical
                 }
                 else
                 {
-                    Style fontTitle = new TextStyle(Brushes.Blue, null, FontStyle.Bold);
+                    Style fontTitle = new TextStyle(Brushes.Wheat, null, FontStyle.Bold);
                     Style fontBody = new TextStyle(Brushes.Green, null, FontStyle.Bold);
                     string sReg = fctxt_Pattern.SelectedText;
                     string sString = fctxt_Test.Text;
                     if (string.IsNullOrEmpty(sReg)) sReg = fctxt_Pattern.Text;
                     Dictionary<int, RegesValue> listResult = new Dictionary<int, RegesValue>();
                     uc.TextCustom.AppendText("Pattern: ", fontTitle);
-                    uc.TextCustom.AppendText(sReg + Environment.NewLine, new TextStyle(Brushes.Red, null, FontStyle.Bold));
+                    uc.TextCustom.AppendText(sReg + Environment.NewLine, new TextStyle(Brushes.White, null, FontStyle.Bold));
                     if (Regexs.RunPatternRegular(sString, sReg, out listResult))
                     {
                         uc.TextCustom.AppendText("Time: " + (DateTime.Now - timeStart).TotalMilliseconds + " milliseconds ~ " + (DateTime.Now - timeStart).TotalSeconds + " seconds\n", fontTitle);
