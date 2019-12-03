@@ -188,6 +188,11 @@ namespace Transaction_Statistical
         public Dictionary<string, string> Template_SplitTransactions;
         public Dictionary<string, string> Template_EventCounterChanged;
         public Dictionary<string, TransactionType> Template_TransType;
+
+        //DAT : 2/12/2019
+        public Dictionary<string, string> Template_SplitSupervisorMode;
+        public Dictionary<string, Dictionary<DateTime, Cycle>> ListCycle;
+
         public ReadTransaction()
         {
             sqlite = new SQLiteHelper();
@@ -201,6 +206,7 @@ namespace Transaction_Statistical
             if (Template_EventReceive == null) Template_EventReceive = new Dictionary<string, string>();
             if (Template_SplitTransactions == null) Template_SplitTransactions = new Dictionary<string, string>();
             if (Template_EventCounterChanged == null) Template_EventCounterChanged = new Dictionary<string, string>();
+            if (Template_SplitSupervisorMode == null) Template_SplitSupervisorMode = new Dictionary<string, string>();
 
             if (Template_TransType == null) Template_TransType = new Dictionary<string, TransactionType>(); else Template_TransType.Clear();
 
@@ -229,6 +235,10 @@ namespace Transaction_Statistical
             cfg_data = sqlite.GetTableDataWith2ColumnName("CfgData", "Type_ID", "459", "Parent_ID", InitParametar.TemplateTransactionID);
             foreach (DataRow r in cfg_data.Rows)
                 Template_EventCounterChanged[r["Field"].ToString()] = r["Data"].ToString();
+
+            cfg_data = sqlite.GetTableDataWith2ColumnName("CfgData", "Type_ID", "460", "Parent_ID", InitParametar.TemplateTransactionID);
+            foreach (DataRow r in cfg_data.Rows)
+                Template_SplitSupervisorMode[r["Field"].ToString()] = r["Data"].ToString();
             //{
             //    //foreach (TransactionEvent.Events name in (TransactionEvent.Events[])Enum.GetValues(typeof(TransactionEvent.Events)))
             //    //{
@@ -264,8 +274,10 @@ namespace Transaction_Statistical
                     string day = file.Substring(file.Length - 12, 8);
                     string contenFile = File.ReadAllText(file);
                     DateTime.TryParseExact(day, "yyyyMMdd", CultureInfo.InvariantCulture, DateTimeStyles.None, out currentDate);
+                    SplitLogged(ref contenFile);
                     SplitTransactionEJ(ref contenFile);
-                    FindCounterChanged(ref contenFile);
+
+                    //FindCounterChanged(ref contenFile);
 
                 }
                 int i = ListTransaction.Values.LastOrDefault().Keys.Count;
@@ -282,7 +294,6 @@ namespace Transaction_Statistical
         {
             try
             {
-
                 Dictionary<int, RegesValue> lst = new Dictionary<int, RegesValue>();
                 foreach (string reg in Template_SplitTransactions.Values)
                 {
@@ -488,7 +499,31 @@ namespace Transaction_Statistical
             return false;
         }
 
+        //DAT : 3/12/2019
+        private bool SplitLogged(ref string sString)
+        {
+            try
+            {
+                Dictionary<int, RegesValue> lst = new Dictionary<int, RegesValue>();
+                Dictionary<string, Cycle> cycles = new Dictionary<string, Cycle>();
+                string reg = @"(?<LoggedStart>(\d+:\d+:\d+))\sLogged into Supervisor Mode[^=]+
+\s+(?<LoggedEnd>(\d+:\d+:\d+))\s+Logged out from Supervisor Mode";
+                if (Regexs.RunPatternRegular(sString, reg, out lst))
+                {
+                    Cycle cycle;
+                    foreach (KeyValuePair<int, RegesValue> key in lst)
+                    {
 
+                    }
+                }
+
+            }
+            catch (Exception ex)
+            {
+                InitParametar.Send_Error(ex.ToString(), MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name);
+            }
+            return false;
+        }
     }
 
     public class Transaction
@@ -858,7 +893,6 @@ namespace Transaction_Statistical
         //}
         public static bool RunPatternRegular(string sString, string sReg, out Dictionary<int, RegesValue> listResult)
         {
-
             listResult = new Dictionary<int, RegesValue>();
             try
             {

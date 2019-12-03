@@ -242,6 +242,56 @@ namespace Transaction_Statistical
 
         private void btn_Keyword_Run_Click(object sender, EventArgs e)
         {
+            try
+            {
+                UC_Info uc = new UC_Info();
+                uc.Dock = DockStyle.Fill;
+                Frm_TemplateDefault frm = new Frm_TemplateDefault(uc);
+                frm.titleCustom.Text = "Test map";
+                DateTime timeStart = DateTime.Now;
+                if (fctxt_Pattern.Text.Trim() == string.Empty || fctxt_Test.Text.Trim() == string.Empty)
+                {
+                    MessageBox.Show("Please, input data Pattern string and Test string", "Run test", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
+                else
+                {
+                    Style fontTitle = new TextStyle(Brushes.Blue, null, FontStyle.Bold);
+                    Style fontBody = new TextStyle(Brushes.Green, null, FontStyle.Bold);
+                    string sReg = fctxt_Pattern.SelectedText;
+                    string sString = fctxt_Test.Text;
+                    if (string.IsNullOrEmpty(sReg)) sReg = fctxt_Pattern.Text;
+                    Dictionary<int, RegesValue> listResult = new Dictionary<int, RegesValue>();
+                    uc.TextCustom.AppendText("Pattern: ", fontTitle);
+                    uc.TextCustom.AppendText(sReg + Environment.NewLine, new TextStyle(Brushes.Red, null, FontStyle.Bold));
+                    if (Regexs.RunPatternRegular(sString, sReg, out listResult))
+                    {
+                        uc.TextCustom.AppendText("Time: " + (DateTime.Now - timeStart).TotalMilliseconds + " milliseconds ~ " + (DateTime.Now - timeStart).TotalSeconds + " seconds\n", fontTitle);
+                        int k = 0;
+                        foreach (KeyValuePair<int, RegesValue> group in listResult)
+                        {
+                            k++;
+                            uc.TextCustom.AppendText(Environment.NewLine + "Found map: " + k.ToString() + "/" + listResult.Count.ToString() + Environment.NewLine + "-----------Group var map-----------" + Environment.NewLine, fontTitle);
+                            foreach (KeyValuePair<string, string> var in group.Value.value)
+                            {
+                                uc.TextCustom.AppendText(var.Key + "=" + var.Value + Environment.NewLine, fontTitle);
+                            }
+                            uc.TextCustom.AppendText("-----------Map string--------------" + Environment.NewLine, fontTitle);
+                            uc.TextCustom.AppendText(group.Value.stringfind + Environment.NewLine, fontBody);
+                        }
+                    }
+                    else
+                    {
+                        uc.TextCustom.AppendText("Time: " + (DateTime.Now - timeStart).TotalMilliseconds + " milliseconds ~ " + (DateTime.Now - timeStart).TotalSeconds + " seconds\n", fontTitle);
+                        uc.TextCustom.AppendText("Not math :(", new TextStyle(Brushes.Red, null, FontStyle.Italic));
+                    }
+                    frm.Show();
+                }
+            }
+            catch (Exception ex)
+            {
+                InitParametar.Send_Error(ex.ToString(), MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name);
+            }
         }
 
         private void cbo_Keyword_LstKeyword_SelectedIndexChanged(object sender, EventArgs e)

@@ -233,7 +233,7 @@
             this.spc_Keyword_Pattern.Panel2.Controls.Add(this.btn_Keyword_Save);
             this.spc_Keyword_Pattern.Panel2.Controls.Add(this.btn_Keyword_Help);
             this.spc_Keyword_Pattern.Size = new System.Drawing.Size(602, 265);
-            this.spc_Keyword_Pattern.SplitterDistance = 442;
+            this.spc_Keyword_Pattern.SplitterDistance = 443;
             this.spc_Keyword_Pattern.SplitterWidth = 3;
             this.spc_Keyword_Pattern.TabIndex = 0;
             // 
@@ -263,6 +263,7 @@
             this.fctxt_Pattern.Cursor = System.Windows.Forms.Cursors.IBeam;
             this.fctxt_Pattern.DisabledColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))));
             this.fctxt_Pattern.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.fctxt_Pattern.Font = new System.Drawing.Font("Courier New", 9.75F);
             this.fctxt_Pattern.IndentBackColor = System.Drawing.Color.DimGray;
             this.fctxt_Pattern.IsReplaceMode = false;
             this.fctxt_Pattern.Language = FastColoredTextBoxNS.Language.CSharp;
@@ -277,7 +278,7 @@
             this.fctxt_Pattern.SelectionColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(255)))));
             this.fctxt_Pattern.ServiceColors = ((FastColoredTextBoxNS.ServiceColors)(resources.GetObject("fctxt_Pattern.ServiceColors")));
             this.fctxt_Pattern.ServiceLinesColor = System.Drawing.Color.DimGray;
-            this.fctxt_Pattern.Size = new System.Drawing.Size(442, 265);
+            this.fctxt_Pattern.Size = new System.Drawing.Size(443, 265);
             this.fctxt_Pattern.TabIndex = 1;
             this.fctxt_Pattern.WordWrap = true;
             this.fctxt_Pattern.Zoom = 100;
@@ -387,7 +388,7 @@
             this.spc_Keyword_Test.Panel2.Controls.Add(this.btn_Keyword_Import);
             this.spc_Keyword_Test.Panel2.Controls.Add(this.btn_Keyword_Run);
             this.spc_Keyword_Test.Size = new System.Drawing.Size(602, 292);
-            this.spc_Keyword_Test.SplitterDistance = 442;
+            this.spc_Keyword_Test.SplitterDistance = 443;
             this.spc_Keyword_Test.SplitterWidth = 3;
             this.spc_Keyword_Test.TabIndex = 0;
             // 
@@ -417,6 +418,7 @@
             this.fctxt_Test.Cursor = System.Windows.Forms.Cursors.IBeam;
             this.fctxt_Test.DisabledColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))));
             this.fctxt_Test.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.fctxt_Test.Font = new System.Drawing.Font("Courier New", 9.75F);
             this.fctxt_Test.IndentBackColor = System.Drawing.Color.DimGray;
             this.fctxt_Test.IsReplaceMode = false;
             this.fctxt_Test.Language = FastColoredTextBoxNS.Language.CSharp;
@@ -431,7 +433,7 @@
             this.fctxt_Test.SelectionColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(255)))));
             this.fctxt_Test.ServiceColors = ((FastColoredTextBoxNS.ServiceColors)(resources.GetObject("fctxt_Test.ServiceColors")));
             this.fctxt_Test.ServiceLinesColor = System.Drawing.Color.DimGray;
-            this.fctxt_Test.Size = new System.Drawing.Size(442, 292);
+            this.fctxt_Test.Size = new System.Drawing.Size(443, 292);
             this.fctxt_Test.TabIndex = 2;
             this.fctxt_Test.WordWrap = true;
             this.fctxt_Test.Zoom = 100;
@@ -567,6 +569,7 @@
             this.fctxt_Unsuccessful.CharWidth = 8;
             this.fctxt_Unsuccessful.Cursor = System.Windows.Forms.Cursors.IBeam;
             this.fctxt_Unsuccessful.DisabledColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))));
+            this.fctxt_Unsuccessful.Font = new System.Drawing.Font("Courier New", 9.75F);
             this.fctxt_Unsuccessful.IndentBackColor = System.Drawing.Color.DimGray;
             this.fctxt_Unsuccessful.IsReplaceMode = false;
             this.fctxt_Unsuccessful.Language = FastColoredTextBoxNS.Language.CSharp;
@@ -627,6 +630,7 @@
             this.fctxt_Successful.CharWidth = 8;
             this.fctxt_Successful.Cursor = System.Windows.Forms.Cursors.IBeam;
             this.fctxt_Successful.DisabledColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))));
+            this.fctxt_Successful.Font = new System.Drawing.Font("Courier New", 9.75F);
             this.fctxt_Successful.IndentBackColor = System.Drawing.Color.DimGray;
             this.fctxt_Successful.IsReplaceMode = false;
             this.fctxt_Successful.Language = FastColoredTextBoxNS.Language.CSharp;
@@ -686,6 +690,7 @@
             this.fctxt_Identification.CharWidth = 8;
             this.fctxt_Identification.Cursor = System.Windows.Forms.Cursors.IBeam;
             this.fctxt_Identification.DisabledColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))));
+            this.fctxt_Identification.Font = new System.Drawing.Font("Courier New", 9.75F);
             this.fctxt_Identification.IndentBackColor = System.Drawing.Color.DimGray;
             this.fctxt_Identification.IsReplaceMode = false;
             this.fctxt_Identification.Language = FastColoredTextBoxNS.Language.CSharp;
