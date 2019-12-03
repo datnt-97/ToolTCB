@@ -413,7 +413,6 @@ namespace Transaction_Statistical
                     Dictionary<int, RegesValueWithPatternOfGroup> listResult2 = new Dictionary<int, RegesValueWithPatternOfGroup>();
                     uc.TextCustom.AppendText("Pattern: ", fontTitle);
                     uc.TextCustom.AppendText(sReg + Environment.NewLine, new TextStyle(Brushes.White, null, FontStyle.Bold));
-
                     if (Regexs.RunPatternRegular(sString, sReg, out listResult2))
                     {
                         uc.TextCustom.AppendText("Time: " + (DateTime.Now - timeStart).TotalMilliseconds + " milliseconds ~ " + (DateTime.Now - timeStart).TotalSeconds + " seconds\n", fontTitle);

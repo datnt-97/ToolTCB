@@ -47,3 +47,5 @@ E:\Project\NPS\ToolTCB\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Sta
 E:\Project\NPS\ToolTCB\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.UControl.UC_Menu_Dashboard.resources
 E:\Project\NPS\ToolTCB\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.UControl.UC_Menu_Overview.resources
 E:\Project\NPS\ToolTCB\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.UControl.UC_Menu_Startup.resources
+E:\Project\NPS\ToolTCB\ToolTCB\Transaction Statistical\bin\Debug\EPPlus.dll
+E:\Project\NPS\ToolTCB\ToolTCB\Transaction Statistical\bin\Debug\EPPlus.xml

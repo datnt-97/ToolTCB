@@ -276,8 +276,7 @@ namespace Transaction_Statistical
                     DateTime.TryParseExact(day, "yyyyMMdd", CultureInfo.InvariantCulture, DateTimeStyles.None, out currentDate);
                     SplitLogged(ref contenFile);
                     SplitTransactionEJ(ref contenFile);
-
-                    //FindCounterChanged(ref contenFile);
+                    FindCounterChanged(ref contenFile);
 
                 }
                 int i = ListTransaction.Values.LastOrDefault().Keys.Count;
@@ -505,15 +504,16 @@ namespace Transaction_Statistical
             try
             {
                 Dictionary<int, RegesValue> lst = new Dictionary<int, RegesValue>();
-                Dictionary<string, Cycle> cycles = new Dictionary<string, Cycle>();
-                string reg = @"(?<LoggedStart>(\d+:\d+:\d+))\sLogged into Supervisor Mode[^=]+
-\s+(?<LoggedEnd>(\d+:\d+:\d+))\s+Logged out from Supervisor Mode";
+                string reg = @"(?<Logged>(?<LoggedStart>(\d+:\d+:\d+))\sLogged into Supervisor Mode[\s\S]*?\s+(?<LoggedEnd>(\d+:\d+:\d+))\s+Logged out from Supervisor Mode)";
                 if (Regexs.RunPatternRegular(sString, reg, out lst))
                 {
                     Cycle cycle;
                     foreach (KeyValuePair<int, RegesValue> key in lst)
                     {
-
+                        cycle = new Cycle();
+                        cycle.LogTxt = key.Value.stringfind;
+                        //FindCounterChanged(cycle.LogTxt);
+                        sString = sString.Replace(key.Value.value["Logged"], null);
                     }
                 }
 
@@ -1011,6 +1011,8 @@ namespace Transaction_Statistical
         public string LogTxt;
         public string PathLog;
         public int IndexLog;
+        public string TerminalID;
+        public string SerialNo;
     }
     public class Cassette
     {
