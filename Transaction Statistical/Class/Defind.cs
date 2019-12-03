@@ -76,9 +76,9 @@ namespace Transaction_Statistical
                 if (!Directory.Exists(PathDirectoryDocumentsUsr)) Directory.CreateDirectory(PathDirectoryDocumentsUsr);
                 if (!Directory.Exists(PathDirectoryCurrentApp) || !Directory.Exists(PathDirectoryUtilities) || !Directory.Exists(PathDirectoryTempUsr)) MessageBox.Show("Directory Application or directory temp profile user error.", "Error Directory.");
                 listFileOpened = (PathDirectoryDocumentsUsr + "\\ListFileOpened.ini").Replace(@"\\", @"\"); if (!File.Exists(listFileOpened)) File.Create(listFileOpened);
-              
+
                 configFileTraceDefault = PathDirectoryCurrentApp + @"\config\ConfigTraceFile.ini";
-               
+
                 PathFileRecordDeletetStartup = (PathDirectoryDocumentsUsr + "\\ListFileDeletetStartup.txt").Replace(@"\\", @"\"); if (!File.Exists(PathFileRecordDeletetStartup)) File.Create(PathFileRecordDeletetStartup);
 
                 DatabaseFile = PathDirectoryCurrentAppConfigData + "\\DB.s3db";
@@ -122,7 +122,7 @@ namespace Transaction_Statistical
             }
             #endregion
         }
-     
+
         public static void Send_Error(string MsgError, string ClassName, string MethodName)
         {
             try
@@ -167,27 +167,27 @@ namespace Transaction_Statistical
         public string Successful;
         public string Unsuccessful;
     }
-    
+
     public class ReadTransaction
     {
         SQLiteHelper sqlite;
         /// Transaction
-        public string FormatTime= "HH:mm:ss";
+        public string FormatTime = "HH:mm:ss";
         public string FormatDate = "yyyyMMdd";
         public string FormatDateTime = "MM - dd - yyyy HH:mm:ss";
         public string TemplateTransactionID = "65";
-        public  Dictionary<TransactionEvent.Events, string> transactionTemplate;
+        public Dictionary<TransactionEvent.Events, string> transactionTemplate;
 
-        public  Dictionary<string, Dictionary<DateTime, Transaction>> ListTransaction;
-        public  DateTime StartDate = DateTime.MinValue;
-        public  DateTime EndDate = DateTime.MaxValue;
+        public Dictionary<string, Dictionary<DateTime, Transaction>> ListTransaction;
+        public DateTime StartDate = DateTime.MinValue;
+        public DateTime EndDate = DateTime.MaxValue;
         public Dictionary<string, string> Template_EventTransaction;
         public Dictionary<string, string> Template_EventDevice;
         public Dictionary<string, string> Template_EventRequest;
         public Dictionary<string, string> Template_EventReceive;
         public Dictionary<string, string> Template_SplitTransactions;
-        public Dictionary<string, string> Template_EventCounterChanged; 
-        public  Dictionary<string, TransactionType> Template_TransType;
+        public Dictionary<string, string> Template_EventCounterChanged;
+        public Dictionary<string, TransactionType> Template_TransType;
         public ReadTransaction()
         {
             sqlite = new SQLiteHelper();
@@ -258,7 +258,7 @@ namespace Transaction_Statistical
                 DateTime currentDate = DateTime.MinValue;
 
                 ListTransaction = new Dictionary<string, Dictionary<DateTime, Transaction>>();
-               
+
                 foreach (string file in files)
                 {
                     string day = file.Substring(file.Length - 12, 8);
@@ -342,7 +342,7 @@ namespace Transaction_Statistical
                 {
                     if (Regexs.RunPatternRegular(sString, reg, out lst))
                     {
-                      //check counter
+                        //check counter
                     }
                 }
             }
@@ -352,14 +352,14 @@ namespace Transaction_Statistical
             }
             return false;
         }
-        private bool FindEventDevice( DateTime DateCurrent,ref string sString,ref Dictionary<DateTime,TransactionEvent> eventList)
+        private bool FindEventDevice(DateTime DateCurrent, ref string sString, ref Dictionary<DateTime, TransactionEvent> eventList)
         {
             try
             {
                 Dictionary<int, RegesValue> lst = new Dictionary<int, RegesValue>();
                 TransactionEvent evt;
-                
-                foreach (KeyValuePair<string,string>  tmp in Template_EventDevice)
+
+                foreach (KeyValuePair<string, string> tmp in Template_EventDevice)
                 {
                     if (Regexs.RunPatternRegular(sString, tmp.Value, out lst))
                     {
@@ -406,7 +406,7 @@ namespace Transaction_Statistical
                             {
                                 evt.TTime = regx.value["Time"];
                                 DateTime.TryParseExact(String.Format("{0:" + FormatDate + "}", DateCurrent) + evt.TTime, FormatDate + FormatTime, CultureInfo.InvariantCulture, DateTimeStyles.None, out DateCurrent);
-                            }                         
+                            }
                             evt.TDate = string.Format("{0:" + FormatDate + "}", DateCurrent);
                             if (eventList.ContainsKey(DateCurrent)) eventList[DateCurrent.AddMilliseconds(1)] = evt;
                             else eventList[DateCurrent] = evt;
@@ -488,7 +488,7 @@ namespace Transaction_Statistical
             return false;
         }
 
-       
+
     }
 
     public class Transaction
@@ -502,7 +502,7 @@ namespace Transaction_Statistical
             MiniStatement,
             ChangePin
         }
-        public Dictionary<DateTime, TransactionEvent> ListEvent=new Dictionary<DateTime, TransactionEvent>();
+        public Dictionary<DateTime, TransactionEvent> ListEvent = new Dictionary<DateTime, TransactionEvent>();
         public int Result;
         string _datainput = string.Empty;
         [CategoryAttribute("Customer"), DescriptionAttribute("Data input")]
@@ -712,12 +712,12 @@ namespace Transaction_Statistical
         { }
 
     }
-    public class RegesValue_2
+    public class RegesValueWithPatternOfGroup
     {
         public int index;
         public Dictionary<string, Dictionary<int, string>> value = new Dictionary<string, Dictionary<int, string>>();
         public string stringfind;
-        public RegesValue_2()
+        public RegesValueWithPatternOfGroup()
         { }
 
     }
@@ -891,10 +891,10 @@ namespace Transaction_Statistical
             }
             return false;
         }
-        public static bool RunPatternRegular_2(string sString, string sReg, out Dictionary<int, RegesValue_2> listResult)
+        public static bool RunPatternRegular(string sString, string sReg, out Dictionary<int, RegesValueWithPatternOfGroup> listResult)
         {
 
-            listResult = new Dictionary<int, RegesValue_2>();
+            listResult = new Dictionary<int, RegesValueWithPatternOfGroup>();
             try
             {
                 Regex myRegex = new Regex(sReg, RegexOptions.ExplicitCapture, TimeSpan.FromSeconds(5));
@@ -904,7 +904,7 @@ namespace Transaction_Statistical
                 {
                     foreach (Match n in m)
                     {
-                        RegesValue_2 results = new RegesValue_2();
+                        RegesValueWithPatternOfGroup results = new RegesValueWithPatternOfGroup();
                         results.stringfind = n.ToString(); sString = sString.Replace(n.ToString(), string.Empty);
                         results.index = n.Index;
                         foreach (string groupName in myRegex.GetGroupNames())
@@ -933,6 +933,8 @@ namespace Transaction_Statistical
             }
             return false;
         }
+
+
     }
     public class UIHelper
     {

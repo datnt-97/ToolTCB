@@ -25,20 +25,20 @@ namespace Transaction_Statistical
         }
         private void LoadTypeLog()
         {
-                try
+            try
+            {
+                DataTable cfg_data = sqlite.GetTableDataWithColumnName("CfgData", "Type_ID", "67");
+                cbo_Keyword_Typelog.Items.Clear();
+                foreach (DataRow R in cfg_data.Rows)
                 {
-                    DataTable cfg_data = sqlite.GetTableDataWithColumnName("CfgData", "Type_ID", "67");
-                    cbo_Keyword_Typelog.Items.Clear();
-                    foreach (DataRow R in cfg_data.Rows)
-                    {
-                        ComboBoxItem cb = new ComboBoxItem();
-                        cb.Text = R["Data"].ToString();
-                        cb.Value = R["ID"].ToString(); 
+                    ComboBoxItem cb = new ComboBoxItem();
+                    cb.Text = R["Data"].ToString();
+                    cb.Value = R["ID"].ToString();
                     cbo_Keyword_Typelog.Items.Add(cb);
-                    }
-                    if (cbo_Keyword_Typelog.Items.Count != 0) cbo_Keyword_Typelog.SelectedIndex = 0;
                 }
-                catch { }
+                if (cbo_Keyword_Typelog.Items.Count != 0) cbo_Keyword_Typelog.SelectedIndex = 0;
+            }
+            catch { }
         }
         private void btn_Keyword_Help_Click(object sender, EventArgs e)
         {
@@ -239,64 +239,11 @@ namespace Transaction_Statistical
             if (chk_Keywork_Test.Checked) fctxt_Test.WordWrap = true;
             else fctxt_Test.WordWrap = false;
         }
-        
+
         private void btn_Keyword_Run_Click(object sender, EventArgs e)
         {
-            try
-            {
-                UC_Info uc = new UC_Info();
-                uc.Dock = DockStyle.Fill;
-                Frm_TemplateDefault frm = new Frm_TemplateDefault(uc);
-                frm.titleCustom.Text = "Test map";
-                DateTime timeStart = DateTime.Now;
-                if (fctxt_Pattern.Text.Trim() == string.Empty || fctxt_Test.Text.Trim() == string.Empty)
-                {
-                    MessageBox.Show("Please, input data Pattern string and Test string", "Run test", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                    return;
-                }
-                else
-                {
-                    Style fontTitle = new TextStyle(Brushes.Wheat, null, FontStyle.Bold);
-                    Style fontBody = new TextStyle(Brushes.Green, null, FontStyle.Bold);
-                    string sReg = fctxt_Pattern.SelectedText;
-                    string sString = fctxt_Test.Text;
-                    if (string.IsNullOrEmpty(sReg)) sReg = fctxt_Pattern.Text;
-                    Dictionary<int, RegesValue> listResult = new Dictionary<int, RegesValue>();
-                    Dictionary<int, RegesValue_2> listResult2 = new Dictionary<int, RegesValue_2>();
-                    uc.TextCustom.AppendText("Pattern: ", fontTitle);
-                    uc.TextCustom.AppendText(sReg + Environment.NewLine, new TextStyle(Brushes.White, null, FontStyle.Bold));
-
-                    if (Regexs.RunPatternRegular_2(sString, sReg, out listResult2))
-                    {
-                        uc.TextCustom.AppendText("Time: " + (DateTime.Now - timeStart).TotalMilliseconds + " milliseconds ~ " + (DateTime.Now - timeStart).TotalSeconds + " seconds\n", fontTitle);
-                        int k = 0;
-                        foreach (KeyValuePair<int, RegesValue_2> group in listResult2)
-                        {
-                            k++;
-                            uc.TextCustom.AppendText(Environment.NewLine + "Found map: " + k.ToString() + "/" + listResult2.Count.ToString() + Environment.NewLine + "-----------Group var map-----------" + Environment.NewLine, fontTitle);
-                            foreach (KeyValuePair<string, Dictionary<int, string>> var in group.Value.value)
-                            {
-                                uc.TextCustom.AppendText(var.Key + " : " + string.Join(" | ", var.Value.Values.ToArray()) + Environment.NewLine, fontTitle);
-
-                            }
-                            uc.TextCustom.AppendText("-----------Map string--------------" + Environment.NewLine, fontTitle);
-                            uc.TextCustom.AppendText(group.Value.stringfind + Environment.NewLine, fontBody);
-                        }
-                    }
-                    else
-                    {
-                        uc.TextCustom.AppendText("Time: " + (DateTime.Now - timeStart).TotalMilliseconds + " milliseconds ~ " + (DateTime.Now - timeStart).TotalSeconds + " seconds\n", fontTitle);
-                        uc.TextCustom.AppendText("Not math :(", new TextStyle(Brushes.Red, null, FontStyle.Italic));
-                    }
-                    frm.Show();
-                }
-            }
-            catch (Exception ex)
-            {
-                InitParametar.Send_Error(ex.ToString(), MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name);
-            }
         }
-               
+
         private void cbo_Keyword_LstKeyword_SelectedIndexChanged(object sender, EventArgs e)
         {
             try
@@ -350,7 +297,7 @@ namespace Transaction_Statistical
         {
             try
             {
-                
+
                 cbo_Transactions.Items.Clear();
                 cbo_Transactions.Text = string.Empty;
                 DataTable tb_trans = sqlite.GetTableDataWithColumnName("Transactions", "TemplateID", template_ID);
@@ -363,7 +310,7 @@ namespace Transaction_Statistical
                 }
             }
             catch (Exception ex) { InitParametar.Send_Error(ex.ToString(), MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name); }
-        }       
+        }
 
         private void cbo_Keyword_Typelog_SelectedIndexChanged(object sender, EventArgs e)
         {
@@ -384,6 +331,68 @@ namespace Transaction_Statistical
                 if (cbo_Keyword_LstKeyword.Items.Count != 0) cbo_Keyword_LstKeyword.SelectedIndex = 0;
             }
             catch { }
+        }
+
+        private void btn_Keyword_Import_Click(object sender, EventArgs e)
+        {
+
+        }
+
+
+        private void btn_RunTest2_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                UC_Info uc = new UC_Info();
+                uc.Dock = DockStyle.Fill;
+                Frm_TemplateDefault frm = new Frm_TemplateDefault(uc);
+                frm.titleCustom.Text = "Test map";
+                DateTime timeStart = DateTime.Now;
+                if (fctxt_Pattern.Text.Trim() == string.Empty || fctxt_Test.Text.Trim() == string.Empty)
+                {
+                    MessageBox.Show("Please, input data Pattern string and Test string", "Run test", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
+                else
+                {
+                    Style fontTitle = new TextStyle(Brushes.Wheat, null, FontStyle.Bold);
+                    Style fontBody = new TextStyle(Brushes.Green, null, FontStyle.Bold);
+                    string sReg = fctxt_Pattern.SelectedText;
+                    string sString = fctxt_Test.Text;
+                    if (string.IsNullOrEmpty(sReg)) sReg = fctxt_Pattern.Text;
+                    Dictionary<int, RegesValueWithPatternOfGroup> listResult2 = new Dictionary<int, RegesValueWithPatternOfGroup>();
+                    uc.TextCustom.AppendText("Pattern: ", fontTitle);
+                    uc.TextCustom.AppendText(sReg + Environment.NewLine, new TextStyle(Brushes.White, null, FontStyle.Bold));
+
+                    if (Regexs.RunPatternRegular(sString, sReg, out listResult2))
+                    {
+                        uc.TextCustom.AppendText("Time: " + (DateTime.Now - timeStart).TotalMilliseconds + " milliseconds ~ " + (DateTime.Now - timeStart).TotalSeconds + " seconds\n", fontTitle);
+                        int k = 0;
+                        foreach (KeyValuePair<int, RegesValueWithPatternOfGroup> group in listResult2)
+                        {
+                            k++;
+                            uc.TextCustom.AppendText(Environment.NewLine + "Found map: " + k.ToString() + "/" + listResult2.Count.ToString() + Environment.NewLine + "-----------Group var map-----------" + Environment.NewLine, fontTitle);
+                            foreach (KeyValuePair<string, Dictionary<int, string>> var in group.Value.value)
+                            {
+                                uc.TextCustom.AppendText(var.Key + " : " + string.Join(" | ", var.Value.Values.ToArray()) + Environment.NewLine, fontTitle);
+
+                            }
+                            uc.TextCustom.AppendText("-----------Map string--------------" + Environment.NewLine, fontTitle);
+                            uc.TextCustom.AppendText(group.Value.stringfind + Environment.NewLine, fontBody);
+                        }
+                    }
+                    else
+                    {
+                        uc.TextCustom.AppendText("Time: " + (DateTime.Now - timeStart).TotalMilliseconds + " milliseconds ~ " + (DateTime.Now - timeStart).TotalSeconds + " seconds\n", fontTitle);
+                        uc.TextCustom.AppendText("Not math :(", new TextStyle(Brushes.Red, null, FontStyle.Italic));
+                    }
+                    frm.Show();
+                }
+            }
+            catch (Exception ex)
+            {
+                InitParametar.Send_Error(ex.ToString(), MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name);
+            }
         }
     }
 }
