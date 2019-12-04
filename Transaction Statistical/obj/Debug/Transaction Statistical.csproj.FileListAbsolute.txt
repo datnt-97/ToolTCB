@@ -49,3 +49,34 @@ E:\Project\NPS\ToolTCB\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Sta
 E:\Project\NPS\ToolTCB\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.UControl.UC_Menu_Startup.resources
 E:\Project\NPS\ToolTCB\ToolTCB\Transaction Statistical\bin\Debug\EPPlus.dll
 E:\Project\NPS\ToolTCB\ToolTCB\Transaction Statistical\bin\Debug\EPPlus.xml
+D:\ToolTCB_Git\ToolTCB\Transaction Statistical\bin\Debug\Transaction Statistical.exe.config
+D:\ToolTCB_Git\ToolTCB\Transaction Statistical\bin\Debug\Transaction Statistical.exe
+D:\ToolTCB_Git\ToolTCB\Transaction Statistical\bin\Debug\Transaction Statistical.pdb
+D:\ToolTCB_Git\ToolTCB\Transaction Statistical\bin\Debug\EPPlus.dll
+D:\ToolTCB_Git\ToolTCB\Transaction Statistical\bin\Debug\FastColoredTextBox.dll
+D:\ToolTCB_Git\ToolTCB\Transaction Statistical\bin\Debug\MetroFramework.Design.dll
+D:\ToolTCB_Git\ToolTCB\Transaction Statistical\bin\Debug\MetroFramework.dll
+D:\ToolTCB_Git\ToolTCB\Transaction Statistical\bin\Debug\MetroFramework.Fonts.dll
+D:\ToolTCB_Git\ToolTCB\Transaction Statistical\bin\Debug\FastColoredTextBox.pdb
+D:\ToolTCB_Git\ToolTCB\Transaction Statistical\bin\Debug\FastColoredTextBox.xml
+D:\ToolTCB_Git\ToolTCB\Transaction Statistical\bin\Debug\EPPlus.xml
+D:\ToolTCB_Git\ToolTCB\Transaction Statistical\obj\Debug\Transaction Statistical.csprojAssemblyReference.cache
+D:\ToolTCB_Git\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.AddOn.ButtonMenu.resources
+D:\ToolTCB_Git\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.AddOn.TabControlX.resources
+D:\ToolTCB_Git\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.AddOn.TabPanelControl.resources
+D:\ToolTCB_Git\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.Frm_TemplateDefault.resources
+D:\ToolTCB_Git\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.Frm_Main.resources
+D:\ToolTCB_Git\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.Frm_LoadingApp.resources
+D:\ToolTCB_Git\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.Frm.test.resources
+D:\ToolTCB_Git\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.Properties.Resources.resources
+D:\ToolTCB_Git\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.UC_CfgTemplate.resources
+D:\ToolTCB_Git\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.UC_Info.resources
+D:\ToolTCB_Git\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.UControl.UC_Menu.resources
+D:\ToolTCB_Git\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.UControl.UC_Menu_Dashboard.resources
+D:\ToolTCB_Git\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.UControl.UC_Menu_Overview.resources
+D:\ToolTCB_Git\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.UControl.UC_Menu_Startup.resources
+D:\ToolTCB_Git\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.UControl.UC_Transaction.resources
+D:\ToolTCB_Git\ToolTCB\Transaction Statistical\obj\Debug\Transaction Statistical.csproj.GenerateResource.cache
+D:\ToolTCB_Git\ToolTCB\Transaction Statistical\obj\Debug\Transaction Statistical.csproj.CopyComplete
+D:\ToolTCB_Git\ToolTCB\Transaction Statistical\obj\Debug\Transaction Statistical.exe
+D:\ToolTCB_Git\ToolTCB\Transaction Statistical\obj\Debug\Transaction Statistical.pdb

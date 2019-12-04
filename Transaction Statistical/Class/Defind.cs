@@ -261,6 +261,7 @@ namespace Transaction_Statistical
         }
         public bool Reads(List<string> files)
         {
+
             try
             {
                 DateTime dateBegin = DateTime.MinValue;
@@ -274,8 +275,8 @@ namespace Transaction_Statistical
                     string day = file.Substring(file.Length - 12, 8);
                     string contenFile = File.ReadAllText(file);
                     DateTime.TryParseExact(day, "yyyyMMdd", CultureInfo.InvariantCulture, DateTimeStyles.None, out currentDate);
-                    SplitLogged(ref contenFile);
                     SplitTransactionEJ(ref contenFile);
+
                     FindCounterChanged(ref contenFile);
 
                 }
@@ -348,11 +349,20 @@ namespace Transaction_Statistical
             {
 
                 Dictionary<int, RegesValue> lst = new Dictionary<int, RegesValue>();
-                foreach (string reg in Template_EventCounterChanged.Values)
+                Cycle cycle;
+                CycleEvent evt;
+                foreach (KeyValuePair<string, string> reg in Template_EventCounterChanged)
                 {
-                    if (Regexs.RunPatternRegular(sString, reg, out lst))
+                    if (Regexs.RunPatternRegular(sString, reg.Value, out lst))
                     {
-                        //check counter
+                        foreach (KeyValuePair<int, RegesValue> key in lst)
+                        {
+                            evt = new CycleEvent();
+                            evt.Name = reg.Key;
+                            //evt.
+                            //evt.Status = TransactionEvent.StatusS.Succeeded;
+                            //evt.TContent = regx.stringfind;
+                        }
                     }
                 }
             }
@@ -738,6 +748,29 @@ namespace Transaction_Statistical
         [CategoryAttribute("Transaction"), DescriptionAttribute("Content of the transaction")]
         public string TContent;
     }
+
+    public class CycleEvent
+    {
+        public enum Events
+        {
+            SettlementPeriod,
+            CashCount,
+            DenominationCount,
+            CardCapture,
+            ForgottenBanknote,
+            Replenishment
+        }
+
+        public string Name;
+        public string Terminal_No;
+        public string Serial_No;
+
+        [CategoryAttribute("Cycle"), DescriptionAttribute("Date of the cycle")]
+        public string TDate;
+
+    }
+
+
     public class RegesValue
     {
         public int index;
@@ -1007,18 +1040,50 @@ namespace Transaction_Statistical
     {
         public DateTime DateBegin;
         public DateTime DateEnd;
-        public Dictionary<string, Cassette> ListCassette = new Dictionary<string, Cassette>();
+        public Dictionary<DateTime, CycleEvent> ListEvent = new Dictionary<DateTime, CycleEvent>();
+        //public Dictionary<DateTime, Cassette> Cashcount_In = new Dictionary<DateTime, Cassette>();
+        //public Dictionary<DateTime, Cassette> Cashcount_Out = new Dictionary<DateTime, Cassette>();
+        //public Dictionary<string, Deno> Denomination = new Dictionary<string, Deno>();
         public string LogTxt;
         public string PathLog;
         public int IndexLog;
         public string TerminalID;
         public string SerialNo;
     }
+    public class Deno
+    {
+        public string Name;
+        public int Initial;
+        public int Dispensed;
+        public int Deposited;
+        public int Remaining;
+        public int Retracted;
+        public string Current;
+
+    }
+    public class CapturedCard
+    {
+        public DateTime DateTime;
+        public int Count;
+        public string CardNumber;
+        public string RetractedTitle;
+        public string Status;
+    }
+    public class ForgottenBanknote
+    {
+        public DateTime DateTime;
+        public string No;
+        public string CardNumber;
+        public string Retract;
+        public string Position;
+    }
     public class Cassette
     {
         public string Name;
         public string Description;
-        public string Denomination;
+        public string Status;
+        public Deno Denomination;
+        public string Type;
         public decimal Value;
         public int Counter;
         public DateTime DateChange;

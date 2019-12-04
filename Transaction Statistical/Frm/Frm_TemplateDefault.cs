@@ -288,5 +288,9 @@ namespace Transaction_Statistical
 
         #endregion
 
+        private void pnl_Main_Paint(object sender, PaintEventArgs e)
+        {
+
+        }
     }
 }

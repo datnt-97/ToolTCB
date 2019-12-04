@@ -26,8 +26,8 @@ namespace Transaction_Statistical.UControl
         {
             if (show) show = false; else show = true;
             if (running) return;
-            running = true;      
-            while(running)
+            running = true;
+            while (running)
             {
                 if (show)
                 {
@@ -92,7 +92,7 @@ namespace Transaction_Statistical.UControl
             this.txt_Path.Name = "txt_Path";
             this.txt_Path.Size = new System.Drawing.Size(645, 22);
             this.txt_Path.TabIndex = 1;
-            this.txt_Path.Text = "d:\\06-NPSS\\Tool_TraSoat\\LOG tech\\LOG tech\\02-10-2019";
+            this.txt_Path.Text = @"D:\99147001_EJF\Thư mục mới";
             // 
             // gpBox_Actions
             // 
@@ -174,7 +174,7 @@ namespace Transaction_Statistical.UControl
             // 
             // tre_LstTrans
             // 
-            this.tre_LstTrans.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            this.tre_LstTrans.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
             | System.Windows.Forms.AnchorStyles.Left)));
             this.tre_LstTrans.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(37)))), ((int)(((byte)(37)))), ((int)(((byte)(38)))));
             this.tre_LstTrans.ForeColor = System.Drawing.Color.White;
@@ -235,8 +235,8 @@ namespace Transaction_Statistical.UControl
             // 
             // propertyGrid1
             // 
-            this.propertyGrid1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
+            this.propertyGrid1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+            | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
             this.propertyGrid1.Location = new System.Drawing.Point(18, 33);
             this.propertyGrid1.Name = "propertyGrid1";

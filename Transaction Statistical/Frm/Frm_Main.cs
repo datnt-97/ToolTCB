@@ -292,8 +292,12 @@ namespace Transaction_Statistical
                 isWindowMaximized = true;
             }
         }
+
         #endregion
 
+        private void tabControlX1_Load(object sender, EventArgs e)
+        {
 
+        }
     }
 }
