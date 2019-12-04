@@ -92,7 +92,7 @@ namespace Transaction_Statistical.UControl
             this.txt_Path.Name = "txt_Path";
             this.txt_Path.Size = new System.Drawing.Size(645, 22);
             this.txt_Path.TabIndex = 1;
-            this.txt_Path.Text = @"D:\99147001_EJF\Thư mục mới";
+            this.txt_Path.Text = @"E:\Project\NPS\Document\99147001_EJF\99147001_EJF";
             // 
             // gpBox_Actions
             // 

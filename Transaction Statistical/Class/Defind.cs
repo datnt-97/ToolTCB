@@ -175,6 +175,7 @@ namespace Transaction_Statistical
         public string FormatTime = "HH:mm:ss";
         public string FormatDate = "yyyyMMdd";
         public string FormatDateTime = "MM - dd - yyyy HH:mm:ss";
+        public string FormatDateTime_2 = "MM-dd-yyyy HH:mm:ss";
         public string TemplateTransactionID = "65";
         public Dictionary<TransactionEvent.Events, string> transactionTemplate;
 
@@ -191,7 +192,7 @@ namespace Transaction_Statistical
 
         //DAT : 2/12/2019
         public Dictionary<string, string> Template_SplitSupervisorMode;
-        public Dictionary<string, Dictionary<DateTime, Cycle>> ListCycle;
+        public Dictionary<DateTime, Cycle> ListCycle = new Dictionary<DateTime, Cycle>();
 
         public ReadTransaction()
         {
@@ -276,12 +277,13 @@ namespace Transaction_Statistical
                     string contenFile = File.ReadAllText(file);
                     DateTime.TryParseExact(day, "yyyyMMdd", CultureInfo.InvariantCulture, DateTimeStyles.None, out currentDate);
                     SplitTransactionEJ(ref contenFile);
+                    SplitLogged(ref contenFile);
 
-                    FindCounterChanged(ref contenFile);
+                    //FindCounterChanged(ref contenFile);
 
                 }
                 int i = ListTransaction.Values.LastOrDefault().Keys.Count;
-                MessageBox.Show(i.ToString() + " transaction : " + (DateTime.Now - dateEnd).TotalSeconds.ToString() + " s =>" + ((DateTime.Now - dateEnd).TotalSeconds / i).ToString(), "Total");
+                MessageBox.Show(ListCycle.Count() + ":  Cycle " + i.ToString() + " transaction : " + (DateTime.Now - dateEnd).TotalSeconds.ToString() + " s =>" + ((DateTime.Now - dateEnd).TotalSeconds / i).ToString(), "Total");
                 return true;
             }
             catch (Exception ex)
@@ -343,27 +345,88 @@ namespace Transaction_Statistical
             }
             return false;
         }
-        private bool FindCounterChanged(ref string sString)
+        private bool FindCounterChanged(ref string sString, ref Dictionary<DateTime, Cycle> Cycles)
         {
             try
             {
+                Cycle cycleItem = null;
+                Dictionary<int, RegesValueWithPatternOfGroup> lst = new Dictionary<int, RegesValueWithPatternOfGroup>();
 
-                Dictionary<int, RegesValue> lst = new Dictionary<int, RegesValue>();
-                Cycle cycle;
                 CycleEvent evt;
                 foreach (KeyValuePair<string, string> reg in Template_EventCounterChanged)
                 {
+                    evt = new CycleEvent();
+                    evt.Name = reg.Key;
                     if (Regexs.RunPatternRegular(sString, reg.Value, out lst))
                     {
-                        foreach (KeyValuePair<int, RegesValue> key in lst)
+                        foreach (KeyValuePair<int, RegesValueWithPatternOfGroup> key in lst)
                         {
-                            evt = new CycleEvent();
-                            evt.Name = reg.Key;
-                            //evt.
-                            //evt.Status = TransactionEvent.StatusS.Succeeded;
-                            //evt.TContent = regx.stringfind;
+                            evt.Log = key.Value.stringfind;
+
+                            if (key.Value.value.ContainsKey("Settlement"))
+                            {
+                                cycleItem = new Cycle();
+                                var date = key.Value.value["StartDateTime"].FirstOrDefault().Value;
+                                var startSettlement = DateTime.ParseExact(date, FormatDateTime_2, CultureInfo.InvariantCulture);
+                                cycleItem.DateBegin = startSettlement;
+                                cycleItem.TerminalID = key.Value.value["TerminalNo"].FirstOrDefault().Value;
+                                cycleItem.SerialNo = key.Value.value["SerialNo"].FirstOrDefault().Value;
+
+                                var valueStart = key.Value.value["Start"].LastOrDefault();
+                                var valueEnd = key.Value.value["End"].LastOrDefault();
+                                cycleItem.SettlementPeriodDateBegin = DateTime.ParseExact(valueStart.Value, FormatDateTime_2, CultureInfo.InvariantCulture);
+                                cycleItem.SettlementPeriodDateEnd = DateTime.ParseExact(valueEnd.Value, FormatDateTime_2, CultureInfo.InvariantCulture);
+
+
+                                if (!Cycles.ContainsKey(startSettlement))
+                                {
+                                    Cycles.Add(startSettlement, cycleItem);
+                                }
+                            }
+                            else if (key.Value.value.ContainsKey("TimeCashCount"))
+                            {
+
+                                Dictionary<int, Cassette> Cashcount = new Dictionary<int, Cassette>() {
+                                    { 1,new Cassette{ Name="CAS_A" } },
+                                        {2,new Cassette{ Name="CAS_B" } },
+                                        {3,new Cassette{ Name="CAS_C" } },
+                                        {4,new Cassette{ Name="CAS_D" } },
+                                        {5,new Cassette{ Name="CAS_E" } },
+                                        {6,new Cassette{ Name="CAS_F" } },
+                                        {7,new Cassette{ Name="CAS_R" } },
+                                    };
+
+                                var TimeCashCount = key.Value.value["TimeCashCount"];
+                                evt.TDate = TimeCashCount.FirstOrDefault().Value;
+                                var Type = key.Value.value["Type"].ToArray();
+                                var Denomi = key.Value.value["Denomi"].ToArray();
+                                var Initial = key.Value.value["Initial"].ToArray();
+                                var Current = key.Value.value["Current"].ToArray();
+                                var Status = key.Value.value["Status"].ToArray();
+                                for (int i = 0; i < Type.Count(); i++)
+                                {
+                                    Cashcount.FirstOrDefault(x => x.Key == i + 1).Value.Type = Type[i].Value;
+                                    Cashcount.FirstOrDefault(x => x.Key == i + 1).Value.Denomination.Name = Denomi[i].Value;
+                                    Cashcount.FirstOrDefault(x => x.Key == i + 1).Value.Value = int.Parse(Initial[i].Value.Trim());
+                                    Cashcount.FirstOrDefault(x => x.Key == i + 1).Value.Denomination.Current = Current[i].Value;
+                                    Cashcount.FirstOrDefault(x => x.Key == i + 1).Value.Status = Status[i].Value;
+                                }
+                                if (cycleItem.Cashcount_In == null && cycleItem != null)
+                                {
+                                    cycleItem.Cashcount_In = Cashcount;
+                                }
+                                else
+                                {
+                                    cycleItem.Cashcount_Out = Cashcount;
+                                }
+                            }
+                            else
+                            {
+                                evt.TDate = cycleItem.DateBegin.ToString();
+                            }
                         }
                     }
+                    cycleItem.ListEvent.Add(evt.Name, evt);
                 }
             }
             catch (Exception ex)
@@ -522,7 +585,15 @@ namespace Transaction_Statistical
                     {
                         cycle = new Cycle();
                         cycle.LogTxt = key.Value.stringfind;
-                        //FindCounterChanged(cycle.LogTxt);
+                        string LogTxts = key.Value.stringfind;
+                        FindCounterChanged(ref LogTxts, ref ListCycle);
+
+                        //if (cycle.DateBegin != DateTime.MinValue)
+                        //{
+
+                        //    ListCycle.Add(cycle.DateBegin.ToString(), cycle);
+                        //}
+
                         sString = sString.Replace(key.Value.value["Logged"], null);
                     }
                 }
@@ -762,8 +833,7 @@ namespace Transaction_Statistical
         }
 
         public string Name;
-        public string Terminal_No;
-        public string Serial_No;
+        public string Log;
 
         [CategoryAttribute("Cycle"), DescriptionAttribute("Date of the cycle")]
         public string TDate;
@@ -1038,12 +1108,24 @@ namespace Transaction_Statistical
     }
     public class Cycle
     {
+
         public DateTime DateBegin;
         public DateTime DateEnd;
-        public Dictionary<DateTime, CycleEvent> ListEvent = new Dictionary<DateTime, CycleEvent>();
-        //public Dictionary<DateTime, Cassette> Cashcount_In = new Dictionary<DateTime, Cassette>();
-        //public Dictionary<DateTime, Cassette> Cashcount_Out = new Dictionary<DateTime, Cassette>();
-        //public Dictionary<string, Deno> Denomination = new Dictionary<string, Deno>();
+        public DateTime SettlementPeriodDateBegin;
+        public DateTime SettlementPeriodDateEnd;
+        public Dictionary<string, CycleEvent> ListEvent = new Dictionary<string, CycleEvent>();
+        public Dictionary<int, Cassette> Cashcount_In = null;
+        public Dictionary<int, Cassette> Cashcount_Out = null;
+        public Dictionary<int, Deno> DenominationCount = new Dictionary<int, Deno>()
+        {
+            {1,new Deno{ Name="500k" } },
+            {2,new Deno{ Name="200k" } },
+            {3,new Deno{ Name="100k" } },
+            {4,new Deno{ Name="50k" } },
+            {5,new Deno{ Name="20k" } },
+            {6,new Deno{ Name="10k" } },
+            {7,new Deno{ Name="Unknown" } },
+        };
         public string LogTxt;
         public string PathLog;
         public int IndexLog;
@@ -1082,10 +1164,10 @@ namespace Transaction_Statistical
         public string Name;
         public string Description;
         public string Status;
-        public Deno Denomination;
+        public Deno Denomination = new Deno();
         public string Type;
         public decimal Value;
-        public int Counter;
+        public int Current;
         public DateTime DateChange;
         public Cassette()
         {
