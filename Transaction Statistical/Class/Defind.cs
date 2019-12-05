@@ -278,24 +278,34 @@ namespace Transaction_Statistical
                     string contenFile = File.ReadAllText(file);
                     DateTime.TryParseExact(day, "yyyyMMdd", CultureInfo.InvariantCulture, DateTimeStyles.None, out currentDate);
                     SplitTransactionEJ(ref Terminal, ref contenFile);
-                    FindEventDevice2(currentDate, Terminal, ref contenFile);
+                    //FindEventDevice2(currentDate, Terminal, ref contenFile);
                     FindCounterChanged(ref contenFile, ref ListCycle);
 
                     InitParametar.sTest += contenFile + Environment.NewLine;
                 }
-                var ListCycleFroup = ListCycle.GroupBy(x => x.Value.TerminalID).ToList();
                 var ListTransactionTemp = ListTransaction;
                 for (int c = 0; c < ListTransactionTemp.Count; c++)
                 {
                     var item = ListTransactionTemp.ToArray()[c];
-                    var itemCycle = ListCycleFroup.FirstOrDefault(x => x.Key.Contains(item.Key));
-                    if (itemCycle != null)
+                    var itemValue = item.Value.ToList(); ;
+                    var cycles = ListCycle.Where(x => x.Value.TerminalID.Contains(item.Key)).ToList();
+                    cycles.ForEach(x =>
                     {
-                        for (int ci = 0; ci < itemCycle.Count(); ci++)
-                        {
-                            ListTransaction.FirstOrDefault(x => x.Key.Contains(item.Key)).Value.Add(itemCycle.ToArray()[ci].Key, "Cycle:" + itemCycle.ToArray()[ci].Value.DateBegin);
-                        }
-                    }
+                        ListTransaction.FirstOrDefault(x1 => x1.Key == item.Key).Value.Add(x.Key, x.Value);
+
+                    });
+                    //for (int ci = 0; ci < itemValue.Count(); ci++)
+                    //{
+                    //    var cycles = ListCycle.Where(x => CompareDate(x.Key, itemValue[ci].Key) && x.Value.TerminalID.Contains(item.Key)).ToList();
+                    //    if (cycles != null && cycles.Count > 0)
+                    //    {
+                    //        cycles.ForEach(x =>
+                    //        {
+                    //            ListTransactionTemp.FirstOrDefault(x1 => x1.Key == item.Key).Value.Add(x.Key, x.Value);
+
+                    //        });
+                    //    }
+                    //}
                 }
                 int i = ListTransaction.Values.LastOrDefault().Keys.Count;
                 InitParametar.sTest = i.ToString() + " transaction : " + (DateTime.Now - dateEnd).TotalSeconds.ToString() + " s =>" + ((DateTime.Now - dateEnd).TotalSeconds / i).ToString() + InitParametar.sTest + Environment.NewLine;
@@ -312,6 +322,10 @@ namespace Transaction_Statistical
                 InitParametar.Send_Error(ex.ToString(), MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name);
             }
             return false;
+        }
+        private bool CompareDate(DateTime date1, DateTime date2)
+        {
+            return (date1.Year == date2.Year && date1.Month == date2.Month && date1.Day == date2.Day);
         }
         private bool SplitTransactionEJ(ref string TerminalID, ref string sString)
         {
@@ -1231,6 +1245,13 @@ namespace Transaction_Statistical
         public int IndexLog;
         public string TerminalID;
         public string SerialNo;
+        public Cycle()
+        {
+        }
+        public override string ToString()
+        {
+            return "Cycle: " + DateBegin.ToString();
+        }
     }
     public class Deno
     {

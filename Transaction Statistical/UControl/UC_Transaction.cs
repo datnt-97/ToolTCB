@@ -164,8 +164,12 @@ namespace Transaction_Statistical.UControl
                     string day;
                     foreach (KeyValuePair<string, Dictionary<DateTime, object>> kTerminal in readtran.ListTransaction)
                     {
-                        TreeNodeX ndTerminal = new TreeNodeX(String.Format("Terminal ID: {0} - Total: {1} transactions", kTerminal.Key, kTerminal.Value.Count));
-                        foreach (KeyValuePair<DateTime, object> kTransaction in kTerminal.Value)
+                        int countCycle = kTerminal.Value.Where(x => (x.Value is Cycle)).ToList().Count;
+                        int countTransaction = kTerminal.Value.Where(x => (x.Value is Transaction)).ToList().Count;
+                        TreeNodeX ndTerminal = new TreeNodeX(String.Format("Terminal ID: {0} - Transactions: {1} - Cycle: {2}",
+                            kTerminal.Key, countTransaction, countCycle));
+                        ndTerminal.Tag = readtran.ListCycle.Where(x => x.Value.TerminalID.Contains(kTerminal.Key)).ToList();
+                        foreach (KeyValuePair<DateTime, object> kTransaction in kTerminal.Value.OrderBy(x => x.Key))
                         {
                             day = String.Format("{0:" + readtran.FormatDate + "}", kTransaction.Key);
                             TreeNode ndDay = new TreeNode(day);
@@ -233,6 +237,22 @@ namespace Transaction_Statistical.UControl
                     propertyGrid1.SelectedObject = (Transaction)e.Node.Tag;
                     fctxt_FullLog.Text = (e.Node.Tag as Transaction).TraceJournalFull;
                 }
+                else if (e.Node != null && e.Node.Tag != null && e.Node.Tag is Cycle)
+                {
+                    propertyGrid1.SelectedObject = (Cycle)e.Node.Tag;
+                    fctxt_FullLog.Text = (e.Node.Tag as Cycle).LogTxt;
+                }
+                else if (e.Node != null && e.Node.Tag != null && e.Node.Tag is List<KeyValuePair<DateTime, Cycle>>)
+                {
+                    var tagValue = ((List<KeyValuePair<DateTime, Cycle>>)e.Node.Tag).ToList();
+                    ListBox listBox = new ListBox();
+                    listBox.Dock = DockStyle.Fill;
+                    tagValue.ForEach(x =>
+                    {
+                        listBox.Items.Add(x.Value.ToString());
+                    });
+                    panel4.Controls.Add(listBox);
+                }
             }
             catch (Exception ex)
             {
@@ -244,7 +264,7 @@ namespace Transaction_Statistical.UControl
         {
             if (e.Node.Tag is Transaction)
             {
-                toolTip1.Show((e.Node.Tag as Transaction).TraceJournalFull, tre_LstTrans);
+                //toolTip1.Show((e.Node.Tag as Transaction).TraceJournalFull, tre_LstTrans);
             }
         }
     }
