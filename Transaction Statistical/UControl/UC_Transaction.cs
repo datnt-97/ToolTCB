@@ -19,17 +19,23 @@ namespace Transaction_Statistical.UControl
 {
     public partial class UC_Transaction : UserControl
     {
-        SQLiteHelper sqlite = new SQLiteHelper();
+        SQLiteHelper sqlite;
         List<Transaction> transactions = new List<Transaction>();
         ReadTransaction readTransactions;
         public UC_Transaction()
         {
+            sqlite = new SQLiteHelper();
             InitializeComponent();
             Add_GUI();
             uc_Menu.Location = new Point(-uc_Menu.Width, uc_Menu.Location.Y);
             readTransactions = new ReadTransaction();
         }
         #region design
+        bool runningShowMenu = false;
+        bool showMenu = false;
+
+        bool runningShowExplorer = false;
+        bool showExplorer = false;
 
         private void uc_Explorer_Leave(object sender, EventArgs e)
         {
@@ -38,6 +44,56 @@ namespace Transaction_Statistical.UControl
         private void txt_Path_MouseEnter(object sender, EventArgs e)
         {
             if (!showExplorer) SlideExplorerShow(sender, e);
+        }
+        public void SlideExplorerShow(object sender, EventArgs e)
+        {
+            if (showExplorer) showExplorer = false; else showExplorer = true;
+            if (runningShowExplorer) return;
+            runningShowExplorer = true;
+            while (runningShowExplorer)
+            {
+                if (showExplorer)
+                {
+                    //uc_Explorer.Location = new Point(uc_Explorer.Location.X + 3, uc_Explorer.Location.Y);
+                    //if (uc_Explorer.Location.X >= 0) break;
+                    uc_Explorer.Height += 5;
+                    if (uc_Explorer.Height >= 500)
+                    {
+                        uc_Explorer.SelectPath(txt_Path.Text);
+                        break;
+                    }
+                }
+                else
+                {
+                    uc_Explorer.Height -= 3;
+                    if (uc_Explorer.Height == 0) break;
+                    //uc_Explorer.Location = new Point(uc_Explorer.Location.X - 3, uc_Explorer.Location.Y);
+                    //if (uc_Explorer.Location.X <= -uc_Explorer.Width) break;
+                }
+                this.Update();
+            }
+            runningShowExplorer = false;
+        }
+        public void SlideMenuShow()
+        {
+            if (showMenu) showMenu = false; else showMenu = true;
+            if (runningShowMenu) return;
+            runningShowMenu = true;
+            while (runningShowMenu)
+            {
+                if (showMenu)
+                {
+                    uc_Menu.Location = new Point(uc_Menu.Location.X + 3, uc_Menu.Location.Y);
+                    if (uc_Menu.Location.X >= 0) break;
+                }
+                else
+                {
+                    uc_Menu.Location = new Point(uc_Menu.Location.X - 3, uc_Menu.Location.Y);
+                    if (uc_Menu.Location.X <= -uc_Menu.Width) break;
+                }
+                this.Update();
+            }
+            runningShowMenu = false;
         }
         #endregion
         private void Add_GUI()
@@ -87,7 +143,7 @@ namespace Transaction_Statistical.UControl
             DirectoryFileUtilities df = new DirectoryFileUtilities();
             FileInfo[] files = df.GetAllFilePath(txt_Path.Text, extension);
             JournalAnalyze(files);
-
+            tre_LstTrans.ExpandAll();
         }
         private void JournalAnalyze(FileInfo[] File_Journal)
         {
@@ -117,7 +173,7 @@ namespace Transaction_Statistical.UControl
                                 ndDay = ndTerminal.Nodes[day];
                             else
                                 ndDay = ndTerminal.Nodes.Add(day, day);
-                            string textDisplay = kTransaction.Value.ToString();                         
+                            string textDisplay = kTransaction.Value.ToString();
                             TreeNode ndTransaction = ndDay.Nodes.Add(textDisplay, textDisplay);
                             ndTransaction.Tag = kTransaction.Value;
                             ndDay.Text = day + " Total: " + ndDay.Nodes.Count + " transactions";
@@ -175,11 +231,20 @@ namespace Transaction_Statistical.UControl
                 if (e.Node != null && e.Node.Tag != null && e.Node.Tag is Transaction)
                 {
                     propertyGrid1.SelectedObject = (Transaction)e.Node.Tag;
+                    fctxt_FullLog.Text = (e.Node.Tag as Transaction).TraceJournalFull;
                 }
             }
             catch (Exception ex)
             {
                 InitParametar.Send_Error(ex.ToString(), MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name);
+            }
+        }
+
+        private void tre_LstTrans_NodeMouseHover(object sender, TreeNodeMouseHoverEventArgs e)
+        {
+            if (e.Node.Tag is Transaction)
+            {
+                toolTip1.Show((e.Node.Tag as Transaction).TraceJournalFull, tre_LstTrans);
             }
         }
     }

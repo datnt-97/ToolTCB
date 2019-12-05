@@ -12,8 +12,6 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using FastColoredTextBoxNS;
-using OfficeOpenXml;
-using Transaction_Statistical.Class;
 
 namespace Transaction_Statistical
 {
@@ -54,7 +52,7 @@ namespace Transaction_Statistical
         {
             try
             {
-                sqlite = new SQLiteHelper();
+
                 // ftp Support
                 UsrSupport = "UsrUpdate";
                 PwdSupport = "@UsrUpdate@";
@@ -86,7 +84,7 @@ namespace Transaction_Statistical
                 PathFileRecordDeletetStartup = (PathDirectoryDocumentsUsr + "\\ListFileDeletetStartup.txt").Replace(@"\\", @"\"); if (!File.Exists(PathFileRecordDeletetStartup)) File.Create(PathFileRecordDeletetStartup);
 
                 DatabaseFile = PathDirectoryCurrentAppConfigData + "\\DB.s3db";
-
+                sqlite = new SQLiteHelper();
                 listTransaction = new Dictionary<string, Dictionary<DateTime, Transaction>>();
                 // Chesk file cfg
                 LoadTemplateInfo();
@@ -195,8 +193,8 @@ namespace Transaction_Statistical
         public Dictionary<string, string> Template_EventCounterChanged;
         public Dictionary<string, TransactionType> Template_TransType;
 
-        //DAT : 2/12/2019
-        public Dictionary<DateTime, Cycle> ListCycle = new Dictionary<DateTime, Cycle>();
+        public Dictionary<DateTime, Cycle> ListCycle = null;
+
         public ReadTransaction()
         {
             sqlite = new SQLiteHelper();
@@ -272,6 +270,7 @@ namespace Transaction_Statistical
                 DateTime currentDate = DateTime.MinValue;
 
                 ListTransaction = new Dictionary<string, Dictionary<DateTime, object>>();
+                ListCycle = new Dictionary<DateTime, Cycle>();
                 string Terminal = "Terminal";
                 foreach (string file in files)
                 {
@@ -279,24 +278,26 @@ namespace Transaction_Statistical
                     string contenFile = File.ReadAllText(file);
                     DateTime.TryParseExact(day, "yyyyMMdd", CultureInfo.InvariantCulture, DateTimeStyles.None, out currentDate);
                     SplitTransactionEJ(ref Terminal, ref contenFile);
-                    FindCounterChanged(ref contenFile, ref ListCycle);
                     FindEventDevice2(currentDate, Terminal, ref contenFile);
+                    FindCounterChanged(ref contenFile, ref ListCycle);
+
                     InitParametar.sTest += contenFile + Environment.NewLine;
                 }
-
-                int i = ListTransaction.Values.LastOrDefault().Keys.Count;
-                Stream stream = null;
-                using (var excelPackage = new ExcelPackage(stream ?? new MemoryStream()))
+                var ListCycleFroup = ListCycle.GroupBy(x => x.Value.TerminalID).ToList();
+                var ListTransactionTemp = ListTransaction;
+                for (int c = 0; c < ListTransactionTemp.Count; c++)
                 {
-                    TemplateHelper template = new TemplateHelper("Dat", "Report", "Test", excelPackage);
-                    // Tạo buffer memory stream để hứng file excel
-                    template.CanQuyTheoCouterTrenMay("cân quỹ theo counter trên máy", OfficeOpenXml.Table.TableStyles.Custom, ListCycle);
-                    //template.BaoCaoGiaoDichBatThuong("test_2", OfficeOpenXml.Table.TableStyles.Custom);
-                    //template.BaoCaoGiaoDichKhongThanhCong("test_3", OfficeOpenXml.Table.TableStyles.Custom, dBTemp);
-                    stream = template.getStream();
-                    var buffer = stream as MemoryStream;
-                    File.WriteAllBytes(@"E:\text.xlsx", buffer.ToArray());
+                    var item = ListTransactionTemp.ToArray()[c];
+                    var itemCycle = ListCycleFroup.FirstOrDefault(x => x.Key.Contains(item.Key));
+                    if (itemCycle != null)
+                    {
+                        for (int ci = 0; ci < itemCycle.Count(); ci++)
+                        {
+                            ListTransaction.FirstOrDefault(x => x.Key.Contains(item.Key)).Value.Add(itemCycle.ToArray()[ci].Key, "Cycle:" + itemCycle.ToArray()[ci].Value.DateBegin);
+                        }
+                    }
                 }
+                int i = ListTransaction.Values.LastOrDefault().Keys.Count;
                 InitParametar.sTest = i.ToString() + " transaction : " + (DateTime.Now - dateEnd).TotalSeconds.ToString() + " s =>" + ((DateTime.Now - dateEnd).TotalSeconds / i).ToString() + InitParametar.sTest + Environment.NewLine;
 
                 UC_Info uc = new UC_Info(InitParametar.sTest);
@@ -325,15 +326,14 @@ namespace Transaction_Statistical
                         foreach (KeyValuePair<int, RegesValue> key in lst)
                         {
                             trans = new Transaction();
-                            trans.sTimeBegin = key.Value.value["DateBegin"];
-                            trans.sTimeEnd = key.Value.value["TimeEnd"];
-                            DateTime.TryParseExact(trans.sTimeBegin, "MM-dd-yyyy HH:mm:ss", CultureInfo.InvariantCulture, DateTimeStyles.None, out trans.DateBegin);
-                            trans.DateEnd = trans.DateBegin;
-                            DateTime.TryParseExact(trans.sTimeEnd, "HH:mm:ss", CultureInfo.InvariantCulture, DateTimeStyles.None, out trans.DateEnd);
+                            DateTime.TryParseExact(key.Value.value["DateBegin"], "MM-dd-yyyy HH:mm:ss", CultureInfo.InvariantCulture, DateTimeStyles.None, out trans.DateBegin);
+                            DateTime.TryParseExact(key.Value.value["TimeEnd"], "HH:mm:ss", CultureInfo.InvariantCulture, DateTimeStyles.None, out trans.DateEnd);
+                            trans.DateEnd.AddDays(trans.DateBegin.Day);
+                            trans.DateEnd.AddMonths(trans.DateBegin.Month);
+                            trans.DateEnd.AddYears(trans.DateBegin.Year);
+
                             trans.Terminal = TerminalID = key.Value.value["TerminalID"];
                             trans.MachineSequenceNo = key.Value.value["MachineNo"];
-                            //trans.CardNumber = key.Value.value["CardNo"];
-                            //trans.DataInput = key.Value.value["DataInput"];
                             trans.TraceJournalFull = trans.TraceJournal_Remaining = key.Value.stringfind;
                             trans.TransactionTypeList = string.Empty;
                             trans.Day = String.Format("{0:yyyyMMdd}", trans.DateBegin);
@@ -499,7 +499,6 @@ namespace Transaction_Statistical
             }
             return false;
         }
-
         private bool FindEventDevice2(DateTime DateCurrent, string Terminal, ref string sString)
         {
             try
@@ -544,6 +543,7 @@ namespace Transaction_Statistical
                         }
                     }
                 }
+                return true;
             }
             catch (Exception ex)
             {
@@ -734,166 +734,150 @@ namespace Transaction_Statistical
             CardNumber,
             CardLess
         }
+        public string TraceJournalFull;
         public Dictionary<DateTime, TransactionEvent> ListEvent = new Dictionary<DateTime, TransactionEvent>();
         public int Result;
         List<string> _datainput = new List<string>();
 
         CardTypes _cardtype = CardTypes.CardLess;
-        [CategoryAttribute("Customer"), DescriptionAttribute("Data input")]
+        [CategoryAttribute("2. Customer"), DescriptionAttribute("Data input")]
         public CardTypes CardType
         {
             get { return _cardtype; }
             set { _cardtype = value; }
         }
 
-        [CategoryAttribute("Customer"), DescriptionAttribute("Data input")]
+        [CategoryAttribute("2. Customer"), DescriptionAttribute("Data input")]
         public List<string> DataInput
         {
             get { return _datainput; }
             set { _datainput = value; }
         }
         string _card = "";
-        [CategoryAttribute("Customer"), DescriptionAttribute("Card number")]
+        [CategoryAttribute("2. Customer"), DescriptionAttribute("Card number")]
         public string CardNumber
         {
             get { return _card; }
             set { _card = value; }
         }
         string _name = "";
-        [CategoryAttribute("Customer"), DescriptionAttribute("Name of the customer")]
+        [CategoryAttribute("2. Customer"), DescriptionAttribute("Name of the customer")]
         public string Name
         {
             get { return _name; }
             set { _name = value; }
         }
-        public string TraceJournalFull;
+
         public string TraceJournal_Remaining;
         public string TraceDeviceTxt;
         public string TraceTransMsgTxt;
         public string TraceApplicationTrcTxt;
         public string Day;
+
+        [CategoryAttribute("3. Transaction"), DescriptionAttribute("Machine Sequence No")]
+        public string MachineSequenceNo { get; set; }
         TransactionType _type = TransactionType.Withdrawal;
-        [CategoryAttribute("Transaction"), DescriptionAttribute("Type the transaction")]
+        [CategoryAttribute("3. Transaction"), DescriptionAttribute("Type the transaction")]
         public TransactionType Type
         {
             get { return _type; }
             set { _type = value; }
         }
-        [CategoryAttribute("Transaction"), DescriptionAttribute("Type the transaction list")]
+        [CategoryAttribute("3. Transaction"), DescriptionAttribute("Type the transaction list")]
         public string TransactionTypeList { get; set; }
-        string _tdate = "";
-        [CategoryAttribute("Transaction"), DescriptionAttribute("Date of the transaction")]
-        public string TDate
-        {
-            get { return _tdate; }
-            set { _tdate = value; }
-        }
+
+        [CategoryAttribute("3. Transaction"), DescriptionAttribute("Date of the transaction")]
+        public string TDate { get { return String.Format("{0:yyyy-MM-dd}", DateBegin); } }
         public DateTime DateBegin;
         public DateTime DateEnd;
-        public string sTimeBegin;
-        public string sTimeEnd;
-        string _ttime = "";
-        [CategoryAttribute("Transaction"), DescriptionAttribute("Time of the transaction")]
-        public string Time
-        {
-            get { return _ttime; }
-            set { _ttime = value; }
-        }
+
+        [CategoryAttribute("3. Transaction"), DescriptionAttribute("Start time of the transaction")]
+        public string TimeStart { get { return String.Format("{0:HH:mm:ss}", DateEnd); } }
+        [CategoryAttribute("3. Transaction"), DescriptionAttribute("End time of the transaction")]
+        public string TimeEnd { get { return String.Format("{0:HH:mm:ss}", DateBegin); } }
 
         string _amount = "0";
-        [CategoryAttribute("Transaction"), DescriptionAttribute("Amount")]
+        [CategoryAttribute("3. Transaction"), DescriptionAttribute("Amount")]
         public string Amount
         {
             get { return _amount; }
             set { _amount = value; }
         }
 
-        string _terminal;
-        [CategoryAttribute("CRM"), DescriptionAttribute("Terminal ID")]
-        public string Terminal
-        {
-            get { return _terminal; }
-            set { _terminal = value; }
-        }
-
-        string _machineNo;
-        [CategoryAttribute("CRM"), DescriptionAttribute("Machine Sequence No")]
-        public string MachineSequenceNo
-        {
-            get { return _machineNo; }
-            set { _machineNo = value; }
-        }
-        string _cassette1 = string.Empty;
-        [CategoryAttribute("CRM"), DescriptionAttribute("Cassette 1")]
-        public string Cassette1
-        {
-            get { return _cassette1; }
-            set { _cassette1 = value; }
-        }
-
-        string _cassette2 = string.Empty;
-        [CategoryAttribute("CRM"), DescriptionAttribute("Cassette 2")]
-        public string Cassette2
-        {
-            get { return _cassette2; }
-            set { _cassette2 = value; }
-        }
-
-        string _cassette3 = string.Empty;
-        [CategoryAttribute("CRM"), DescriptionAttribute("Cassette 3")]
-        public string Cassette3
-        {
-            get { return _cassette3; }
-            set { _cassette3 = value; }
-        }
-
-        string _cassette4 = string.Empty;
-        [CategoryAttribute("CRM"), DescriptionAttribute("Cassette 4")]
-        public string Cassette4
-        {
-            get { return _cassette4; }
-            set { _cassette4 = value; }
-        }
-
-        string _cassette5 = string.Empty;
-        [CategoryAttribute("CRM"), DescriptionAttribute("Cassette 5")]
-        public string Cassette5
-        {
-            get { return _cassette5; }
-            set { _cassette5 = value; }
-        }
-
-        string _cassette6 = string.Empty;
-        [CategoryAttribute("CRM"), DescriptionAttribute("Cassette 6")]
-        public string Cassette6
-        {
-            get { return _cassette6; }
-            set { _cassette6 = value; }
-        }
-
-        string _cassette7 = string.Empty;
-        [CategoryAttribute("CRM"), DescriptionAttribute("Cassette 7")]
-        public string Cassette7
-        {
-            get { return _cassette7; }
-            set { _cassette7 = value; }
-        }
-
-        string _cassette8 = string.Empty;
-        [CategoryAttribute("CRM"), DescriptionAttribute("Cassette 8")]
-        public string Cassette8
-        {
-            get { return _cassette8; }
-            set { _cassette8 = value; }
-        }
-
-        string _status = "";
-        [CategoryAttribute("CRM"), DescriptionAttribute("Status")]
+        [CategoryAttribute("1.Terminal"), DescriptionAttribute("Terminal ID")]
+        public string Terminal { get; set; }
+        string _status = "0000";
+        [CategoryAttribute("1.Terminal"), DescriptionAttribute("Status")]
         public string Status
         {
             get { return _status; }
             set { _status = value; }
         }
+        //string _cassette1 = string.Empty;
+        //[CategoryAttribute("CRM"), DescriptionAttribute("Cassette 1")]
+        //public string Cassette1
+        //{
+        //    get { return _cassette1; }
+        //    set { _cassette1 = value; }
+        //}
+
+        //string _cassette2 = string.Empty;
+        //[CategoryAttribute("CRM"), DescriptionAttribute("Cassette 2")]
+        //public string Cassette2
+        //{
+        //    get { return _cassette2; }
+        //    set { _cassette2 = value; }
+        //}
+
+        //string _cassette3 = string.Empty;
+        //[CategoryAttribute("CRM"), DescriptionAttribute("Cassette 3")]
+        //public string Cassette3
+        //{
+        //    get { return _cassette3; }
+        //    set { _cassette3 = value; }
+        //}
+
+        //string _cassette4 = string.Empty;
+        //[CategoryAttribute("CRM"), DescriptionAttribute("Cassette 4")]
+        //public string Cassette4
+        //{
+        //    get { return _cassette4; }
+        //    set { _cassette4 = value; }
+        //}
+
+        //string _cassette5 = string.Empty;
+        //[CategoryAttribute("CRM"), DescriptionAttribute("Cassette 5")]
+        //public string Cassette5
+        //{
+        //    get { return _cassette5; }
+        //    set { _cassette5 = value; }
+        //}
+
+        //string _cassette6 = string.Empty;
+        //[CategoryAttribute("CRM"), DescriptionAttribute("Cassette 6")]
+        //public string Cassette6
+        //{
+        //    get { return _cassette6; }
+        //    set { _cassette6 = value; }
+        //}
+
+        //string _cassette7 = string.Empty;
+        //[CategoryAttribute("CRM"), DescriptionAttribute("Cassette 7")]
+        //public string Cassette7
+        //{
+        //    get { return _cassette7; }
+        //    set { _cassette7 = value; }
+        //}
+
+        //string _cassette8 = string.Empty;
+        //[CategoryAttribute("CRM"), DescriptionAttribute("Cassette 8")]
+        //public string Cassette8
+        //{
+        //    get { return _cassette8; }
+        //    set { _cassette8 = value; }
+        //}
+
+
 
         public Transaction()
         {
@@ -1135,7 +1119,6 @@ namespace Transaction_Statistical
             return false;
         }
 
-
         //Dat 5/12/2019
         public static bool RunPatternRegular(string sString, string sReg, out Dictionary<int, RegesValueWithPatternOfGroup> listResult)
         {
@@ -1179,7 +1162,6 @@ namespace Transaction_Statistical
             }
             return false;
         }
-
     }
     public class UIHelper
     {
@@ -1293,3 +1275,5 @@ namespace Transaction_Statistical
         }
     }
 }
+
+
