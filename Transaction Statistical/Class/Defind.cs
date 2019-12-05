@@ -284,8 +284,21 @@ namespace Transaction_Statistical
 
                     FindCounterChanged(ref contenFile, ref ListCycle);
 
+
                 }
                 int i = ListTransaction.Values.LastOrDefault().Keys.Count;
+                Stream stream = null;
+                using (var excelPackage = new ExcelPackage(stream ?? new MemoryStream()))
+                {
+                    TemplateHelper template = new TemplateHelper("Dat", "Report", "Test", excelPackage);
+                    // Tạo buffer memory stream để hứng file excel
+                    template.CanQuyTheoCouterTrenMay("cân quỹ theo counter trên máy", OfficeOpenXml.Table.TableStyles.Custom, ListCycle);
+                    //template.BaoCaoGiaoDichBatThuong("test_2", OfficeOpenXml.Table.TableStyles.Custom);
+                    //template.BaoCaoGiaoDichKhongThanhCong("test_3", OfficeOpenXml.Table.TableStyles.Custom, dBTemp);
+                    stream = template.getStream();
+                    var buffer = stream as MemoryStream;
+                    File.WriteAllBytes(@"E:\text.xlsx", buffer.ToArray());
+                }
                 MessageBox.Show(ListCycle.Count() + ":  Cycle " + i.ToString() + " transaction : " + (DateTime.Now - dateEnd).TotalSeconds.ToString() + " s =>" + ((DateTime.Now - dateEnd).TotalSeconds / i).ToString(), "Total");
 
                 return true;
@@ -465,7 +478,7 @@ namespace Transaction_Statistical
 
                                 }
                                 //GET DENOMINATION COUNT 
-                                if (key.Value.value.ContainsKey("DenimiationCount")
+                                if (key.Value.value.ContainsKey("DenomiationCount")
                                     && key.Value.value.ContainsKey("ListDeno") && key.Value.value.ContainsKey("DenoListRetract"))
                                 {
                                     var dateDenominationCountValue = key.Value.value["TimeCashCount"].FirstOrDefault().Value;
@@ -497,12 +510,18 @@ namespace Transaction_Statistical
                                         if (!cycleItem.DenominationCount.ContainsKey(NameDenoRetract[i].Value.Trim()))
                                         {
                                             Deno deno = new Deno();
+                                            deno.Name = NameDenoRetract[i].Value.Trim();
                                             deno.Retracted = CountDenoRetract[i].Value.Trim();
                                             cycleItem.DenominationCount.Add(NameDenoRetract[i].Value.Trim(), deno);
                                         }
                                         else
                                         {
-                                            cycleItem.DenominationCount.ToArray()[i].Value.Retracted = CountDenoRetract[i].Value.Trim();
+                                            cycleItem
+                                                .DenominationCount
+                                                .FirstOrDefault(x => x.Key == NameDenoRetract[i].Value.Trim())
+                                                .Value
+                                                .Retracted = CountDenoRetract[i].Value.Trim();
+
                                         }
                                     }
 
@@ -1213,13 +1232,14 @@ namespace Transaction_Statistical
     }
     public class Deno
     {
-        public string Name;
-        public string Dispensed;
-        public string Deposited;
-        public string Remaining;
-        public string Retracted;
-        public string Initial;
-        public string log;
+        public string Name = string.Empty;
+        public string Dispensed = "0";
+        public string Deposited = "0";
+        public string Remaining = "0";
+        public string Retracted = "0";
+        public string Initial = "0";
+        public string currency = string.Empty;
+        public string log = string.Empty;
     }
     public class CapturedCard
     {

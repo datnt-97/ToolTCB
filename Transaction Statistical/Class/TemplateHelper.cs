@@ -63,61 +63,63 @@ namespace Transaction_Statistical.Class
 
 
 
-                //HEADER MENH GIA
-                using (ExcelRange rng = worksheet.Cells[indexRow, indexCol])
-                {
-                    rng.Value = "Mệnh Giá";
 
-                }
-                using (ExcelRange rng = worksheet.Cells[indexRow, indexCol + 1])
-                {
-                    rng.Value = "ATM ID";
-
-                }
-                using (ExcelRange rng = worksheet.Cells[indexRow, indexCol + 2])
-                {
-                    rng.Value = "Ngày giờ tiếp quỹ";
-
-                }
-                using (ExcelRange rng = worksheet.Cells[indexRow, indexCol + 3])
-                {
-                    rng.Value = "Ngày giờ kiểm quỹ";
-
-                }
-                using (ExcelRange rng = worksheet.Cells[indexRow, indexCol + 4])
-                {
-                    rng.Value = "Tiếp quỹ";
-
-                }
-                using (ExcelRange rng = worksheet.Cells[indexRow, indexCol + 5])
-                {
-                    rng.Value = "Giao dịch rút tiền";
-
-                }
-                using (ExcelRange rng = worksheet.Cells[indexRow, indexCol + 6])
-                {
-                    rng.Value = "Giao dịch nộp tiền";
-
-                }
-                using (ExcelRange rng = worksheet.Cells[indexRow, indexCol + 7])
-                {
-                    rng.Value = "Số tiền trong khay thu hồi";
-
-                }
-                using (ExcelRange rng = worksheet.Cells[indexRow, indexCol + 8])
-                {
-                    rng.Value = "Số tiền còn lại";
-
-                }
-                using (ExcelRange rng = worksheet.Cells[string.Format("A{0}:I{1}", indexRow, indexRow)])
-                {
-                    rng.Style.Fill.PatternType = OfficeOpenXml.Style.ExcelFillStyle.Solid;
-                    rng.Style.Fill.BackgroundColor.SetColor(Color.FromArgb(255, 255, 0));
-                }
                 #endregion
                 #region DRAW DATA
                 for (long cycle = 0; cycle < cycles.Count(); cycle++)
                 {
+                    //HEADER MENH GIA
+                    using (ExcelRange rng = worksheet.Cells[indexRow, indexCol])
+                    {
+                        rng.Value = "Mệnh Giá";
+
+                    }
+                    using (ExcelRange rng = worksheet.Cells[indexRow, indexCol + 1])
+                    {
+                        rng.Value = "ATM ID";
+
+                    }
+                    using (ExcelRange rng = worksheet.Cells[indexRow, indexCol + 2])
+                    {
+                        rng.Value = "Ngày giờ tiếp quỹ";
+
+                    }
+                    using (ExcelRange rng = worksheet.Cells[indexRow, indexCol + 3])
+                    {
+                        rng.Value = "Ngày giờ kiểm quỹ";
+
+                    }
+                    using (ExcelRange rng = worksheet.Cells[indexRow, indexCol + 4])
+                    {
+                        rng.Value = "Tiếp quỹ";
+
+                    }
+                    using (ExcelRange rng = worksheet.Cells[indexRow, indexCol + 5])
+                    {
+                        rng.Value = "Giao dịch rút tiền";
+
+                    }
+                    using (ExcelRange rng = worksheet.Cells[indexRow, indexCol + 6])
+                    {
+                        rng.Value = "Giao dịch nộp tiền";
+
+                    }
+                    using (ExcelRange rng = worksheet.Cells[indexRow, indexCol + 7])
+                    {
+                        rng.Value = "Số tiền trong khay thu hồi";
+
+                    }
+                    using (ExcelRange rng = worksheet.Cells[indexRow, indexCol + 8])
+                    {
+                        rng.Value = "Số tiền còn lại";
+
+                    }
+                    using (ExcelRange rng = worksheet.Cells[string.Format("A{0}:I{1}", indexRow, indexRow)])
+                    {
+                        rng.Style.Fill.PatternType = OfficeOpenXml.Style.ExcelFillStyle.Solid;
+                        rng.Style.Fill.BackgroundColor.SetColor(Color.FromArgb(255, 255, 0));
+                    }
+                    var cycleItem = cycles[cycle].Value;
                     var denoList = cycles[cycle].Value.DenominationCount;
                     int denoLength = denoList.Count;
                     if (denoList.ContainsKey("TotalAmount"))
@@ -125,141 +127,88 @@ namespace Transaction_Statistical.Class
                         denoLength -= 1;
                     }
                     //
+                    int indexDeno = indexRow;
                     for (int deno = 0; deno < denoList.Count(); deno++)
                     {
-                        int indexDeno = indexRow + deno + 1;
+                        indexDeno++;
                         var denoItem = denoList.ToArray()[deno].Value;
                         if (!denoItem.Name.Contains("TotalAmount"))
                         {
-                            worksheet.Cells[string.Format("A{0}:I{1}", indexDeno, indexRow)].Value = denoItem.Name;
-                            worksheet.Cells[string.Format("A{0}:I{1}", indexDeno, indexRow + 4)].Value = denoItem.Name;
+                            using (ExcelRange rng = worksheet.Cells[string.Format("A{0}", indexDeno)])
+                            {
+                                rng.Value = denoItem.Name;
+                            }
+                            using (ExcelRange rng = worksheet.Cells[string.Format("E{0}", indexDeno)])
+                            {
+                                rng.Formula = "=" + denoItem.Initial;
+                            }
+                            using (ExcelRange rng = worksheet.Cells[string.Format("F{0}", indexDeno)])
+                            {
+                                rng.Style.Numberformat.Format = "0";
+                                rng.Formula = "=" + denoItem.Dispensed;
+                            }
+                            using (ExcelRange rng = worksheet.Cells[string.Format("G{0}", indexDeno)])
+                            {
+                                rng.Style.Numberformat.Format = "0";
+                                rng.Formula = "=" + denoItem.Deposited;
+                            }
+                            using (ExcelRange rng = worksheet.Cells[string.Format("H{0}", indexDeno)])
+                            {
+                                rng.Style.Numberformat.Format = "0";
+                                rng.Formula = "=" + denoItem.Retracted;
+                            }
+                            using (ExcelRange rng = worksheet.Cells[string.Format("I{0}", indexDeno)])
+                            {
+                                rng.Style.Numberformat.Format = "0";
+                                rng.Formula = "=" + denoItem.Remaining;
+                            }
+                        }
+                        else
+                        {
+                            indexDeno--;
                         }
                     }
+
+                    //ATM ID
+                    using (ExcelRange rng = worksheet.Cells[string.Format("B{0}:B{1}", indexRow + 1, indexRow + denoLength)])
+                    {
+                        rng.Merge = true;
+                        rng.Value = cycleItem.TerminalID;
+                    }
+
+                    using (ExcelRange rng = worksheet.Cells[string.Format("C{0}:C{1}", indexRow + 1, indexRow + denoLength)])
+                    {
+                        rng.Merge = true;
+                        rng.Value = cycleItem.SettlementPeriodDateBegin.ToString();
+                    }
+                    using (ExcelRange rng = worksheet.Cells[string.Format("D{0}:D{1}", indexRow + 1, indexRow + denoLength)])
+                    {
+                        rng.Merge = true;
+                        rng.Value = cycleItem.SettlementPeriodDateEnd.ToString();
+                    }
+
+
+                    using (ExcelRange rng = worksheet.Cells[string.Format("A{0}:I{1}", indexRow, indexRow + denoLength)])
+                    {
+                        rng.Style.Border.Top.Style = ExcelBorderStyle.Thin;
+                        rng.Style.Border.Bottom.Style = ExcelBorderStyle.Thin;
+                        rng.Style.Border.Left.Style = ExcelBorderStyle.Thin;
+                        rng.Style.Border.Right.Style = ExcelBorderStyle.Thin;
+
+                        rng.Style.Border.Top.Color.SetColor(Color.Black);
+                        rng.Style.Border.Bottom.Color.SetColor(Color.Black);
+                        rng.Style.Border.Left.Color.SetColor(Color.Black);
+                        rng.Style.Border.Right.Color.SetColor(Color.Black);
+                    }
+                    indexRow += denoLength + 2;
                 }
                 #endregion
-                //for (long atm = 0; atm < ListCycle.Count; atm++)
-                //{
-
-                //    int headerV = index + 1;
-                //    int deno500 = index + 2;
-                //    int deno200 = index + 3;
-                //    int deno100 = index + 4;
-                //    int deno50 = index + 5;
-                //    int deno20 = index + 6;
-                //    int deno10 = index + 7;
-                //    int denoUnkown = index + 8;
-
-                //    using (ExcelRange rng = worksheet.Cells[string.Format("A{0}:J{1}", index, headerV)])
-                //    {
-                //        rng.Style.Fill.PatternType = OfficeOpenXml.Style.ExcelFillStyle.Solid;
-                //        rng.Style.Fill.BackgroundColor.SetColor(Color.FromArgb(255, 255, 0));
-                //    }
-
-
-                //    using (ExcelRange rng = worksheet.Cells[string.Format("A{0}:L{1}", index, denoUnkown)])
-                //    {
-
-                //        rng.Style.Border.Top.Style = ExcelBorderStyle.Thin;
-                //        rng.Style.Border.Bottom.Style = ExcelBorderStyle.Thin;
-                //        rng.Style.Border.Left.Style = ExcelBorderStyle.Thin;
-                //        rng.Style.Border.Right.Style = ExcelBorderStyle.Thin;
-
-                //        rng.Style.Border.Top.Color.SetColor(Color.Black);
-                //        rng.Style.Border.Bottom.Color.SetColor(Color.Black);
-                //        rng.Style.Border.Left.Color.SetColor(Color.Black);
-                //        rng.Style.Border.Right.Color.SetColor(Color.Black);
-                //    }
-
-                //    //MENH GIA
-                //    using (ExcelRange rng = worksheet.Cells[string.Format("A{0}:A{1}", index, headerV)])
-                //    {
-                //        rng.Merge = true;
-                //        rng.Value = "Mệnh Giá";
-
-                //    }
-                //    //ATM ID
-                //    using (ExcelRange rng = worksheet.Cells[string.Format("B{0}:B{1}", index, headerV)])
-                //    {
-                //        rng.Merge = true;
-
-                //        rng.Value = "ATM ID";
-                //    }
-                //    //NGAY GIO TIEP QUY
-                //    using (ExcelRange rng = worksheet.Cells[string.Format("C{0}:D{1}", index, index)])
-                //    {
-                //        rng.Merge = true;
-
-                //        rng.Value = "Ngày giờ tiếp quỹ";
-                //    }
-                //    worksheet.Cells[string.Format("C{0}", headerV)].Value = "Date";
-                //    worksheet.Cells[string.Format("D{0}", headerV)].Value = "Time";
-                //    //NGAY GIO KIEM QUY
-                //    using (ExcelRange rng = worksheet.Cells[string.Format("E{0}:F{1}", index, index)])
-                //    {
-                //        rng.Merge = true;
-                //        rng.Value = "Ngày giờ kiểm quỹ";
-                //    }
-                //    worksheet.Cells[string.Format("E{0}", headerV)].Value = "Date";
-                //    worksheet.Cells[string.Format("F{0}", headerV)].Value = "Time";
-                //    //COUNTER TREN MAY
-                //    using (ExcelRange rng = worksheet.Cells[string.Format("G{0}:I{1}", index, index)])
-                //    {
-                //        rng.Merge = true;
-
-                //        rng.Value = "Counter trên máy";
-                //    }
-                //    worksheet.Cells[string.Format("G{0}", headerV)].Value = "Initial";
-                //    worksheet.Cells[string.Format("H{0}", headerV)].Value = "Remaining";
-                //    worksheet.Cells[string.Format("I{0}", headerV)].Value = "Retract";
-                //    ////COUNTER TINH THEO GIAO DICH
-                //    //using (ExcelRange rng = worksheet.Cells[string.Format("J{0}:K{1}", index, index)])
-                //    //{
-                //    //    rng.Merge = true;
-
-                //    //    rng.Value = "Counter tính theo các giao dịch";
-                //    //}
-                //    //worksheet.Cells[string.Format("J{0}", headerV)].Value = "with/de";
-                //    //worksheet.Cells[string.Format("K{0}", headerV)].Value = "Retract";
-                //    ////LECH COUNTER
-                //    //using (ExcelRange rng = worksheet.Cells[string.Format("L{0}:L{1}", index, headerV)])
-                //    //{
-                //    //    rng.Merge = true;
-
-                //    //    rng.Value = "lệch counter trên máy";
-                //    //}
-
-                //    //DRAW DATA
-                //    //ATM_ID
-                //    using (ExcelRange rng = worksheet.Cells[string.Format("B{0}:B{1}", deno500, denoLength)])
-                //    {
-                //        rng.Merge = true;
-                //    }
-                //    //TQ_Date
-                //    using (ExcelRange rng = worksheet.Cells[string.Format("C{0}:C{1}", deno500, denoLength)])
-                //    {
-                //        rng.Merge = true;
-                //    }
-                //    //Q_Time
-                //    using (ExcelRange rng = worksheet.Cells[string.Format("D{0}:D{1}", deno500, denoLength)])
-                //    {
-                //        rng.Merge = true;
-                //    }
-                //    //KQ_Date
-                //    using (ExcelRange rng = worksheet.Cells[string.Format("E{0}:E{1}", deno500, denoLength)])
-                //    {
-                //        rng.Merge = true;
-                //    }
-                //    //KQ_Time
-                //    using (ExcelRange rng = worksheet.Cells[string.Format("F{0}:F{1}", deno500, denoLength)])
-                //    {
-                //        rng.Merge = true;
-                //    }
-
-
-                //}
                 var allCells = worksheet.Cells[1, 1, worksheet.Dimension.End.Row, worksheet.Dimension.End.Column];
                 var cellFont = allCells.Style.Font;
+                allCells.Style.VerticalAlignment = ExcelVerticalAlignment.Center;
+                allCells.Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
                 cellFont.SetFromFont(new Font("Calibri", 11));
+                worksheet.Cells[worksheet.Dimension.Address].AutoFitColumns();
 
             }
             catch (Exception e)
