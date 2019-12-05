@@ -9,9 +9,8 @@ namespace Transaction_Statistical
     {
         public Frm_Main()
         {
-            InitializeComponent();
-
             InitParametar.Init();
+            InitializeComponent();
 
             //UC_CfgTemplate uc_TemplateCfg = new UC_CfgTemplate("65");
             //uc_TemplateCfg.Dock = DockStyle.Fill;

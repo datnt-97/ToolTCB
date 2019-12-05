@@ -249,6 +249,7 @@
             this.fctxt_Pattern.Cursor = System.Windows.Forms.Cursors.IBeam;
             this.fctxt_Pattern.DisabledColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))));
             this.fctxt_Pattern.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.fctxt_Pattern.Font = new System.Drawing.Font("Courier New", 9.75F);
             this.fctxt_Pattern.IndentBackColor = System.Drawing.Color.DimGray;
             this.fctxt_Pattern.IsReplaceMode = false;
             this.fctxt_Pattern.Language = FastColoredTextBoxNS.Language.CSharp;
@@ -393,6 +394,7 @@
             this.fctxt_Test.Cursor = System.Windows.Forms.Cursors.IBeam;
             this.fctxt_Test.DisabledColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))));
             this.fctxt_Test.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.fctxt_Test.Font = new System.Drawing.Font("Courier New", 9.75F);
             this.fctxt_Test.IndentBackColor = System.Drawing.Color.DimGray;
             this.fctxt_Test.IsReplaceMode = false;
             this.fctxt_Test.Language = FastColoredTextBoxNS.Language.CSharp;
@@ -519,6 +521,7 @@
             this.fctxt_Unsuccessful.CharWidth = 10;
             this.fctxt_Unsuccessful.Cursor = System.Windows.Forms.Cursors.IBeam;
             this.fctxt_Unsuccessful.DisabledColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))));
+            this.fctxt_Unsuccessful.Font = new System.Drawing.Font("Courier New", 9.75F);
             this.fctxt_Unsuccessful.IndentBackColor = System.Drawing.Color.DimGray;
             this.fctxt_Unsuccessful.IsReplaceMode = false;
             this.fctxt_Unsuccessful.Language = FastColoredTextBoxNS.Language.CSharp;
@@ -577,6 +580,7 @@
             this.fctxt_Successful.CharWidth = 10;
             this.fctxt_Successful.Cursor = System.Windows.Forms.Cursors.IBeam;
             this.fctxt_Successful.DisabledColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))));
+            this.fctxt_Successful.Font = new System.Drawing.Font("Courier New", 9.75F);
             this.fctxt_Successful.IndentBackColor = System.Drawing.Color.DimGray;
             this.fctxt_Successful.IsReplaceMode = false;
             this.fctxt_Successful.Language = FastColoredTextBoxNS.Language.CSharp;
@@ -634,6 +638,7 @@
             this.fctxt_Identification.CharWidth = 10;
             this.fctxt_Identification.Cursor = System.Windows.Forms.Cursors.IBeam;
             this.fctxt_Identification.DisabledColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))));
+            this.fctxt_Identification.Font = new System.Drawing.Font("Courier New", 9.75F);
             this.fctxt_Identification.IndentBackColor = System.Drawing.Color.DimGray;
             this.fctxt_Identification.IsReplaceMode = false;
             this.fctxt_Identification.Language = FastColoredTextBoxNS.Language.CSharp;

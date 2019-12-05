@@ -20,7 +20,7 @@ namespace Transaction_Statistical.AddOn
         private bool isChanged = true;
         private bool showCloseButton = true;
 
-        
+
         public String DisplayText
         {
             get { return text; }
@@ -68,7 +68,7 @@ namespace Transaction_Statistical.AddOn
             set { textY = value; Invalidate(); }
         }
 
-       
+
         public ButtonX()
         {
             this.Size = new System.Drawing.Size(31, 24);
@@ -79,13 +79,13 @@ namespace Transaction_Statistical.AddOn
 
         }
 
-      private  Panel cp;
+        private Panel cp;
         private void SynColorClose(Color cl)
         {
             if (!showCloseButton) return;
             if (cp == null) AddClose();
-            
-                (cp.Controls[0] as ButtonZ).BZBackColor = cl;
+
+            (cp.Controls[0] as ButtonZ).BZBackColor = cl;
         }
         private void AddClose()
         {
@@ -108,7 +108,7 @@ namespace Transaction_Statistical.AddOn
             cp.Controls.Add(bt_close);
             bt_close.Dock = DockStyle.Fill;
             bt_close.Click += Close_Button;
-            this.Controls.Add(cp);          
+            this.Controls.Add(cp);
         }
 
         public delegate void ClickCloseHandler(object sender, EventArgs e);
@@ -135,13 +135,13 @@ namespace Transaction_Statistical.AddOn
         //method mouse leave
         protected override void OnMouseLeave(EventArgs e)
         {
-            
+
             base.OnMouseLeave(e);
             if (isChanged)
             {
                 color = clr1;
             }
-           SynColorClose(this.BackColor);
+            SynColorClose(this.BackColor);
         }
 
         protected override void OnMouseDown(MouseEventArgs mevent)
@@ -151,7 +151,7 @@ namespace Transaction_Statistical.AddOn
             {
                 color = clickcolor;
             }
-             SynColorClose(clickcolor);
+            SynColorClose(clickcolor);
         }
 
         protected override void OnMouseUp(MouseEventArgs mevent)
@@ -178,7 +178,7 @@ namespace Transaction_Statistical.AddOn
             Point p = new Point(textX, textY);
             pe.Graphics.FillRectangle(new SolidBrush(color), ClientRectangle);
             pe.Graphics.DrawString(text, this.Font, new SolidBrush(this.ForeColor), p);
-           
+
         }
 
     }

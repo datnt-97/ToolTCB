@@ -44,3 +44,5 @@ D:\05-TEMP\Source\GitHub\ToolTCB\Transaction Statistical\obj\Release\Transaction
 D:\05-TEMP\Source\GitHub\ToolTCB\Transaction Statistical\obj\Release\Transaction_Statistical.UControl.UC_Menu_Overview.resources
 D:\05-TEMP\Source\GitHub\ToolTCB\Transaction Statistical\obj\Release\Transaction_Statistical.UControl.UC_Menu_Dashboard.resources
 D:\05-TEMP\Source\GitHub\ToolTCB\Transaction Statistical\obj\Release\Transaction_Statistical.UControl.UC_Menu_Startup.resources
+D:\05-TEMP\Source\GitHub\ToolTCB\Transaction Statistical\bin\Release\System.Data.SQLite.dll
+D:\05-TEMP\Source\GitHub\ToolTCB\Transaction Statistical\obj\Release\Transaction_Statistical.UControl.UC_Explorer.resources

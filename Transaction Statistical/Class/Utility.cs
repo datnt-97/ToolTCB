@@ -29,7 +29,7 @@ namespace Transaction_Statistical
             }
             return listFileInfo;
         }
-      
+       
     }
     public class FileComparer : IComparer<string>
     {
