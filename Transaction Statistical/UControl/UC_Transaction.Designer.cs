@@ -127,7 +127,7 @@ namespace Transaction_Statistical.UControl
             this.txt_Path.Name = "txt_Path";
             this.txt_Path.Size = new System.Drawing.Size(645, 22);
             this.txt_Path.TabIndex = 1;
-            this.txt_Path.Text = "d:\\06-NPSS\\Tool_TraSoat\\LOG tech\\LOG tech\\02-10-2019";
+            this.txt_Path.Text = @"E:\Project\NPS\Document\99147001_EJF\99147001_EJF\New folder";
             this.txt_Path.MouseClick +=new MouseEventHandler(txt_Path_MouseEnter);
             //this.txt_Path.MouseLeave += new System.EventHandler(txt_Path_MouseLeave);
             //this.txt_Path.MouseEnter += new System.EventHandler(txt_Path_MouseEnter);

@@ -147,7 +147,7 @@ namespace Transaction_Statistical
                 else
                 if (Password == null)
                 {
-                    DataBaseConnnection.ConnectionString = @"Data Source=" + DatabaseFile + ";Version=3;UseUTF16Encoding=True;Synchronous=Normal;New=False";
+                    DataBaseConnnection.ConnectionString = @"Data Source=" + DatabaseFile + ";Version=3;UseUTF16Encoding=True;;Pooling=true;FailIfMissing=false;Synchronous=Normal;New=False";
                     DataBaseConnnection.Open();
                 }
             }
