@@ -1,4 +1,6 @@
-﻿using System.Drawing;
+﻿using System;
+using System.Drawing;
+using System.Windows.Forms;
 
 namespace Transaction_Statistical.UControl
 {
@@ -8,8 +10,12 @@ namespace Transaction_Statistical.UControl
         /// Required designer variable.
         /// </summary>
         private System.ComponentModel.IContainer components = null;
-        bool running = false;
-        bool show = false;
+        bool runningShowMenu = false;
+        bool showMenu = false;
+
+        bool runningShowExplorer = false;
+        bool showExplorer = false;
+
         /// <summary> 
         /// Clean up any resources being used.
         /// </summary>
@@ -22,14 +28,44 @@ namespace Transaction_Statistical.UControl
             }
             base.Dispose(disposing);
         }
+      
+        public void SlideExplorerShow(object sender, EventArgs e)
+        {
+            if (showExplorer) showExplorer = false; else showExplorer = true;
+            if (runningShowExplorer) return;
+            runningShowExplorer = true;
+            while (runningShowExplorer)
+            {
+                if (showExplorer)
+                {
+                    //uc_Explorer.Location = new Point(uc_Explorer.Location.X + 3, uc_Explorer.Location.Y);
+                    //if (uc_Explorer.Location.X >= 0) break;
+                    uc_Explorer.Height += 5;
+                    if (uc_Explorer.Height >= 500)
+                    {
+                        uc_Explorer.SelectPath(txt_Path.Text);
+                        break;
+                    }
+                }
+                else
+                {
+                    uc_Explorer.Height -= 3;
+                    if (uc_Explorer.Height == 0) break;
+                    //uc_Explorer.Location = new Point(uc_Explorer.Location.X - 3, uc_Explorer.Location.Y);
+                    //if (uc_Explorer.Location.X <= -uc_Explorer.Width) break;
+                }
+                this.Update();
+            }
+            runningShowExplorer = false;
+        }
         public void SlideMenuShow()
         {
-            if (show) show = false; else show = true;
-            if (running) return;
-            running = true;      
-            while(running)
+            if (showMenu) showMenu = false; else showMenu = true;
+            if (runningShowMenu) return;
+            runningShowMenu = true;
+            while (runningShowMenu)
             {
-                if (show)
+                if (showMenu)
                 {
                     uc_Menu.Location = new Point(uc_Menu.Location.X + 3, uc_Menu.Location.Y);
                     if (uc_Menu.Location.X >= 0) break;
@@ -41,9 +77,8 @@ namespace Transaction_Statistical.UControl
                 }
                 this.Update();
             }
-            running = false;
+            runningShowMenu = false;
         }
-
         #region Component Designer generated code
 
         /// <summary> 
@@ -51,7 +86,7 @@ namespace Transaction_Statistical.UControl
         /// the contents of this method with the code editor.
         /// </summary>
         private void InitializeComponent()
-        {
+        {          
             this.uc_Menu = new Transaction_Statistical.UControl.UC_Menu();
             this.txt_Path = new System.Windows.Forms.TextBox();
             this.gpBox_Actions = new System.Windows.Forms.GroupBox();
@@ -71,7 +106,7 @@ namespace Transaction_Statistical.UControl
             this.splitContainer_Main.Panel1.SuspendLayout();
             this.splitContainer_Main.Panel2.SuspendLayout();
             this.splitContainer_Main.SuspendLayout();
-            this.SuspendLayout();
+            this.SuspendLayout();           
             // 
             // uc_Menu
             // 
@@ -93,6 +128,19 @@ namespace Transaction_Statistical.UControl
             this.txt_Path.Size = new System.Drawing.Size(645, 22);
             this.txt_Path.TabIndex = 1;
             this.txt_Path.Text = "d:\\06-NPSS\\Tool_TraSoat\\LOG tech\\LOG tech\\02-10-2019";
+            this.txt_Path.MouseClick +=new MouseEventHandler(txt_Path_MouseEnter);
+            //this.txt_Path.MouseLeave += new System.EventHandler(txt_Path_MouseLeave);
+            //this.txt_Path.MouseEnter += new System.EventHandler(txt_Path_MouseEnter);
+            // 
+            // uc_Explorer
+            // 
+            this.uc_Explorer = new UC_Explorer(txt_Path);
+            this.uc_Explorer.BackColor = System.Drawing.Color.Transparent;
+            this.uc_Explorer.Location = new Point(this.txt_Path.Location.X, this.txt_Path.Location.Y + this.txt_Path.Height + 5);
+            this.uc_Explorer.Name = "uc_Explorer";
+            this.uc_Explorer.Size = new System.Drawing.Size(this.txt_Path.Width, 0);
+            this.uc_Explorer.TabIndex = 1;
+            this.uc_Explorer.tre_Explorer.MouseLeave += new System.EventHandler(uc_Explorer_Leave);
             // 
             // gpBox_Actions
             // 
@@ -116,6 +164,8 @@ namespace Transaction_Statistical.UControl
             // 
             // splitContainer_Main
             // 
+            this.splitContainer_Main.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.splitContainer_Main.FixedPanel = System.Windows.Forms.FixedPanel.Panel1;
             this.splitContainer_Main.Location = new System.Drawing.Point(0, 0);
             this.splitContainer_Main.Name = "splitContainer_Main";
             // 
@@ -136,7 +186,7 @@ namespace Transaction_Statistical.UControl
             // 
             this.splitContainer_Main.Panel2.Controls.Add(this.propertyGrid1);
             this.splitContainer_Main.Size = new System.Drawing.Size(1324, 639);
-            this.splitContainer_Main.SplitterDistance = 674;
+            this.splitContainer_Main.SplitterDistance = 560;
             this.splitContainer_Main.TabIndex = 3;
             // 
             // btn_Menu
@@ -175,13 +225,14 @@ namespace Transaction_Statistical.UControl
             // tre_LstTrans
             // 
             this.tre_LstTrans.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left)));
+            | System.Windows.Forms.AnchorStyles.Left )));
             this.tre_LstTrans.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(37)))), ((int)(((byte)(37)))), ((int)(((byte)(38)))));
             this.tre_LstTrans.ForeColor = System.Drawing.Color.White;
             this.tre_LstTrans.Location = new System.Drawing.Point(17, 269);
             this.tre_LstTrans.Name = "tre_LstTrans";
             this.tre_LstTrans.Size = new System.Drawing.Size(649, 355);
             this.tre_LstTrans.TabIndex = 8;
+            this.tre_LstTrans.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.tre_LstTrans_AfterSelect);
             // 
             // cb_FullTime
             // 
@@ -248,6 +299,7 @@ namespace Transaction_Statistical.UControl
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(37)))), ((int)(((byte)(37)))), ((int)(((byte)(38)))));
+            this.Controls.Add(this.uc_Explorer);
             this.Controls.Add(this.uc_Menu);
             this.Controls.Add(this.splitContainer_Main);
             this.Name = "UC_Transaction";
@@ -277,5 +329,6 @@ namespace Transaction_Statistical.UControl
         private AddOn.ButtonZ btn_Read;
         private AddOn.ButtonMenu btn_Menu;
         public UC_Menu uc_Menu;
+        public UC_Explorer uc_Explorer;
     }
 }

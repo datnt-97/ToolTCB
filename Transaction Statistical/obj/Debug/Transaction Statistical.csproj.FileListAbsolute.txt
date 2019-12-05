@@ -46,3 +46,13 @@ D:\05-TEMP\Source\GitHub\ToolTCB\Transaction Statistical\obj\Debug\Transaction S
 D:\05-TEMP\Source\GitHub\ToolTCB\Transaction Statistical\obj\Debug\Transaction Statistical.csproj.CopyComplete
 D:\05-TEMP\Source\GitHub\ToolTCB\Transaction Statistical\obj\Debug\Transaction Statistical.exe
 D:\05-TEMP\Source\GitHub\ToolTCB\Transaction Statistical\obj\Debug\Transaction Statistical.pdb
+D:\05-TEMP\Source\GitHub\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.UControl.UC_Explorer.resources
+D:\05-TEMP\Source\GitHub\ToolTCB\Transaction Statistical\bin\Debug\EntityFramework.dll
+D:\05-TEMP\Source\GitHub\ToolTCB\Transaction Statistical\bin\Debug\EntityFramework.SqlServer.dll
+D:\05-TEMP\Source\GitHub\ToolTCB\Transaction Statistical\bin\Debug\System.Data.SQLite.dll
+D:\05-TEMP\Source\GitHub\ToolTCB\Transaction Statistical\bin\Debug\System.Data.SQLite.EF6.dll
+D:\05-TEMP\Source\GitHub\ToolTCB\Transaction Statistical\bin\Debug\System.Data.SQLite.Linq.dll
+D:\05-TEMP\Source\GitHub\ToolTCB\Transaction Statistical\bin\Debug\EntityFramework.xml
+D:\05-TEMP\Source\GitHub\ToolTCB\Transaction Statistical\bin\Debug\EntityFramework.SqlServer.xml
+D:\05-TEMP\Source\GitHub\ToolTCB\Transaction Statistical\bin\Debug\System.Data.SQLite.xml
+D:\05-TEMP\Source\GitHub\ToolTCB\Transaction Statistical\bin\Debug\System.Data.SQLite.dll.config

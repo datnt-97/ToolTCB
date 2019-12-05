@@ -138,12 +138,13 @@ namespace Transaction_Statistical
                 if (DataBaseConnnection.State == System.Data.ConnectionState.Open)
                 {
                     return;
-                }
+                }else
                 if (Password != null)
                 {
                     DataBaseConnnection.ConnectionString = @"Data Source=" + DatabaseFile + "; Password=" + Password + ";";
                     DataBaseConnnection.Open();
                 }
+                else
                 if (Password == null)
                 {
                     DataBaseConnnection.ConnectionString = @"Data Source=" + DatabaseFile + ";Version=3;UseUTF16Encoding=True;Synchronous=Normal;New=False";
@@ -157,7 +158,7 @@ namespace Transaction_Statistical
         }
         public void DbDisconnect()
         {
-            return;
+          //  return;
             while (true)
             {
                 if (DataBaseConnnection.State != System.Data.ConnectionState.Executing) break;
@@ -1100,9 +1101,9 @@ namespace Transaction_Statistical
                 DbDisconnect();
             }
             catch (Exception ex)
-            {
+            {DbDisconnect();
                 SystemLog.WriteSQLLog(this.GetType().Name, MethodBase.GetCurrentMethod().Name, ex.ToString());
-                DbDisconnect();
+                
                 // MsgInfo.MessageBoxError("Class SQLite", "SQLite", "GetTableDataWith2ColumnName", "Parameter1: " + TableName + "\n Parameter2: " + ColumnName1 + "\n Parameter3: " + Equals1 + "\n Parameter4: " + ColumnName2 + "\n Parameter5: " + Equals2 + "\n" +ex.ToString());
                 //MessageBox.Show("Error: " + ex.Message.ToString(), "Error", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
             }
@@ -1126,9 +1127,9 @@ namespace Transaction_Statistical
                 DbDisconnect();
             }
             catch (Exception ex)
-            {
+            { DbDisconnect();
                 SystemLog.WriteSQLLog(this.GetType().Name, MethodBase.GetCurrentMethod().Name, ex.ToString());
-                DbDisconnect();
+               
                 // MsgInfo.MessageBoxError("Class SQLite", "SQLite", "GetTableDataWith2ColumnName", "Parameter1: " + TableName + "\n Parameter2: " + ColumnName1 + "\n Parameter3: " + Equals1 + "\n Parameter4: " + ColumnName2 + "\n Parameter5: " + Equals2 + "\n" +ex.ToString());
                 //MessageBox.Show("Error: " + ex.Message.ToString(), "Error", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
             }
@@ -1204,9 +1205,9 @@ namespace Transaction_Statistical
                 DbDisconnect();
             }
             catch (Exception ex)
-            {
+            {    DbDisconnect();
                 SystemLog.WriteSQLLog(this.GetType().Name, MethodBase.GetCurrentMethod().Name, ex.ToString());
-                DbDisconnect();
+            
                 // MsgInfo.MessageBoxError("Class SQLite", "SQLite", "GetTableDataWith2ColumnName", "Parameter1: " + TableName + "\n Parameter2: " + ColumnName1 + "\n Parameter3: " + Equals1 + "\n Parameter4: " + ColumnName2 + "\n Parameter5: " + Equals2 + "\n" +ex.ToString());
                 //MessageBox.Show("Error: " + ex.Message.ToString(), "Error", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
             }
