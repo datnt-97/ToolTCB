@@ -143,7 +143,7 @@ namespace Transaction_Statistical.UControl
             DirectoryFileUtilities df = new DirectoryFileUtilities();
             FileInfo[] files = df.GetAllFilePath(txt_Path.Text, extension);
             JournalAnalyze(files);
-
+            tre_LstTrans.ExpandAll();
         }
         private void JournalAnalyze(FileInfo[] File_Journal)
         {

@@ -307,15 +307,14 @@ namespace Transaction_Statistical
                         foreach (KeyValuePair<int, RegesValue> key in lst)
                         {
                             trans = new Transaction();
-                            trans.sTimeBegin = key.Value.value["DateBegin"];
-                            trans.sTimeEnd = key.Value.value["TimeEnd"];
-                            DateTime.TryParseExact(trans.sTimeBegin, "MM-dd-yyyy HH:mm:ss", CultureInfo.InvariantCulture, DateTimeStyles.None, out trans.DateBegin);
-                            trans.DateEnd = trans.DateBegin;
-                            DateTime.TryParseExact(trans.sTimeEnd, "HH:mm:ss", CultureInfo.InvariantCulture, DateTimeStyles.None, out trans.DateEnd);
+                            DateTime.TryParseExact(key.Value.value["DateBegin"], "MM-dd-yyyy HH:mm:ss", CultureInfo.InvariantCulture, DateTimeStyles.None, out trans.DateBegin);                 
+                            DateTime.TryParseExact(key.Value.value["TimeEnd"], "HH:mm:ss", CultureInfo.InvariantCulture, DateTimeStyles.None, out trans.DateEnd);
+                            trans.DateEnd.AddDays(trans.DateBegin.Day);
+                            trans.DateEnd.AddMonths(trans.DateBegin.Month);
+                            trans.DateEnd.AddYears(trans.DateBegin.Year);
+
                             trans.Terminal = TerminalID = key.Value.value["TerminalID"];
                             trans.MachineSequenceNo = key.Value.value["MachineNo"];
-                            //trans.CardNumber = key.Value.value["CardNo"];
-                            //trans.DataInput = key.Value.value["DataInput"];
                             trans.TraceJournalFull = trans.TraceJournal_Remaining = key.Value.stringfind;
                             trans.TransactionTypeList = string.Empty;
                             trans.Day = String.Format("{0:yyyyMMdd}", trans.DateBegin);
@@ -413,6 +412,7 @@ namespace Transaction_Statistical
                         }
                     }
                 }
+                return true;
             }
             catch (Exception ex)
             {
@@ -603,33 +603,34 @@ namespace Transaction_Statistical
             CardNumber,
             CardLess
         }
+        public string TraceJournalFull;
         public Dictionary<DateTime, TransactionEvent> ListEvent = new Dictionary<DateTime, TransactionEvent>();
         public int Result;
         List<string> _datainput = new List<string>();
 
         CardTypes _cardtype = CardTypes.CardLess;
-        [CategoryAttribute("Customer"), DescriptionAttribute("Data input")]
+        [CategoryAttribute("2. Customer"), DescriptionAttribute("Data input")]
         public CardTypes CardType
         {
             get { return _cardtype; }
             set { _cardtype = value; }
         }
 
-        [CategoryAttribute("Customer"), DescriptionAttribute("Data input")]
+        [CategoryAttribute("2. Customer"), DescriptionAttribute("Data input")]
         public List<string> DataInput
         {
             get { return _datainput; }
             set { _datainput = value; }
         }
         string _card = "";
-        [CategoryAttribute("Customer"), DescriptionAttribute("Card number")]
+        [CategoryAttribute("2. Customer"), DescriptionAttribute("Card number")]
         public string CardNumber
         {
             get { return _card; }
             set { _card = value; }
         }
         string _name = "";
-        [CategoryAttribute("Customer"), DescriptionAttribute("Name of the customer")]
+        [CategoryAttribute("2. Customer"), DescriptionAttribute("Name of the customer")]
         public string Name
         {
             get { return _name; }
@@ -641,131 +642,111 @@ namespace Transaction_Statistical
         public string TraceTransMsgTxt;
         public string TraceApplicationTrcTxt;
         public string Day;
-        [CategoryAttribute("Transaction"), DescriptionAttribute("Type the transaction")]
-        public string TraceJournalFull { get; set; }
 
+        [CategoryAttribute("3. Transaction"), DescriptionAttribute("Machine Sequence No")]
+        public string MachineSequenceNo { get; set; }
         TransactionType _type = TransactionType.Withdrawal;
-        [CategoryAttribute("Transaction"), DescriptionAttribute("Type the transaction")]
+        [CategoryAttribute("3. Transaction"), DescriptionAttribute("Type the transaction")]
         public TransactionType Type
         {
             get { return _type; }
             set { _type = value; }
         }
-        [CategoryAttribute("Transaction"), DescriptionAttribute("Type the transaction list")]
+        [CategoryAttribute("3. Transaction"), DescriptionAttribute("Type the transaction list")]
         public string TransactionTypeList { get; set; }
-        string _tdate = "";
-        [CategoryAttribute("Transaction"), DescriptionAttribute("Date of the transaction")]
-        public string TDate
-        {
-            get { return _tdate; }
-            set { _tdate = value; }
-        }
+      
+        [CategoryAttribute("3. Transaction"), DescriptionAttribute("Date of the transaction")]
+        public string TDate { get { return String.Format("{0:yyyy-MM-dd}", DateBegin); } }
         public DateTime DateBegin;
-        public DateTime DateEnd;
-        public string sTimeBegin;
-        public string sTimeEnd;
-        string _ttime = "";
-        [CategoryAttribute("Transaction"), DescriptionAttribute("Time of the transaction")]
-        public string Time
-        {
-            get { return _ttime; }
-            set { _ttime = value; }
-        }
+        public DateTime DateEnd;       
+      
+        [CategoryAttribute("3. Transaction"), DescriptionAttribute("Start time of the transaction")]
+        public string TimeStart { get {return String.Format("{0:HH:mm:ss}", DateEnd); } }
+        [CategoryAttribute("3. Transaction"), DescriptionAttribute("End time of the transaction")]
+        public string TimeEnd { get { return String.Format("{0:HH:mm:ss}", DateBegin); } }
 
         string _amount = "0";
-        [CategoryAttribute("Transaction"), DescriptionAttribute("Amount")]
+        [CategoryAttribute("3. Transaction"), DescriptionAttribute("Amount")]
         public string Amount
         {
             get { return _amount; }
             set { _amount = value; }
         }
 
-        string _terminal;
-        [CategoryAttribute("CRM"), DescriptionAttribute("Terminal ID")]
-        public string Terminal
-        {
-            get { return _terminal; }
-            set { _terminal = value; }
-        }
-
-        string _machineNo;
-        [CategoryAttribute("CRM"), DescriptionAttribute("Machine Sequence No")]
-        public string MachineSequenceNo
-        {
-            get { return _machineNo; }
-            set { _machineNo = value; }
-        }
-        string _cassette1 = string.Empty;
-        [CategoryAttribute("CRM"), DescriptionAttribute("Cassette 1")]
-        public string Cassette1
-        {
-            get { return _cassette1; }
-            set { _cassette1 = value; }
-        }
-
-        string _cassette2 = string.Empty;
-        [CategoryAttribute("CRM"), DescriptionAttribute("Cassette 2")]
-        public string Cassette2
-        {
-            get { return _cassette2; }
-            set { _cassette2 = value; }
-        }
-
-        string _cassette3 = string.Empty;
-        [CategoryAttribute("CRM"), DescriptionAttribute("Cassette 3")]
-        public string Cassette3
-        {
-            get { return _cassette3; }
-            set { _cassette3 = value; }
-        }
-
-        string _cassette4 = string.Empty;
-        [CategoryAttribute("CRM"), DescriptionAttribute("Cassette 4")]
-        public string Cassette4
-        {
-            get { return _cassette4; }
-            set { _cassette4 = value; }
-        }
-
-        string _cassette5 = string.Empty;
-        [CategoryAttribute("CRM"), DescriptionAttribute("Cassette 5")]
-        public string Cassette5
-        {
-            get { return _cassette5; }
-            set { _cassette5 = value; }
-        }
-
-        string _cassette6 = string.Empty;
-        [CategoryAttribute("CRM"), DescriptionAttribute("Cassette 6")]
-        public string Cassette6
-        {
-            get { return _cassette6; }
-            set { _cassette6 = value; }
-        }
-
-        string _cassette7 = string.Empty;
-        [CategoryAttribute("CRM"), DescriptionAttribute("Cassette 7")]
-        public string Cassette7
-        {
-            get { return _cassette7; }
-            set { _cassette7 = value; }
-        }
-
-        string _cassette8 = string.Empty;
-        [CategoryAttribute("CRM"), DescriptionAttribute("Cassette 8")]
-        public string Cassette8
-        {
-            get { return _cassette8; }
-            set { _cassette8 = value; }
-        }
-
-        string _status = "";
-        [CategoryAttribute("CRM"), DescriptionAttribute("Status")]
+        [CategoryAttribute("1.Terminal"), DescriptionAttribute("Terminal ID")]
+        public string Terminal { get; set; }
+        string _status = "0000";
+        [CategoryAttribute("1.Terminal"), DescriptionAttribute("Status")]
         public string Status
         {
             get { return _status; }
             set { _status = value; }
         }
+        //string _cassette1 = string.Empty;
+        //[CategoryAttribute("CRM"), DescriptionAttribute("Cassette 1")]
+        //public string Cassette1
+        //{
+        //    get { return _cassette1; }
+        //    set { _cassette1 = value; }
+        //}
+
+        //string _cassette2 = string.Empty;
+        //[CategoryAttribute("CRM"), DescriptionAttribute("Cassette 2")]
+        //public string Cassette2
+        //{
+        //    get { return _cassette2; }
+        //    set { _cassette2 = value; }
+        //}
+
+        //string _cassette3 = string.Empty;
+        //[CategoryAttribute("CRM"), DescriptionAttribute("Cassette 3")]
+        //public string Cassette3
+        //{
+        //    get { return _cassette3; }
+        //    set { _cassette3 = value; }
+        //}
+
+        //string _cassette4 = string.Empty;
+        //[CategoryAttribute("CRM"), DescriptionAttribute("Cassette 4")]
+        //public string Cassette4
+        //{
+        //    get { return _cassette4; }
+        //    set { _cassette4 = value; }
+        //}
+
+        //string _cassette5 = string.Empty;
+        //[CategoryAttribute("CRM"), DescriptionAttribute("Cassette 5")]
+        //public string Cassette5
+        //{
+        //    get { return _cassette5; }
+        //    set { _cassette5 = value; }
+        //}
+
+        //string _cassette6 = string.Empty;
+        //[CategoryAttribute("CRM"), DescriptionAttribute("Cassette 6")]
+        //public string Cassette6
+        //{
+        //    get { return _cassette6; }
+        //    set { _cassette6 = value; }
+        //}
+
+        //string _cassette7 = string.Empty;
+        //[CategoryAttribute("CRM"), DescriptionAttribute("Cassette 7")]
+        //public string Cassette7
+        //{
+        //    get { return _cassette7; }
+        //    set { _cassette7 = value; }
+        //}
+
+        //string _cassette8 = string.Empty;
+        //[CategoryAttribute("CRM"), DescriptionAttribute("Cassette 8")]
+        //public string Cassette8
+        //{
+        //    get { return _cassette8; }
+        //    set { _cassette8 = value; }
+        //}
+
+
 
         public Transaction()
         {
