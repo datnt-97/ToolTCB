@@ -12,11 +12,11 @@ namespace Transaction_Statistical
             InitParametar.Init();
             InitializeComponent();
 
-            //UC_CfgTemplate uc_TemplateCfg = new UC_CfgTemplate("65");
-            //uc_TemplateCfg.Dock = DockStyle.Fill;
-            //Frm_TemplateDefault frm_templateCfg = new Frm_TemplateDefault(uc_TemplateCfg);
-            //frm_templateCfg.titleCustom.Text = "Template Config";
-            //frm_templateCfg.ShowDialog();
+            UC_CfgTemplate uc_TemplateCfg = new UC_CfgTemplate("65");
+            uc_TemplateCfg.Dock = DockStyle.Fill;
+            Frm_TemplateDefault frm_templateCfg = new Frm_TemplateDefault(uc_TemplateCfg);
+            frm_templateCfg.titleCustom.Text = "Template Config";
+            frm_templateCfg.Show();
 
             TabPanelControl tpc = new TabPanelControl();
             tpc.Dock = DockStyle.Fill;

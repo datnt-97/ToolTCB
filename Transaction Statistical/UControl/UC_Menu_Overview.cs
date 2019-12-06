@@ -15,14 +15,14 @@ namespace Transaction_Statistical.UControl
     {
         public UC_Menu_Overview()
         {
-            InitializeComponent();
-            //LoadInfo();
+            InitializeComponent();          
+            LoadInfo();
         }
         public void LoadInfo()
         {
             try
             {
-                DataTable cfg_vendor = InitParametar.sqlite.GetTableDataWith2ColumnName("CfgData", "Type_ID", "60", "Parent_ID", "54");
+                DataTable cfg_vendor =InitParametar.sqlite.GetTableDataWith2ColumnName("CfgData", "Type_ID", "60", "Parent_ID", "54");
                 foreach (DataRow R in cfg_vendor.Rows)
                 {
                     ComboBoxItem cb = new ComboBoxItem();

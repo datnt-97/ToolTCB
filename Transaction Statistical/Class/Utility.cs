@@ -9,27 +9,26 @@ namespace Transaction_Statistical
 {
     public class DirectoryFileUtilities
     {
-   
+
         public FileInfo[] GetAllFilePath(string FolderPath, string[] FileFormat)
         {
             DirectoryInfo rootDirectory = new DirectoryInfo(FolderPath);
-            FileInfo[] listFileInfo = null ;
+            FileInfo[] lstFileTotal = null;
             foreach (string sFormat in FileFormat)
             {
-                FileInfo[] fs = rootDirectory.GetFiles(sFormat);
-                if (listFileInfo == null) listFileInfo = fs;
-               else listFileInfo = listFileInfo.Concat(fs).ToArray();
-                DirectoryInfo[] subDirectory = rootDirectory.GetDirectories();
-                foreach (DirectoryInfo sub in subDirectory)
-                {
-                    FileInfo[] listFileInfoNew = GetAllFilePath(sub.FullName, FileFormat);
-                    if (listFileInfo != null) listFileInfo = listFileInfo.Concat(listFileInfoNew).ToArray();
-                    else listFileInfo = listFileInfoNew;
-                }
+                FileInfo[] lstFileRoot = rootDirectory.GetFiles(sFormat);
+                if (lstFileTotal == null) lstFileTotal = lstFileRoot; else lstFileTotal = lstFileTotal.Concat(lstFileRoot).ToArray();
+
             }
-            return listFileInfo;
+            DirectoryInfo[] subDirectory = rootDirectory.GetDirectories();
+            foreach (DirectoryInfo sub in subDirectory)
+            {
+                FileInfo[] listFileSub = GetAllFilePath(sub.FullName, FileFormat);
+                if (lstFileTotal != null) lstFileTotal = lstFileTotal.Concat(listFileSub).ToArray(); else lstFileTotal = listFileSub;
+            }
+            return lstFileTotal;
         }
-       
+
     }
     public class FileComparer : IComparer<string>
     {

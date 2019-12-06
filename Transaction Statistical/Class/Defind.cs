@@ -178,9 +178,9 @@ namespace Transaction_Statistical
         /// Transaction
         public string FormatTime = "HH:mm:ss";
         public string FormatDate = "yyyy-MM-dd";
-        public string FormatDate_2 = "MM-dd-yyyy";
         public string FormatDateTime = "MM - dd - yyyy HH:mm:ss";
         public string FormatDateTime_2 = "MM-dd-yyyy HH:mm:ss";
+
         public string TemplateTransactionID = "65";
         public Dictionary<TransactionEvent.Events, string> transactionTemplate;
         public Dictionary<string, Dictionary<DateTime, object>> ListTransaction;
@@ -197,7 +197,6 @@ namespace Transaction_Statistical
 
         //DAT : 6/12/2019
         public Dictionary<DateTime, Cycle> ListCycle = null;
-
         public ReadTransaction()
         {
             sqlite = new SQLiteHelper();
@@ -273,10 +272,8 @@ namespace Transaction_Statistical
                 DateTime currentDate = DateTime.MinValue;
 
                 ListTransaction = new Dictionary<string, Dictionary<DateTime, object>>();
-
-                ListCycle = new Dictionary<DateTime, Cycle>();
-
                 string Terminal = "Terminal";
+                ListCycle = new Dictionary<DateTime, Cycle>();
                 foreach (string file in files)
                 {
                     string day = file.Substring(file.Length - 12, 8);
@@ -285,10 +282,13 @@ namespace Transaction_Statistical
                     SplitTransactionEJ(ref Terminal, ref contenFile);
                     FindEventDevice2(currentDate, Terminal, ref contenFile);
                     FindCounterChanged(ref contenFile, ref ListCycle);
-                    //InitParametar.sTest += contenFile + Environment.NewLine;
+
+                    ListTransaction[Terminal] = ListTransaction[Terminal].OrderBy(d => d.Key).ToDictionary(k => k.Key, v => v.Value);
+                    InitParametar.sTest += contenFile + Environment.NewLine;
                 }
 
                 int i = ListTransaction.Values.LastOrDefault().Keys.Count;
+                InitParametar.sTest = i.ToString() + " transaction : " + (DateTime.Now - dateEnd).TotalSeconds.ToString() + " s =>" + ((DateTime.Now - dateEnd).TotalSeconds / i).ToString() + InitParametar.sTest + Environment.NewLine;
                 //CHANGE 6/12
                 var ListTransactionTemp = ListTransaction;
 
@@ -304,8 +304,6 @@ namespace Transaction_Statistical
                     });
 
                 }
-                InitParametar.sTest = i.ToString() + " transaction : " + (DateTime.Now - dateEnd).TotalSeconds.ToString() + " s =>" + ((DateTime.Now - dateEnd).TotalSeconds / i).ToString() + InitParametar.sTest + Environment.NewLine;
-
                 UC_Info uc = new UC_Info(InitParametar.sTest);
                 uc.Dock = DockStyle.Fill;
                 Frm_TemplateDefault frm = new Frm_TemplateDefault(uc);
@@ -380,7 +378,7 @@ namespace Transaction_Statistical
                         {
                             trans = new Transaction();
                             DateTime.TryParseExact(key.Value.value["DateBegin"], "MM-dd-yyyy HH:mm:ss", CultureInfo.InvariantCulture, DateTimeStyles.None, out trans.DateBegin);
-                            DateTime.TryParseExact(key.Value.value["TimeEnd"], "HH:mm:ss", CultureInfo.InvariantCulture, DateTimeStyles.None, out trans.DateEnd);
+                            DateTime.TryParseExact(string.Format("{0:MM-dd-yyyy}", trans.DateBegin) + key.Value.value["TimeEnd"], "MM-dd-yyyy" + FormatTime, CultureInfo.InvariantCulture, DateTimeStyles.None, out trans.DateEnd);
                             trans.DateEnd.AddDays(trans.DateBegin.Day);
                             trans.DateEnd.AddMonths(trans.DateBegin.Month);
                             trans.DateEnd.AddYears(trans.DateBegin.Year);
@@ -388,8 +386,6 @@ namespace Transaction_Statistical
                             trans.Terminal = TerminalID = key.Value.value["TerminalID"];
                             trans.MachineSequenceNo = key.Value.value["MachineNo"];
                             trans.TraceJournalFull = trans.TraceJournal_Remaining = key.Value.stringfind;
-                            trans.TransactionTypeList = string.Empty;
-                            trans.Day = String.Format("{0:yyyyMMdd}", trans.DateBegin);
 
                             trans.TraceJournal_Remaining = trans.TraceJournal_Remaining.Replace(key.Value.value["SStart"], null);
                             trans.TraceJournal_Remaining = trans.TraceJournal_Remaining.Replace(key.Value.value["SEnd"], null);
@@ -400,7 +396,7 @@ namespace Transaction_Statistical
                             FindEventReceive(ref trans.TraceJournal_Remaining, trans.DateBegin, ref trans.ListEvent);
                             FindEventDevice(ref trans.TraceJournal_Remaining, trans.DateBegin, ref trans.ListEvent);
                             InitParametar.sTest += trans.TraceJournal_Remaining + Environment.NewLine;
-
+                            trans.ListEvent = trans.ListEvent.OrderBy(d => d.Key).ToDictionary(k => k.Key, v => v.Value);
                             if (ListTransaction.ContainsKey(trans.Terminal))
                             {
                                 if (ListTransaction[trans.Terminal].ContainsKey(trans.DateBegin))
@@ -409,6 +405,7 @@ namespace Transaction_Statistical
                             }
                             else
                                 ListTransaction[trans.Terminal] = new Dictionary<DateTime, object>() { { trans.DateBegin, trans } };
+
                             sString = sString.Replace(trans.TraceJournalFull, string.Empty);
                         }
                     }
@@ -585,14 +582,19 @@ namespace Transaction_Statistical
                         foreach (RegesValue regx in lst.Values)
                         {
                             evt = new TransactionEvent();
+
                             evt.Name = tmp.Key;
                             evt.Status = TransactionEvent.StatusS.Succeeded;
                             evt.TContent = regx.stringfind;
-                            evt.TTime = regx.value.ContainsKey("Time") ? regx.value["Time"] : string.Empty;
-                            DateTime.TryParseExact(string.Format("{0} {1}", DateCurrent.ToString(FormatDate_2), evt.TTime), FormatDateTime_2, CultureInfo.InvariantCulture, DateTimeStyles.None, out DateCurrent);
-                            evt.TDate = string.Format("{0:" + FormatDate + "}", DateCurrent);
-                            if (eventList.ContainsKey(DateCurrent)) eventList[DateCurrent.AddMilliseconds(1)] = evt;
-                            else eventList[DateCurrent] = evt;
+                            if (regx.value.ContainsKey("Time") && !string.IsNullOrEmpty(regx.value["Time"]))
+                            {
+                                DateTime.TryParseExact(string.Format("{0:yyyyMMdd}", DateCurrent) + regx.value["Time"], "yyyyMMdd" + FormatTime, CultureInfo.InvariantCulture, DateTimeStyles.None, out evt.DateBegin);
+                                DateCurrent = evt.DateBegin;
+                            }
+                            else
+                                evt.DateBegin = DateCurrent;
+                            if (eventList.ContainsKey(evt.DateBegin)) eventList[evt.DateBegin.AddMilliseconds(1)] = evt;
+                            else eventList[evt.DateBegin] = evt;
                             sString = sString.Replace(regx.stringfind, string.Empty);
                         }
                     }
@@ -622,12 +624,13 @@ namespace Transaction_Statistical
                             evt.Name = tmp.Key;
                             evt.Status = TransactionEvent.StatusS.Succeeded;
                             evt.TContent = regx.stringfind;
-                            if (regx.value.ContainsKey("Time"))
+                            if (regx.value.ContainsKey("Time") && !string.IsNullOrEmpty(regx.value["Time"]))
                             {
-                                evt.TTime = regx.value["Time"];
-                                DateTime.TryParseExact(String.Format("{0:" + FormatDate + "}", DateCurrent) + evt.TTime, FormatDate + FormatTime, CultureInfo.InvariantCulture, DateTimeStyles.None, out DateCurrent);
+                                DateTime.TryParseExact(String.Format("{0:yyyyMMdd}", DateCurrent) + regx.value["Time"], "yyyyMMdd" + FormatTime, CultureInfo.InvariantCulture, DateTimeStyles.None, out evt.DateBegin);
+                                DateCurrent = evt.DateBegin;
                             }
-                            evt.TDate = string.Format("{0:" + FormatDate + "}", DateCurrent);
+                            else
+                                evt.DateBegin = DateCurrent.AddMilliseconds(10);
                             if (regx.value["Data"].StartsWith("("))
                                 transaction.DataInput.Add(regx.value["Data"]);
                             else
@@ -635,9 +638,8 @@ namespace Transaction_Statistical
                                 transaction.CardType = Transaction.CardTypes.CardNumber;
                                 transaction.CardNumber = regx.value["Data"];
                             }
-
-                            if (eventList.ContainsKey(DateCurrent)) eventList[DateCurrent.AddMilliseconds(1)] = evt;
-                            else eventList[DateCurrent] = evt;
+                            if (eventList.ContainsKey(evt.DateBegin)) eventList[evt.DateBegin.AddMilliseconds(1)] = evt;
+                            else eventList[evt.DateBegin] = evt;
                             sString = sString.Replace(regx.stringfind, string.Empty);
                         }
                     }
@@ -666,14 +668,15 @@ namespace Transaction_Statistical
                             evt.Name = tmp.Key;
                             evt.Status = TransactionEvent.StatusS.Succeeded;
                             evt.TContent = regx.stringfind;
-                            if (regx.value.ContainsKey("Time"))
+                            if (regx.value.ContainsKey("Time") && !string.IsNullOrEmpty(regx.value["Time"]))
                             {
-                                evt.TTime = regx.value["Time"];
-                                DateTime.TryParseExact(String.Format("{0:" + FormatDate + "}", DateCurrent) + evt.TTime, FormatDate + FormatTime, CultureInfo.InvariantCulture, DateTimeStyles.None, out DateCurrent);
+                                DateTime.TryParseExact(String.Format("{0:yyyyMMdd}", DateCurrent) + regx.value["Time"], "yyyyMMdd" + FormatTime, CultureInfo.InvariantCulture, DateTimeStyles.None, out evt.DateBegin);
+                                DateCurrent = evt.DateBegin;
                             }
-                            evt.TDate = string.Format("{0:" + FormatDate + "}", DateCurrent);
-                            if (eventList.ContainsKey(DateCurrent)) eventList[DateCurrent.AddMilliseconds(1)] = evt;
-                            else eventList[DateCurrent] = evt;
+                            else
+                                evt.DateBegin = DateCurrent.AddMilliseconds(10);
+                            if (eventList.ContainsKey(evt.DateBegin)) eventList[evt.DateBegin.AddMilliseconds(1)] = evt;
+                            else eventList[evt.DateBegin] = evt;
                             sString = sString.Replace(regx.stringfind, string.Empty);
                         }
                     }
@@ -702,11 +705,15 @@ namespace Transaction_Statistical
                             evt.Name = tmp.Key;
                             evt.Status = TransactionEvent.StatusS.Succeeded;
                             evt.TContent = regx.stringfind;
-                            evt.TTime = regx.value.ContainsKey("Time") ? regx.value["Time"] : string.Empty;
-                            DateTime.TryParseExact(evt.TTime, FormatTime, CultureInfo.InvariantCulture, DateTimeStyles.None, out DateCurrent);
-                            evt.TDate = string.Format("{0:" + FormatDate + "}", DateCurrent);
-                            if (eventList.ContainsKey(DateCurrent)) eventList[DateCurrent.AddMilliseconds(1)] = evt;
-                            else eventList[DateCurrent] = evt;
+                            if (regx.value.ContainsKey("Time") && !string.IsNullOrEmpty(regx.value["Time"]))
+                            {
+                                DateTime.TryParseExact(String.Format("{0:yyyyMMdd}", DateCurrent) + regx.value["Time"], "yyyyMMdd" + FormatTime, CultureInfo.InvariantCulture, DateTimeStyles.None, out evt.DateBegin);
+                                DateCurrent = evt.DateBegin;
+                            }
+                            else
+                                evt.DateBegin = DateCurrent.AddMinutes(10);
+                            if (eventList.ContainsKey(evt.DateBegin)) eventList[evt.DateBegin.AddMilliseconds(1)] = evt;
+                            else eventList[evt.DateBegin] = evt;
                             sString = sString.Replace(regx.stringfind, string.Empty);
                         }
                     }
@@ -735,11 +742,15 @@ namespace Transaction_Statistical
                             evt.Name = tmp.Key;
                             evt.Status = TransactionEvent.StatusS.Succeeded;
                             evt.TContent = regx.stringfind;
-                            evt.TTime = regx.value.ContainsKey("Time") ? regx.value["Time"] : string.Empty;
-                            DateTime.TryParseExact(evt.TTime, FormatTime, CultureInfo.InvariantCulture, DateTimeStyles.None, out DateCurrent);
-                            evt.TDate = string.Format("{0:" + FormatDate + "}", DateCurrent);
-                            if (eventList.ContainsKey(DateCurrent)) eventList[DateCurrent.AddMilliseconds(1)] = evt;
-                            else eventList[DateCurrent] = evt;
+                            if (regx.value.ContainsKey("Time") && !string.IsNullOrEmpty(regx.value["Time"]))
+                            {
+                                DateTime.TryParseExact(String.Format("{0:yyyyMMdd}", DateCurrent) + regx.value["Time"], "yyyyMMdd" + FormatTime, CultureInfo.InvariantCulture, DateTimeStyles.None, out evt.DateBegin);
+                                DateCurrent = evt.DateBegin;
+                            }
+                            else
+                                evt.DateBegin = DateCurrent.AddMilliseconds(10);
+                            if (eventList.ContainsKey(evt.DateBegin)) eventList[evt.DateBegin.AddMilliseconds(1)] = evt;
+                            else eventList[evt.DateBegin] = evt;
                             sString = sString.Replace(regx.stringfind, string.Empty);
                         }
                     }
@@ -756,7 +767,7 @@ namespace Transaction_Statistical
         {
             try
             {
-                transaction.ListEvent.OrderByDescending(d => d.Key);
+
                 foreach (TransactionEvent evt in transaction.ListEvent.Values)
                 {
 
@@ -826,7 +837,6 @@ namespace Transaction_Statistical
         public string TraceDeviceTxt;
         public string TraceTransMsgTxt;
         public string TraceApplicationTrcTxt;
-        public string Day;
 
         [CategoryAttribute("3. Transaction"), DescriptionAttribute("Machine Sequence No")]
         public string MachineSequenceNo { get; set; }
@@ -837,8 +847,6 @@ namespace Transaction_Statistical
             get { return _type; }
             set { _type = value; }
         }
-        [CategoryAttribute("3. Transaction"), DescriptionAttribute("Type the transaction list")]
-        public string TransactionTypeList { get; set; }
 
         [CategoryAttribute("3. Transaction"), DescriptionAttribute("Date of the transaction")]
         public string TDate { get { return String.Format("{0:yyyy-MM-dd}", DateBegin); } }
@@ -850,13 +858,13 @@ namespace Transaction_Statistical
         [CategoryAttribute("3. Transaction"), DescriptionAttribute("End time of the transaction")]
         public string TimeEnd { get { return String.Format("{0:HH:mm:ss}", DateBegin); } }
 
-        string _amount = "0";
+        //string _amount = "0";
         [CategoryAttribute("3. Transaction"), DescriptionAttribute("Amount")]
-        public string Amount
-        {
-            get { return _amount; }
-            set { _amount = value; }
-        }
+        public int Amount { get; set; }
+        //{
+        //    get { return _amount; }
+        //    set { _amount = value; }
+        //}
 
         [CategoryAttribute("1.Terminal"), DescriptionAttribute("Terminal ID")]
         public string Terminal { get; set; }
@@ -965,7 +973,7 @@ namespace Transaction_Statistical
             Transaction
         }
         public Events Type;
-        public string Name;
+
         public enum StatusS
         {
             Succeeded,
@@ -973,18 +981,36 @@ namespace Transaction_Statistical
             Warning,
             Error
         }
-        public StatusS Status;
+        public DateTime DateBegin;
+        [CategoryAttribute("Event"), DescriptionAttribute("Status of the Event")]
+        public StatusS Status { get; set; }
+        [CategoryAttribute("Event"), DescriptionAttribute("Name of the Event")]
+        public string Name { get; set; }
         [CategoryAttribute("Event"), DescriptionAttribute("Date of the Event")]
-        public string TDate;
+        public string TDate { get { return String.Format("{0:yyyy-MM-dd}", DateBegin); } }
 
         [CategoryAttribute("Event"), DescriptionAttribute("Time of the Event")]
-        public string TTime;
+        public string TTime { get { return String.Format("{0:HH:mm:ss}", DateBegin); } }
+
         [CategoryAttribute("Event"), DescriptionAttribute("Content of the Event")]
-        public string TContent;
+        public string TContent { get; set; }
         public override string ToString()
         {
             return Name + ": " + Status;
         }
+    }
+    public class TransactionRequest
+    {
+        public string Request;
+        public List<Denomination> LstDenomination = new List<Denomination>();
+        public int AmountDeposit
+        {
+            get { int a=0;
+                foreach (Denomination de in LstDenomination)
+                { a += de.Amount; } return a; }
+        }
+        public int AmountRequest;
+        public Dictionary<DateTime, object> LstEvent = new Dictionary<DateTime, object>();
     }
     public class RegesValue
     {
@@ -995,6 +1021,7 @@ namespace Transaction_Statistical
         { }
 
     }
+
     public class RegesValueWithPatternOfGroup
     {
         public int index;
@@ -1172,7 +1199,6 @@ namespace Transaction_Statistical
             }
             return false;
         }
-
         //Dat 5/12/2019
         public static bool RunPatternRegular(string sString, string sReg, out Dictionary<int, RegesValueWithPatternOfGroup> listResult)
         {
@@ -1251,6 +1277,41 @@ namespace Transaction_Statistical
             return Text;
         }
     }
+    //public class Cycle
+    //{
+    //    public DateTime DateBegin;
+    //    public DateTime DateEnd;
+    //    public Dictionary<string, Cassette> ListCassette = new Dictionary<string, Cassette>();
+    //    public string LogTxt;
+    //    public string PathLog;
+    //    public int IndexLog;
+    //}
+    //public class Cassette
+    //{
+    //    public string Name;
+    //    public string Description;
+    //    public string Denomination;
+    //    public decimal Value;
+    //    public int Counter;
+    //    public DateTime DateChange;
+    //    public Cassette()
+    //    {
+
+    //    }
+    //}
+    public class Denomination
+    {
+        public DateTime DateBegin;
+        public DateTime DateEnd;
+        public string Currency;
+        public int Value;
+        public int Remaining;
+        public int Init { set { Remaining = value; } }
+        public int Retract;
+        public int Reject;
+        public int Amount { get { return Value * Remaining; } }
+    }
+
     public class CycleEvent
     {
         public enum Events
