@@ -183,7 +183,6 @@ namespace Transaction_Statistical
         public string FormatDateTime_2 = "MM-dd-yyyy HH:mm:ss";
         public string TemplateTransactionID = "65";
         public Dictionary<TransactionEvent.Events, string> transactionTemplate;
-
         public Dictionary<string, Dictionary<DateTime, object>> ListTransaction;
         public DateTime StartDate = DateTime.MinValue;
         public DateTime EndDate = DateTime.MaxValue;
@@ -292,6 +291,7 @@ namespace Transaction_Statistical
                 int i = ListTransaction.Values.LastOrDefault().Keys.Count;
                 //CHANGE 6/12
                 var ListTransactionTemp = ListTransaction;
+
                 for (int c = 0; c < ListTransactionTemp.Count; c++)
                 {
                     var item = ListTransactionTemp.ToArray()[c];
@@ -326,14 +326,32 @@ namespace Transaction_Statistical
             {
                 if (ListTransaction != null)
                 {
+
+                    var cycle = new Dictionary<DateTime, Cycle>();
+                    ListTransaction.Select(x => x.Value).ToList().ForEach(x =>
+                    {
+                        cycle = cycle.Concat(x.Where(i => i.Value is Cycle).ToDictionary(d => d.Key, d => (Cycle)d.Value))
+                       .GroupBy(i => i.Key).ToDictionary(
+                           group => group.Key,
+                           group => group.First().Value).ToDictionary(d => d.Key, d => (Cycle)d.Value);
+                    });
+                    var transaction = new Dictionary<DateTime, Transaction>();
+                    ListTransaction.Select(x => x.Value).ToList().ForEach(x =>
+                    {
+                        transaction = transaction.Concat(x.Where(i => i.Value is Transaction).ToDictionary(d => d.Key, d => (Transaction)d.Value))
+                       .GroupBy(i => i.Key).ToDictionary(
+                           group => group.Key,
+                           group => group.First().Value).ToDictionary(d => d.Key, d => (Transaction)d.Value);
+                    });
+
                     Stream stream = null;
                     using (var excelPackage = new ExcelPackage(stream ?? new MemoryStream()))
                     {
                         TemplateHelper template = new TemplateHelper("Dat", "Report", "Test", excelPackage);
                         // Tạo buffer memory stream để hứng file excel
-                        template.CanQuyTheoCouterTrenMay("cân quỹ theo counter trên máy", OfficeOpenXml.Table.TableStyles.Custom, ListCycle);
+                        template.CanQuyTheoCouterTrenMay("cân quỹ theo counter trên máy", OfficeOpenXml.Table.TableStyles.Custom, cycle);
                         //template.BaoCaoGiaoDichBatThuong("test_2", OfficeOpenXml.Table.TableStyles.Custom);
-                        //template.BaoCaoGiaoDichKhongThanhCong("test_3", OfficeOpenXml.Table.TableStyles.Custom, dBTemp);
+                        template.BaoCaoGiaoDichTaiChinh("báo cáo giao dịch tài chính", OfficeOpenXml.Table.TableStyles.Custom, transaction);
                         stream = template.getStream();
                         var buffer = stream as MemoryStream;
                         File.WriteAllBytes(@"E:\text.xlsx", buffer.ToArray());
@@ -343,8 +361,7 @@ namespace Transaction_Statistical
             }
             catch (Exception ex)
             {
-                InitParametar.Send_Error(ex.ToString(), MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name);
-                return false;
+                throw ex;
 
             }
             return false;
@@ -1255,20 +1272,45 @@ namespace Transaction_Statistical
     }
     public class Cycle
     {
+        private DateTime dateBegin;
+        private DateTime dateEnd;
+        private DateTime settlementPeriodDateBegin;
 
-        public DateTime DateBegin;
-        public DateTime DateEnd;
-        public DateTime SettlementPeriodDateBegin;
-        public DateTime SettlementPeriodDateEnd;
+        private DateTime settlementPeriodDateEnd;
+
         public Dictionary<string, CycleEvent> ListEvent = new Dictionary<string, CycleEvent>();
         public Dictionary<int, Cassette> Cashcount_In = null;
-        public Dictionary<string, Cassette> Cashcount_Out = new Dictionary<string, Cassette>();
-        public Dictionary<string, Deno> DenominationCount = new Dictionary<string, Deno>();
+
+
+        private Dictionary<string, Cassette> cashcount_Out = new Dictionary<string, Cassette>();
+
+
+        private Dictionary<string, Deno> denominationCount = new Dictionary<string, Deno>();
         public string LogTxt;
         public string PathLog;
         public int IndexLog;
+
+        [CategoryAttribute("1. Info"), DescriptionAttribute("Terminal ID")]
         public string TerminalID;
         public string SerialNo;
+
+        [CategoryAttribute("1. Info"), DescriptionAttribute("Time Start")]
+        public DateTime DateBegin { get => dateBegin; set => dateBegin = value; }
+
+        public DateTime DateEnd { get => dateEnd; set => dateEnd = value; }
+
+        [CategoryAttribute("1. Info"), DescriptionAttribute("Start of settlement period")]
+        public DateTime SettlementPeriodDateBegin { get => settlementPeriodDateBegin; set => settlementPeriodDateBegin = value; }
+
+        [CategoryAttribute("1. Info"), DescriptionAttribute("End of settlement period")]
+        public DateTime SettlementPeriodDateEnd { get => settlementPeriodDateEnd; set => settlementPeriodDateEnd = value; }
+
+        [CategoryAttribute("2.Terminal Count"), DescriptionAttribute("Cash Count")]
+        public Dictionary<string, Cassette> Cashcount_Out { get => cashcount_Out; set => cashcount_Out = value; }
+
+        [CategoryAttribute("2.Terminal Count"), DescriptionAttribute("Denomination count")]
+        public Dictionary<string, Deno> DenominationCount { get => denominationCount; set => denominationCount = value; }
+
         public Cycle()
         {
         }
@@ -1279,14 +1321,39 @@ namespace Transaction_Statistical
     }
     public class Deno
     {
-        public string Name = string.Empty;
-        public string Dispensed = "0";
-        public string Deposited = "0";
-        public string Remaining = "0";
-        public string Retracted = "0";
-        public string Initial = "0";
-        public string currency = string.Empty;
-        public string log = string.Empty;
+        private string name = string.Empty;
+        private string dispensed = "0";
+        private string deposited = "0";
+        private string remaining = "0";
+        private string retracted = "0";
+        private string initial = "0";
+        private string currency = string.Empty;
+        private string log = string.Empty;
+
+        public string Name { get => name; set => name = value; }
+        public string Dispensed { get => dispensed; set => dispensed = value; }
+        public string Deposited { get => deposited; set => deposited = value; }
+        public string Remaining { get => remaining; set => remaining = value; }
+        public string Retracted { get => retracted; set => retracted = value; }
+        public string Initial { get => initial; set => initial = value; }
+        public string Currency { get => currency; set => currency = value; }
+        public string Log { get => log; set => log = value; }
+        public override string ToString()
+        {
+            //StringBuilder sb = new StringBuilder();
+            //sb.Append(this.Dispensed);
+            //sb.Append(",");
+            //sb.Append(this.Dispensed);
+            //sb.Append(",");
+            //sb.Append(this.Deposited);
+            //sb.Append(",");
+            //sb.Append(this.Remaining);
+            //sb.Append(",");
+            //sb.Append(this.Retracted);
+            //return sb.ToString();
+            return string.Format("Dispensed: {0}, Dispensed: {1}, Deposited: {2}, Remaining: {3}, Retracted: {4}, Initial: {5}",
+                Dispensed, Dispensed, Deposited, Remaining, Retracted, Initial);
+        }
     }
     public class CapturedCard
     {
@@ -1303,20 +1370,71 @@ namespace Transaction_Statistical
         public string CardNumber;
         public string Retract;
         public string Position;
+
     }
     public class Cassette
     {
-        public string Name;
-        public string Type;
-        public string Denomi;
-        public string Initial;
-        public string Current;
-        public string Status;
-        public string Log;
+        private string name;
+        private string type;
+        private string denomi;
+        private string initial;
+        private string current;
+        private string status;
+        private string log;
 
+        public string Name { get => name; set => name = value; }
+        public string Type { get => type; set => type = value; }
+        public string Denomi { get => denomi; set => denomi = value; }
+        public string Initial { get => initial; set => initial = value; }
+        public string Current { get => current; set => current = value; }
+        public string Status { get => status; set => status = value; }
+        public string Log { get => log; set => log = value; }
+
+        public override string ToString()
+        {
+            return string.Format("Type: {0}, Denomi: {1}, Initial: {2}, Current: {3}, Status: {4}", Type, Denomi, Initial, Current, Status);
+        }
         public Cassette()
         {
 
+        }
+    }
+    public class ListPropertyGrid<T> where T : class
+    {
+        private List<KeyValuePair<DateTime, T>> keyValue = new List<KeyValuePair<DateTime, T>>();
+
+        [CategoryAttribute("1. List item"), DescriptionAttribute("Cycle")]
+        public List<KeyValuePair<DateTime, T>> KeyValue { get => keyValue; set => keyValue = value; }
+        public ListPropertyGrid(List<KeyValuePair<DateTime, T>> keyValue)
+        {
+            KeyValue = keyValue;
+        }
+    }
+    internal class TCollectionConverter<T> : ExpandableObjectConverter where T : class
+    {
+        public override object ConvertTo(ITypeDescriptorContext context, System.Globalization.CultureInfo culture, object value, Type destType)
+        {
+            if (destType == typeof(string) && value is Dictionary<string, T>)
+            {
+                // Return department and department role separated by comma.
+                return typeof(T).Name + "'s data";
+            }
+            return base.ConvertTo(context, culture, value, destType);
+        }
+    }
+    internal class TConverter<T> : ExpandableObjectConverter where T : class
+    {
+        public override object ConvertTo(ITypeDescriptorContext context, System.Globalization.CultureInfo culture, object value, Type destType)
+        {
+            if (destType == typeof(string) && value is T)
+            {
+                // Cast the value to an Employee type
+                T emp = (T)value;
+
+                // Return department and department role separated by comma.
+                return emp.ToString();
+            }
+            return base.ConvertTo(context, culture, value, destType);
         }
     }
 }

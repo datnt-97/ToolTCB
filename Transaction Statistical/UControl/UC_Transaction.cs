@@ -173,7 +173,7 @@ namespace Transaction_Statistical.UControl
                         ///CHANGE 6/12
                         TreeNodeX ndTerminal = new TreeNodeX(String.Format("Terminal ID: {0} - Transactions:{1} - Cycle:{2} - Event :{3} ",
                             kTerminal.Key, countTransaction, countCycle, countTransactionEvent));
-
+                        ndTerminal.Tag = kTerminal.Value.Where(x => x.Value is Cycle).ToList();
                         foreach (KeyValuePair<DateTime, object> kTransaction in kTerminal.Value.OrderBy(x => x.Key))
                         {
                             day = String.Format("{0:" + readtran.FormatDate + "}", kTransaction.Key);
@@ -249,6 +249,9 @@ namespace Transaction_Statistical.UControl
                 }
                 else if (e.Node != null && e.Node.Tag != null && e.Node.Tag is List<KeyValuePair<DateTime, Cycle>>)
                 {
+                    var tag = (List<KeyValuePair<DateTime, Cycle>>)e.Node.Tag;
+                    ListPropertyGrid<Cycle> listProperty = new ListPropertyGrid<Cycle>(tag);
+                    propertyGrid1.SelectedObject = listProperty;
                     var tagValue = ((List<KeyValuePair<DateTime, Cycle>>)e.Node.Tag).ToList();
                     ListBox listBox = new ListBox();
                     listBox.Dock = DockStyle.Fill;
@@ -258,6 +261,7 @@ namespace Transaction_Statistical.UControl
                     });
                     panel4.Controls.Add(listBox);
                 }
+
             }
             catch (Exception ex)
             {
@@ -275,14 +279,24 @@ namespace Transaction_Statistical.UControl
 
         private void btnExport_Click(object sender, EventArgs e)
         {
-            if (readtran != null)
+            try
             {
+                if (readtran != null)
+                {
+                    readtran.Export();
+                    MessageBox.Show("Export Successfully");
+                }
+                else
+                {
+                    MessageBox.Show("Please Read Transaction");
+                }
+            }
+            catch (Exception ex)
+            {
+                InitParametar.Send_Error(ex.ToString(), MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name);
 
             }
-            else
-            {
-                MessageBox.Show("Please Read Transaction");
-            }
+
         }
     }
 
