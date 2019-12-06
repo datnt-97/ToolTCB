@@ -12,6 +12,8 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using FastColoredTextBoxNS;
+using OfficeOpenXml;
+using Transaction_Statistical.Class;
 
 namespace Transaction_Statistical
 {
@@ -272,16 +274,26 @@ namespace Transaction_Statistical
                 ListTransaction = new Dictionary<string, Dictionary<DateTime, object>>();
                 ListCycle = new Dictionary<DateTime, Cycle>();
                 string Terminal = "Terminal";
+
                 foreach (string file in files)
                 {
-                    string day = file.Substring(file.Length - 12, 8);
-                    string contenFile = File.ReadAllText(file);
-                    DateTime.TryParseExact(day, "yyyyMMdd", CultureInfo.InvariantCulture, DateTimeStyles.None, out currentDate);
-                    SplitTransactionEJ(ref Terminal, ref contenFile);
-                    //FindEventDevice2(currentDate, Terminal, ref contenFile);
-                    FindCounterChanged(ref contenFile, ref ListCycle);
+                    using (FileStream fs = File.Open(file, FileMode.Open, FileAccess.Read))
+                    using (BufferedStream bs = new BufferedStream(fs))
+                    using (StreamReader sr = new StreamReader(bs))
+                    {
+                        string day = file.Substring(file.Length - 12, 8);
+                        string contenFile = sr.ReadToEnd();
+                        DateTime.TryParseExact(day, "yyyyMMdd", CultureInfo.InvariantCulture, DateTimeStyles.None, out currentDate);
 
-                    InitParametar.sTest += contenFile + Environment.NewLine;
+                        SplitTransactionEJ(ref Terminal, ref contenFile);
+                        FindEventDevice2(currentDate, Terminal, ref contenFile);
+                        FindCounterChanged(ref contenFile, ref ListCycle);
+                        //InitParametar.sTest += contenFile + Environment.NewLine;
+                    }
+
+
+
+                    //InitParametar.sTest += contenFile + Environment.NewLine;
                 }
                 var ListTransactionTemp = ListTransaction;
                 for (int c = 0; c < ListTransactionTemp.Count; c++)
@@ -294,22 +306,22 @@ namespace Transaction_Statistical
                         ListTransaction.FirstOrDefault(x1 => x1.Key == item.Key).Value.Add(x.Key, x.Value);
 
                     });
-                    //for (int ci = 0; ci < itemValue.Count(); ci++)
-                    //{
-                    //    var cycles = ListCycle.Where(x => CompareDate(x.Key, itemValue[ci].Key) && x.Value.TerminalID.Contains(item.Key)).ToList();
-                    //    if (cycles != null && cycles.Count > 0)
-                    //    {
-                    //        cycles.ForEach(x =>
-                    //        {
-                    //            ListTransactionTemp.FirstOrDefault(x1 => x1.Key == item.Key).Value.Add(x.Key, x.Value);
 
-                    //        });
-                    //    }
-                    //}
                 }
                 int i = ListTransaction.Values.LastOrDefault().Keys.Count;
                 InitParametar.sTest = i.ToString() + " transaction : " + (DateTime.Now - dateEnd).TotalSeconds.ToString() + " s =>" + ((DateTime.Now - dateEnd).TotalSeconds / i).ToString() + InitParametar.sTest + Environment.NewLine;
-
+                Stream stream = null;
+                using (var excelPackage = new ExcelPackage(stream ?? new MemoryStream()))
+                {
+                    TemplateHelper template = new TemplateHelper("Dat", "Report", "Test", excelPackage);
+                    // Tạo buffer memory stream để hứng file excel
+                    template.CanQuyTheoCouterTrenMay("cân quỹ theo counter trên máy", OfficeOpenXml.Table.TableStyles.Custom, ListCycle);
+                    //template.BaoCaoGiaoDichBatThuong("test_2", OfficeOpenXml.Table.TableStyles.Custom);
+                    //template.BaoCaoGiaoDichKhongThanhCong("test_3", OfficeOpenXml.Table.TableStyles.Custom, dBTemp);
+                    stream = template.getStream();
+                    var buffer = stream as MemoryStream;
+                    File.WriteAllBytes(@"E:\text.xlsx", buffer.ToArray());
+                }
                 UC_Info uc = new UC_Info(InitParametar.sTest);
                 uc.Dock = DockStyle.Fill;
                 Frm_TemplateDefault frm = new Frm_TemplateDefault(uc);
