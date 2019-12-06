@@ -21,14 +21,15 @@ namespace Transaction_Statistical.UControl
     {
         SQLiteHelper sqlite;
         List<Transaction> transactions = new List<Transaction>();
-        ReadTransaction readTransactions;
+        ReadTransaction readtran;
+        public Dictionary<string, Dictionary<DateTime, object>> ListTransaction;
+
         public UC_Transaction()
         {
             sqlite = new SQLiteHelper();
             InitializeComponent();
             Add_GUI();
             uc_Menu.Location = new Point(-uc_Menu.Width, uc_Menu.Location.Y);
-            readTransactions = new ReadTransaction();
         }
         #region design
         bool runningShowMenu = false;
@@ -149,11 +150,12 @@ namespace Transaction_Statistical.UControl
         {
             try
             {
+                readtran = new ReadTransaction();
+
                 FileComparer comp = new FileComparer(FileComparer.CompareBy.Name);
                 List<string> filesReadJournal = File_Journal.Select(f => f.FullName).ToList();
                 filesReadJournal.Sort(comp);
                 //  Reads(filesReadJournal);
-                ReadTransaction readtran = new ReadTransaction();
                 if (!cb_FullTime.Checked)
                 {
                     readtran.StartDate = dateTimePicker_Start.Value;
@@ -164,8 +166,15 @@ namespace Transaction_Statistical.UControl
                     string day;
                     foreach (KeyValuePair<string, Dictionary<DateTime, object>> kTerminal in readtran.ListTransaction)
                     {
-                        TreeNodeX ndTerminal = new TreeNodeX(String.Format("Terminal ID: {0} - Total: {1} transactions", kTerminal.Key, kTerminal.Value.Count));
-                        foreach (KeyValuePair<DateTime, object> kTransaction in kTerminal.Value)
+                        int countCycle = kTerminal.Value.Where(x => (x.Value is Cycle)).ToList().Count;
+                        int countTransaction = kTerminal.Value.Where(x => (x.Value is Transaction)).ToList().Count;
+                        int countTransactionEvent = kTerminal.Value.Where(x => (x.Value is TransactionEvent)).ToList().Count;
+                        ////TreeNodeX ndTerminal = new TreeNodeX(String.Format("Terminal ID: {0} - Total: {1} transactions", kTerminal.Key, kTerminal.Value.Count));
+                        ///CHANGE 6/12
+                        TreeNodeX ndTerminal = new TreeNodeX(String.Format("Terminal ID: {0} - Transactions:{1} - Cycle:{2} - Event :{3} ",
+                            kTerminal.Key, countTransaction, countCycle, countTransactionEvent));
+
+                        foreach (KeyValuePair<DateTime, object> kTransaction in kTerminal.Value.OrderBy(x => x.Key))
                         {
                             day = String.Format("{0:" + readtran.FormatDate + "}", kTransaction.Key);
                             TreeNode ndDay = new TreeNode(day);
@@ -176,7 +185,7 @@ namespace Transaction_Statistical.UControl
                             string textDisplay = kTransaction.Value.ToString();
                             TreeNode ndTransaction = ndDay.Nodes.Add(textDisplay, textDisplay);
                             ndTransaction.Tag = kTransaction.Value;
-                            ndDay.Text = day + " Total: " + ndDay.Nodes.Count + " transactions";
+                            ndDay.Text = day + " Total: " + ndDay.Nodes.Count + " items";
                         }
                         tre_LstTrans.Nodes.Add(ndTerminal);
                     }
@@ -233,6 +242,22 @@ namespace Transaction_Statistical.UControl
                     propertyGrid1.SelectedObject = (Transaction)e.Node.Tag;
                     fctxt_FullLog.Text = (e.Node.Tag as Transaction).TraceJournalFull;
                 }
+                else if (e.Node != null && e.Node.Tag != null && e.Node.Tag is Cycle)
+                {
+                    propertyGrid1.SelectedObject = (Cycle)e.Node.Tag;
+                    fctxt_FullLog.Text = (e.Node.Tag as Cycle).LogTxt;
+                }
+                else if (e.Node != null && e.Node.Tag != null && e.Node.Tag is List<KeyValuePair<DateTime, Cycle>>)
+                {
+                    var tagValue = ((List<KeyValuePair<DateTime, Cycle>>)e.Node.Tag).ToList();
+                    ListBox listBox = new ListBox();
+                    listBox.Dock = DockStyle.Fill;
+                    tagValue.ForEach(x =>
+                    {
+                        listBox.Items.Add(x.Value.ToString());
+                    });
+                    panel4.Controls.Add(listBox);
+                }
             }
             catch (Exception ex)
             {
@@ -244,7 +269,19 @@ namespace Transaction_Statistical.UControl
         {
             if (e.Node.Tag is Transaction)
             {
-                toolTip1.Show((e.Node.Tag as Transaction).TraceJournalFull, tre_LstTrans);
+                //toolTip1.Show((e.Node.Tag as Transaction).TraceJournalFull, tre_LstTrans);
+            }
+        }
+
+        private void btnExport_Click(object sender, EventArgs e)
+        {
+            if (readtran != null)
+            {
+
+            }
+            else
+            {
+                MessageBox.Show("Please Read Transaction");
             }
         }
     }

@@ -12,6 +12,8 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using FastColoredTextBoxNS;
+using OfficeOpenXml;
+using Transaction_Statistical.Class;
 
 namespace Transaction_Statistical
 {
@@ -52,7 +54,7 @@ namespace Transaction_Statistical
         {
             try
             {
-              
+
                 // ftp Support
                 UsrSupport = "UsrUpdate";
                 PwdSupport = "@UsrUpdate@";
@@ -176,7 +178,9 @@ namespace Transaction_Statistical
         /// Transaction
         public string FormatTime = "HH:mm:ss";
         public string FormatDate = "yyyy-MM-dd";
+        public string FormatDate_2 = "MM-dd-yyyy";
         public string FormatDateTime = "MM - dd - yyyy HH:mm:ss";
+        public string FormatDateTime_2 = "MM-dd-yyyy HH:mm:ss";
         public string TemplateTransactionID = "65";
         public Dictionary<TransactionEvent.Events, string> transactionTemplate;
 
@@ -191,6 +195,10 @@ namespace Transaction_Statistical
         public Dictionary<string, string> Template_SplitTransactions;
         public Dictionary<string, string> Template_EventCounterChanged;
         public Dictionary<string, TransactionType> Template_TransType;
+
+        //DAT : 6/12/2019
+        public Dictionary<DateTime, Cycle> ListCycle = null;
+
         public ReadTransaction()
         {
             sqlite = new SQLiteHelper();
@@ -266,6 +274,9 @@ namespace Transaction_Statistical
                 DateTime currentDate = DateTime.MinValue;
 
                 ListTransaction = new Dictionary<string, Dictionary<DateTime, object>>();
+
+                ListCycle = new Dictionary<DateTime, Cycle>();
+
                 string Terminal = "Terminal";
                 foreach (string file in files)
                 {
@@ -273,14 +284,28 @@ namespace Transaction_Statistical
                     string contenFile = File.ReadAllText(file);
                     DateTime.TryParseExact(day, "yyyyMMdd", CultureInfo.InvariantCulture, DateTimeStyles.None, out currentDate);
                     SplitTransactionEJ(ref Terminal, ref contenFile);
-                    FindEventDevice2(currentDate, Terminal,ref contenFile);
-                    FindCounterChanged(ref contenFile);
-                    InitParametar.sTest += contenFile + Environment.NewLine;
+                    FindEventDevice2(currentDate, Terminal, ref contenFile);
+                    FindCounterChanged(ref contenFile, ref ListCycle);
+                    //InitParametar.sTest += contenFile + Environment.NewLine;
                 }
-                
+
                 int i = ListTransaction.Values.LastOrDefault().Keys.Count;
+                //CHANGE 6/12
+                var ListTransactionTemp = ListTransaction;
+                for (int c = 0; c < ListTransactionTemp.Count; c++)
+                {
+                    var item = ListTransactionTemp.ToArray()[c];
+                    var itemValue = item.Value.ToList(); ;
+                    var cycles = ListCycle.Where(x => x.Value.TerminalID.Contains(item.Key)).ToList();
+                    cycles.ForEach(x =>
+                    {
+                        ListTransaction.FirstOrDefault(x1 => x1.Key == item.Key).Value.Add(x.Key, x.Value);
+
+                    });
+
+                }
                 InitParametar.sTest = i.ToString() + " transaction : " + (DateTime.Now - dateEnd).TotalSeconds.ToString() + " s =>" + ((DateTime.Now - dateEnd).TotalSeconds / i).ToString() + InitParametar.sTest + Environment.NewLine;
-                
+
                 UC_Info uc = new UC_Info(InitParametar.sTest);
                 uc.Dock = DockStyle.Fill;
                 Frm_TemplateDefault frm = new Frm_TemplateDefault(uc);
@@ -291,6 +316,36 @@ namespace Transaction_Statistical
             catch (Exception ex)
             {
                 InitParametar.Send_Error(ex.ToString(), MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name);
+            }
+            return false;
+        }
+
+        public bool Export()
+        {
+            try
+            {
+                if (ListTransaction != null)
+                {
+                    Stream stream = null;
+                    using (var excelPackage = new ExcelPackage(stream ?? new MemoryStream()))
+                    {
+                        TemplateHelper template = new TemplateHelper("Dat", "Report", "Test", excelPackage);
+                        // Tạo buffer memory stream để hứng file excel
+                        template.CanQuyTheoCouterTrenMay("cân quỹ theo counter trên máy", OfficeOpenXml.Table.TableStyles.Custom, ListCycle);
+                        //template.BaoCaoGiaoDichBatThuong("test_2", OfficeOpenXml.Table.TableStyles.Custom);
+                        //template.BaoCaoGiaoDichKhongThanhCong("test_3", OfficeOpenXml.Table.TableStyles.Custom, dBTemp);
+                        stream = template.getStream();
+                        var buffer = stream as MemoryStream;
+                        File.WriteAllBytes(@"E:\text.xlsx", buffer.ToArray());
+                    }
+                    return true;
+                }
+            }
+            catch (Exception ex)
+            {
+                InitParametar.Send_Error(ex.ToString(), MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name);
+                return false;
+
             }
             return false;
         }
@@ -307,7 +362,7 @@ namespace Transaction_Statistical
                         foreach (KeyValuePair<int, RegesValue> key in lst)
                         {
                             trans = new Transaction();
-                            DateTime.TryParseExact(key.Value.value["DateBegin"], "MM-dd-yyyy HH:mm:ss", CultureInfo.InvariantCulture, DateTimeStyles.None, out trans.DateBegin);                 
+                            DateTime.TryParseExact(key.Value.value["DateBegin"], "MM-dd-yyyy HH:mm:ss", CultureInfo.InvariantCulture, DateTimeStyles.None, out trans.DateBegin);
                             DateTime.TryParseExact(key.Value.value["TimeEnd"], "HH:mm:ss", CultureInfo.InvariantCulture, DateTimeStyles.None, out trans.DateEnd);
                             trans.DateEnd.AddDays(trans.DateBegin.Day);
                             trans.DateEnd.AddMonths(trans.DateBegin.Month);
@@ -323,10 +378,10 @@ namespace Transaction_Statistical
                             trans.TraceJournal_Remaining = trans.TraceJournal_Remaining.Replace(key.Value.value["SEnd"], null);
 
                             FindEventBeginInput(ref trans.TraceJournal_Remaining, ref trans, ref trans.ListEvent);
-                            FindEventTransaction(ref trans.TraceJournal_Remaining, trans.DateBegin, ref trans.ListEvent);                           
+                            FindEventTransaction(ref trans.TraceJournal_Remaining, trans.DateBegin, ref trans.ListEvent);
                             FindEventRequest(ref trans.TraceJournal_Remaining, trans.DateBegin, ref trans.ListEvent);
                             FindEventReceive(ref trans.TraceJournal_Remaining, trans.DateBegin, ref trans.ListEvent);
-                            FindEventDevice(ref trans.TraceJournal_Remaining, trans.DateBegin,  ref trans.ListEvent);
+                            FindEventDevice(ref trans.TraceJournal_Remaining, trans.DateBegin, ref trans.ListEvent);
                             InitParametar.sTest += trans.TraceJournal_Remaining + Environment.NewLine;
 
                             if (ListTransaction.ContainsKey(trans.Terminal))
@@ -348,17 +403,129 @@ namespace Transaction_Statistical
             }
             return false;
         }
-        private bool FindCounterChanged(ref string sString)
+        private bool FindCounterChanged(ref string sString, ref Dictionary<DateTime, Cycle> Cycles)
         {
             try
             {
+                Cycle cycleItem = null;
+                Dictionary<int, RegesValueWithPatternOfGroup> lst = new Dictionary<int, RegesValueWithPatternOfGroup>();
 
-                Dictionary<int, RegesValue> lst = new Dictionary<int, RegesValue>();
-                foreach (string reg in Template_EventCounterChanged.Values)
+                CycleEvent evt;
+                foreach (KeyValuePair<string, string> reg in Template_EventCounterChanged)
                 {
-                    if (Regexs.RunPatternRegular(sString, reg, out lst))
+                    if (Regexs.RunPatternRegular(sString, reg.Value, out lst))
                     {
-                        //check counter
+                        foreach (KeyValuePair<int, RegesValueWithPatternOfGroup> key in lst)
+                        {
+                            evt = new CycleEvent();
+                            evt.Name = reg.Value;
+                            evt.Log = key.Value.stringfind;
+
+                            if (key.Value.value.ContainsKey("Settlement"))
+                            {
+                                cycleItem = new Cycle();
+                                cycleItem.LogTxt = key.Value.stringfind;
+                                cycleItem.IndexLog = key.Value.index;
+                                var date = key.Value.value["StartDateTime"].FirstOrDefault().Value;
+                                evt.TDate = date;
+                                var settlementPeriodDateBegin = key.Value.value["Start"].FirstOrDefault().Value;
+                                var settlementPeriodDateEnd = key.Value.value["End"].FirstOrDefault().Value;
+                                var startSettlement = DateTime.ParseExact(date, FormatDateTime_2, CultureInfo.InvariantCulture);
+                                var periodDateBegin = DateTime.ParseExact(settlementPeriodDateBegin, FormatDateTime_2, CultureInfo.InvariantCulture);
+                                var periodDateEnd = DateTime.ParseExact(settlementPeriodDateEnd, FormatDateTime_2, CultureInfo.InvariantCulture);
+                                cycleItem.SettlementPeriodDateBegin = periodDateBegin;
+                                cycleItem.SettlementPeriodDateEnd = periodDateEnd;
+                                cycleItem.DateBegin = startSettlement;
+                                cycleItem.TerminalID = key.Value.value["TerminalNo"].FirstOrDefault().Value;
+                                cycleItem.SerialNo = key.Value.value["SerialNo"].FirstOrDefault().Value;
+
+                                //GET CASH COUNT OUT 
+                                if (key.Value.value.ContainsKey("CashCount") && key.Value.value.ContainsKey("ListCassette"))
+                                {
+                                    var dateCashCountValue = key.Value.value["TimeCashCount"].FirstOrDefault().Value;
+                                    var dateCashCount = DateTime.ParseExact(
+                                        string.Format("{0} {1}",
+                                        date.Split(' ')[0],
+                                        dateCashCountValue),
+                                        FormatDateTime_2,
+                                        CultureInfo.InvariantCulture);
+                                    var NameCassette = key.Value.value["NameCassette"].ToArray();
+                                    var TypeCassette = key.Value.value["Type"].ToArray();
+                                    var DenomiCassette = key.Value.value["Denomi"].ToArray();
+                                    var InitialCassette = key.Value.value["InitialCassette"].ToArray();
+                                    var CurrentCassette = key.Value.value["Current"].ToArray();
+                                    var StatusCassette = key.Value.value["Status"].ToArray();
+                                    for (int i = 0; i < NameCassette.Count(); i++)
+                                    {
+                                        Cassette cassette = new Cassette();
+                                        cassette.Name = NameCassette[i].Value.Trim();
+                                        cassette.Type = TypeCassette[i].Value.Trim();
+                                        cassette.Denomi = DenomiCassette[i].Value.Trim();
+                                        cassette.Initial = InitialCassette[i].Value.Trim();
+                                        cassette.Current = CurrentCassette[i].Value.Trim();
+                                        cassette.Status = StatusCassette[i].Value.Trim();
+                                        cycleItem.Cashcount_Out.Add(NameCassette[i].Value, cassette);
+
+                                    }
+
+                                }
+                                //GET DENOMINATION COUNT 
+                                if (key.Value.value.ContainsKey("DenomiationCount")
+                                    && key.Value.value.ContainsKey("ListDeno") && key.Value.value.ContainsKey("DenoListRetract"))
+                                {
+                                    var dateDenominationCountValue = key.Value.value["TimeCashCount"].FirstOrDefault().Value;
+                                    var dateDenominationCount = DateTime.ParseExact(
+                                        string.Format("{0} {1}",
+                                        date.Split(' ')[0],
+                                        dateDenominationCountValue),
+                                        FormatDateTime_2,
+                                        CultureInfo.InvariantCulture);
+                                    var NameDenomi = key.Value.value["Name"].ToArray();
+                                    var DispensedDenomi = key.Value.value["Dispensed"].ToArray();
+                                    var DepositedDenomi = key.Value.value["Deposited"].ToArray();
+                                    var RemainingDenomi = key.Value.value["Remaining"].ToArray();
+                                    var InitialDenomi = key.Value.value["Initial"].ToArray();
+                                    var NameDenoRetract = key.Value.value["NameDenoRetract"].ToArray();
+                                    var CountDenoRetract = key.Value.value["CountDenoRetract"].ToArray();
+                                    for (int i = 0; i < NameDenomi.Count(); i++)
+                                    {
+                                        Deno deno = new Deno();
+                                        deno.Name = NameDenomi[i].Value;
+                                        deno.Dispensed = DispensedDenomi[i].Value.Trim();
+                                        deno.Deposited = DepositedDenomi[i].Value.Trim();
+                                        deno.Initial = InitialDenomi[i].Value.Trim();
+                                        deno.Remaining = RemainingDenomi[i].Value.Trim();
+                                        cycleItem.DenominationCount.Add(NameDenomi[i].Value, deno);
+                                    }
+                                    for (int i = 0; i < NameDenoRetract.Count(); i++)
+                                    {
+                                        if (!cycleItem.DenominationCount.ContainsKey(NameDenoRetract[i].Value.Trim()))
+                                        {
+                                            Deno deno = new Deno();
+                                            deno.Name = NameDenoRetract[i].Value.Trim();
+                                            deno.Retracted = CountDenoRetract[i].Value.Trim();
+                                            cycleItem.DenominationCount.Add(NameDenoRetract[i].Value.Trim(), deno);
+                                        }
+                                        else
+                                        {
+                                            cycleItem
+                                                .DenominationCount
+                                                .FirstOrDefault(x => x.Key == NameDenoRetract[i].Value.Trim())
+                                                .Value
+                                                .Retracted = CountDenoRetract[i].Value.Trim();
+
+                                        }
+                                    }
+
+                                }
+                                if (!Cycles.ContainsKey(startSettlement))
+                                {
+                                    Cycles.Add(startSettlement, cycleItem);
+                                }
+                            }
+                            sString.Replace(key.Value.stringfind, null);
+                        }
+
                     }
                 }
             }
@@ -368,12 +535,13 @@ namespace Transaction_Statistical
             }
             return false;
         }
+
         private bool FindEventDevice2(DateTime DateCurrent, string Terminal, ref string sString)
         {
             try
             {
                 Dictionary<DateTime, TransactionEvent> t = new Dictionary<DateTime, TransactionEvent>();
-                if (FindEventDevice( ref sString, DateCurrent,ref t))
+                if (FindEventDevice(ref sString, DateCurrent, ref t))
                     foreach (KeyValuePair<DateTime, TransactionEvent> var in t)
                     {
                         if (ListTransaction[Terminal].ContainsKey(var.Key)) ListTransaction[Terminal].Add(var.Key.AddMilliseconds(1), var.Value);
@@ -386,7 +554,7 @@ namespace Transaction_Statistical
             }
             return false;
         }
-        private bool FindEventDevice(ref string sString,DateTime DateCurrent,  ref Dictionary<DateTime, TransactionEvent> eventList)
+        private bool FindEventDevice(ref string sString, DateTime DateCurrent, ref Dictionary<DateTime, TransactionEvent> eventList)
         {
             try
             {
@@ -404,11 +572,11 @@ namespace Transaction_Statistical
                             evt.Status = TransactionEvent.StatusS.Succeeded;
                             evt.TContent = regx.stringfind;
                             evt.TTime = regx.value.ContainsKey("Time") ? regx.value["Time"] : string.Empty;
-                            DateTime.TryParseExact(evt.TTime, FormatTime, CultureInfo.InvariantCulture, DateTimeStyles.None, out DateCurrent);
+                            DateTime.TryParseExact(string.Format("{0} {1}", DateCurrent.ToString(FormatDate_2), evt.TTime), FormatDateTime_2, CultureInfo.InvariantCulture, DateTimeStyles.None, out DateCurrent);
                             evt.TDate = string.Format("{0:" + FormatDate + "}", DateCurrent);
                             if (eventList.ContainsKey(DateCurrent)) eventList[DateCurrent.AddMilliseconds(1)] = evt;
                             else eventList[DateCurrent] = evt;
-                          sString = sString.Replace(regx.stringfind, string.Empty);
+                            sString = sString.Replace(regx.stringfind, string.Empty);
                         }
                     }
                 }
@@ -636,7 +804,7 @@ namespace Transaction_Statistical
             get { return _name; }
             set { _name = value; }
         }
-      
+
         public string TraceJournal_Remaining;
         public string TraceDeviceTxt;
         public string TraceTransMsgTxt;
@@ -654,14 +822,14 @@ namespace Transaction_Statistical
         }
         [CategoryAttribute("3. Transaction"), DescriptionAttribute("Type the transaction list")]
         public string TransactionTypeList { get; set; }
-      
+
         [CategoryAttribute("3. Transaction"), DescriptionAttribute("Date of the transaction")]
         public string TDate { get { return String.Format("{0:yyyy-MM-dd}", DateBegin); } }
         public DateTime DateBegin;
-        public DateTime DateEnd;       
-      
+        public DateTime DateEnd;
+
         [CategoryAttribute("3. Transaction"), DescriptionAttribute("Start time of the transaction")]
-        public string TimeStart { get {return String.Format("{0:HH:mm:ss}", DateEnd); } }
+        public string TimeStart { get { return String.Format("{0:HH:mm:ss}", DateEnd); } }
         [CategoryAttribute("3. Transaction"), DescriptionAttribute("End time of the transaction")]
         public string TimeEnd { get { return String.Format("{0:HH:mm:ss}", DateBegin); } }
 
@@ -807,6 +975,15 @@ namespace Transaction_Statistical
         public Dictionary<string, string> value = new Dictionary<string, string>();
         public string stringfind;
         public RegesValue()
+        { }
+
+    }
+    public class RegesValueWithPatternOfGroup
+    {
+        public int index;
+        public Dictionary<string, Dictionary<int, string>> value = new Dictionary<string, Dictionary<int, string>>();
+        public string stringfind;
+        public RegesValueWithPatternOfGroup()
         { }
 
     }
@@ -978,6 +1155,51 @@ namespace Transaction_Statistical
             }
             return false;
         }
+
+        //Dat 5/12/2019
+        public static bool RunPatternRegular(string sString, string sReg, out Dictionary<int, RegesValueWithPatternOfGroup> listResult)
+        {
+
+            listResult = new Dictionary<int, RegesValueWithPatternOfGroup>();
+            try
+            {
+                Regex myRegex = new Regex(sReg, RegexOptions.ExplicitCapture, TimeSpan.FromSeconds(5));
+                MatchCollection m = myRegex.Matches(sString);
+                Match ma = myRegex.Match(sString);
+                if (m.Count != 0)
+                {
+                    foreach (Match n in m)
+                    {
+                        RegesValueWithPatternOfGroup results = new RegesValueWithPatternOfGroup();
+                        results.stringfind = n.ToString(); sString = sString.Replace(n.ToString(), string.Empty);
+                        results.index = n.Index;
+                        foreach (string groupName in myRegex.GetGroupNames())
+                        {
+                            if (groupName.Equals("0")) continue;
+                            CaptureCollection captureCollection = n.Groups[groupName].Captures;
+                            Dictionary<int, string> keyValues = new Dictionary<int, string>();
+                            foreach (Capture capture in captureCollection)
+                            {
+
+                                keyValues.Add(capture.Index, capture.Value);
+                            }
+                            results.value[groupName] = keyValues;
+                        }
+                        listResult[n.Index] = results;
+                    }
+                    return true;
+                }
+            }
+
+            catch (TimeoutException)
+            { }
+            catch (Exception ex)
+            {
+                InitParametar.Send_Error(ex.ToString(), MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name);
+            }
+            return false;
+        }
+
     }
     public class UIHelper
     {
@@ -1012,23 +1234,86 @@ namespace Transaction_Statistical
             return Text;
         }
     }
+    public class CycleEvent
+    {
+        public enum Events
+        {
+            SettlementPeriod,
+            CashCount,
+            DenominationCount,
+            CardCapture,
+            ForgottenBanknote,
+            Replenishment
+        }
+
+        public string Name;
+        public string Log;
+
+        [CategoryAttribute("Cycle"), DescriptionAttribute("Date of the cycle")]
+        public string TDate;
+
+    }
     public class Cycle
     {
+
         public DateTime DateBegin;
         public DateTime DateEnd;
-        public Dictionary<string, Cassette> ListCassette = new Dictionary<string, Cassette>();
+        public DateTime SettlementPeriodDateBegin;
+        public DateTime SettlementPeriodDateEnd;
+        public Dictionary<string, CycleEvent> ListEvent = new Dictionary<string, CycleEvent>();
+        public Dictionary<int, Cassette> Cashcount_In = null;
+        public Dictionary<string, Cassette> Cashcount_Out = new Dictionary<string, Cassette>();
+        public Dictionary<string, Deno> DenominationCount = new Dictionary<string, Deno>();
         public string LogTxt;
         public string PathLog;
         public int IndexLog;
+        public string TerminalID;
+        public string SerialNo;
+        public Cycle()
+        {
+        }
+        public override string ToString()
+        {
+            return "CYCLE START: " + DateBegin.ToString();
+        }
+    }
+    public class Deno
+    {
+        public string Name = string.Empty;
+        public string Dispensed = "0";
+        public string Deposited = "0";
+        public string Remaining = "0";
+        public string Retracted = "0";
+        public string Initial = "0";
+        public string currency = string.Empty;
+        public string log = string.Empty;
+    }
+    public class CapturedCard
+    {
+        public DateTime DateTime;
+        public int Count;
+        public string CardNumber;
+        public string RetractedTitle;
+        public string Status;
+    }
+    public class ForgottenBanknote
+    {
+        public DateTime DateTime;
+        public string No;
+        public string CardNumber;
+        public string Retract;
+        public string Position;
     }
     public class Cassette
     {
         public string Name;
-        public string Description;
-        public string Denomination;
-        public decimal Value;
-        public int Counter;
-        public DateTime DateChange;
+        public string Type;
+        public string Denomi;
+        public string Initial;
+        public string Current;
+        public string Status;
+        public string Log;
+
         public Cassette()
         {
 
