@@ -40,22 +40,24 @@ namespace Transaction_Statistical.UControl
             this.gpBox_Actions = new System.Windows.Forms.GroupBox();
             this.pl_Actions = new System.Windows.Forms.FlowLayoutPanel();
             this.tre_LstTrans = new System.Windows.Forms.TreeView();
+            this.imageList = new System.Windows.Forms.ImageList(this.components);
             this.cb_FullTime = new System.Windows.Forms.CheckBox();
             this.label2 = new System.Windows.Forms.Label();
             this.dateTimePicker_End = new System.Windows.Forms.DateTimePicker();
             this.label1 = new System.Windows.Forms.Label();
             this.dateTimePicker_Start = new System.Windows.Forms.DateTimePicker();
             this.panel1 = new System.Windows.Forms.Panel();
-            this.btn_Menu = new Transaction_Statistical.AddOn.ButtonMenu();
-            this.btn_Read = new Transaction_Statistical.AddOn.ButtonZ();
             this.panel2 = new System.Windows.Forms.Panel();
             this.propertyGrid1 = new System.Windows.Forms.PropertyGrid();
-            this.uc_Menu = new Transaction_Statistical.UControl.UC_Menu();
-            this.uc_Explorer = new Transaction_Statistical.UControl.UC_Explorer();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.panel3 = new System.Windows.Forms.Panel();
             this.fctxt_FullLog = new FastColoredTextBoxNS.FastColoredTextBox();
             this.panel4 = new System.Windows.Forms.Panel();
+            this.btn_Menu = new Transaction_Statistical.AddOn.ButtonMenu();
+            this.btn_Read = new Transaction_Statistical.AddOn.ButtonZ();
+            this.uc_Menu = new Transaction_Statistical.UControl.UC_Menu();
+            this.uc_Explorer = new Transaction_Statistical.UControl.UC_Explorer();
+            this.btn_Export = new System.Windows.Forms.Button();
             this.gpBox_Actions.SuspendLayout();
             this.panel1.SuspendLayout();
             this.panel2.SuspendLayout();
@@ -103,12 +105,31 @@ namespace Transaction_Statistical.UControl
             | System.Windows.Forms.AnchorStyles.Left)));
             this.tre_LstTrans.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(37)))), ((int)(((byte)(37)))), ((int)(((byte)(38)))));
             this.tre_LstTrans.ForeColor = System.Drawing.Color.White;
+            this.tre_LstTrans.ImageIndex = 0;
+            this.tre_LstTrans.ImageList = this.imageList;
             this.tre_LstTrans.Location = new System.Drawing.Point(14, 265);
             this.tre_LstTrans.Name = "tre_LstTrans";
+            this.tre_LstTrans.SelectedImageIndex = 0;
             this.tre_LstTrans.Size = new System.Drawing.Size(649, 358);
             this.tre_LstTrans.TabIndex = 8;
             this.tre_LstTrans.NodeMouseHover += new System.Windows.Forms.TreeNodeMouseHoverEventHandler(this.tre_LstTrans_NodeMouseHover);
             this.tre_LstTrans.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.tre_LstTrans_AfterSelect);
+            // 
+            // imageList
+            // 
+            this.imageList.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("imageList.ImageStream")));
+            this.imageList.TransparentColor = System.Drawing.Color.Transparent;
+            this.imageList.Images.SetKeyName(0, "Flag_b");
+            this.imageList.Images.SetKeyName(1, "Flag_g");
+            this.imageList.Images.SetKeyName(2, "Flag_r");
+            this.imageList.Images.SetKeyName(3, "Flag_y");
+            this.imageList.Images.SetKeyName(4, "Setting");
+            this.imageList.Images.SetKeyName(5, "Setting_r");
+            this.imageList.Images.SetKeyName(6, "Setting_y");
+            this.imageList.Images.SetKeyName(7, "Date_open");
+            this.imageList.Images.SetKeyName(8, "Date");
+            this.imageList.Images.SetKeyName(9, "Terminal");
+            this.imageList.Images.SetKeyName(10, "Cycle");
             // 
             // cb_FullTime
             // 
@@ -178,41 +199,9 @@ namespace Transaction_Statistical.UControl
             this.panel1.Size = new System.Drawing.Size(675, 639);
             this.panel1.TabIndex = 4;
             // 
-            // btn_Menu
-            // 
-            this.btn_Menu.BackColor = System.Drawing.Color.Transparent;
-            this.btn_Menu.Color4point = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(120)))), ((int)(((byte)(240)))));
-            this.btn_Menu.Color4pointDown = System.Drawing.Color.DeepSkyBlue;
-            this.btn_Menu.Color4pointHover = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(98)))), ((int)(((byte)(215)))));
-            this.btn_Menu.Location = new System.Drawing.Point(3, 3);
-            this.btn_Menu.Name = "btn_Menu";
-            this.btn_Menu.Size = new System.Drawing.Size(39, 39);
-            this.btn_Menu.TabIndex = 1;
-            this.btn_Menu.OnMouseDownHandler += new Transaction_Statistical.AddOn.ButtonMenu.MouseDownHandler(this.btn_Menu_OnMouseDownHandler);
-            // 
-            // btn_Read
-            // 
-            this.btn_Read.BorderLeft = false;
-            this.btn_Read.BZBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(120)))), ((int)(((byte)(240)))));
-            this.btn_Read.DisplayText = "Read";
-            this.btn_Read.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btn_Read.Font = new System.Drawing.Font("Microsoft YaHei UI", 14F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btn_Read.ForeColor = System.Drawing.Color.White;
-            this.btn_Read.Location = new System.Drawing.Point(14, 220);
-            this.btn_Read.MouseClickColor1 = System.Drawing.Color.FromArgb(((int)(((byte)(160)))), ((int)(((byte)(180)))), ((int)(((byte)(200)))));
-            this.btn_Read.MouseHoverColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(140)))));
-            this.btn_Read.Name = "btn_Read";
-            this.btn_Read.NotchangeAfterMouseUP = false;
-            this.btn_Read.Size = new System.Drawing.Size(649, 28);
-            this.btn_Read.TabIndex = 9;
-            this.btn_Read.Text = "Read";
-            this.btn_Read.TextLocation_X = 210;
-            this.btn_Read.TextLocation_Y = -3;
-            this.btn_Read.UseVisualStyleBackColor = true;
-            this.btn_Read.Click += new System.EventHandler(this.bt_Read_Click);
-            // 
             // panel2
             // 
+            this.panel2.Controls.Add(this.btn_Export);
             this.panel2.Controls.Add(this.propertyGrid1);
             this.panel2.Dock = System.Windows.Forms.DockStyle.Left;
             this.panel2.Location = new System.Drawing.Point(675, 0);
@@ -230,23 +219,6 @@ namespace Transaction_Statistical.UControl
             this.propertyGrid1.Size = new System.Drawing.Size(396, 560);
             this.propertyGrid1.TabIndex = 0;
             // 
-            // uc_Menu
-            // 
-            this.uc_Menu.BackColor = System.Drawing.Color.Transparent;
-            this.uc_Menu.Location = new System.Drawing.Point(-10000, 100);
-            this.uc_Menu.Name = "uc_Menu";
-            this.uc_Menu.Size = new System.Drawing.Size(1066, 568);
-            this.uc_Menu.TabIndex = 0;
-            // 
-            // uc_Explorer
-            // 
-            this.uc_Explorer.BackColor = System.Drawing.Color.Transparent;
-            this.uc_Explorer.ForeColor = System.Drawing.Color.White;
-            this.uc_Explorer.Location = new System.Drawing.Point(21, 189);
-            this.uc_Explorer.Name = "uc_Explorer";
-            this.uc_Explorer.Size = new System.Drawing.Size(645, 0);
-            this.uc_Explorer.TabIndex = 1;
-            // 
             // panel3
             // 
             this.panel3.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
@@ -254,9 +226,9 @@ namespace Transaction_Statistical.UControl
             | System.Windows.Forms.AnchorStyles.Right)));
             this.panel3.BackColor = System.Drawing.Color.Transparent;
             this.panel3.Controls.Add(this.fctxt_FullLog);
-            this.panel3.Location = new System.Drawing.Point(1083, 328);
+            this.panel3.Location = new System.Drawing.Point(1083, 498);
             this.panel3.Name = "panel3";
-            this.panel3.Size = new System.Drawing.Size(268, 297);
+            this.panel3.Size = new System.Drawing.Size(268, 127);
             this.panel3.TabIndex = 6;
             // 
             // fctxt_FullLog
@@ -299,7 +271,7 @@ namespace Transaction_Statistical.UControl
             this.fctxt_FullLog.SelectionColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(255)))));
             this.fctxt_FullLog.ServiceColors = ((FastColoredTextBoxNS.ServiceColors)(resources.GetObject("fctxt_FullLog.ServiceColors")));
             this.fctxt_FullLog.ServiceLinesColor = System.Drawing.Color.DimGray;
-            this.fctxt_FullLog.Size = new System.Drawing.Size(268, 297);
+            this.fctxt_FullLog.Size = new System.Drawing.Size(268, 127);
             this.fctxt_FullLog.TabIndex = 2;
             this.fctxt_FullLog.WordWrap = true;
             this.fctxt_FullLog.Zoom = 100;
@@ -312,8 +284,73 @@ namespace Transaction_Statistical.UControl
             this.panel4.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.panel4.Location = new System.Drawing.Point(1083, 65);
             this.panel4.Name = "panel4";
-            this.panel4.Size = new System.Drawing.Size(268, 257);
+            this.panel4.Size = new System.Drawing.Size(268, 427);
             this.panel4.TabIndex = 7;
+            // 
+            // btn_Menu
+            // 
+            this.btn_Menu.BackColor = System.Drawing.Color.Transparent;
+            this.btn_Menu.Color4point = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(120)))), ((int)(((byte)(240)))));
+            this.btn_Menu.Color4pointDown = System.Drawing.Color.DeepSkyBlue;
+            this.btn_Menu.Color4pointHover = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(98)))), ((int)(((byte)(215)))));
+            this.btn_Menu.Location = new System.Drawing.Point(3, 3);
+            this.btn_Menu.Name = "btn_Menu";
+            this.btn_Menu.Size = new System.Drawing.Size(39, 39);
+            this.btn_Menu.TabIndex = 1;
+            this.btn_Menu.OnMouseDownHandler += new Transaction_Statistical.AddOn.ButtonMenu.MouseDownHandler(this.btn_Menu_OnMouseDownHandler);
+            // 
+            // btn_Read
+            // 
+            this.btn_Read.BorderLeft = false;
+            this.btn_Read.BZBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(120)))), ((int)(((byte)(240)))));
+            this.btn_Read.DisplayText = "Read";
+            this.btn_Read.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btn_Read.Font = new System.Drawing.Font("Microsoft YaHei UI", 14F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btn_Read.ForeColor = System.Drawing.Color.White;
+            this.btn_Read.Location = new System.Drawing.Point(14, 220);
+            this.btn_Read.MouseClickColor1 = System.Drawing.Color.FromArgb(((int)(((byte)(160)))), ((int)(((byte)(180)))), ((int)(((byte)(200)))));
+            this.btn_Read.MouseHoverColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(140)))));
+            this.btn_Read.Name = "btn_Read";
+            this.btn_Read.NotchangeAfterMouseUP = false;
+            this.btn_Read.Size = new System.Drawing.Size(649, 28);
+            this.btn_Read.TabIndex = 9;
+            this.btn_Read.Text = "Read";
+            this.btn_Read.TextLocation_X = 210;
+            this.btn_Read.TextLocation_Y = -3;
+            this.btn_Read.UseVisualStyleBackColor = true;
+            this.btn_Read.Click += new System.EventHandler(this.bt_Read_Click);
+            // 
+            // uc_Menu
+            // 
+            this.uc_Menu.BackColor = System.Drawing.Color.Transparent;
+            this.uc_Menu.Location = new System.Drawing.Point(-10000, 100);
+            this.uc_Menu.Name = "uc_Menu";
+            this.uc_Menu.Size = new System.Drawing.Size(1066, 568);
+            this.uc_Menu.TabIndex = 0;
+            // 
+            // uc_Explorer
+            // 
+            this.uc_Explorer.BackColor = System.Drawing.Color.Transparent;
+            this.uc_Explorer.ForeColor = System.Drawing.Color.White;
+            this.uc_Explorer.Location = new System.Drawing.Point(21, 189);
+            this.uc_Explorer.Name = "uc_Explorer";
+            this.uc_Explorer.Size = new System.Drawing.Size(645, 0);
+            this.uc_Explorer.TabIndex = 1;
+            // 
+            // btn_Export
+            // 
+            this.btn_Export.FlatAppearance.BorderColor = System.Drawing.Color.Silver;
+            this.btn_Export.FlatAppearance.MouseDownBackColor = System.Drawing.Color.DimGray;
+            this.btn_Export.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Blue;
+            this.btn_Export.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btn_Export.ForeColor = System.Drawing.Color.White;
+            this.btn_Export.Location = new System.Drawing.Point(3, 17);
+            this.btn_Export.Name = "btn_Export";
+            this.btn_Export.Size = new System.Drawing.Size(105, 42);
+            this.btn_Export.TabIndex = 15;
+            this.btn_Export.Text = "Export";
+            this.btn_Export.UseVisualStyleBackColor = true;
+            this.btn_Export.Click += new System.EventHandler(this.btn_Export_Click);
             // 
             // UC_Transaction
             // 
@@ -357,5 +394,7 @@ namespace Transaction_Statistical.UControl
         private Panel panel3;
         private Panel panel4;
         private FastColoredTextBoxNS.FastColoredTextBox fctxt_FullLog;
+        private ImageList imageList;
+        private Button btn_Export;
     }
 }
