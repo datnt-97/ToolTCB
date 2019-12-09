@@ -218,7 +218,7 @@ namespace Transaction_Statistical.Class
             return worksheet;
         }
 
-        public void BaoCaoHanhDongBatThuong(string WorksheetsName, TableStyles tableStyles)
+        public void BaoCaoGiaoDichTaiChinh(string WorksheetsName, TableStyles tableStyles)
         {
             this.excelPackage.Workbook.Worksheets.Add(WorksheetsName);
             var lastWS = excelPackage.Workbook.Worksheets.Last();
