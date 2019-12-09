@@ -274,6 +274,8 @@ namespace Transaction_Statistical
                 ListTransaction = new Dictionary<string, Dictionary<DateTime, object>>();
                 string Terminal = "Terminal";
                 ListCycle = new Dictionary<DateTime, Cycle>();
+                var watch = System.Diagnostics.Stopwatch.StartNew();
+                watch.Start();
                 foreach (string file in files)
                 {
                     string day = file.Substring(file.Length - 12, 8);
@@ -284,8 +286,11 @@ namespace Transaction_Statistical
                     FindCounterChanged(ref contenFile, ref ListCycle);
 
                     ListTransaction[Terminal] = ListTransaction[Terminal].OrderBy(d => d.Key).ToDictionary(k => k.Key, v => v.Value);
-                    InitParametar.sTest += contenFile + Environment.NewLine;
+                    //InitParametar.sTest += contenFile + Environment.NewLine;
                 }
+                var time = watch.ElapsedMilliseconds;
+                watch.Stop();
+                MessageBox.Show(time.ToString());
 
                 int i = ListTransaction.Values.LastOrDefault().Keys.Count;
                 InitParametar.sTest = i.ToString() + " transaction : " + (DateTime.Now - dateEnd).TotalSeconds.ToString() + " s =>" + ((DateTime.Now - dateEnd).TotalSeconds / i).ToString() + InitParametar.sTest + Environment.NewLine;
@@ -304,11 +309,11 @@ namespace Transaction_Statistical
                     });
 
                 }
-                UC_Info uc = new UC_Info(InitParametar.sTest);
-                uc.Dock = DockStyle.Fill;
-                Frm_TemplateDefault frm = new Frm_TemplateDefault(uc);
-                frm.titleCustom.Text = "Regular Expression trong C#";
-                frm.Show();
+                //UC_Info uc = new UC_Info(InitParametar.sTest);
+                //uc.Dock = DockStyle.Fill;
+                //Frm_TemplateDefault frm = new Frm_TemplateDefault(uc);
+                //frm.titleCustom.Text = "Regular Expression trong C#";
+                //frm.Show();
                 return true;
             }
             catch (Exception ex)
@@ -350,9 +355,10 @@ namespace Transaction_Statistical
                         template.CanQuyTheoCouterTrenMay("cân quỹ theo counter trên máy", OfficeOpenXml.Table.TableStyles.Custom, cycle);
                         //template.BaoCaoGiaoDichBatThuong("test_2", OfficeOpenXml.Table.TableStyles.Custom);
                         template.BaoCaoGiaoDichTaiChinh("báo cáo giao dịch tài chính", OfficeOpenXml.Table.TableStyles.Custom, transaction);
+                        template.BaoCaoHanhDongBatThuong("báo cáo hành động bất thường", OfficeOpenXml.Table.TableStyles.Custom);
                         stream = template.getStream();
                         var buffer = stream as MemoryStream;
-                        File.WriteAllBytes(@"E:\text.xlsx", buffer.ToArray());
+                        File.WriteAllBytes(@"D:\text.xlsx", buffer.ToArray());
                     }
                     return true;
                 }
@@ -391,11 +397,12 @@ namespace Transaction_Statistical
                             trans.TraceJournal_Remaining = trans.TraceJournal_Remaining.Replace(key.Value.value["SEnd"], null);
 
                             FindEventBeginInput(ref trans.TraceJournal_Remaining, ref trans, ref trans.ListEvent);
+
                             FindEventTransaction(ref trans.TraceJournal_Remaining, trans.DateBegin, ref trans.ListEvent);
                             FindEventRequest(ref trans.TraceJournal_Remaining, trans.DateBegin, ref trans.ListEvent);
                             FindEventReceive(ref trans.TraceJournal_Remaining, trans.DateBegin, ref trans.ListEvent);
                             FindEventDevice(ref trans.TraceJournal_Remaining, trans.DateBegin, ref trans.ListEvent);
-                            InitParametar.sTest += trans.TraceJournal_Remaining + Environment.NewLine;
+                            //InitParametar.sTest += trans.TraceJournal_Remaining + Environment.NewLine;
                             trans.ListEvent = trans.ListEvent.OrderBy(d => d.Key).ToDictionary(k => k.Key, v => v.Value);
                             if (ListTransaction.ContainsKey(trans.Terminal))
                             {
@@ -452,7 +459,6 @@ namespace Transaction_Statistical
                                 cycleItem.DateBegin = startSettlement;
                                 cycleItem.TerminalID = key.Value.value["TerminalNo"].FirstOrDefault().Value;
                                 cycleItem.SerialNo = key.Value.value["SerialNo"].FirstOrDefault().Value;
-
                                 //GET CASH COUNT OUT 
                                 if (key.Value.value.ContainsKey("CashCount") && key.Value.value.ContainsKey("ListCassette"))
                                 {
@@ -650,6 +656,57 @@ namespace Transaction_Statistical
                 InitParametar.Send_Error(ex.ToString(), MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name);
             }
             return false;
+        }
+
+
+        private async Task<Dictionary<DateTime, TransactionEvent>> FindEventBeginInputAsync(string sString, Transaction transaction, Dictionary<DateTime, TransactionEvent> eventList)
+        {
+            try
+            {
+                await Task.Run(() =>
+                {
+                    Dictionary<int, RegesValue> lst = new Dictionary<int, RegesValue>();
+
+                    DateTime DateCurrent = transaction.DateBegin;
+                    foreach (KeyValuePair<string, string> tmp in Template_EventBeginInput)
+                    {
+                        if (Regexs.RunPatternRegular(sString, tmp.Value, out lst))
+                        {
+                            foreach (RegesValue regx in lst.Values)
+                            {
+
+                                TransactionEvent evt = new TransactionEvent();
+                                evt.Name = tmp.Key;
+                                evt.Status = TransactionEvent.StatusS.Succeeded;
+                                evt.TContent = regx.stringfind;
+                                if (regx.value.ContainsKey("Time") && !string.IsNullOrEmpty(regx.value["Time"]))
+                                {
+                                    DateTime.TryParseExact(String.Format("{0:yyyyMMdd}", DateCurrent) + regx.value["Time"], "yyyyMMdd" + FormatTime, CultureInfo.InvariantCulture, DateTimeStyles.None, out evt.DateBegin);
+                                    DateCurrent = evt.DateBegin;
+                                }
+                                else
+                                    evt.DateBegin = DateCurrent.AddMilliseconds(10);
+                                if (regx.value["Data"].StartsWith("("))
+                                    transaction.DataInput.Add(regx.value["Data"]);
+                                else
+                                {
+                                    transaction.CardType = Transaction.CardTypes.CardNumber;
+                                    transaction.CardNumber = regx.value["Data"];
+                                }
+                                if (eventList.ContainsKey(evt.DateBegin)) eventList[evt.DateBegin.AddMilliseconds(1)] = evt;
+                                else eventList[evt.DateBegin] = evt;
+                                sString = sString.Replace(regx.stringfind, string.Empty);
+                            }
+                        }
+                    }
+                });
+
+            }
+            catch (Exception ex)
+            {
+                InitParametar.Send_Error(ex.ToString(), MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name);
+            }
+            return eventList;
         }
         private bool FindEventTransaction(ref string sString, DateTime DateCurrent, ref Dictionary<DateTime, TransactionEvent> eventList)
         {
@@ -1005,9 +1062,13 @@ namespace Transaction_Statistical
         public List<Denomination> LstDenomination = new List<Denomination>();
         public int AmountDeposit
         {
-            get { int a=0;
+            get
+            {
+                int a = 0;
                 foreach (Denomination de in LstDenomination)
-                { a += de.Amount; } return a; }
+                { a += de.Amount; }
+                return a;
+            }
         }
         public int AmountRequest;
         public Dictionary<DateTime, object> LstEvent = new Dictionary<DateTime, object>();
@@ -1351,7 +1412,7 @@ namespace Transaction_Statistical
         public string PathLog;
         public int IndexLog;
 
-        [CategoryAttribute("1. Info"), DescriptionAttribute("Terminal ID")]
+        //[CategoryAttribute("1. Info"), DescriptionAttribute("Terminal ID")]
         public string TerminalID;
         public string SerialNo;
 
@@ -1366,10 +1427,10 @@ namespace Transaction_Statistical
         [CategoryAttribute("1. Info"), DescriptionAttribute("End of settlement period")]
         public DateTime SettlementPeriodDateEnd { get => settlementPeriodDateEnd; set => settlementPeriodDateEnd = value; }
 
-        [CategoryAttribute("2.Terminal Count"), DescriptionAttribute("Cash Count")]
+        //[CategoryAttribute("2.Terminal Count"), DescriptionAttribute("Cash Count")]
         public Dictionary<string, Cassette> Cashcount_Out { get => cashcount_Out; set => cashcount_Out = value; }
 
-        [CategoryAttribute("2.Terminal Count"), DescriptionAttribute("Denomination count")]
+        //[CategoryAttribute("2.Terminal Count"), DescriptionAttribute("Denomination count")]
         public Dictionary<string, Deno> DenominationCount { get => denominationCount; set => denominationCount = value; }
 
         public Cycle()
@@ -1397,8 +1458,11 @@ namespace Transaction_Statistical
         public string Remaining { get => remaining; set => remaining = value; }
         public string Retracted { get => retracted; set => retracted = value; }
         public string Initial { get => initial; set => initial = value; }
-        public string Currency { get => currency; set => currency = value; }
-        public string Log { get => log; set => log = value; }
+        public string GetLog() { return this.log; }
+        public void SetLog(string value) { this.log = value; }
+
+        public string GetCurrency() { return this.currency; }
+        public void SetCurrency(string value) { this.currency = value; }
         public override string ToString()
         {
             //StringBuilder sb = new StringBuilder();
@@ -1449,7 +1513,7 @@ namespace Transaction_Statistical
         public string Initial { get => initial; set => initial = value; }
         public string Current { get => current; set => current = value; }
         public string Status { get => status; set => status = value; }
-        public string Log { get => log; set => log = value; }
+        //public string Log { get => log; set => log = value; }
 
         public override string ToString()
         {
