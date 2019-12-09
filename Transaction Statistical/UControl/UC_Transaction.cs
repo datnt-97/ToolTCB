@@ -24,18 +24,18 @@ namespace Transaction_Statistical.UControl
         ReadTransaction readtran;
         UC_Explorer uc_Explorer;
         UC_Menu uc_Menu;
+        
         public UC_Transaction()
         {
             sqlite = new SQLiteHelper();
             InitializeComponent();
             Add_GUI();
             readtran = new ReadTransaction();
-            
-         }
+        }
         #region design     
-        
+
         private void txt_Path_MouseEnter(object sender, EventArgs e)
-        {           
+        {
             uc_Explorer.ShowFromControl(this, sender as Control);
         }
         private void btn_Export_MouseHover(object sender, EventArgs e)
@@ -131,7 +131,7 @@ namespace Transaction_Statistical.UControl
                         int countTransactionEvent = kTerminal.Value.Where(x => (x.Value is TransactionEvent)).ToList().Count;
                         TreeNode ndTerminal = tre_LstTrans.Nodes.Add(kTerminal.Key, String.Format("Terminal ID: {0} - Total: {1} transactions", kTerminal.Key, kTerminal.Value.Count), "Terminal", "Terminal");
 
-                        foreach (KeyValuePair<DateTime, object> kTransaction in kTerminal.Value.OrderBy(x=>x.Key))
+                        foreach (KeyValuePair<DateTime, object> kTransaction in kTerminal.Value.OrderBy(x => x.Key))
                         {
                             day = String.Format("{0:" + readtran.FormatDate + "}", kTransaction.Key);
                             TreeNode ndDay = new TreeNode(day);
@@ -220,8 +220,9 @@ namespace Transaction_Statistical.UControl
                 }
                 else if (e.Node != null && e.Node.Tag != null && e.Node.Tag is Cycle)
                 {
-                    propertyGrid1.SelectedObject = (Cycle)e.Node.Tag;
+                    var cycle = (Cycle)e.Node.Tag;
                     fctxt_FullLog.Text = (e.Node.Tag as Cycle).LogTxt;
+                    AddLayoutEventCycle(cycle, panel4);
                 }
                 else if (e.Node != null && e.Node.Tag != null && e.Node.Tag is List<KeyValuePair<DateTime, Cycle>>)
                 {
@@ -240,7 +241,69 @@ namespace Transaction_Statistical.UControl
                 InitParametar.Send_Error(ex.ToString(), MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name);
             }
         }
+        private void AddLayoutEventCycle(Cycle cycle, Panel panel4)
+        {
+            if (panel4.Controls.Count > 0)
+            {
+                TabControl control = (TabControl)panel4.Controls[0];
+                panel4.Controls.Remove(control);
+            }
+            var denoCount = cycle.DenominationCount.ToList();
+            var cashCount = cycle.Cashcount_Out.ToList();
 
+            TabControl tabControlCycle = new TabControl();
+            tabControlCycle.Height = panel4.Height;
+            tabControlCycle.Width = panel4.Width;
+            tabControlCycle.Dock = DockStyle.Fill;
+            tabControlCycle.Name = "tcCycle";
+            TabPage tabPageCycle = new TabPage("Cycle Genaral");
+
+            PropertyGrid propertyGrid = new PropertyGrid();
+            propertyGrid.BrowsableAttributes = new AttributeCollection(new CategoryAttribute("1. Info"));
+            propertyGrid.Dock = DockStyle.Fill;
+            propertyGrid.SelectedObject = cycle;
+            tabPageCycle.Controls.Add(propertyGrid);
+            tabControlCycle.Controls.Add(tabPageCycle);
+
+            if (denoCount != null)
+            {
+                TabPage tabPageCycleDeno = new TabPage("Denomination Count");
+                DataGridView dataGrid = new DataGridView();
+                dataGrid.Dock = DockStyle.Fill;
+
+                BindingSource dtsDeno = new BindingSource();
+                dtsDeno.DataSource = typeof(Deno);
+                dataGrid.DataSource = dtsDeno;
+                denoCount.OrderByDescending(x => x.Value.Name).ToList().ForEach(x =>
+                {
+                    dtsDeno.Add(x.Value);
+                });
+                tabPageCycleDeno.Controls.Add(dataGrid);
+                tabControlCycle.Controls.Add(tabPageCycleDeno);
+
+            }
+            if (cashCount != null)
+            {
+
+                TabPage tabPageCycleCash = new TabPage("Cash Count");
+                DataGridView dataGridCash = new DataGridView();
+                dataGridCash.Dock = DockStyle.Fill;
+                BindingSource dtsCash = new BindingSource();
+                dtsCash.DataSource = typeof(Cassette);
+                dataGridCash.DataSource = dtsCash;
+                cashCount.OrderByDescending(x => x.Value.Name).ToList().ForEach(x =>
+                {
+                    dtsCash.Add(x.Value);
+                });
+                tabPageCycleCash.Controls.Add(dataGridCash);
+                tabControlCycle.Controls.Add(tabPageCycleCash);
+
+            }
+
+
+
+            panel4.Controls.Add(tabControlCycle);
+        }
         private void tre_LstTrans_NodeMouseHover(object sender, TreeNodeMouseHoverEventArgs e)
         {
 
@@ -258,7 +321,7 @@ namespace Transaction_Statistical.UControl
             }
         }
 
-      
+
     }
 
 }
