@@ -15,7 +15,7 @@ namespace Transaction_Statistical
 {
     public partial class UC_Menu_Startup : UserControl
     {
-        string TaskName = "AutoRunTransaction";
+        string TaskName = "AutoRunTransaction_";
         UC_Explorer uc_Explorer;
         SQLiteHelper sqlite;
         string forms;
@@ -25,17 +25,37 @@ namespace Transaction_Statistical
             uc_Explorer = new UC_Explorer();
 
             sqlite = new SQLiteHelper();
-            DataTable cfg_data = sqlite.GetTableDataWithColumnName("CfgData", "ID", "511");
+            LoadTask();
+            //DataTable cfg_data = sqlite.GetTableDataWithColumnName("CfgData", "ID", "511");
 
-            string[] field = cfg_data.Rows[0]["Data"].ToString().Split('|');
-            if (field.Length != 0)
-            {
-                txt_HH.Text = field[0];
-                txt_Source.Text = field[1];
-                txt_Destination.Text = field[2];
-                forms= field[3];
-                CreateTask(txt_HH.Text);
+            //string[] field = cfg_data.Rows[0]["Data"].ToString().Split('|');
+            //if (field.Length != 0)
+            //{
+            //    txt_HH.Text = field[0];
+            //    txt_Source.Text = field[1];
+            //    txt_Destination.Text = field[2];
+            //    forms= field[3];
+            //    CreateTask(txt_HH.Text);
                 
+            //}
+        }
+        private void LoadTask()
+        {
+            DataTable cfg_data = sqlite.GetTableDataWithColumnName("CfgData", "Type_ID", "511");
+            int n = 0;
+            
+            foreach (DataRow rowData in cfg_data.Rows)
+            {
+                DataGridViewRow row = new DataGridViewRow();
+                string[] description = rowData["Data"].ToString().Split('|');
+                row.CreateCells(dataGridView_lsPermissions);
+                row.Cells[0].Value = n;
+                row.Cells[1].Value = rowData["Field"];
+                row.Cells[2].Value = ChecckTaskExist(rowData["Field"].ToString());
+                row.Cells[3].Value = description[0];
+                row.Cells[4].Value = string.Format("Template: {0}, source: {1}, destination: {2}, forms: {3} ", description[1], description[2], description[3], description[4]);
+                row.Tag = row;
+                dataGridView_lsPermissions.Rows.Add(row);
             }
         }
         private void txt_MouseDown(object sender, MouseEventArgs e)
@@ -51,9 +71,9 @@ namespace Transaction_Statistical
             else
                 MessageBox.Show("Add data unsuccessful", "Add data", MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
-        private void ChecckTaskExist()
+        private bool ChecckTaskExist(string taskName)
         {
-
+        return true;
         }
         private void CreateTask(string time)
         {
@@ -74,7 +94,26 @@ namespace Transaction_Statistical
             }
         
         }
-
+        private bool RemoveTask(string taskName)
+        {
+            string fileExe = Process.GetCurrentProcess().MainModule.FileName + " Auto";
+            Process process = new Process();
+            process.StartInfo.FileName = "schtasks";
+            process.StartInfo.Arguments = string.Format("SCHTASKS /Delete /TN \"{0}\"", taskName);
+            process.StartInfo.UseShellExecute = false;
+            process.StartInfo.RedirectStandardOutput = true;
+            process.StartInfo.RedirectStandardError = true;
+            process.Start();
+            //* Read the output (or the error)
+            string output = process.StandardOutput.ReadToEnd();
+            if (!output.Contains("successfully been created"))
+            {
+                string err = process.StandardError.ReadToEnd();
+                MessageBox.Show(output + Environment.NewLine + err, "Creates scheduled task", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return false;
+            }
+            return true;
+        }
         private void txt_HH_Validating(object sender, CancelEventArgs e)
         {
             TextBox box = sender as TextBox;
