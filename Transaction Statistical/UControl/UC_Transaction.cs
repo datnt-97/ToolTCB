@@ -267,49 +267,6 @@ namespace Transaction_Statistical.UControl
                     var cycle = (Cycle)e.Node.Tag;
                     fctxt_FullLog.Text = (e.Node.Tag as Cycle).LogTxt;
                     AddLayoutEventCycle(cycle, panel4);
-
-
-                    //GroupBox groupBoxCycle = new GroupBox();
-
-                    //groupBoxCycle.Text = "Cycle";
-                    //groupBoxCycle.Dock = DockStyle.Fill;
-
-                    //var cycleTerminalID = new Label();
-                    //cycleTerminalID.Dock = DockStyle.Fill;
-                    //cycleTerminalID.Text = cycle.TerminalID;
-                    ////grCycle.Controls.Add(cycleTerminalID);
-                    ////propertyGrid1.SelectedObject = (Cycle)e.Node.Tag;
-                    //Label labelDeno = new Label();
-                    //labelDeno.Text = "Denomination Count";
-                    //fctxt_FullLog.Text = (e.Node.Tag as Cycle).LogTxt;
-                    //DataGridView dataGrid = new DataGridView();
-                    //DataGridView dataGridCash = new DataGridView();
-                    //dataGrid.Dock = DockStyle.Fill;
-                    //dataGridCash.Dock = DockStyle.Fill;
-                    //var denoCount = cycle.DenominationCount.ToList();
-                    //var cashCount = cycle.Cashcount_Out.ToList();
-
-                    //BindingSource dtsDeno = new BindingSource();
-                    //BindingSource dtsCash = new BindingSource();
-                    //dtsDeno.DataSource = typeof(Deno);
-                    //dtsCash.DataSource = typeof(Cassette);
-                    //dataGrid.DataSource = dtsDeno;
-                    //dataGridCash.DataSource = dtsCash;
-                    //denoCount.ForEach(x =>
-                    //{
-                    //    dtsDeno.Add(x.Value);
-                    //});
-                    //cashCount.ForEach(x =>
-                    //{
-                    //    dtsCash.Add(x.Value);
-                    //});
-                    //Panel panelDeno = new Panel();
-                    //Panel panelCash = new Panel();
-                    ////panelDeno.Controls.Add(dataGrid);
-                    ////panelCash.Controls.Add(dataGridCash);
-                    //panel4.Controls.Add(panelDeno);
-                    //panel4.Controls.Add(groupBoxCycle);
-                    //panel4.Parent.Controls.Add(dataGrid);
                 }
                 //else if (e.Node != null && e.Node.Tag != null && e.Node.Tag is List<KeyValuePair<DateTime, Cycle>>)
                 //{
@@ -335,12 +292,19 @@ namespace Transaction_Statistical.UControl
 
         private void AddLayoutEventCycle(Cycle cycle, Panel panel4)
         {
-
+            if (panel4.Controls.Count > 0)
+            {
+                TabControl control = (TabControl)panel4.Controls[0];
+                panel4.Controls.Remove(control);
+            }
+            var denoCount = cycle.DenominationCount.ToList();
+            var cashCount = cycle.Cashcount_Out.ToList();
 
             TabControl tabControlCycle = new TabControl();
             tabControlCycle.Height = panel4.Height;
             tabControlCycle.Width = panel4.Width;
             tabControlCycle.Dock = DockStyle.Fill;
+            tabControlCycle.Name = "tcCycle";
             TabPage tabPageCycle = new TabPage("Cycle Genaral");
 
             PropertyGrid propertyGrid = new PropertyGrid();
@@ -348,36 +312,44 @@ namespace Transaction_Statistical.UControl
             propertyGrid.Dock = DockStyle.Fill;
             propertyGrid.SelectedObject = cycle;
             tabPageCycle.Controls.Add(propertyGrid);
-
-            TabPage tabPageCycleDeno = new TabPage("Denomination Count");
-            DataGridView dataGrid = new DataGridView();
-            dataGrid.Dock = DockStyle.Fill;
-            var denoCount = cycle.DenominationCount.ToList();
-            BindingSource dtsDeno = new BindingSource();
-            dtsDeno.DataSource = typeof(Deno);
-            dataGrid.DataSource = dtsDeno;
-            denoCount.OrderByDescending(x => x.Value.Name).ToList().ForEach(x =>
-            {
-                dtsDeno.Add(x.Value);
-            });
-            tabPageCycleDeno.Controls.Add(dataGrid);
-
-            TabPage tabPageCycleCash = new TabPage("Cash Count");
-            DataGridView dataGridCash = new DataGridView();
-            dataGridCash.Dock = DockStyle.Fill;
-            var cashCount = cycle.Cashcount_Out.ToList();
-            BindingSource dtsCash = new BindingSource();
-            dtsCash.DataSource = typeof(Cassette);
-            dataGridCash.DataSource = dtsCash;
-            cashCount.OrderByDescending(x => x.Value.Name).ToList().ForEach(x =>
-            {
-                dtsCash.Add(x.Value);
-            });
-            tabPageCycleCash.Controls.Add(dataGridCash);
-
             tabControlCycle.Controls.Add(tabPageCycle);
-            tabControlCycle.Controls.Add(tabPageCycleDeno);
-            tabControlCycle.Controls.Add(tabPageCycleCash);
+
+            if (denoCount != null)
+            {
+                TabPage tabPageCycleDeno = new TabPage("Denomination Count");
+                DataGridView dataGrid = new DataGridView();
+                dataGrid.Dock = DockStyle.Fill;
+
+                BindingSource dtsDeno = new BindingSource();
+                dtsDeno.DataSource = typeof(Deno);
+                dataGrid.DataSource = dtsDeno;
+                denoCount.OrderByDescending(x => x.Value.Name).ToList().ForEach(x =>
+                {
+                    dtsDeno.Add(x.Value);
+                });
+                tabPageCycleDeno.Controls.Add(dataGrid);
+                tabControlCycle.Controls.Add(tabPageCycleDeno);
+
+            }
+            if (cashCount != null)
+            {
+
+                TabPage tabPageCycleCash = new TabPage("Cash Count");
+                DataGridView dataGridCash = new DataGridView();
+                dataGridCash.Dock = DockStyle.Fill;
+                BindingSource dtsCash = new BindingSource();
+                dtsCash.DataSource = typeof(Cassette);
+                dataGridCash.DataSource = dtsCash;
+                cashCount.OrderByDescending(x => x.Value.Name).ToList().ForEach(x =>
+                {
+                    dtsCash.Add(x.Value);
+                });
+                tabPageCycleCash.Controls.Add(dataGridCash);
+                tabControlCycle.Controls.Add(tabPageCycleCash);
+
+            }
+
+
 
             panel4.Controls.Add(tabControlCycle);
         }
@@ -405,6 +377,11 @@ namespace Transaction_Statistical.UControl
             {
                 InitParametar.Send_Error(ex.ToString(), MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name);
             }
+
+        }
+
+        private void txt_Path_MouseEnter(object sender, MouseEventArgs e)
+        {
 
         }
     }
