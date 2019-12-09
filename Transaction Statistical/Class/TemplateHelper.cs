@@ -218,6 +218,14 @@ namespace Transaction_Statistical.Class
             return worksheet;
         }
 
+        public void BaoCaoHanhDongBatThuong(string WorksheetsName, TableStyles tableStyles)
+        {
+            this.excelPackage.Workbook.Worksheets.Add(WorksheetsName);
+            var lastWS = excelPackage.Workbook.Worksheets.Last();
+            lastWS = DrawHDTC(lastWS);
+            this.excelPackage.Save();
+        }
+
         public void BaoCaoGiaoDichBatThuong(string WorksheetsName, TableStyles tableStyles)
         {
             this.excelPackage.Workbook.Worksheets.Add(WorksheetsName);
@@ -225,7 +233,89 @@ namespace Transaction_Statistical.Class
             lastWS = DrawHDBT(lastWS);
             this.excelPackage.Save();
         }
+        public void BaoCaoGiaoDichTaiChinh(string WorksheetsName, TableStyles tableStyles, Dictionary<DateTime, Transaction> ListTransaction)
+        {
+            this.excelPackage.Workbook.Worksheets.Add(WorksheetsName);
+            var lastWS = excelPackage.Workbook.Worksheets.Last();
+            lastWS = DrawGDTC(lastWS, ListTransaction);
+            this.excelPackage.Save();
+        }
 
+        private ExcelWorksheet DrawHDTC(ExcelWorksheet worksheet)
+        {
+            try
+            {
+                int index = 2;
+                int timesOpenTheCashDrawer = 5;
+                int timesOpenTechnicalChamber = 8;
+                int timesReboot = 5;
+                int timesDisconect = 5;
+                int timesMoneyWithdrawn = 5;
+                int timesWithdrawalStuck = 5;
+                int timesDepositStuck = 5;
+
+                //DRAW CHUDE
+                using (ExcelRange rng = worksheet.Cells["A1:I1"])
+                {
+                    rng.Style.Fill.PatternType = OfficeOpenXml.Style.ExcelFillStyle.Solid;
+                    rng.Style.Fill.BackgroundColor.SetColor(Color.FromArgb(252, 228, 214));
+                    rng.Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+                    rng.Style.VerticalAlignment = ExcelVerticalAlignment.Center;
+                }
+                worksheet.Cells["A1"].Value = "Nội dung";
+                worksheet.Cells["B1"].Value = "ATMID";
+                worksheet.Cells["C1"].Value = "Ngày tiếp quỹ";
+                worksheet.Cells["D1"].Value = "Ngày kiểm quỹ";
+                worksheet.Cells["E1"].Value = "Số lần";
+                worksheet.Cells["F1"].Value = "Date time";
+                worksheet.Cells["G1"].Value = "Hành động";
+                worksheet.Cells["H1"].Value = "Trace ID";
+                worksheet.Cells["I1"].Value = "Số tiền thu hồi của GD";
+
+                //DRAW DATA
+                //Bao nhiêu lần mở cửa khoang tiền?
+                worksheet = DrawLoop(worksheet, ref index, timesOpenTheCashDrawer, "Bao nhiêu lần mở cửa khoang tiền?");
+
+                //Bao nhiêu lần mở cửa khoang kỹ thuật? 
+                worksheet = DrawLoop(worksheet, ref index, timesOpenTechnicalChamber, "Bao nhiêu lần mở cửa khoang kỹ thuật?");
+
+                //Bao nhiêu lần máy khởi động lại ?
+                worksheet = DrawLoop(worksheet, ref index, timesReboot, "Bao nhiêu lần máy khởi động lại ?");
+
+                //Bao nhiêu lần mất mạng
+                worksheet = DrawLoop(worksheet, ref index, timesDisconect, "Bao nhiêu lần mất mạng?");
+
+                //Bao nhiêu lần tiền bị thu hồi?
+                worksheet = DrawLoop(worksheet, ref index, timesMoneyWithdrawn, "Bao nhiêu lần tiền bị thu hồi?");
+
+                //Bao nhiêu lần rút tiền bị kẹt?
+                worksheet = DrawLoop(worksheet, ref index, timesDepositStuck, "Bao nhiêu lần rút tiền bị kẹt?");
+
+                //Bao nhiêu lần nộp tiền bị kẹt?
+                worksheet = DrawLoop(worksheet, ref index, timesWithdrawalStuck, "Bao nhiêu lần nộp tiền bị kẹt?");
+
+                var allCells = worksheet.Cells[1, 1, worksheet.Dimension.End.Row, worksheet.Dimension.End.Column];
+                allCells.AutoFitColumns();
+                allCells.Style.Border.Top.Style = ExcelBorderStyle.Thin;
+                allCells.Style.Border.Bottom.Style = ExcelBorderStyle.Thin;
+                allCells.Style.Border.Left.Style = ExcelBorderStyle.Thin;
+                allCells.Style.Border.Right.Style = ExcelBorderStyle.Thin;
+
+                allCells.Style.Border.Top.Color.SetColor(Color.Black);
+                allCells.Style.Border.Bottom.Color.SetColor(Color.Black);
+                allCells.Style.Border.Left.Color.SetColor(Color.Black);
+                allCells.Style.Border.Right.Color.SetColor(Color.Black);
+                allCells.Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+                allCells.Style.VerticalAlignment = ExcelVerticalAlignment.Center;
+
+                allCells.Style.WrapText = true;
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
+            return worksheet;
+        }
         private ExcelWorksheet DrawHDBT(ExcelWorksheet worksheet)
         {
             try
@@ -344,16 +434,7 @@ namespace Transaction_Statistical.Class
 
             return worksheet;
         }
-
-        public void BaoCaoGiaoDichKhongThanhCong(string WorksheetsName, TableStyles tableStyles)
-        {
-            this.excelPackage.Workbook.Worksheets.Add(WorksheetsName);
-            var lastWS = excelPackage.Workbook.Worksheets.Last();
-            lastWS = DrawGDKTC(lastWS);
-            this.excelPackage.Save();
-        }
-
-        private ExcelWorksheet DrawGDKTC(ExcelWorksheet worksheet)
+        private ExcelWorksheet DrawGDTC(ExcelWorksheet worksheet, Dictionary<DateTime, Transaction> ListTransaction)
         {
             try
             {
@@ -471,23 +552,25 @@ namespace Transaction_Statistical.Class
                     rng.Value = "LOG JNT (chỉ lấy log với các GD không thành công)";
                 }
                 //DRAW DATA
+                var trans = ListTransaction.ToArray();
                 int indexData = index + 2;
-                for (int j = 0; j < 1; j++)
+                for (int j = 0; j < trans.Count(); j++)
                 {
+                    var itemTrans = trans[j].Value;
                     var detail = "";
 
                     worksheet.Cells[indexData, index].Value = "";
-                    worksheet.Cells[indexData, index + 1].Value = "";
-                    worksheet.Cells[indexData, index + 2].Value = "";
-                    worksheet.Cells[indexData, index + 3].Value = "";
+                    worksheet.Cells[indexData, index + 1].Value = itemTrans.Type;
+                    worksheet.Cells[indexData, index + 2].Value = itemTrans.Status;
+                    worksheet.Cells[indexData, index + 3].Value = itemTrans.Terminal;
                     worksheet.Cells[indexData, index + 4].Value = "";
                     worksheet.Cells[indexData, index + 5].Value = "";
-                    worksheet.Cells[indexData, index + 6].Value = "";
-                    worksheet.Cells[indexData, index + 7].Value = "";
-                    worksheet.Cells[indexData, index + 8].Value = "";
+                    worksheet.Cells[indexData, index + 6].Value = itemTrans.CardType == Transaction.CardTypes.CardLess ? "CardLess" : itemTrans.CardNumber;
+                    worksheet.Cells[indexData, index + 7].Value = itemTrans.DataInput;
+                    worksheet.Cells[indexData, index + 8].Value = itemTrans.DateBegin;
                     worksheet.Cells[indexData, index + 8].Style.Numberformat.Format = "mm/dd/yyyy hh:mm:ss AM/PM";
 
-                    worksheet.Cells[indexData, index + 9].Value = "";
+                    worksheet.Cells[indexData, index + 9].Value = itemTrans.Amount;
                     worksheet.Cells[indexData, index + 10].Value = "";
                     worksheet.Cells[indexData, index + 11].Value = "";
                     worksheet.Cells[indexData, index + 12].Value = "";

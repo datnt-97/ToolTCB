@@ -13,20 +13,16 @@ namespace Transaction_Statistical.UControl
 {
     public partial class UC_Menu_Overview : UserControl
     {
-        SQLiteHelper sqlite;
         public UC_Menu_Overview()
         {
-            InitializeComponent();
-           sqlite = new SQLiteHelper();
+            InitializeComponent();          
             LoadInfo();
         }
         public void LoadInfo()
         {
             try
             {
-
-                DataTable cfg_vendor = sqlite.GetTableDataWith2ColumnName("CfgData", "Type_ID", "60", "Parent_ID", "54");
-
+                DataTable cfg_vendor =InitParametar.sqlite.GetTableDataWith2ColumnName("CfgData", "Type_ID", "60", "Parent_ID", "54");
                 foreach (DataRow R in cfg_vendor.Rows)
                 {
                     ComboBoxItem cb = new ComboBoxItem();

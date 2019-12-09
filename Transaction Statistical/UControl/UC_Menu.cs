@@ -12,16 +12,15 @@ namespace Transaction_Statistical.UControl
 {
     public partial class UC_Menu : UserControl
     {
-        SQLiteHelper sqlite;
+        UC_Menu_Overview ucOVerview;
         public UC_Menu()
         {
             InitializeComponent();
-            addUserCfg();
-            sqlite = new SQLiteHelper();
+           addUserCfg();          
         }
         private void addUserCfg()
         {
-            UC_Menu_Overview ucOVerview = new UC_Menu_Overview();
+            ucOVerview = new UC_Menu_Overview();
             ucOVerview.Width = this.Width - 1 - pnl_Menu.Width;
             ucOVerview.Height = this.Height - 2;
             ucOVerview.Location = new Point(pnl_Menu.Width , 1);

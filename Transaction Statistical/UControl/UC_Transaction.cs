@@ -11,47 +11,17 @@ using System.IO;
 using System.Globalization;
 using System.Text.RegularExpressions;
 using System.Reflection;
+using System.Runtime.InteropServices;
+using System.Threading;
+using Transaction_Statistical.AddOn;
 
 namespace Transaction_Statistical.UControl
 {
     public partial class UC_Transaction : UserControl
     {
         SQLiteHelper sqlite;
-        Dictionary<string, int> ListTransactionType;
         List<Transaction> transactions = new List<Transaction>();
-
         ReadTransaction readtran;
-
-        #region Read parameter EJ
-
-
-        int CodeCycleReadFrom = 1;
-        string sCycleBegin = string.Empty;
-        string sCycleEnd = string.Empty;
-
-        string sSplitTransaction = string.Empty;
-        string sFileNameFormat = string.Empty;
-        string sTRANSACTIONSTART = string.Empty;
-        string sAMOUNTENTERED = string.Empty;
-        string sCASHREQUEST = string.Empty;
-        string sCASHDISPENSE = string.Empty;
-        string sCASHPRESENTED = string.Empty;
-        string sDEVICEERROR = string.Empty;
-        string sCASHTAKEN = string.Empty;
-        string sCASHRETRACT = string.Empty;
-        string sTRANSACTIONFAIL = string.Empty;
-        string sTRANSACTIONSUCCESSFUL = string.Empty;
-        string sCARDTAKEN = string.Empty;
-        string sTRANSACTIONEND = string.Empty;
-        string sTRACK1 = string.Empty;
-        string sTRACK2 = string.Empty;
-        string sTRACK3 = string.Empty;
-        string sTRANSACTIONREQUEST = string.Empty;
-        string sTRANSACTIONREPLY = string.Empty;
-        string sNewCounter = string.Empty;
-        string sOldCounter = string.Empty;
-
-        #endregion
         public UC_Transaction()
         {
             sqlite = new SQLiteHelper();
@@ -60,6 +30,72 @@ namespace Transaction_Statistical.UControl
             uc_Menu.Location = new Point(-uc_Menu.Width, uc_Menu.Location.Y);
             readtran = new ReadTransaction();
         }
+        #region design
+        bool runningShowMenu = false;
+        bool showMenu = false;
+
+        bool runningShowExplorer = false;
+        bool showExplorer = false;
+
+        private void uc_Explorer_Leave(object sender, EventArgs e)
+        {
+            SlideExplorerShow(sender, e);
+        }
+        private void txt_Path_MouseEnter(object sender, EventArgs e)
+        {
+            if (!showExplorer) SlideExplorerShow(sender, e);
+        }
+        public void SlideExplorerShow(object sender, EventArgs e)
+        {
+            if (showExplorer) showExplorer = false; else showExplorer = true;
+            if (runningShowExplorer) return;
+            runningShowExplorer = true;
+            while (runningShowExplorer)
+            {
+                if (showExplorer)
+                {
+                    //uc_Explorer.Location = new Point(uc_Explorer.Location.X + 3, uc_Explorer.Location.Y);
+                    //if (uc_Explorer.Location.X >= 0) break;
+                    uc_Explorer.Height += 5;
+                    if (uc_Explorer.Height >= 500)
+                    {
+                        uc_Explorer.SelectPath(txt_Path.Text);
+                        break;
+                    }
+                }
+                else
+                {
+                    uc_Explorer.Height -= 3;
+                    if (uc_Explorer.Height == 0) break;
+                    //uc_Explorer.Location = new Point(uc_Explorer.Location.X - 3, uc_Explorer.Location.Y);
+                    //if (uc_Explorer.Location.X <= -uc_Explorer.Width) break;
+                }
+                this.Update();
+            }
+            runningShowExplorer = false;
+        }
+        public void SlideMenuShow()
+        {
+            if (showMenu) showMenu = false; else showMenu = true;
+            if (runningShowMenu) return;
+            runningShowMenu = true;
+            while (runningShowMenu)
+            {
+                if (showMenu)
+                {
+                    uc_Menu.Location = new Point(uc_Menu.Location.X + 3, uc_Menu.Location.Y);
+                    if (uc_Menu.Location.X >= 0) break;
+                }
+                else
+                {
+                    uc_Menu.Location = new Point(uc_Menu.Location.X - 3, uc_Menu.Location.Y);
+                    if (uc_Menu.Location.X <= -uc_Menu.Width) break;
+                }
+                this.Update();
+            }
+            runningShowMenu = false;
+        }
+        #endregion
         private void Add_GUI()
         {
             CheckBox cb1 = new CheckBox();
@@ -92,12 +128,12 @@ namespace Transaction_Statistical.UControl
             if (cb_FullTime.Checked)
             {
                 dateTimePicker_Start.Enabled = false;
-                dateTimePicker_End.Enabled = false;               
+                dateTimePicker_End.Enabled = false;
             }
             else
             {
                 dateTimePicker_Start.Enabled = true;
-                dateTimePicker_End.Enabled = true;              
+                dateTimePicker_End.Enabled = true;
             }
         }
 
@@ -105,167 +141,68 @@ namespace Transaction_Statistical.UControl
         {
             string[] extension = { "*.txt", "*.log" };
             DirectoryFileUtilities df = new DirectoryFileUtilities();
-            FileInfo[] files = df.GetAllFilePath(txt_Path.Text, extension);
-            JournalAnalyze(files);
-
+            if (File.Exists(txt_Path.Text))
+                JournalAnalyze(new List<string> { txt_Path.Text });
+            else if (Directory.Exists(txt_Path.Text))
+            {
+                FileInfo[] files = df.GetAllFilePath(txt_Path.Text, extension);
+                JournalAnalyze(files.Select(f => f.FullName).ToList());
+                tre_LstTrans.ExpandAll();
+            }
+            else
+                MessageBox.Show("File/Drectory not exist.", "Error File/Directory", MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
-        private void JournalAnalyze(FileInfo[] File_Journal)
+        private void JournalAnalyze(List<string> lsFile_Journal)
         {
             try
             {
-                FileComparer comp = new FileComparer(FileComparer.CompareBy.Name);
-                List<string> filesReadJournal = File_Journal.Select(f => f.FullName).ToList();
-                filesReadJournal.Sort(comp);
-                //  Reads(filesReadJournal);
-                ReadTransaction readtran = new ReadTransaction();
+                readtran = new ReadTransaction();
+                tre_LstTrans.Nodes.Clear();
+                propertyGrid1.SelectedObject = null;
+                fctxt_FullLog.Text = string.Empty;
                 if (!cb_FullTime.Checked)
                 {
                     readtran.StartDate = dateTimePicker_Start.Value;
                     readtran.EndDate = dateTimePicker_End.Value;
-                         }
-                if(readtran.Reads(filesReadJournal))
-                {
-
                 }
-            }
-            catch (Exception ex)
-            {
-                InitParametar.Send_Error(ex.ToString(), MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name);
-            }
-        }
-        private void Reads(List<string> files)
-        {
-            //try
-            //{
-
-            //    //   List<string> listDataDay = new List<string>();
-            //    ///
-            //    DateTime dateBegin = DateTime.MinValue;
-            //    DateTime dateEnd = DateTime.Now;
-            //    DateTime currentDate = DateTime.MinValue;
-
-            //    Dictionary<string, Transaction> listDataDay = new Dictionary<string, Transaction>();
-            //    foreach (string file in files)
-            //    {
-            //        string day = file.Substring(file.Length - 12, 8);
-            //        string contenFile = File.ReadAllText(file);
-            //        DateTime.TryParseExact(file.Substring(file.Length - 12, 8), "yyyyMMdd", CultureInfo.InvariantCulture, DateTimeStyles.None, out currentDate);
-            //        contenFile = SplitTransactionEJ(contenFile, InitParametar.transactionTemplate[TransactionEvent.Events.Transaction], listDataDay);
-                   
-            //    }
-
-            //    string start = StartDate.ToString("HH:mm:ss");
-            //    string end = EndDate.ToString("HH:mm:ss");
-            //    ListTransactionType = new Dictionary<string, int>();
-            //    foreach (KeyValuePair<string, Transaction> KeyValue in listDataDay)
-            //    {
-            //        Transaction trn = Reads_TransInfo(KeyValue.Value);
-            //        //    if (!(((trn.Day == StartDate.ToString(sFileNameFormat)) && String.Compare(trn.TTime, start) < 0) || ((trn.Day == EndDate.ToString(sFileNameFormat)) && String.Compare(trn.TTime, end) > 0)))
-            //        if (trn.DateEnd > StartDate && trn.DateBegin < EndDate)
-            //        {
-            //            if (trn.TransactionTypeList == string.Empty) trn.TransactionTypeList = "Unknow";
-            //            foreach (string s in trn.TransactionTypeList.Split(new string[] { "||" }, StringSplitOptions.RemoveEmptyEntries))
-            //            {
-            //                if (!InitParametar.listTransType.Keys.Contains(s))
-            //                {
-            //                    ListTransactionType[s] = 1;
-            //                    UIHelper.UIThread(pl_Actions, delegate
-            //                    {
-            //                        CheckBox item = new CheckBox();
-            //                        item.Name = s;
-            //                        pl_Actions.Controls.Add(item);
-            //                        //     checkedComboBox_TransType1.Items.Add(s); checkedComboBox_TransType1.CheckBoxItems[s].Checked = true; 
-            //                    });
-            //                }
-            //                else
-            //                    ListTransactionType[s] = ListTransactionType[s] + 1;
-            //            }
-            //            transactions.Add(trn);
-            //        }
-
-            //    }
-            //}
-            //catch (Exception ex)
-            //{
-            //    InitParametar.Send_Error(ex.ToString(), MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name);
-            //}
-
-        }
-        private bool Journal_ReadCycleCash(string line, string sCycleBegin, string sCycleEnd, Dictionary<string, string> listDateFormat, DateTime currentDate)
-        {
-            //try
-            //{
-            //    ///get cycle
-            //    DateTime dateBegin;
-            //    DateTime dateEnd;
-            //    if (GetDateFromFormatLine(line, sCycleBegin, listDateFormat, out dateBegin))
-            //    {
-            //        Cycle cl = new Cycle();
-            //        cl.DateBegin = currentDate;
-            //        ListCycle[dateBegin] = cl;
-            //    }
-            //    else if (GetDateFromFormatLine(line, sCycleEnd, listDateFormat, out dateEnd))
-            //    {
-            //        dateEnd = DateTime.ParseExact(currentDate.ToString("yyyyMMdd") + dateEnd.ToString("HHmmss"), "yyyyMMddHHmmss", CultureInfo.InvariantCulture, DateTimeStyles.None);
-            //        if (ListCycle.Keys.Count == 0)
-            //        {
-            //            Cycle cl = new Cycle();
-            //            cl.DateBegin = DateTime.MinValue;
-            //            cl.DateEnd = dateEnd;
-            //            ListCycle[dateBegin] = cl;
-            //        }
-            //        else
-            //        {
-            //            Cycle cl = ListCycle.Values.LastOrDefault();
-            //            if (cl.DateEnd == null)
-            //            {
-            //                cl.DateEnd = dateEnd;
-            //                ListCycle[cl.DateBegin] = cl;
-            //            }
-            //            else
-            //            {
-            //                Cycle cln = new Cycle();
-            //                cln.DateBegin = cl.DateEnd;
-            //                cln.DateEnd = dateEnd;
-            //                ListCycle[cln.DateBegin] = cln;
-            //            }
-            //        }
-            //        return true;
-            //    }
-            //}
-            //catch (Exception ex)
-            //{
-            //    InitParametar.Send_Error(ex.ToString(), MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name);
-            //}
-            return false;
-        }
-        private string SplitTransactionEJ(string sString, string sReg, Dictionary<string, Transaction> listDataDay)
-        {
-            string sAfter = sString;
-            try
-            {
-                
-                Dictionary<int, RegesValue> lst = new Dictionary<int, RegesValue>();
-                if (Regexs.RunPatternRegular(sString, sReg, out lst))
+                if (readtran.Reads(lsFile_Journal))
                 {
-                    Transaction trans;
-                    foreach (KeyValuePair<int, RegesValue> key in lst)
+                    string day;
+                    foreach (KeyValuePair<string, Dictionary<DateTime, object>> kTerminal in readtran.ListTransaction)
                     {
-                        trans = new Transaction();                      
-                        trans.TTimeBegin = key.Value.value["DateBegin"];
-                        trans.TTimeEnd = key.Value.value["TimeEnd"];
-                        DateTime.TryParseExact(trans.TTimeBegin, "MM-dd-yyyy HH:mm:ss", CultureInfo.InvariantCulture, DateTimeStyles.None, out trans.DateBegin);
-                        trans.DateEnd = trans.DateBegin;
-                        DateTime.TryParseExact(trans.TTimeEnd, "HH:mm:ss", CultureInfo.InvariantCulture, DateTimeStyles.None, out trans.DateEnd);
-                        trans.Terminal = key.Value.value["TerminalID"];
-                        trans.MachineNo = key.Value.value["MachineNo"];
-                        trans.CardNumber = key.Value.value["CardNo"];
-                        trans.DataInput = key.Value.value["DataInput"];
-                        trans.TraceJournalFull = key.Value.stringfind;
-                        trans.TransactionTypeList = string.Empty;
-                        trans.Day = String.Format("{0:yyyyMMdd}", trans.DateBegin);
-                        listDataDay[key.Value.value["DateBegin"]] = trans;
-                        sAfter = sAfter.Replace(key.Value.stringfind, null);
+                        int countCycle = kTerminal.Value.Where(x => (x.Value is Cycle)).ToList().Count;
+                        int countTransaction = kTerminal.Value.Where(x => (x.Value is Transaction)).ToList().Count;
+                        int countTransactionEvent = kTerminal.Value.Where(x => (x.Value is TransactionEvent)).ToList().Count;
+                        TreeNode ndTerminal = tre_LstTrans.Nodes.Add(String.Format("Terminal ID: {0} - Total: {1} transactions", kTerminal.Key, kTerminal.Value.Count), kTerminal.Key, "Terminal", "Terminal");
+
+                        foreach (KeyValuePair<DateTime, object> kTransaction in kTerminal.Value.OrderBy(x => x.Key))
+                        {
+                            day = String.Format("{0:" + readtran.FormatDate + "}", kTransaction.Key);
+                            TreeNode ndDay = new TreeNode(day);
+                            if (ndTerminal.Nodes.ContainsKey(day))
+                                ndDay = ndTerminal.Nodes[day];
+                            else
+                                ndDay = ndTerminal.Nodes.Add(day, day, "Date", "Date_Open");
+                            string textDisplay = kTransaction.Value.ToString();
+                            TreeNode ndTransaction = ndDay.Nodes.Add(textDisplay, textDisplay);
+                            ndTransaction.Tag = kTransaction.Value;
+                            if (ndTransaction.Tag is Transaction)
+                            {
+                                ndTransaction.ImageKey = "Flag_b";
+                                ndTransaction.SelectedImageKey = "Flag_b";
+                            }
+                            else if (ndTransaction.Tag is TransactionEvent)
+                            {
+                                ndTransaction.ImageKey = "Setting";
+                                ndTransaction.SelectedImageKey = "Setting";
+                            }
+                            else
+                            {
+                                ndTransaction.ImageKey = "Cycle";
+                                ndTransaction.SelectedImageKey = "Cycle";
+                            }
+                            ndDay.Text = day + " Total: " + ndDay.Nodes.Count + " transactions";
+                        }
                     }
                 }
             }
@@ -273,74 +210,8 @@ namespace Transaction_Statistical.UControl
             {
                 InitParametar.Send_Error(ex.ToString(), MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name);
             }
-            return sAfter;
-        }
-        private Transaction Reads_TransInfo(Transaction trn)
-        {
-            try
-            {
-                using (StringReader reader = new StringReader(trn.TraceJournalFull))
-                {
-
-                    trn = Read_TransSub(trn, reader);
-                }
-
-                Dictionary<int, RegesValue> tkeytmp;
-                //Amount
-                Dictionary<int, RegesValue> dc_amount = new Dictionary<int, RegesValue>();
-                if (Regexs.RunPatternRegular(trn.TraceJournalFull, sAMOUNTENTERED, out dc_amount))
-                {
-                    trn.Amount = dc_amount.FirstOrDefault().Value.value.FirstOrDefault().Value;
-                }
-            }
-            catch (Exception ex)
-            {
-                InitParametar.Send_Error(ex.ToString(), MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name);
-            }
-            return trn;
         }
 
-        private Transaction Read_TransSub(Transaction trn, StringReader reader)
-        {
-            //try
-            //{
-            //    TransactionEvent ev;
-            //    string line = reader.ReadLine();
-            //    if (trn.CasebyCase == null)
-            //    {
-            //        trn.CasebyCase = new List<TransactionEvent>();
-            //         ev = new TransactionEvent();
-            //        ev.Name = TransactionEvent.Events.TransactionStart;
-            //        ev.TTime = trn.TTime;
-            //        ev.Status = TransactionEvent.StatusS.Succeeded;
-            //        trn.CasebyCase.Add(ev);
-                   
-            //    }
-            //    while (!string.IsNullOrEmpty(line))
-            //    {
-            //        Dictionary<int, RegesValue> tkeytmp = new Dictionary<int, RegesValue>();
-            //        foreach(KeyValuePair<TransactionEvent.Events,string> tmp in InitParametar.transactionTemplate)
-            //        {
-            //            if (Regexs.RunPatternRegular(line, tmp.Value, out tkeytmp))
-            //            {
-            //                ev = new TransactionEvent();
-            //                ev.Name = tmp.Key;
-            //                ev.TTime = tkeytmp.FirstOrDefault().Value.value["Time"] ?? string.Empty;
-            //                ev.TContent = tkeytmp.FirstOrDefault().Value.stringfind;
-            //                ev.Status = TransactionEvent.StatusS.Succeeded;
-            //                trn.CasebyCase.Add(ev);
-            //                break;
-            //            }
-            //        }
-            //        line = reader.ReadLine();
-            //    }
-            //}
-            //catch (Exception ex)
-            //{
-            //    InitParametar.Send_Error(ex.ToString(), MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name);
-            //}
-            return trn;
-        }
         private bool GetDateFromFormatLine(string row, string rowFormat, Dictionary<string, string> listDateFormat, out DateTime date)
         {
             date = DateTime.Now;
@@ -376,5 +247,143 @@ namespace Transaction_Statistical.UControl
         {
             this.SlideMenuShow();
         }
+
+        private void tre_LstTrans_AfterSelect(object sender, TreeViewEventArgs e)
+        {
+            try
+            {
+                if (e.Node != null && e.Node.Tag != null && e.Node.Tag is Transaction)
+                {
+                    propertyGrid1.SelectedObject = (Transaction)e.Node.Tag;
+                    fctxt_FullLog.Text = (e.Node.Tag as Transaction).TraceJournalFull;
+                }
+                else if (e.Node != null && e.Node.Tag != null && e.Node.Tag is TransactionEvent)
+                {
+                    propertyGrid1.SelectedObject = (TransactionEvent)e.Node.Tag;
+                    fctxt_FullLog.Text = (e.Node.Tag as TransactionEvent).TContent;
+                }
+                else if (e.Node != null && e.Node.Tag != null && e.Node.Tag is Cycle)
+                {
+                    var cycle = (Cycle)e.Node.Tag;
+                    fctxt_FullLog.Text = (e.Node.Tag as Cycle).LogTxt;
+                    AddLayoutEventCycle(cycle, panel4);
+                }
+                //else if (e.Node != null && e.Node.Tag != null && e.Node.Tag is List<KeyValuePair<DateTime, Cycle>>)
+                //{
+                //    var tag = (List<KeyValuePair<DateTime, Cycle>>)e.Node.Tag;
+                //    ListPropertyGrid<Cycle> listProperty = new ListPropertyGrid<Cycle>(tag);
+                //    propertyGrid1.SelectedObject = listProperty;
+                //    var tagValue = ((List<KeyValuePair<DateTime, Cycle>>)e.Node.Tag).ToList();
+                //    ListBox listBox = new ListBox();
+                //    listBox.Dock = DockStyle.Fill;
+                //    tagValue.ForEach(x =>
+                //    {
+                //        listBox.Items.Add(x.Value.ToString());
+                //    });
+                //    panel4.Controls.Add(listBox);
+                //}
+
+            }
+            catch (Exception ex)
+            {
+                InitParametar.Send_Error(ex.ToString(), MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name);
+            }
+        }
+
+        private void AddLayoutEventCycle(Cycle cycle, Panel panel4)
+        {
+            if (panel4.Controls.Count > 0)
+            {
+                TabControl control = (TabControl)panel4.Controls[0];
+                panel4.Controls.Remove(control);
+            }
+            var denoCount = cycle.DenominationCount.ToList();
+            var cashCount = cycle.Cashcount_Out.ToList();
+
+            TabControl tabControlCycle = new TabControl();
+            tabControlCycle.Height = panel4.Height;
+            tabControlCycle.Width = panel4.Width;
+            tabControlCycle.Dock = DockStyle.Fill;
+            tabControlCycle.Name = "tcCycle";
+            TabPage tabPageCycle = new TabPage("Cycle Genaral");
+
+            PropertyGrid propertyGrid = new PropertyGrid();
+            propertyGrid.BrowsableAttributes = new AttributeCollection(new CategoryAttribute("1. Info"));
+            propertyGrid.Dock = DockStyle.Fill;
+            propertyGrid.SelectedObject = cycle;
+            tabPageCycle.Controls.Add(propertyGrid);
+            tabControlCycle.Controls.Add(tabPageCycle);
+
+            if (denoCount != null)
+            {
+                TabPage tabPageCycleDeno = new TabPage("Denomination Count");
+                DataGridView dataGrid = new DataGridView();
+                dataGrid.Dock = DockStyle.Fill;
+
+                BindingSource dtsDeno = new BindingSource();
+                dtsDeno.DataSource = typeof(Deno);
+                dataGrid.DataSource = dtsDeno;
+                denoCount.OrderByDescending(x => x.Value.Name).ToList().ForEach(x =>
+                {
+                    dtsDeno.Add(x.Value);
+                });
+                tabPageCycleDeno.Controls.Add(dataGrid);
+                tabControlCycle.Controls.Add(tabPageCycleDeno);
+
+            }
+            if (cashCount != null)
+            {
+
+                TabPage tabPageCycleCash = new TabPage("Cash Count");
+                DataGridView dataGridCash = new DataGridView();
+                dataGridCash.Dock = DockStyle.Fill;
+                BindingSource dtsCash = new BindingSource();
+                dtsCash.DataSource = typeof(Cassette);
+                dataGridCash.DataSource = dtsCash;
+                cashCount.OrderByDescending(x => x.Value.Name).ToList().ForEach(x =>
+                {
+                    dtsCash.Add(x.Value);
+                });
+                tabPageCycleCash.Controls.Add(dataGridCash);
+                tabControlCycle.Controls.Add(tabPageCycleCash);
+
+            }
+
+
+
+            panel4.Controls.Add(tabControlCycle);
+        }
+
+        private void tre_LstTrans_NodeMouseHover(object sender, TreeNodeMouseHoverEventArgs e)
+        {
+
+        }
+
+        private void btn_Export_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                if (readtran != null)
+                {
+                    readtran.Export();
+                    MessageBox.Show("Export Successfully");
+                }
+                else
+                {
+                    MessageBox.Show("Please Read Transaction");
+                }
+            }
+            catch (Exception ex)
+            {
+                InitParametar.Send_Error(ex.ToString(), MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name);
+            }
+
+        }
+
+        private void txt_Path_MouseEnter(object sender, MouseEventArgs e)
+        {
+
+        }
     }
+
 }
