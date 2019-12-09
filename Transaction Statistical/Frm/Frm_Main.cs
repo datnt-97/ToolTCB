@@ -9,14 +9,20 @@ namespace Transaction_Statistical
     {
         public Frm_Main()
         {
-            InitParametar.Init();
             InitializeComponent();
 
-            UC_CfgTemplate uc_TemplateCfg = new UC_CfgTemplate("65");
-            uc_TemplateCfg.Dock = DockStyle.Fill;
-            Frm_TemplateDefault frm_templateCfg = new Frm_TemplateDefault(uc_TemplateCfg);
-            frm_templateCfg.titleCustom.Text = "Template Config";
-            frm_templateCfg.Show();
+            //uc_cfgtemplate uc_templatecfg = new uc_cfgtemplate("65");
+            //uc_templatecfg.dock = dockstyle.fill;
+            //frm_templatedefault frm_templatecfg = new frm_templatedefault(uc_templatecfg);
+            //frm_templatecfg.titlecustom.text = "template config";
+            //frm_templatecfg.show();
+
+            //UC_Menu_Startup uc_MenuStartup = new UC_Menu_Startup();
+            //uc_MenuStartup.Dock = DockStyle.Fill;
+            //Frm_TemplateDefault frm_Startup = new Frm_TemplateDefault(uc_MenuStartup);
+            //frm_Startup.titleCustom.Text = "Startup";
+            //frm_Startup.ShowDialog();
+
 
             TabPanelControl tpc = new TabPanelControl();
             tpc.Dock = DockStyle.Fill;

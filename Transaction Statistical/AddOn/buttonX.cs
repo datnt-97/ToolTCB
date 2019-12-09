@@ -16,7 +16,7 @@ namespace Transaction_Statistical.AddOn
         private Color clickcolor = Color.FromArgb(160, 180, 200);
         private int textX = 6;
         private int textY = -20;
-        private String text = "_";
+        private String text = "";
         private bool isChanged = true;
         private bool showCloseButton = true;
 

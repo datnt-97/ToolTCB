@@ -14,7 +14,7 @@ using System.Drawing.Drawing2D;
 using System.Threading;
 using System.Diagnostics;
 
-namespace Transaction_Statistical.UControl
+namespace Transaction_Statistical
 {
     public partial class UC_Explorer : UserControl
     {
@@ -24,23 +24,86 @@ namespace Transaction_Statistical.UControl
         public static Image InternetImage;
         public static TreeNodeX Node_DisksDirectories;
         public static Dictionary<string, Image> ListExtensionIcon;
-        private static Control control;
-        public UC_Explorer(Control ctr)
+        private static Control textBoxShow;
+        bool runningShowExplorer = false;
+        bool showExplorer = false;
+        public UC_Explorer(Control _textBoxShow)
         {
             InitializeComponent();
             init();
-            control = ctr;
+            textBoxShow = _textBoxShow;
         }
+       
         public UC_Explorer()
         {
             InitializeComponent();
             init();
+            this.tre_Explorer.MouseLeave += new System.EventHandler(uc_Explorer_MouseLeave);
         }
+        public void ShowFromControl(Control _Parent, Control _textBoxShow)
+        {
+            if (!_Parent.Controls.Contains(this))
+            {
+                this.Size = new Size(0, 0);
+                _Parent.Controls.Add(this);
+                this.BringToFront();
+                this.SendToBack();
+                _Parent.Controls.SetChildIndex(this, 0);
+            }
+
+            if (showExplorer && _textBoxShow.Equals(textBoxShow)) return;
+            textBoxShow = _textBoxShow;
+            Point pt = textBoxShow.Parent.PointToScreen(textBoxShow.Location);
+            this.Location = new Point(_Parent.PointToClient(pt).X, _Parent.PointToClient(pt).Y + textBoxShow.Height + 2);
+            if (showExplorer)
+                this.Size = new System.Drawing.Size(_textBoxShow.Width, this.Size.Height);
+            else
+            {
+                this.Size = new System.Drawing.Size(_textBoxShow.Width, 0);
+                SlideExplorerShow(null, null);
+            }
+            this.SelectPath(textBoxShow.Text);
+        }
+        private void uc_Explorer_MouseLeave(object sender, EventArgs e)
+        {
+            SlideExplorerShow(sender, e);
+        }
+        private void tre_Explorer_MouseHover(object sender, EventArgs e)
+        {
+            showExplorer = true;
+        }
+        private void txt_Path_MouseEnter(object sender, EventArgs e)
+        {
+            if (!showExplorer) SlideExplorerShow(sender, e);
+        }
+        public void SlideExplorerShow(object sender, EventArgs e)
+        {
+            if (showExplorer) showExplorer = false; else showExplorer = true;
+            if (runningShowExplorer) return;
+            runningShowExplorer = true;
+            while (runningShowExplorer)
+            {
+                if (showExplorer)
+                {
+                    this.Height += 5;
+                    if (this.Height >= 500)                  
+                        break;
+                }
+                else
+                {
+                    this.Height -= 3;
+                    if (this.Height == 0) break;
+                }
+                this.Update();
+            }
+            runningShowExplorer = false;
+        }
+
         public void SelectPath(string path)
         {
             try
             {
-                if (string.IsNullOrEmpty(path)) return;
+                if (!(File.Exists(path) || Directory.Exists(path))) return;
                 tre_Explorer.Select();
                 if (tre_Explorer.SelectedNode != null)
                 {
@@ -180,8 +243,8 @@ namespace Transaction_Statistical.UControl
                 {
                     GetAllDirectoriesFilesOfDirectoryToNode((tre_Explorer.SelectedNode).Tag as DirectoryInfo, tre_Explorer.SelectedNode, 1);
                 }
-                if (tre_Explorer.SelectedNode.Tag is DirectoryInfo) control.Text = (tre_Explorer.SelectedNode.Tag as DirectoryInfo).FullName;
-                if (tre_Explorer.SelectedNode.Tag is FileInfo) control.Text = (tre_Explorer.SelectedNode.Tag as FileInfo).FullName;
+                if (tre_Explorer.SelectedNode.Tag is DirectoryInfo) textBoxShow.Text = (tre_Explorer.SelectedNode.Tag as DirectoryInfo).FullName;
+                if (tre_Explorer.SelectedNode.Tag is FileInfo) textBoxShow.Text = (tre_Explorer.SelectedNode.Tag as FileInfo).FullName;
 
             }
             catch (Exception ex)
@@ -233,6 +296,8 @@ namespace Transaction_Statistical.UControl
                 th_file.Start();
             }
         }
+
+        
     }  
  
 

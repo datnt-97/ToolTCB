@@ -948,7 +948,7 @@ namespace Transaction_Statistical
 
         public override string ToString()
         {
-            return CardType == Transaction.CardTypes.CardLess ? "Cardless: " + (DataInput.Count == 0 ? string.Empty : DataInput[0]) : "Card: " + CardNumber;
+            return String.Format("{0:HH:mm:ss }", DateBegin) + ( CardType == Transaction.CardTypes.CardLess ? "Cardless: " + (DataInput.Count == 0 ? string.Empty : DataInput[0]) : "Card: " + CardNumber);
         }
     }
     public class TransactionEvent
@@ -996,7 +996,7 @@ namespace Transaction_Statistical
         public string TContent { get; set; }
         public override string ToString()
         {
-            return Name + ": " + Status;
+            return String.Format("{0:HH:mm:ss }", DateBegin) + Name + ": " + Status;
         }
     }
     public class TransactionRequest

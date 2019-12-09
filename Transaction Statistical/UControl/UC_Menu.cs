@@ -13,11 +13,49 @@ namespace Transaction_Statistical.UControl
     public partial class UC_Menu : UserControl
     {
         UC_Menu_Overview ucOVerview;
+        bool runningShowMenu = false;
+        bool showMenu = false;
         public UC_Menu()
         {
             InitializeComponent();
            addUserCfg();          
         }
+        public UC_Menu(Control _Parent)
+        {
+            InitializeComponent();
+            addUserCfg();
+            this.BackColor = System.Drawing.Color.Transparent;
+            this.Location = new System.Drawing.Point(-10000, 100); 
+          //  this.Location = new Point(-this.Width, this.Location.Y);
+            this.Size = new System.Drawing.Size(1066, 568);
+            _Parent.Controls.Add(this);
+            this.BringToFront();
+            this.SendToBack();
+            _Parent.Controls.SetChildIndex(this, 0);
+        }
+        public void SlideMenuShow()
+        {
+            if (showMenu) showMenu = false; else showMenu = true;
+            if (runningShowMenu) return;
+            runningShowMenu = true;
+            while (runningShowMenu)
+            {
+                if (showMenu)
+                {
+                    this.Location = new Point(this.Location.X + 3, this.Location.Y);
+                    if (this.Location.X >= 0) break;
+                }
+                else
+                {
+                    this.Location = new Point(this.Location.X - 3, this.Location.Y);
+                    if (this.Location.X <= -this.Width) break;
+                }
+                this.Update();
+            }
+            runningShowMenu = false;
+        }
+       
+
         private void addUserCfg()
         {
             ucOVerview = new UC_Menu_Overview();

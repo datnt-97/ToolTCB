@@ -15,14 +15,13 @@ namespace Transaction_Statistical.AddOn
         private Color clickcolor = Color.FromArgb(160, 180, 200);
         private int textX = 6;
         private int textY = -20;
-        private String text = "_";
+        private String text = "";
 
         public enum CustomFormState
         {
             Normal,
             Maximize
         }
-
         CustomFormState _customFormState;
 
         public CustomFormState CFormState
@@ -72,7 +71,7 @@ namespace Transaction_Statistical.AddOn
             this.Size = new System.Drawing.Size(31, 24);
             this.ForeColor = Color.White;
             this.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.Text = "_";
+            this.Text = "";
             text = this.Text;
         }
 

@@ -1,4 +1,4 @@
-﻿namespace Transaction_Statistical.UControl
+﻿namespace Transaction_Statistical
 {
     partial class UC_Explorer
     {
@@ -87,11 +87,12 @@
             this.tre_Explorer.Location = new System.Drawing.Point(1, 1);
             this.tre_Explorer.Name = "tre_Explorer";
             this.tre_Explorer.SelectedImageIndex = 0;
-            this.tre_Explorer.Size = new System.Drawing.Size(454, 490);
+            this.tre_Explorer.Size = new System.Drawing.Size(454, 498);
             this.tre_Explorer.TabIndex = 7;
             this.tre_Explorer.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.tre_Explorer_AfterSelect);
             this.tre_Explorer.DoubleClick += new System.EventHandler(this.tre_Explorer_DoubleClick);
             this.tre_Explorer.MouseLeave += new System.EventHandler(this.tre_Explorer_MouseLeave);
+            this.tre_Explorer.MouseHover += new System.EventHandler(this.tre_Explorer_MouseHover);
             // 
             // imageList
             // 

@@ -13,12 +13,21 @@ namespace Transaction_Statistical
         /// The main entry point for the application.
         /// </summary>
         [STAThread]
-        static void Main()
-        {
-            Application.EnableVisualStyles();
-            Application.SetCompatibleTextRenderingDefault(false);
-         //   Application.Run(new Frm_LoadingApp());
-            Application.Run(new Frm_Main());
+        static void Main(string[] args)
+        { 
+            InitParametar.Init();
+            if (args.Length == 0)
+            {               
+                Application.EnableVisualStyles();
+                Application.SetCompatibleTextRenderingDefault(false);
+              //  Application.Run(new Frm_LoadingApp());
+                Application.Run(new Frm_Main());
+            }
+            else
+            {
+                //Auto start - not GUI
+
+            }
         }
     }
 }

@@ -22,82 +22,38 @@ namespace Transaction_Statistical.UControl
         SQLiteHelper sqlite;
         List<Transaction> transactions = new List<Transaction>();
         ReadTransaction readtran;
+        UC_Explorer uc_Explorer;
+        UC_Menu uc_Menu;
         public UC_Transaction()
         {
             sqlite = new SQLiteHelper();
             InitializeComponent();
             Add_GUI();
-            uc_Menu.Location = new Point(-uc_Menu.Width, uc_Menu.Location.Y);
             readtran = new ReadTransaction();
-        }
-        #region design
-        bool runningShowMenu = false;
-        bool showMenu = false;
-
-        bool runningShowExplorer = false;
-        bool showExplorer = false;
-
-        private void uc_Explorer_Leave(object sender, EventArgs e)
-        {
-            SlideExplorerShow(sender, e);
-        }
+            
+         }
+        #region design     
+        
         private void txt_Path_MouseEnter(object sender, EventArgs e)
-        {
-            if (!showExplorer) SlideExplorerShow(sender, e);
+        {           
+            uc_Explorer.ShowFromControl(this, sender as Control);
         }
-        public void SlideExplorerShow(object sender, EventArgs e)
+        private void btn_Export_MouseHover(object sender, EventArgs e)
         {
-            if (showExplorer) showExplorer = false; else showExplorer = true;
-            if (runningShowExplorer) return;
-            runningShowExplorer = true;
-            while (runningShowExplorer)
-            {
-                if (showExplorer)
-                {
-                    //uc_Explorer.Location = new Point(uc_Explorer.Location.X + 3, uc_Explorer.Location.Y);
-                    //if (uc_Explorer.Location.X >= 0) break;
-                    uc_Explorer.Height += 5;
-                    if (uc_Explorer.Height >= 500)
-                    {
-                        uc_Explorer.SelectPath(txt_Path.Text);
-                        break;
-                    }
-                }
-                else
-                {
-                    uc_Explorer.Height -= 3;
-                    if (uc_Explorer.Height == 0) break;
-                    //uc_Explorer.Location = new Point(uc_Explorer.Location.X - 3, uc_Explorer.Location.Y);
-                    //if (uc_Explorer.Location.X <= -uc_Explorer.Width) break;
-                }
-                this.Update();
-            }
-            runningShowExplorer = false;
+            btn_Export.FlatAppearance.BorderColor = Color.FromArgb(20, 120, 204);
+            btn_Export.ImageKey = "Excel_Select";
         }
-        public void SlideMenuShow()
+        private void btn_Export_MouseLeave(object sender, EventArgs e)
         {
-            if (showMenu) showMenu = false; else showMenu = true;
-            if (runningShowMenu) return;
-            runningShowMenu = true;
-            while (runningShowMenu)
-            {
-                if (showMenu)
-                {
-                    uc_Menu.Location = new Point(uc_Menu.Location.X + 3, uc_Menu.Location.Y);
-                    if (uc_Menu.Location.X >= 0) break;
-                }
-                else
-                {
-                    uc_Menu.Location = new Point(uc_Menu.Location.X - 3, uc_Menu.Location.Y);
-                    if (uc_Menu.Location.X <= -uc_Menu.Width) break;
-                }
-                this.Update();
-            }
-            runningShowMenu = false;
+            btn_Export.FlatAppearance.BorderColor = this.BackColor;
+            btn_Export.FlatAppearance.BorderSize = 1;
+            btn_Export.ImageKey = "Excel";
         }
         #endregion
         private void Add_GUI()
         {
+            uc_Explorer = new UC_Explorer();
+            uc_Menu = new UC_Menu(this);
             CheckBox cb1 = new CheckBox();
             cb1.Text = "All";
             pl_Actions.Controls.Add(cb1);
@@ -173,7 +129,7 @@ namespace Transaction_Statistical.UControl
                         int countCycle = kTerminal.Value.Where(x => (x.Value is Cycle)).ToList().Count;
                         int countTransaction = kTerminal.Value.Where(x => (x.Value is Transaction)).ToList().Count;
                         int countTransactionEvent = kTerminal.Value.Where(x => (x.Value is TransactionEvent)).ToList().Count;
-                        TreeNode ndTerminal = tre_LstTrans.Nodes.Add(String.Format("Terminal ID: {0} - Total: {1} transactions", kTerminal.Key, kTerminal.Value.Count), kTerminal.Key, "Terminal", "Terminal");
+                        TreeNode ndTerminal = tre_LstTrans.Nodes.Add(kTerminal.Key, String.Format("Terminal ID: {0} - Total: {1} transactions", kTerminal.Key, kTerminal.Value.Count), "Terminal", "Terminal");
 
                         foreach (KeyValuePair<DateTime, object> kTransaction in kTerminal.Value.OrderBy(x=>x.Key))
                         {
@@ -182,19 +138,19 @@ namespace Transaction_Statistical.UControl
                             if (ndTerminal.Nodes.ContainsKey(day))
                                 ndDay = ndTerminal.Nodes[day];
                             else
-                                ndDay = ndTerminal.Nodes.Add(day, day, "Date", "Date_Open");
+                                ndDay = ndTerminal.Nodes.Add(day, day, "Date", "DateOpen");
                             string textDisplay = kTransaction.Value.ToString();
                             TreeNode ndTransaction = ndDay.Nodes.Add(textDisplay, textDisplay);
                             ndTransaction.Tag = kTransaction.Value;
                             if (ndTransaction.Tag is Transaction)
                             {
-                                ndTransaction.ImageKey = "Flag_b";
-                                ndTransaction.SelectedImageKey = "Flag_b";
+                                ndTransaction.ImageKey = "Flag";
+                                ndTransaction.SelectedImageKey = "Flag_Success";
                             }
                             else if (ndTransaction.Tag is TransactionEvent)
                             {
-                                ndTransaction.ImageKey = "Setting";
-                                ndTransaction.SelectedImageKey = "Setting";
+                                ndTransaction.ImageKey = "Device";
+                                ndTransaction.SelectedImageKey = "Device";
                             }
                             else
                             {
@@ -245,7 +201,7 @@ namespace Transaction_Statistical.UControl
 
         private void btn_Menu_OnMouseDownHandler(object sender, EventArgs e)
         {
-            this.SlideMenuShow();
+            uc_Menu.SlideMenuShow();
         }
 
         private void tre_LstTrans_AfterSelect(object sender, TreeViewEventArgs e)
@@ -301,6 +257,8 @@ namespace Transaction_Statistical.UControl
                 InitParametar.Send_Error(ex.ToString(), MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name);
             }
         }
+
+      
     }
 
 }
