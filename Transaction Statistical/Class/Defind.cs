@@ -211,7 +211,6 @@ namespace Transaction_Statistical
             if (Template_EventReceive == null) Template_EventReceive = new Dictionary<string, string>();
             if (Template_SplitTransactions == null) Template_SplitTransactions = new Dictionary<string, string>();
             if (Template_EventCounterChanged == null) Template_EventCounterChanged = new Dictionary<string, string>();
-            if (Template_SplitSupervisorMode == null) Template_SplitSupervisorMode = new Dictionary<string, string>();
 
             if (Template_TransType == null) Template_TransType = new Dictionary<string, TransactionType>(); else Template_TransType.Clear();
 
@@ -245,16 +244,7 @@ namespace Transaction_Statistical
             foreach (DataRow r in cfg_data.Rows)
                 Template_EventCounterChanged[r["Field"].ToString()] = r["Data"].ToString();
 
-            cfg_data = sqlite.GetTableDataWith2ColumnName("CfgData", "Type_ID", "460", "Parent_ID", InitParametar.TemplateTransactionID);
-            foreach (DataRow r in cfg_data.Rows)
-                Template_SplitSupervisorMode[r["Field"].ToString()] = r["Data"].ToString();
-            //{
-            //    //foreach (TransactionEvent.Events name in (TransactionEvent.Events[])Enum.GetValues(typeof(TransactionEvent.Events)))
-            //    //{
-            //        if (r["Field"].Equals(name.ToString())) transactionTemplate[name] = r["Data"].ToString();
-            //  //  }
-
-            //}
+ 
             Template_TransType = new Dictionary<string, TransactionType>();
             DataTable tb_transtype = sqlite.GetTableDataWithColumnName("Transactions", "TemplateID", InitParametar.TemplateTransactionID);
             foreach (DataRow r in tb_transtype.Rows)
@@ -1083,25 +1073,6 @@ namespace Transaction_Statistical
         public Dictionary<DateTime, object> LstEvent = new Dictionary<DateTime, object>();
     }
 
-    public class CycleEvent
-    {
-        public enum Events
-        {
-            SettlementPeriod,
-            CashCount,
-            DenominationCount,
-            CardCapture,
-            ForgottenBanknote,
-            Replenishment
-        }
-
-        public string Name;
-        public string Log;
-
-        [CategoryAttribute("Cycle"), DescriptionAttribute("Date of the cycle")]
-        public string TDate;
-
-    }
 
 
     public class RegesValue

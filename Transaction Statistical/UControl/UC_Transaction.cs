@@ -74,27 +74,6 @@ namespace Transaction_Statistical.UControl
             }
             runningShowExplorer = false;
         }
-        public void SlideMenuShow()
-        {
-            if (showMenu) showMenu = false; else showMenu = true;
-            if (runningShowMenu) return;
-            runningShowMenu = true;
-            while (runningShowMenu)
-            {
-                if (showMenu)
-                {
-                    uc_Menu.Location = new Point(uc_Menu.Location.X + 3, uc_Menu.Location.Y);
-                    if (uc_Menu.Location.X >= 0) break;
-                }
-                else
-                {
-                    uc_Menu.Location = new Point(uc_Menu.Location.X - 3, uc_Menu.Location.Y);
-                    if (uc_Menu.Location.X <= -uc_Menu.Width) break;
-                }
-                this.Update();
-            }
-            runningShowMenu = false;
-        }
         #endregion
         private void Add_GUI()
         {

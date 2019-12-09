@@ -26,12 +26,12 @@ namespace Transaction_Statistical.UControl
         }
         public void SlideMenuShow()
         {
-            if (show) show = false; else show = true;
-            if (running) return;
-            running = true;
-            while (running)
+            if (showMenu) showMenu = false; else showMenu = true;
+            if (runningShowMenu) return;
+            runningShowMenu = true;
+            while (runningShowMenu)
             {
-                if (show)
+                if (showMenu)
                 {
                     uc_Menu.Location = new Point(uc_Menu.Location.X + 3, uc_Menu.Location.Y);
                     if (uc_Menu.Location.X >= 0) break;
@@ -43,7 +43,7 @@ namespace Transaction_Statistical.UControl
                 }
                 this.Update();
             }
-            running = false;
+            runningShowMenu = false;
         }
 
         #region Component Designer generated code
