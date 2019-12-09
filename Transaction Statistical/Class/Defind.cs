@@ -244,7 +244,7 @@ namespace Transaction_Statistical
             foreach (DataRow r in cfg_data.Rows)
                 Template_EventCounterChanged[r["Field"].ToString()] = r["Data"].ToString();
 
- 
+
             Template_TransType = new Dictionary<string, TransactionType>();
             DataTable tb_transtype = sqlite.GetTableDataWithColumnName("Transactions", "TemplateID", InitParametar.TemplateTransactionID);
             foreach (DataRow r in tb_transtype.Rows)
@@ -536,11 +536,12 @@ namespace Transaction_Statistical
                                 }
                                 if (!Cycles.ContainsKey(startSettlement))
                                 {
-                                    var contain = Cycles.Where(x => x.Value.SettlementPeriodDateBegin == cycleItem.SettlementPeriodDateBegin).ToList();
-                                    if (contain.Count == 0)
-                                    {
-                                        Cycles.Add(startSettlement, cycleItem);
-                                    }
+                                    //var contain = Cycles.Where(x => x.Value.SettlementPeriodDateBegin == cycleItem.SettlementPeriodDateBegin).ToList();
+                                    //if (contain.Count == 0)
+                                    //{
+                                    //    Cycles.Add(startSettlement, cycleItem);
+                                    //}
+                                    Cycles.Add(startSettlement, cycleItem);
                                 }
                             }
                             sString.Replace(key.Value.stringfind, null);
