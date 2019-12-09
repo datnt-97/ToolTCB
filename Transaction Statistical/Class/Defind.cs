@@ -44,7 +44,7 @@ namespace Transaction_Statistical
         public static string PathUpdateSupportError;
 
 
-        /// Transaction
+        /// Transaction Template
         public static string TemplateTransactionID = "65";
         public static Dictionary<TransactionEvent.Events, string> transactionTemplate;
         public static Dictionary<string, TransactionType> listTransType;
@@ -244,13 +244,8 @@ namespace Transaction_Statistical
             cfg_data = sqlite.GetTableDataWith2ColumnName("CfgData", "Type_ID", "459", "Parent_ID", InitParametar.TemplateTransactionID);
             foreach (DataRow r in cfg_data.Rows)
                 Template_EventCounterChanged[r["Field"].ToString()] = r["Data"].ToString();
-            //{
-            //    //foreach (TransactionEvent.Events name in (TransactionEvent.Events[])Enum.GetValues(typeof(TransactionEvent.Events)))
-            //    //{
-            //        if (r["Field"].Equals(name.ToString())) transactionTemplate[name] = r["Data"].ToString();
-            //  //  }
 
-            //}
+
             Template_TransType = new Dictionary<string, TransactionType>();
             DataTable tb_transtype = sqlite.GetTableDataWithColumnName("Transactions", "TemplateID", InitParametar.TemplateTransactionID);
             foreach (DataRow r in tb_transtype.Rows)
@@ -266,6 +261,7 @@ namespace Transaction_Statistical
         }
         public bool Reads(List<string> files)
         {
+
             try
             {
                 DateTime dateBegin = DateTime.MinValue;
@@ -780,7 +776,6 @@ namespace Transaction_Statistical
             }
             return false;
         }
-
     }
 
     public class Transaction
@@ -1012,6 +1007,9 @@ namespace Transaction_Statistical
         public int AmountRequest;
         public Dictionary<DateTime, object> LstEvent = new Dictionary<DateTime, object>();
     }
+
+
+
     public class RegesValue
     {
         public int index;
@@ -1021,7 +1019,6 @@ namespace Transaction_Statistical
         { }
 
     }
-
     public class RegesValueWithPatternOfGroup
     {
         public int index;
@@ -1168,12 +1165,12 @@ namespace Transaction_Statistical
         //}
         public static bool RunPatternRegular(string sString, string sReg, out Dictionary<int, RegesValue> listResult)
         {
-
             listResult = new Dictionary<int, RegesValue>();
             try
             {
                 Regex myRegex = new Regex(sReg, RegexOptions.ExplicitCapture, TimeSpan.FromSeconds(5));
                 MatchCollection m = myRegex.Matches(sString);
+                Match ma = myRegex.Match(sString);
                 if (m.Count != 0)
                 {
                     foreach (Match n in m)
@@ -1191,6 +1188,7 @@ namespace Transaction_Statistical
                     return true;
                 }
             }
+
             catch (TimeoutException)
             { }
             catch (Exception ex)
@@ -1301,6 +1299,7 @@ namespace Transaction_Statistical
     //}
     public class Denomination
     {
+
         public DateTime DateBegin;
         public DateTime DateEnd;
         public string Currency;
