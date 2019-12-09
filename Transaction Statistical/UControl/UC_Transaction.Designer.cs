@@ -24,7 +24,7 @@ namespace Transaction_Statistical.UControl
             }
             base.Dispose(disposing);
         }
-
+       
 
         #region Component Designer generated code
 
