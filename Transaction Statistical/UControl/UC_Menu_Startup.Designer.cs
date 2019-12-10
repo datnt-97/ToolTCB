@@ -34,21 +34,21 @@
             this.txt_Source = new System.Windows.Forms.TextBox();
             this.txt_Destination = new System.Windows.Forms.TextBox();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
+            this.txt_TaskName = new System.Windows.Forms.TextBox();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.label7 = new System.Windows.Forms.Label();
+            this.ckbl_Forms = new System.Windows.Forms.CheckedListBox();
+            this.cbo_LstTemplate = new System.Windows.Forms.ComboBox();
+            this.label6 = new System.Windows.Forms.Label();
+            this.btn_Add = new System.Windows.Forms.Button();
+            this.btn_Save = new System.Windows.Forms.Button();
+            this.label5 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
             this.txt_HH = new System.Windows.Forms.TextBox();
             this.label3 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
-            this.btn_Apply = new System.Windows.Forms.Button();
+            this.btn_Remove = new System.Windows.Forms.Button();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
-            this.label5 = new System.Windows.Forms.Label();
-            this.textBox1 = new System.Windows.Forms.TextBox();
-            this.button1 = new System.Windows.Forms.Button();
-            this.button2 = new System.Windows.Forms.Button();
-            this.cbo_LstTemplate = new System.Windows.Forms.ComboBox();
-            this.label6 = new System.Windows.Forms.Label();
-            this.checkedListBox1 = new System.Windows.Forms.CheckedListBox();
-            this.label7 = new System.Windows.Forms.Label();
             this.dataGridView_lsPermissions = new System.Windows.Forms.DataGridView();
             this.dataGridViewTextBoxColumn4 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.dataGridViewTextBoxColumn5 = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -81,7 +81,6 @@
             this.txt_Source.Name = "txt_Source";
             this.txt_Source.Size = new System.Drawing.Size(560, 22);
             this.txt_Source.TabIndex = 6;
-            this.txt_Source.Text = "D:\\06-NPSS\\Tool_TraSoat\\LOG tech\\LOG tech\\02-10-2019";
             this.txt_Source.MouseDown += new System.Windows.Forms.MouseEventHandler(this.txt_MouseDown);
             // 
             // txt_Destination
@@ -95,25 +94,36 @@
             this.txt_Destination.Name = "txt_Destination";
             this.txt_Destination.Size = new System.Drawing.Size(560, 22);
             this.txt_Destination.TabIndex = 7;
-            this.txt_Destination.Text = "D:\\Export";
             this.toolTip1.SetToolTip(this.txt_Destination, "Ex: D:\\Export\\Transaction_yyyyMMdd.xls");
             this.txt_Destination.MouseDown += new System.Windows.Forms.MouseEventHandler(this.txt_MouseDown);
+            // 
+            // txt_TaskName
+            // 
+            this.txt_TaskName.BackColor = System.Drawing.Color.DimGray;
+            this.txt_TaskName.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.txt_TaskName.ForeColor = System.Drawing.Color.White;
+            this.txt_TaskName.Location = new System.Drawing.Point(154, 39);
+            this.txt_TaskName.Name = "txt_TaskName";
+            this.txt_TaskName.Size = new System.Drawing.Size(560, 22);
+            this.txt_TaskName.TabIndex = 20;
+            this.toolTip1.SetToolTip(this.txt_TaskName, "Ex: Run daily 22h00");
+            this.txt_TaskName.TextChanged += new System.EventHandler(this.txt_TaskName_TextChanged);
             // 
             // groupBox1
             // 
             this.groupBox1.Controls.Add(this.label7);
-            this.groupBox1.Controls.Add(this.checkedListBox1);
+            this.groupBox1.Controls.Add(this.ckbl_Forms);
             this.groupBox1.Controls.Add(this.cbo_LstTemplate);
             this.groupBox1.Controls.Add(this.label6);
-            this.groupBox1.Controls.Add(this.button2);
-            this.groupBox1.Controls.Add(this.button1);
+            this.groupBox1.Controls.Add(this.btn_Add);
+            this.groupBox1.Controls.Add(this.btn_Save);
             this.groupBox1.Controls.Add(this.label5);
-            this.groupBox1.Controls.Add(this.textBox1);
+            this.groupBox1.Controls.Add(this.txt_TaskName);
             this.groupBox1.Controls.Add(this.label4);
             this.groupBox1.Controls.Add(this.txt_HH);
             this.groupBox1.Controls.Add(this.label3);
             this.groupBox1.Controls.Add(this.label2);
-            this.groupBox1.Controls.Add(this.btn_Apply);
+            this.groupBox1.Controls.Add(this.btn_Remove);
             this.groupBox1.Controls.Add(this.txt_Destination);
             this.groupBox1.Controls.Add(this.txt_Source);
             this.groupBox1.Controls.Add(this.label1);
@@ -125,6 +135,91 @@
             this.groupBox1.TabIndex = 8;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Create/Modify";
+            // 
+            // label7
+            // 
+            this.label7.AutoSize = true;
+            this.label7.ForeColor = System.Drawing.Color.White;
+            this.label7.Location = new System.Drawing.Point(56, 216);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(88, 17);
+            this.label7.TabIndex = 26;
+            this.label7.Text = "Forms select";
+            // 
+            // ckbl_Forms
+            // 
+            this.ckbl_Forms.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(37)))), ((int)(((byte)(37)))), ((int)(((byte)(38)))));
+            this.ckbl_Forms.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.ckbl_Forms.CheckOnClick = true;
+            this.ckbl_Forms.ForeColor = System.Drawing.Color.White;
+            this.ckbl_Forms.FormattingEnabled = true;
+            this.ckbl_Forms.Location = new System.Drawing.Point(154, 179);
+            this.ckbl_Forms.Name = "ckbl_Forms";
+            this.ckbl_Forms.Size = new System.Drawing.Size(560, 87);
+            this.ckbl_Forms.TabIndex = 0;
+            // 
+            // cbo_LstTemplate
+            // 
+            this.cbo_LstTemplate.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(37)))), ((int)(((byte)(37)))), ((int)(((byte)(38)))));
+            this.cbo_LstTemplate.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbo_LstTemplate.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.cbo_LstTemplate.ForeColor = System.Drawing.Color.White;
+            this.cbo_LstTemplate.FormattingEnabled = true;
+            this.cbo_LstTemplate.Location = new System.Drawing.Point(154, 150);
+            this.cbo_LstTemplate.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.cbo_LstTemplate.Name = "cbo_LstTemplate";
+            this.cbo_LstTemplate.Size = new System.Drawing.Size(560, 24);
+            this.cbo_LstTemplate.TabIndex = 25;
+            // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.ForeColor = System.Drawing.Color.White;
+            this.label6.Location = new System.Drawing.Point(77, 153);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(67, 17);
+            this.label6.TabIndex = 24;
+            this.label6.Text = "Template";
+            // 
+            // btn_Add
+            // 
+            this.btn_Add.FlatAppearance.BorderColor = System.Drawing.Color.Silver;
+            this.btn_Add.FlatAppearance.MouseDownBackColor = System.Drawing.Color.DimGray;
+            this.btn_Add.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Blue;
+            this.btn_Add.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btn_Add.ForeColor = System.Drawing.Color.White;
+            this.btn_Add.Location = new System.Drawing.Point(748, 75);
+            this.btn_Add.Name = "btn_Add";
+            this.btn_Add.Size = new System.Drawing.Size(105, 42);
+            this.btn_Add.TabIndex = 23;
+            this.btn_Add.Text = "Add";
+            this.btn_Add.UseVisualStyleBackColor = true;
+            this.btn_Add.Click += new System.EventHandler(this.btn_Add_Click);
+            // 
+            // btn_Save
+            // 
+            this.btn_Save.FlatAppearance.BorderColor = System.Drawing.Color.Silver;
+            this.btn_Save.FlatAppearance.MouseDownBackColor = System.Drawing.Color.DimGray;
+            this.btn_Save.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Blue;
+            this.btn_Save.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btn_Save.ForeColor = System.Drawing.Color.White;
+            this.btn_Save.Location = new System.Drawing.Point(748, 123);
+            this.btn_Save.Name = "btn_Save";
+            this.btn_Save.Size = new System.Drawing.Size(105, 42);
+            this.btn_Save.TabIndex = 22;
+            this.btn_Save.Text = "Save";
+            this.btn_Save.UseVisualStyleBackColor = true;
+            this.btn_Save.Click += new System.EventHandler(this.btn_Save_Click);
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.ForeColor = System.Drawing.Color.White;
+            this.label5.Location = new System.Drawing.Point(66, 41);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(78, 17);
+            this.label5.TabIndex = 21;
+            this.label5.Text = "Task name";
             // 
             // label4
             // 
@@ -172,20 +267,20 @@
             this.label2.TabIndex = 16;
             this.label2.Text = "Import Source";
             // 
-            // btn_Apply
+            // btn_Remove
             // 
-            this.btn_Apply.FlatAppearance.BorderColor = System.Drawing.Color.Silver;
-            this.btn_Apply.FlatAppearance.MouseDownBackColor = System.Drawing.Color.DimGray;
-            this.btn_Apply.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Blue;
-            this.btn_Apply.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btn_Apply.ForeColor = System.Drawing.Color.White;
-            this.btn_Apply.Location = new System.Drawing.Point(748, 171);
-            this.btn_Apply.Name = "btn_Apply";
-            this.btn_Apply.Size = new System.Drawing.Size(105, 42);
-            this.btn_Apply.TabIndex = 15;
-            this.btn_Apply.Text = "Remove";
-            this.btn_Apply.UseVisualStyleBackColor = true;
-            this.btn_Apply.Click += new System.EventHandler(this.btn_Apply_Click);
+            this.btn_Remove.FlatAppearance.BorderColor = System.Drawing.Color.Silver;
+            this.btn_Remove.FlatAppearance.MouseDownBackColor = System.Drawing.Color.DimGray;
+            this.btn_Remove.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Blue;
+            this.btn_Remove.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btn_Remove.ForeColor = System.Drawing.Color.White;
+            this.btn_Remove.Location = new System.Drawing.Point(748, 171);
+            this.btn_Remove.Name = "btn_Remove";
+            this.btn_Remove.Size = new System.Drawing.Size(105, 42);
+            this.btn_Remove.TabIndex = 15;
+            this.btn_Remove.Text = "Remove";
+            this.btn_Remove.UseVisualStyleBackColor = true;
+            this.btn_Remove.Click += new System.EventHandler(this.btn_Remove_Click);
             // 
             // groupBox3
             // 
@@ -197,102 +292,6 @@
             this.groupBox3.TabIndex = 9;
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "Forms";
-            // 
-            // label5
-            // 
-            this.label5.AutoSize = true;
-            this.label5.ForeColor = System.Drawing.Color.White;
-            this.label5.Location = new System.Drawing.Point(66, 41);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(78, 17);
-            this.label5.TabIndex = 21;
-            this.label5.Text = "Task name";
-            // 
-            // textBox1
-            // 
-            this.textBox1.BackColor = System.Drawing.Color.DimGray;
-            this.textBox1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.textBox1.ForeColor = System.Drawing.Color.White;
-            this.textBox1.Location = new System.Drawing.Point(154, 39);
-            this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(560, 22);
-            this.textBox1.TabIndex = 20;
-            this.toolTip1.SetToolTip(this.textBox1, "Ex: Run daily 22h00");
-            // 
-            // button1
-            // 
-            this.button1.FlatAppearance.BorderColor = System.Drawing.Color.Silver;
-            this.button1.FlatAppearance.MouseDownBackColor = System.Drawing.Color.DimGray;
-            this.button1.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Blue;
-            this.button1.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.button1.ForeColor = System.Drawing.Color.White;
-            this.button1.Location = new System.Drawing.Point(748, 123);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(105, 42);
-            this.button1.TabIndex = 22;
-            this.button1.Text = "Save";
-            this.button1.UseVisualStyleBackColor = true;
-            // 
-            // button2
-            // 
-            this.button2.FlatAppearance.BorderColor = System.Drawing.Color.Silver;
-            this.button2.FlatAppearance.MouseDownBackColor = System.Drawing.Color.DimGray;
-            this.button2.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Blue;
-            this.button2.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.button2.ForeColor = System.Drawing.Color.White;
-            this.button2.Location = new System.Drawing.Point(748, 75);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(105, 42);
-            this.button2.TabIndex = 23;
-            this.button2.Text = "Add";
-            this.button2.UseVisualStyleBackColor = true;
-            // 
-            // cbo_LstTemplate
-            // 
-            this.cbo_LstTemplate.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(37)))), ((int)(((byte)(37)))), ((int)(((byte)(38)))));
-            this.cbo_LstTemplate.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cbo_LstTemplate.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.cbo_LstTemplate.ForeColor = System.Drawing.Color.White;
-            this.cbo_LstTemplate.FormattingEnabled = true;
-            this.cbo_LstTemplate.Location = new System.Drawing.Point(154, 150);
-            this.cbo_LstTemplate.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.cbo_LstTemplate.Name = "cbo_LstTemplate";
-            this.cbo_LstTemplate.Size = new System.Drawing.Size(560, 24);
-            this.cbo_LstTemplate.TabIndex = 25;
-            // 
-            // label6
-            // 
-            this.label6.AutoSize = true;
-            this.label6.ForeColor = System.Drawing.Color.White;
-            this.label6.Location = new System.Drawing.Point(77, 153);
-            this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(67, 17);
-            this.label6.TabIndex = 24;
-            this.label6.Text = "Template";
-            // 
-            // checkedListBox1
-            // 
-            this.checkedListBox1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(37)))), ((int)(((byte)(37)))), ((int)(((byte)(38)))));
-            this.checkedListBox1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.checkedListBox1.ForeColor = System.Drawing.Color.White;
-            this.checkedListBox1.FormattingEnabled = true;
-            this.checkedListBox1.Items.AddRange(new object[] {
-            "CanQuyTheoCouterTrenMay",
-            "BaoCaoGiaoDichTaiChinh"});
-            this.checkedListBox1.Location = new System.Drawing.Point(154, 179);
-            this.checkedListBox1.Name = "checkedListBox1";
-            this.checkedListBox1.Size = new System.Drawing.Size(560, 87);
-            this.checkedListBox1.TabIndex = 0;
-            // 
-            // label7
-            // 
-            this.label7.AutoSize = true;
-            this.label7.ForeColor = System.Drawing.Color.White;
-            this.label7.Location = new System.Drawing.Point(56, 216);
-            this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(88, 17);
-            this.label7.TabIndex = 26;
-            this.label7.Text = "Forms select";
             // 
             // dataGridView_lsPermissions
             // 
@@ -328,6 +327,8 @@
             this.dataGridView_lsPermissions.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.dataGridView_lsPermissions.Size = new System.Drawing.Size(872, 124);
             this.dataGridView_lsPermissions.TabIndex = 8;
+            this.dataGridView_lsPermissions.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView_lsPermissions_CellClick);
+            this.dataGridView_lsPermissions.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView_lsPermissions_CellContentClick);
             // 
             // dataGridViewTextBoxColumn4
             // 
@@ -348,9 +349,11 @@
             // 
             // dataGridViewCheckBoxColumn5
             // 
+            this.dataGridViewCheckBoxColumn5.FalseValue = "F";
             this.dataGridViewCheckBoxColumn5.HeaderText = "Active";
             this.dataGridViewCheckBoxColumn5.MinimumWidth = 6;
             this.dataGridViewCheckBoxColumn5.Name = "dataGridViewCheckBoxColumn5";
+            this.dataGridViewCheckBoxColumn5.TrueValue = "T";
             this.dataGridViewCheckBoxColumn5.Width = 52;
             // 
             // dataGridViewCheckBoxColumn6
@@ -396,16 +399,16 @@
         private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.Button btn_Apply;
+        private System.Windows.Forms.Button btn_Remove;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.TextBox txt_HH;
-        private System.Windows.Forms.Button button2;
-        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.Button btn_Add;
+        private System.Windows.Forms.Button btn_Save;
         private System.Windows.Forms.Label label5;
-        private System.Windows.Forms.TextBox textBox1;
+        private System.Windows.Forms.TextBox txt_TaskName;
         private System.Windows.Forms.GroupBox groupBox3;
         private System.Windows.Forms.Label label7;
-        private System.Windows.Forms.CheckedListBox checkedListBox1;
+        private System.Windows.Forms.CheckedListBox ckbl_Forms;
         private System.Windows.Forms.ComboBox cbo_LstTemplate;
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.DataGridView dataGridView_lsPermissions;

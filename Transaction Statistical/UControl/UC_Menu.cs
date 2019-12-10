@@ -61,21 +61,21 @@ namespace Transaction_Statistical.UControl
             ucOVerview = new UC_Menu_Overview();
             ucOVerview.Width = this.Width - 1 - pnl_Menu.Width;
             ucOVerview.Height = this.Height - 2;
-            ucOVerview.Location = new Point(pnl_Menu.Width , 1);
+            ucOVerview.Location = new Point(pnl_Menu.Width, 1);
             ucOVerview.TabIndex = btn_Overview.TabIndex;
             this.Controls.Add(ucOVerview);
 
             UC_Menu_Dashboard ucDashboard = new UC_Menu_Dashboard();
             ucDashboard.Width = this.Width - 1 - pnl_Menu.Width;
             ucDashboard.Height = this.Height - 2;
-            ucDashboard.Location = new Point(pnl_Menu.Width , 1);
+            ucDashboard.Location = new Point(pnl_Menu.Width, 1);
             ucDashboard.TabIndex = btn_Dashboard.TabIndex;
             this.Controls.Add(ucDashboard);
 
             UC_Menu_Startup ucStartup = new UC_Menu_Startup();
             ucStartup.Width = this.Width - 1 - pnl_Menu.Width;
             ucStartup.Height = this.Height - 2;
-            ucStartup.Location = new Point(pnl_Menu.Width , 1);
+            ucStartup.Location = new Point(pnl_Menu.Width, 1);
             ucStartup.TabIndex = btn_Startup.TabIndex;
             this.Controls.Add(ucStartup);
         }

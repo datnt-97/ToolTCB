@@ -45,11 +45,13 @@ namespace Transaction_Statistical
 
 
         /// Transaction Template
+        public static ReadTransaction ReadTrans;
         public static string TemplateTransactionID = "65";
         public static Dictionary<TransactionEvent.Events, string> transactionTemplate;
         public static Dictionary<string, TransactionType> listTransType;
         public static Dictionary<string, string> listDateFormat;
         public static Dictionary<string, Dictionary<DateTime, Transaction>> listTransaction;
+        public static string[] ExtensionFile = { "*.txt", "*.log" };
         public static void Init()
         {
             try
@@ -88,15 +90,48 @@ namespace Transaction_Statistical
                 DatabaseFile = PathDirectoryCurrentAppConfigData + "\\DB.s3db";
                 sqlite = new SQLiteHelper();
                 listTransaction = new Dictionary<string, Dictionary<DateTime, Transaction>>();
-                // Chesk file cfg
-                LoadTemplateInfo();
+               
             }
             catch (Exception ex)
             {
                 InitParametar.Send_Error(ex.ToString(), MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name); ;
             }
         }
+        public static void AutoStart(string taskName)
+        {
+            try
+            {
+                DataRow rowTask = sqlite.GetRowDataWith2ColumnName("CfgData", "Field", taskName, "Type_ID", "511");
+                string[] data = rowTask["Data"].ToString().Split('|');
+                InitParametar.TemplateTransactionID = data[1];
+                LoadTemplateInfo();
 
+                DirectoryFileUtilities df = new DirectoryFileUtilities();
+                List<string> lsFile_Journal=new List<string>();
+                if (File.Exists(data[2]))
+                    lsFile_Journal.Add(data[2]);
+                else if (Directory.Exists(data[2]))
+                {
+                    FileInfo[] files = df.GetAllFilePath(data[2], InitParametar.ExtensionFile);
+                    lsFile_Journal = files.Select(f => f.FullName).ToList();
+
+                }
+                else
+                {
+                    // path not exist.
+                }
+                ReadTrans = new ReadTransaction();
+                if (ReadTrans.Reads(lsFile_Journal))
+                {
+                    ReadTrans.Export(data[3]);
+                }
+            }
+            catch (Exception ex)
+            {
+                InitParametar.Send_Error(ex.ToString(), MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name); ;
+            }
+
+        }
         public static void LoadTemplateInfo()
         {
             if (transactionTemplate == null) transactionTemplate = new Dictionary<TransactionEvent.Events, string>();
@@ -195,7 +230,10 @@ namespace Transaction_Statistical
         public Dictionary<string, string> Template_SplitTransactions;
         public Dictionary<string, string> Template_EventCounterChanged;
         public Dictionary<string, TransactionType> Template_TransType;
-
+        public string FileExport;
+        public string FileAuthor = @"Copyright © 2019, Công ty TNHH Giải pháp và Dịch vụ Nam Phương.";
+        public string FileTitle = @"Transaction Statistical";
+        public string FileComment = @"Hotline: 1900 633 412 \nEmail: np.support @npss.vn\nWeb: http://npss.vn";
         //DAT : 6/12/2019
         public Dictionary<DateTime, Cycle> ListCycle = null;
         public ReadTransaction()
@@ -281,7 +319,7 @@ namespace Transaction_Statistical
                     FindCounterChanged(ref contenFile, ref ListCycle);
 
                     ListTransaction[Terminal] = ListTransaction[Terminal].OrderBy(d => d.Key).ToDictionary(k => k.Key, v => v.Value);
-                    InitParametar.sTest += contenFile + Environment.NewLine;
+                //    InitParametar.sTest += contenFile + Environment.NewLine;
                 }
 
                 int i = ListTransaction.Values.LastOrDefault().Keys.Count;
@@ -314,10 +352,13 @@ namespace Transaction_Statistical
             return false;
         }
 
-        public bool Export()
+        public bool Export(string exportDestination)
         {
             try
             {
+                FileExport = exportDestination;
+                if (Directory.Exists(exportDestination))
+                    FileExport = exportDestination + string.Format("\\TransactionStatistical_{0:yyyyMMdd_HH-mm}.xlsx", DateTime.Now);
                 if (ListTransaction != null)
                 {
 
@@ -341,14 +382,14 @@ namespace Transaction_Statistical
                     Stream stream = null;
                     using (var excelPackage = new ExcelPackage(stream ?? new MemoryStream()))
                     {
-                        TemplateHelper template = new TemplateHelper("Dat", "Report", "Test", excelPackage);
+                        TemplateHelper template = new TemplateHelper(FileAuthor, FileTitle, FileComment, excelPackage);
                         // Tạo buffer memory stream để hứng file excel
-                        template.CanQuyTheoCouterTrenMay("cân quỹ theo counter trên máy", OfficeOpenXml.Table.TableStyles.Custom, cycle);
+                        template.CanQuyTheoCouterTrenMay("CanQuyTheoCouterTrenMay", OfficeOpenXml.Table.TableStyles.Custom, cycle);
                         //template.BaoCaoGiaoDichBatThuong("test_2", OfficeOpenXml.Table.TableStyles.Custom);
-                        template.BaoCaoGiaoDichTaiChinh("báo cáo giao dịch tài chính", OfficeOpenXml.Table.TableStyles.Custom, transaction);
+                        template.BaoCaoGiaoDichTaiChinh("BaoCaoGiaoDichTaiChinh", OfficeOpenXml.Table.TableStyles.Custom, transaction);
                         stream = template.getStream();
                         var buffer = stream as MemoryStream;
-                        File.WriteAllBytes(@"E:\text.xlsx", buffer.ToArray());
+                        File.WriteAllBytes(FileExport, buffer.ToArray());
                     }
                     return true;
                 }
@@ -701,6 +742,8 @@ namespace Transaction_Statistical
                             evt.Name = tmp.Key;
                             evt.Status = TransactionEvent.StatusS.Succeeded;
                             evt.TContent = regx.stringfind;
+                            evt.Type = TransactionEvent.Events.TransactionReqSend;
+                            if (regx.value.ContainsKey("Data")) evt.Data = regx.value["Data"];
                             if (regx.value.ContainsKey("Time") && !string.IsNullOrEmpty(regx.value["Time"]))
                             {
                                 DateTime.TryParseExact(String.Format("{0:yyyyMMdd}", DateCurrent) + regx.value["Time"], "yyyyMMdd" + FormatTime, CultureInfo.InvariantCulture, DateTimeStyles.None, out evt.DateBegin);
@@ -763,10 +806,25 @@ namespace Transaction_Statistical
         {
             try
             {
-
+                TransactionRequest req = new TransactionRequest();
+                req.DateBegin = transaction.DateBegin;
+                req.Status = TransactionRequest.StatusS.Succeeded;
                 foreach (TransactionEvent evt in transaction.ListEvent.Values)
                 {
-
+                    if (evt.Type.Equals(TransactionEvent.Events.TransactionReqSend))
+                    {
+                       if(string.IsNullOrEmpty(req.Request))
+                        {
+                            CheckRequestName(evt.Data, ref req.Request);
+                        }
+                       else
+                        {
+                            //tr
+                            //req = new TransactionRequest();
+                            //req.DateBegin = evt.DateBegin;
+                            //req.Status = TransactionRequest.StatusS.Succeeded;
+                        }
+                    }
                 }
                 return true;
             }
@@ -776,10 +834,23 @@ namespace Transaction_Statistical
             }
             return false;
         }
+        private bool CheckRequestName(string operationCode, ref string transactionType)
+        {
+            foreach (TransactionType type in Template_TransType.Values)
+                if (type.Identification.Split('|').Contains(operationCode)) { transactionType = type.Name; return true; }
+            return false;
+        }
     }
 
     public class Transaction
-    {
+    {   
+        public enum StatusS
+        {
+            Succeeded,
+            UnSucceeded,
+            Warning,
+            Error
+        }
         public enum TransactionType
         {
             Alls,
@@ -796,9 +867,19 @@ namespace Transaction_Statistical
         }
         public string TraceJournalFull;
         public Dictionary<DateTime, TransactionEvent> ListEvent = new Dictionary<DateTime, TransactionEvent>();
+        public Dictionary<DateTime, TransactionRequest> ListRequest = new Dictionary<DateTime, TransactionRequest>();
         public int Result;
-        List<string> _datainput = new List<string>();
 
+        
+        [CategoryAttribute("1.Terminal"), DescriptionAttribute("Terminal ID")]
+        public string Terminal { get; set; }
+        string _status = "0000";
+        [CategoryAttribute("1.Terminal"), DescriptionAttribute("Status")]
+        public string Status
+        {
+            get { return _status; }
+            set { _status = value; }
+        }
         CardTypes _cardtype = CardTypes.CardLess;
         [CategoryAttribute("2. Customer"), DescriptionAttribute("Data input")]
         public CardTypes CardType
@@ -806,7 +887,7 @@ namespace Transaction_Statistical
             get { return _cardtype; }
             set { _cardtype = value; }
         }
-
+        List<string> _datainput = new List<string>();
         [CategoryAttribute("2. Customer"), DescriptionAttribute("Data input")]
         public List<string> DataInput
         {
@@ -856,20 +937,13 @@ namespace Transaction_Statistical
         //string _amount = "0";
         [CategoryAttribute("3. Transaction"), DescriptionAttribute("Amount")]
         public int Amount { get; set; }
-        //{
-        //    get { return _amount; }
-        //    set { _amount = value; }
-        //}
-
-        [CategoryAttribute("1.Terminal"), DescriptionAttribute("Terminal ID")]
-        public string Terminal { get; set; }
-        string _status = "0000";
-        [CategoryAttribute("1.Terminal"), DescriptionAttribute("Status")]
-        public string Status
+        [CategoryAttribute("4. Follow"), DescriptionAttribute("Follow of the transaction")]
+        public string Follow
         {
-            get { return _status; }
-            set { _status = value; }
+            get { return string.Join("=>", ListEvent.Values); }           
         }
+
+
         //string _cassette1 = string.Empty;
         //[CategoryAttribute("CRM"), DescriptionAttribute("Cassette 1")]
         //public string Cassette1
@@ -976,6 +1050,7 @@ namespace Transaction_Statistical
             Warning,
             Error
         }
+        public string Data;
         public DateTime DateBegin;
         [CategoryAttribute("Event"), DescriptionAttribute("Status of the Event")]
         public StatusS Status { get; set; }
@@ -997,6 +1072,16 @@ namespace Transaction_Statistical
     public class TransactionRequest
     {
         public string Request;
+        public DateTime DateBegin;
+        public DateTime DateEnd;
+        public enum StatusS
+        {
+            Succeeded,
+            UnSucceeded,
+            Warning,
+            Error
+        }
+        public StatusS Status { get; set; }
         public List<Denomination> LstDenomination = new List<Denomination>();
         public int AmountDeposit
         {
@@ -1005,7 +1090,6 @@ namespace Transaction_Statistical
                 { a += de.Amount; } return a; }
         }
         public int AmountRequest;
-        public Dictionary<DateTime, object> LstEvent = new Dictionary<DateTime, object>();
     }
 
 

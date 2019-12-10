@@ -20,8 +20,7 @@ namespace Transaction_Statistical.UControl
     public partial class UC_Transaction : UserControl
     {
         SQLiteHelper sqlite;
-        List<Transaction> transactions = new List<Transaction>();
-        ReadTransaction readtran;
+        List<Transaction> transactions = new List<Transaction>();       
         UC_Explorer uc_Explorer;
         UC_Menu uc_Menu;
         
@@ -30,7 +29,6 @@ namespace Transaction_Statistical.UControl
             sqlite = new SQLiteHelper();
             InitializeComponent();
             Add_GUI();
-            readtran = new ReadTransaction();
         }
         #region design     
 
@@ -95,13 +93,13 @@ namespace Transaction_Statistical.UControl
 
         private void bt_Read_Click(object sender, EventArgs e)
         {
-            string[] extension = { "*.txt", "*.log" };
+           
             DirectoryFileUtilities df = new DirectoryFileUtilities();
             if (File.Exists(txt_Path.Text))
                 JournalAnalyze(new List<string> { txt_Path.Text });
             else if (Directory.Exists(txt_Path.Text))
             {
-                FileInfo[] files = df.GetAllFilePath(txt_Path.Text, extension);
+                FileInfo[] files = df.GetAllFilePath(txt_Path.Text, InitParametar.ExtensionFile);
                 JournalAnalyze(files.Select(f => f.FullName).ToList());
                 tre_LstTrans.ExpandAll();
             }
@@ -112,19 +110,21 @@ namespace Transaction_Statistical.UControl
         {
             try
             {
-                readtran = new ReadTransaction();
+                InitParametar.ReadTrans = new ReadTransaction();
                 tre_LstTrans.Nodes.Clear();
+                btn_Export.Enabled = false;
                 propertyGrid1.SelectedObject = null;
                 fctxt_FullLog.Text = string.Empty;
                 if (!cb_FullTime.Checked)
                 {
-                    readtran.StartDate = dateTimePicker_Start.Value;
-                    readtran.EndDate = dateTimePicker_End.Value;
+                    InitParametar.ReadTrans.StartDate = dateTimePicker_Start.Value;
+                    InitParametar.ReadTrans.EndDate = dateTimePicker_End.Value;
                 }
-                if (readtran.Reads(lsFile_Journal))
+                if (InitParametar.ReadTrans.Reads(lsFile_Journal))
                 {
+                    btn_Export.Enabled = true;
                     string day;
-                    foreach (KeyValuePair<string, Dictionary<DateTime, object>> kTerminal in readtran.ListTransaction)
+                    foreach (KeyValuePair<string, Dictionary<DateTime, object>> kTerminal in InitParametar.ReadTrans.ListTransaction)
                     {
                         int countCycle = kTerminal.Value.Where(x => (x.Value is Cycle)).ToList().Count;
                         int countTransaction = kTerminal.Value.Where(x => (x.Value is Transaction)).ToList().Count;
@@ -133,7 +133,7 @@ namespace Transaction_Statistical.UControl
 
                         foreach (KeyValuePair<DateTime, object> kTransaction in kTerminal.Value.OrderBy(x => x.Key))
                         {
-                            day = String.Format("{0:" + readtran.FormatDate + "}", kTransaction.Key);
+                            day = String.Format("{0:" + InitParametar.ReadTrans.FormatDate + "}", kTransaction.Key);
                             TreeNode ndDay = new TreeNode(day);
                             if (ndTerminal.Nodes.ContainsKey(day))
                                 ndDay = ndTerminal.Nodes[day];
@@ -313,7 +313,11 @@ namespace Transaction_Statistical.UControl
         {
             try
             {
-                readtran.Export();
+                UC_ExportCus uc_MenuStartup = new UC_ExportCus();
+                uc_MenuStartup.Dock = DockStyle.Fill;
+                Frm_TemplateDefault frm= new Frm_TemplateDefault(uc_MenuStartup);
+                frm.titleCustom.Text = "File Export";
+                frm.ShowDialog();
             }
             catch (Exception ex)
             {

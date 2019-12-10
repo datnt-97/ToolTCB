@@ -30,13 +30,13 @@
         {
             this.pnl_BorderLeft = new System.Windows.Forms.Panel();
             this.pnl_Menu = new System.Windows.Forms.Panel();
+            this.pnl_BorderLeftMenu = new System.Windows.Forms.FlowLayoutPanel();
+            this.pnl_BorderTop = new System.Windows.Forms.Panel();
+            this.pnl_BorderBottom = new System.Windows.Forms.Panel();
             this.btn_History = new Transaction_Statistical.AddOn.ButtonZ();
             this.btn_Startup = new Transaction_Statistical.AddOn.ButtonZ();
             this.btn_Dashboard = new Transaction_Statistical.AddOn.ButtonZ();
             this.btn_Overview = new Transaction_Statistical.AddOn.ButtonZ();
-            this.pnl_BorderLeftMenu = new System.Windows.Forms.FlowLayoutPanel();
-            this.pnl_BorderTop = new System.Windows.Forms.Panel();
-            this.pnl_BorderBottom = new System.Windows.Forms.Panel();
             this.pnl_Menu.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -62,6 +62,33 @@
             this.pnl_Menu.Name = "pnl_Menu";
             this.pnl_Menu.Size = new System.Drawing.Size(149, 568);
             this.pnl_Menu.TabIndex = 1;
+            // 
+            // pnl_BorderLeftMenu
+            // 
+            this.pnl_BorderLeftMenu.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(120)))), ((int)(((byte)(240)))));
+            this.pnl_BorderLeftMenu.Dock = System.Windows.Forms.DockStyle.Right;
+            this.pnl_BorderLeftMenu.Location = new System.Drawing.Point(148, 0);
+            this.pnl_BorderLeftMenu.Name = "pnl_BorderLeftMenu";
+            this.pnl_BorderLeftMenu.Size = new System.Drawing.Size(1, 568);
+            this.pnl_BorderLeftMenu.TabIndex = 0;
+            // 
+            // pnl_BorderTop
+            // 
+            this.pnl_BorderTop.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(120)))), ((int)(((byte)(240)))));
+            this.pnl_BorderTop.Dock = System.Windows.Forms.DockStyle.Top;
+            this.pnl_BorderTop.Location = new System.Drawing.Point(149, 0);
+            this.pnl_BorderTop.Name = "pnl_BorderTop";
+            this.pnl_BorderTop.Size = new System.Drawing.Size(916, 1);
+            this.pnl_BorderTop.TabIndex = 2;
+            // 
+            // pnl_BorderBottom
+            // 
+            this.pnl_BorderBottom.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(120)))), ((int)(((byte)(240)))));
+            this.pnl_BorderBottom.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.pnl_BorderBottom.Location = new System.Drawing.Point(149, 567);
+            this.pnl_BorderBottom.Name = "pnl_BorderBottom";
+            this.pnl_BorderBottom.Size = new System.Drawing.Size(916, 1);
+            this.pnl_BorderBottom.TabIndex = 3;
             // 
             // btn_History
             // 
@@ -103,8 +130,7 @@
             this.btn_Startup.Size = new System.Drawing.Size(148, 58);
             this.btn_Startup.TabIndex = 3;
             this.btn_Startup.Text = "Scheduler";
-            this.btn_Startup.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.btn_Startup.TextLocation_X = 30;
+            this.btn_Startup.TextLocation_X = 20;
             this.btn_Startup.TextLocation_Y = 12;
             this.btn_Startup.UseVisualStyleBackColor = true;
             this.btn_Startup.MouseClick += new System.Windows.Forms.MouseEventHandler(this.menu_MouseClick);
@@ -154,33 +180,6 @@
             this.btn_Overview.TextLocation_Y = 12;
             this.btn_Overview.UseVisualStyleBackColor = true;
             this.btn_Overview.MouseClick += new System.Windows.Forms.MouseEventHandler(this.menu_MouseClick);
-            // 
-            // pnl_BorderLeftMenu
-            // 
-            this.pnl_BorderLeftMenu.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(120)))), ((int)(((byte)(240)))));
-            this.pnl_BorderLeftMenu.Dock = System.Windows.Forms.DockStyle.Right;
-            this.pnl_BorderLeftMenu.Location = new System.Drawing.Point(148, 0);
-            this.pnl_BorderLeftMenu.Name = "pnl_BorderLeftMenu";
-            this.pnl_BorderLeftMenu.Size = new System.Drawing.Size(1, 568);
-            this.pnl_BorderLeftMenu.TabIndex = 0;
-            // 
-            // pnl_BorderTop
-            // 
-            this.pnl_BorderTop.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(120)))), ((int)(((byte)(240)))));
-            this.pnl_BorderTop.Dock = System.Windows.Forms.DockStyle.Top;
-            this.pnl_BorderTop.Location = new System.Drawing.Point(149, 0);
-            this.pnl_BorderTop.Name = "pnl_BorderTop";
-            this.pnl_BorderTop.Size = new System.Drawing.Size(916, 1);
-            this.pnl_BorderTop.TabIndex = 2;
-            // 
-            // pnl_BorderBottom
-            // 
-            this.pnl_BorderBottom.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(120)))), ((int)(((byte)(240)))));
-            this.pnl_BorderBottom.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.pnl_BorderBottom.Location = new System.Drawing.Point(149, 567);
-            this.pnl_BorderBottom.Name = "pnl_BorderBottom";
-            this.pnl_BorderBottom.Size = new System.Drawing.Size(916, 1);
-            this.pnl_BorderBottom.TabIndex = 3;
             // 
             // UC_Menu
             // 

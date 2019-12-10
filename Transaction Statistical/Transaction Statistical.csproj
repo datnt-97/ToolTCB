@@ -158,6 +158,12 @@
     <Compile Include="UControl\UC_Explorer.Designer.cs">
       <DependentUpon>UC_Explorer.cs</DependentUpon>
     </Compile>
+    <Compile Include="UControl\UC_ExportCus.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UControl\UC_ExportCus.Designer.cs">
+      <DependentUpon>UC_ExportCus.cs</DependentUpon>
+    </Compile>
     <Compile Include="UControl\UC_Info.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -230,6 +236,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="UControl\UC_Explorer.resx">
       <DependentUpon>UC_Explorer.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UControl\UC_ExportCus.resx">
+      <DependentUpon>UC_ExportCus.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UControl\UC_Info.resx">
       <DependentUpon>UC_Info.cs</DependentUpon>

@@ -56,7 +56,7 @@ namespace Transaction_Statistical.UControl
             this.imageListControl = new System.Windows.Forms.ImageList(this.components);
             this.panel3 = new System.Windows.Forms.Panel();
             this.fctxt_FullLog = new FastColoredTextBoxNS.FastColoredTextBox();
-            this.panel4 = new System.Windows.Forms.Panel();          
+            this.panel4 = new System.Windows.Forms.Panel();
             this.gpBox_Actions.SuspendLayout();
             this.panel1.SuspendLayout();
             this.panel2.SuspendLayout();
@@ -100,7 +100,7 @@ namespace Transaction_Statistical.UControl
             // 
             // tre_LstTrans
             // 
-            this.tre_LstTrans.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+            this.tre_LstTrans.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left)));
             this.tre_LstTrans.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(37)))), ((int)(((byte)(37)))), ((int)(((byte)(38)))));
             this.tre_LstTrans.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
@@ -249,8 +249,8 @@ namespace Transaction_Statistical.UControl
             // 
             // propertyGrid1
             // 
-            this.propertyGrid1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-            | System.Windows.Forms.AnchorStyles.Left)
+            this.propertyGrid1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.propertyGrid1.Location = new System.Drawing.Point(3, 65);
             this.propertyGrid1.Name = "propertyGrid1";
@@ -268,6 +268,7 @@ namespace Transaction_Statistical.UControl
             this.btn_Export.BZBackColor = System.Drawing.Color.Transparent;
             this.btn_Export.CFormState = Transaction_Statistical.AddOn.MinMaxButton.CustomFormState.Normal;
             this.btn_Export.DisplayText = "";
+            this.btn_Export.Enabled = false;
             this.btn_Export.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(37)))), ((int)(((byte)(37)))), ((int)(((byte)(38)))));
             this.btn_Export.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(34)))), ((int)(((byte)(34)))), ((int)(((byte)(34)))));
             this.btn_Export.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
@@ -297,8 +298,8 @@ namespace Transaction_Statistical.UControl
             // 
             // panel3
             // 
-            this.panel3.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-            | System.Windows.Forms.AnchorStyles.Left)
+            this.panel3.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.panel3.BackColor = System.Drawing.Color.Transparent;
             this.panel3.Controls.Add(this.fctxt_FullLog);
@@ -333,6 +334,7 @@ namespace Transaction_Statistical.UControl
             this.fctxt_FullLog.Cursor = System.Windows.Forms.Cursors.IBeam;
             this.fctxt_FullLog.DisabledColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))));
             this.fctxt_FullLog.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.fctxt_FullLog.Font = new System.Drawing.Font("Courier New", 9.75F);
             this.fctxt_FullLog.ForeColor = System.Drawing.Color.White;
             this.fctxt_FullLog.IndentBackColor = System.Drawing.Color.DimGray;
             this.fctxt_FullLog.IsReplaceMode = false;
@@ -354,7 +356,7 @@ namespace Transaction_Statistical.UControl
             // 
             // panel4
             // 
-            this.panel4.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+            this.panel4.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.panel4.BackColor = System.Drawing.Color.Transparent;
             this.panel4.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
@@ -362,7 +364,6 @@ namespace Transaction_Statistical.UControl
             this.panel4.Name = "panel4";
             this.panel4.Size = new System.Drawing.Size(268, 427);
             this.panel4.TabIndex = 7;
-           
             // 
             // UC_Transaction
             // 
