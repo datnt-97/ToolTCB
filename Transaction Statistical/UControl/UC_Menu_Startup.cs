@@ -16,6 +16,14 @@ namespace Transaction_Statistical
 {
     public partial class UC_Menu_Startup : UserControl
     {
+        public static Dictionary<int, string> Template = new Dictionary<int, string>()
+        {
+            {0,"Cân Quỹ Theo Counter Trên Máy" },
+            {1,"Báo Cáo Giao Dịch Tài Chính" },
+            {2,"Báo Cáo Giao Dịch Tài Chính Không Thành Công" },
+            {3,"Báo Cáo Giao Dịch Tài Chính Bất Thường" },
+            {4,"Báo Cáo Hoạt Động Bất Thường" },
+        };
         string TaskName = "AutoRunTransaction_";
         UC_Explorer uc_Explorer;
         SQLiteHelper sqlite;
@@ -45,8 +53,11 @@ namespace Transaction_Statistical
                     cbo_LstTemplate.Items.Add(cb);
                     if (cb.Value.Equals(InitParametar.TemplateTransactionID.ToString())) cbo_LstTemplate.SelectedItem = cb;
                 }
-                string lst = "CanQuyTheoCouterTrenMay;BaoCaoGiaoDichTaiChinh";
-                foreach (string s in lst.Split(';')) ckbl_Forms.Items.Add(s, true);
+                BindingSource bindingSource = new BindingSource();
+                bindingSource.DataSource = UC_Menu_Startup.Template;
+                ckbl_Forms.DataSource = bindingSource;
+                ckbl_Forms.DisplayMember = "Value";
+                Template.ToList().ForEach(x => { ckbl_Forms.SetItemChecked(x.Key, true); });
             }
             catch (Exception ex)
             {
@@ -63,7 +74,7 @@ namespace Transaction_Statistical
                 DataGridViewRow row = new DataGridViewRow();
                 string[] description = rowData["Data"].ToString().Split('|');
                 row.CreateCells(dataGridView_lsPermissions);
-                row.Cells[0].Value = n;n++;
+                row.Cells[0].Value = n; n++;
                 row.Cells[1].Value = rowData["Field"];
                 row.Cells[2].Value = CheckTaskExist(rowData["Field"].ToString());
                 row.Cells[3].Value = description[0];
@@ -94,7 +105,7 @@ namespace Transaction_Statistical
 
         private bool CheckTaskExist(string taskName)
         {
-            string fileExe = Process.GetCurrentProcess().MainModule.FileName + " Auto";          
+            string fileExe = Process.GetCurrentProcess().MainModule.FileName + " Auto";
             process.StartInfo.Arguments = string.Format("/query /TN \"{0}\"", TaskName + taskName);
             process.StartInfo.UseShellExecute = false;
             process.StartInfo.RedirectStandardOutput = true;
@@ -109,7 +120,7 @@ namespace Transaction_Statistical
         }
         private bool CreateTask(string time, string taskName)
         {
-            string fileExe = Process.GetCurrentProcess().MainModule.FileName + " \"" + taskName + "\"";           
+            string fileExe = Process.GetCurrentProcess().MainModule.FileName + " \"" + taskName + "\"";
             process.StartInfo.Arguments = string.Format("/Create /RU SYSTEM /SC DAILY /TN {0} /TR \"{1}\" /ST {2} /F", TaskName + taskName, fileExe, time);
             process.StartInfo.UseShellExecute = false;
             process.StartInfo.RedirectStandardOutput = true;
@@ -124,7 +135,7 @@ namespace Transaction_Statistical
         }
         private bool RemoveTask(string taskName)
         {
-            string fileExe = Process.GetCurrentProcess().MainModule.FileName + " Auto";           
+            string fileExe = Process.GetCurrentProcess().MainModule.FileName + " Auto";
             process.StartInfo.Arguments = string.Format("SCHTASKS /Delete /TN \"{0}\"", TaskName + taskName);
             process.StartInfo.UseShellExecute = false;
             process.StartInfo.RedirectStandardOutput = true;
@@ -173,8 +184,15 @@ namespace Transaction_Statistical
             if (CreateTask(txt_HH.Text, txt_TaskName.Text))
             {
                 string data = txt_HH.Text + "|" + (cbo_LstTemplate.SelectedItem as ComboBoxItem).Value + "|" + txt_Source.Text + "|" + txt_Destination.Text + "|" + forms;
-                foreach (var item in ckbl_Forms.CheckedItems) data += item.ToString() + ";"; data = data.TrimEnd(';');
+                //foreach (var item in ckbl_Forms.CheckedItems) data += item.ToString() + ";"; data = data.TrimEnd(';');
 
+                Dictionary<int, string> TemplateChoosen = new Dictionary<int, string>();
+                foreach (var item in ckbl_Forms.CheckedItems)
+                {
+                    var row = (KeyValuePair<int, string>)(item);
+                    TemplateChoosen.Add(row.Key, row.Value);
+                }
+                data += string.Join(";", TemplateChoosen);
                 entr.ColumnName.Add("Type_ID");
                 entr.Content.Add("511");
                 entr.ColumnName.Add("Data");

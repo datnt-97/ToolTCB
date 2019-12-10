@@ -13,7 +13,8 @@ using System.Threading;
 namespace Transaction_Statistical.UControl
 {
     public partial class UC_ExportCus : UserControl
-    {       
+    {
+
         public UC_ExportCus()
         {
             InitializeComponent();
@@ -23,8 +24,12 @@ namespace Transaction_Statistical.UControl
         {
             try
             {
-                string lst = "CanQuyTheoCouterTrenMay;BaoCaoGiaoDichTaiChinh";
-                foreach (string s in lst.Split(';')) ckbl_Forms.Items.Add(s, true);
+
+                BindingSource bindingSource = new BindingSource();
+                bindingSource.DataSource = UC_Menu_Startup.Template;
+                ckbl_Forms.DataSource = bindingSource;
+                ckbl_Forms.DisplayMember = "Value";
+                UC_Menu_Startup.Template.ToList().ForEach(x => { ckbl_Forms.SetItemChecked(x.Key, true); });
             }
             catch (Exception ex)
             {
@@ -36,7 +41,13 @@ namespace Transaction_Statistical.UControl
         {
             try
             {
-                if (InitParametar.ReadTrans.Export(txt_Destination.Text))
+                Dictionary<int, string> TemplateChoosen = new Dictionary<int, string>();
+                foreach (var item in ckbl_Forms.CheckedItems)
+                {
+                    var row = (KeyValuePair<int, string>)(item);
+                    TemplateChoosen.Add(row.Key, row.Value);
+                }
+                if (InitParametar.ReadTrans.Export(txt_Destination.Text, TemplateChoosen))
                 {
                     MessageBox.Show("Export successfully.", "Export");
                     if (chb_Open.Checked)

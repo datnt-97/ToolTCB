@@ -90,7 +90,7 @@ namespace Transaction_Statistical
                 DatabaseFile = PathDirectoryCurrentAppConfigData + "\\DB.s3db";
                 sqlite = new SQLiteHelper();
                 listTransaction = new Dictionary<string, Dictionary<DateTime, Transaction>>();
-               
+
             }
             catch (Exception ex)
             {
@@ -107,7 +107,7 @@ namespace Transaction_Statistical
                 LoadTemplateInfo();
 
                 DirectoryFileUtilities df = new DirectoryFileUtilities();
-                List<string> lsFile_Journal=new List<string>();
+                List<string> lsFile_Journal = new List<string>();
                 if (File.Exists(data[2]))
                     lsFile_Journal.Add(data[2]);
                 else if (Directory.Exists(data[2]))
@@ -123,7 +123,9 @@ namespace Transaction_Statistical
                 ReadTrans = new ReadTransaction();
                 if (ReadTrans.Reads(lsFile_Journal))
                 {
-                    ReadTrans.Export(data[3]);
+                    Dictionary<int, string> TemplateChoosen = data[4].Replace("[", "").Replace("]", "").Split(';').ToDictionary(x => int.Parse(x.Split(',')[0]), x => x.Split(',')[1]);
+
+                    ReadTrans.Export(data[3], TemplateChoosen);
                 }
             }
             catch (Exception ex)
@@ -319,7 +321,7 @@ namespace Transaction_Statistical
                     FindCounterChanged(ref contenFile, ref ListCycle);
 
                     ListTransaction[Terminal] = ListTransaction[Terminal].OrderBy(d => d.Key).ToDictionary(k => k.Key, v => v.Value);
-                //    InitParametar.sTest += contenFile + Environment.NewLine;
+                    //    InitParametar.sTest += contenFile + Environment.NewLine;
                 }
 
                 int i = ListTransaction.Values.LastOrDefault().Keys.Count;
@@ -352,7 +354,7 @@ namespace Transaction_Statistical
             return false;
         }
 
-        public bool Export(string exportDestination)
+        public bool Export(string exportDestination, Dictionary<int, string> templateChoosen)
         {
             try
             {
@@ -378,15 +380,35 @@ namespace Transaction_Statistical
                            group => group.Key,
                            group => group.First().Value).ToDictionary(d => d.Key, d => (Transaction)d.Value);
                     });
+                    var transactionEvent = ListTransaction.ToDictionary(d => d.Key, d => d.Value.Where(x => x.Value is TransactionEvent).ToDictionary(k => k.Key, k => (TransactionEvent)k.Value));
+
 
                     Stream stream = null;
                     using (var excelPackage = new ExcelPackage(stream ?? new MemoryStream()))
                     {
                         TemplateHelper template = new TemplateHelper(FileAuthor, FileTitle, FileComment, excelPackage);
                         // Tạo buffer memory stream để hứng file excel
-                        template.CanQuyTheoCouterTrenMay("CanQuyTheoCouterTrenMay", OfficeOpenXml.Table.TableStyles.Custom, cycle);
-                        //template.BaoCaoGiaoDichBatThuong("test_2", OfficeOpenXml.Table.TableStyles.Custom);
-                        template.BaoCaoGiaoDichTaiChinh("BaoCaoGiaoDichTaiChinh", OfficeOpenXml.Table.TableStyles.Custom, transaction);
+                        foreach (var item in templateChoosen)
+                        {
+                            switch (item.Key)
+                            {
+                                case (int)TemplateHelper.TEMPLATE.CanQuyTheoCouterTrenMay:
+                                    template.CanQuyTheoCouterTrenMay(item.Value, OfficeOpenXml.Table.TableStyles.Custom, cycle);
+                                    break;
+                                case (int)TemplateHelper.TEMPLATE.BaoCaoGiaoDichTaiChinh:
+                                    template.BaoCaoGiaoDichTaiChinh(item.Value, OfficeOpenXml.Table.TableStyles.Custom, transaction);
+                                    break;
+                                case (int)TemplateHelper.TEMPLATE.BaoCaoGiaoDichTaiChinhKhongThanhCong:
+                                    template.BaoCaoGiaoDichTaiChinh(item.Value, OfficeOpenXml.Table.TableStyles.Custom, transaction);
+                                    break;
+                                case (int)TemplateHelper.TEMPLATE.BaoCaoGiaoDichTaiChinhBatThuong:
+                                    template.BaoCaoGiaoDichTaiChinh(item.Value, OfficeOpenXml.Table.TableStyles.Custom, transaction);
+                                    break;
+                                case (int)TemplateHelper.TEMPLATE.BaoCaoHoatDongBatThuong:
+                                    template.BaoCaoHoatDongBatThuong(item.Value, OfficeOpenXml.Table.TableStyles.Custom, transactionEvent);
+                                    break;
+                            }
+                        }
                         stream = template.getStream();
                         var buffer = stream as MemoryStream;
                         File.WriteAllBytes(FileExport, buffer.ToArray());
@@ -813,11 +835,11 @@ namespace Transaction_Statistical
                 {
                     if (evt.Type.Equals(TransactionEvent.Events.TransactionReqSend))
                     {
-                       if(string.IsNullOrEmpty(req.Request))
+                        if (string.IsNullOrEmpty(req.Request))
                         {
                             CheckRequestName(evt.Data, ref req.Request);
                         }
-                       else
+                        else
                         {
                             //tr
                             //req = new TransactionRequest();
@@ -843,7 +865,7 @@ namespace Transaction_Statistical
     }
 
     public class Transaction
-    {   
+    {
         public enum StatusS
         {
             Succeeded,
@@ -870,7 +892,7 @@ namespace Transaction_Statistical
         public Dictionary<DateTime, TransactionRequest> ListRequest = new Dictionary<DateTime, TransactionRequest>();
         public int Result;
 
-        
+
         [CategoryAttribute("1.Terminal"), DescriptionAttribute("Terminal ID")]
         public string Terminal { get; set; }
         string _status = "0000";
@@ -940,7 +962,7 @@ namespace Transaction_Statistical
         [CategoryAttribute("4. Follow"), DescriptionAttribute("Follow of the transaction")]
         public string Follow
         {
-            get { return string.Join("=>", ListEvent.Values); }           
+            get { return string.Join("=>", ListEvent.Values); }
         }
 
 
@@ -1017,7 +1039,7 @@ namespace Transaction_Statistical
 
         public override string ToString()
         {
-            return String.Format("{0:HH:mm:ss }", DateBegin) + ( CardType == Transaction.CardTypes.CardLess ? "Cardless: " + (DataInput.Count == 0 ? string.Empty : DataInput[0]) : "Card: " + CardNumber);
+            return String.Format("{0:HH:mm:ss }", DateBegin) + (CardType == Transaction.CardTypes.CardLess ? "Cardless: " + (DataInput.Count == 0 ? string.Empty : DataInput[0]) : "Card: " + CardNumber);
         }
     }
     public class TransactionEvent
@@ -1085,9 +1107,13 @@ namespace Transaction_Statistical
         public List<Denomination> LstDenomination = new List<Denomination>();
         public int AmountDeposit
         {
-            get { int a=0;
+            get
+            {
+                int a = 0;
                 foreach (Denomination de in LstDenomination)
-                { a += de.Amount; } return a; }
+                { a += de.Amount; }
+                return a;
+            }
         }
         public int AmountRequest;
     }
