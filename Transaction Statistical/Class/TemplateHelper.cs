@@ -16,10 +16,10 @@ namespace Transaction_Statistical.Class
         public enum TEMPLATE
         {
             CanQuyTheoCouterTrenMay,
-            BaoCaoHoatDongBatThuong,
             BaoCaoGiaoDichTaiChinh,
             BaoCaoGiaoDichTaiChinhKhongThanhCong,
             BaoCaoGiaoDichTaiChinhBatThuong,
+            BaoCaoHoatDongBatThuong,
         }
 
         ExcelPackage excelPackage { get; set; }
