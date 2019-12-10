@@ -210,7 +210,15 @@ namespace Transaction_Statistical
         {
             DataRow row = dataGridView_lsPermissions.SelectedRows[0].Tag as DataRow;
             string data = txt_HH.Text + "|" + (cbo_LstTemplate.SelectedItem as ComboBoxItem).Value + "|" + txt_Source.Text + "|" + txt_Destination.Text + "|" + forms;
-            foreach (var item in ckbl_Forms.CheckedItems) data += item.ToString() + ";"; data = data.TrimEnd(';');
+            //foreach (var item in ckbl_Forms.CheckedItems) data += item.ToString() + ";"; data = data.TrimEnd(';');
+
+            Dictionary<int, string> TemplateChoosen = new Dictionary<int, string>();
+            foreach (var item in ckbl_Forms.CheckedItems)
+            {
+                var rows = (KeyValuePair<int, string>)(item);
+                TemplateChoosen.Add(rows.Key, rows.Value);
+            }
+            data += string.Join(";", TemplateChoosen);
             if (sqlite.Update1Entry("CfgData", "Data", data, "ID", row["ID"].ToString()))
             {
                 MessageBox.Show("Save Task  successful", "Save Task", MessageBoxButtons.OK, MessageBoxIcon.Information);
