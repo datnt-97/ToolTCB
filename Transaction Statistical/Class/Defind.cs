@@ -398,13 +398,13 @@ namespace Transaction_Statistical
                                     template.CanQuyTheoCouterTrenMay(item.Value, OfficeOpenXml.Table.TableStyles.Custom, cycle);
                                     break;
                                 case (int)TemplateHelper.TEMPLATE.BaoCaoGiaoDichTaiChinh:
-                                    template.BaoCaoGiaoDichTaiChinh(item.Value, OfficeOpenXml.Table.TableStyles.Custom, transaction);
+                                    template.BaoCaoGiaoDichTaiChinh(item.Value, OfficeOpenXml.Table.TableStyles.Custom, transaction, cycle);
                                     break;
                                 case (int)TemplateHelper.TEMPLATE.BaoCaoGiaoDichTaiChinhKhongThanhCong:
-                                    template.BaoCaoGiaoDichTaiChinh(item.Value, OfficeOpenXml.Table.TableStyles.Custom, transaction);
+                                    template.BaoCaoGiaoDichTaiChinh(item.Value, OfficeOpenXml.Table.TableStyles.Custom, transaction, cycle);
                                     break;
                                 case (int)TemplateHelper.TEMPLATE.BaoCaoGiaoDichTaiChinhBatThuong:
-                                    template.BaoCaoGiaoDichTaiChinh(item.Value, OfficeOpenXml.Table.TableStyles.Custom, transaction);
+                                    template.BaoCaoGiaoDichTaiChinh(item.Value, OfficeOpenXml.Table.TableStyles.Custom, transaction, cycle);
                                     break;
                                 case (int)TemplateHelper.TEMPLATE.BaoCaoHoatDongBatThuong:
                                     template.BaoCaoHoatDongBatThuong(item.Value, OfficeOpenXml.Table.TableStyles.Custom, transactionEvent);
@@ -596,7 +596,17 @@ namespace Transaction_Statistical
                                 }
                                 if (!Cycles.ContainsKey(startSettlement))
                                 {
-                                    Cycles.Add(startSettlement, cycleItem);
+                                    var exItem = Cycles.Where(x => x.Value.SettlementPeriodDateBegin == cycleItem.SettlementPeriodDateBegin
+                                    && x.Value.SettlementPeriodDateEnd == cycleItem.SettlementPeriodDateEnd).FirstOrDefault();
+                                    if (exItem.Value != null)
+                                    {
+                                        Cycles.Remove(exItem.Key);
+                                        Cycles.Add(startSettlement, cycleItem);
+                                    }
+                                    else
+                                    {
+                                        Cycles.Add(startSettlement, cycleItem);
+                                    }
                                 }
                             }
                             sString.Replace(key.Value.stringfind, null);
@@ -870,7 +880,7 @@ namespace Transaction_Statistical
         }
     }
 
-    public class Transaction
+    public class Transaction : CustomObjectType
     {
         public enum StatusS
         {
@@ -966,16 +976,16 @@ namespace Transaction_Statistical
         public int Amount { get; set; }
 
         public Dictionary<DateTime, TransactionRequest> ListRequest = new Dictionary<DateTime, TransactionRequest>();
-       
-       
 
-            [CategoryAttribute("5. Follow"), DescriptionAttribute("Follow of the transaction")]
+
+
+        [CategoryAttribute("5. Follow"), DescriptionAttribute("Follow of the transaction")]
         public string Follow
         {
             get { return string.Join("=>", ListEvent.Values); }
         }
 
-      
+
 
         public Transaction()
         {
@@ -987,7 +997,7 @@ namespace Transaction_Statistical
             return String.Format("{0:HH:mm:ss }", DateBegin) + (CardType == Transaction.CardTypes.CardLess ? "Cardless: " + (DataInput.Count == 0 ? string.Empty : DataInput[0]) : "Card: " + CardNumber);
         }
     }
-   
+
     public class TransactionEvent
     {
         public enum Events
@@ -1062,10 +1072,10 @@ namespace Transaction_Statistical
             }
         }
         public int AmountRequest;
-         public override string ToString()
+        public override string ToString()
         {
             return Request;
-           // return String.Format("{0:HH:mm:ss }", DateBegin) + Request;
+            // return String.Format("{0:HH:mm:ss }", DateBegin) + Request;
         }
     }
 

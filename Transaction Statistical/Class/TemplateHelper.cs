@@ -67,11 +67,11 @@ namespace Transaction_Statistical.Class
             this.excelPackage.Save();
         }
 
-        public void BaoCaoGiaoDichTaiChinh(string WorksheetsName, TableStyles tableStyles, Dictionary<DateTime, Transaction> ListTransaction)
+        public void BaoCaoGiaoDichTaiChinh(string WorksheetsName, TableStyles tableStyles, Dictionary<DateTime, Transaction> ListTransaction, Dictionary<DateTime, Cycle> cycles)
         {
             this.excelPackage.Workbook.Worksheets.Add(WorksheetsName);
             var lastWS = excelPackage.Workbook.Worksheets.Last();
-            lastWS = DrawGDTC(lastWS, ListTransaction);
+            lastWS = DrawGDTC(lastWS, ListTransaction, cycles);
             this.excelPackage.Save();
         }
 
@@ -397,10 +397,13 @@ namespace Transaction_Statistical.Class
             return worksheet;
         }
 
-        private ExcelWorksheet DrawGDTC(ExcelWorksheet worksheet, Dictionary<DateTime, Transaction> ListTransaction)
+        private ExcelWorksheet DrawGDTC(ExcelWorksheet worksheet, Dictionary<DateTime, Transaction> ListTransaction, Dictionary<DateTime, Cycle> cycles)
         {
             try
             {
+
+
+                cycles = cycles.OrderBy(x => x.Value.DateBegin).ToDictionary(d => d.Key, d => d.Value);
                 int index = 1;
 
                 //DRAW CHUDE
@@ -520,14 +523,13 @@ namespace Transaction_Statistical.Class
                 for (int j = 0; j < trans.Count(); j++)
                 {
                     var itemTrans = trans[j].Value;
-                    var detail = "";
-
+                    var cycleOfTransction = cycles.Where(x => x.Value.SettlementPeriodDateBegin <= itemTrans.DateBegin && itemTrans.Terminal.Contains(x.Value.TerminalID)).OrderBy(x => x.Value.SettlementPeriodDateBegin).LastOrDefault().Value;
                     worksheet.Cells[indexData, index].Value = "";
                     worksheet.Cells[indexData, index + 1].Value = itemTrans.Type;
                     worksheet.Cells[indexData, index + 2].Value = itemTrans.Status;
                     worksheet.Cells[indexData, index + 3].Value = itemTrans.Terminal;
-                    worksheet.Cells[indexData, index + 4].Value = "";
-                    worksheet.Cells[indexData, index + 5].Value = "";
+                    worksheet.Cells[indexData, index + 4].Value = cycleOfTransction != null ? cycleOfTransction.SettlementPeriodDateBegin.ToString() : "";
+                    worksheet.Cells[indexData, index + 5].Value = cycleOfTransction != null ? cycleOfTransction.SettlementPeriodDateEnd.ToString() : "";
                     worksheet.Cells[indexData, index + 6].Value = itemTrans.CardType == Transaction.CardTypes.CardLess ? "CardLess" : itemTrans.CardNumber;
                     worksheet.Cells[indexData, index + 7].Value = itemTrans.DataInput;
                     worksheet.Cells[indexData, index + 8].Value = itemTrans.DateBegin;
@@ -548,7 +550,7 @@ namespace Transaction_Statistical.Class
                     worksheet.Cells[indexData, index + 21].Value = "";
                     worksheet.Cells[indexData, index + 22].Value = "";
                     worksheet.Cells[indexData, index + 23].Value = "";
-                    //worksheet.Cells[indexData, index + 24].Value = string.Join("->", terminal.transactions[i].work_flow);
+                    worksheet.Cells[indexData, index + 24].Value = itemTrans.Follow;
                     //worksheet.Cells[indexData, index + 25].Value = "";
                     indexData++;
                 }

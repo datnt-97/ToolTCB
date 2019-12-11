@@ -64,8 +64,8 @@ namespace Transaction_Statistical.UControl
             {
                 cb = new CheckBox();
                 cb.Text = name;
-                cb.Checked = true;                
-             //   cb.CheckedChanged += new EventHandler(cb_Action_CheckedChanged);
+                cb.Checked = true;
+                //   cb.CheckedChanged += new EventHandler(cb_Action_CheckedChanged);
                 pl_Actions.Controls.Add(cb);
             }
             InitParametar.ReadTrans.Template_TransType.Values.ToList().ForEach(x =>
@@ -77,7 +77,7 @@ namespace Transaction_Statistical.UControl
                 cb.CheckedChanged += new EventHandler(cb_Action_CheckedChanged);
                 pl_Actions.Controls.Add(cb);
             });
-           
+
         }
         private void ckb_Actions_All_CheckedChanged(object sender, EventArgs e)
         {
@@ -97,7 +97,7 @@ namespace Transaction_Statistical.UControl
                 if ((sender as CheckBox).Checked)
                     sTransactionTypeDisplay.Add((sender as CheckBox).Text);
                 else
-                  sTransactionTypeDisplay.Remove((sender as CheckBox).Text);
+                    sTransactionTypeDisplay.Remove((sender as CheckBox).Text);
             }
             catch { }
         }
@@ -134,7 +134,7 @@ namespace Transaction_Statistical.UControl
         {
             try
             {
-               
+
                 tre_LstTrans.Nodes.Clear();
                 btn_Export.Enabled = false;
                 propertyGrid1.SelectedObject = null;
@@ -164,11 +164,11 @@ namespace Transaction_Statistical.UControl
                             else
                                 ndDay = ndTerminal.Nodes.Add(day, day, "Date", "DateOpen");
                             string textDisplay = kTransaction.Value.ToString();
-                            
+
                             if (kTransaction.Value is Transaction)
                             {
-                                if (!FilterDisplayTransaction((kTransaction.Value as Transaction).ListRequest.Values.ToList())) continue;
-                                 TreeNode ndTransaction = ndDay.Nodes.Add(textDisplay, textDisplay);
+                                //if (!FilterDisplayTransaction((kTransaction.Value as Transaction).ListRequest.Values.ToList())) continue;
+                                TreeNode ndTransaction = ndDay.Nodes.Add(textDisplay, textDisplay);
                                 ndTransaction.Tag = kTransaction.Value;
                                 ndTransaction.ImageKey = "Flag";
                                 ndTransaction.SelectedImageKey = "Flag_Success";
@@ -197,9 +197,9 @@ namespace Transaction_Statistical.UControl
                 InitParametar.Send_Error(ex.ToString(), MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name);
             }
         }
-        private bool FilterDisplayTransaction(List< TransactionRequest> names)
+        private bool FilterDisplayTransaction(List<TransactionRequest> names)
         {
-            return names.Any(x => sTransactionTypeDisplay.Contains(x.Request));          
+            return names.Any(x => sTransactionTypeDisplay.Contains(x.Request));
         }
         private bool GetDateFromFormatLine(string row, string rowFormat, Dictionary<string, string> listDateFormat, out DateTime date)
         {
@@ -236,22 +236,38 @@ namespace Transaction_Statistical.UControl
         {
             uc_Menu.SlideMenuShow();
         }
-
+        public class ass : CustomObjectType
+        {
+            [CategoryAttribute("3. Transaction"), DescriptionAttribute("Type the transaction")]
+            public string Type
+            {
+                get { return "aaaaasdsdf"; }
+            }
+        }
         private void tre_LstTrans_AfterSelect(object sender, TreeViewEventArgs e)
         {
             try
             {
                 if (e.Node != null && e.Node.Tag != null && e.Node.Tag is Transaction)
                 {
-                   
+
                     fctxt_FullLog.Text = (e.Node.Tag as Transaction).TraceJournalFull;
-                   
-                   foreach (TransactionRequest req in (e.Node.Tag as Transaction).ListRequest.Values) 
+                    var trans = (Transaction)e.Node.Tag;
+                    int cCount = 1;
+                    foreach (var req in (e.Node.Tag as Transaction).ListEvent.Values)
                     {
-                     //   propertyGrid1.BrowsableAttributes = new AttributeCollection(new CategoryAttribute(req.Request));
-                      //   [CategoryAttribute("4. Requests"), DescriptionAttribute("Requests of the transaction")]
-                    }   
-                    propertyGrid1.SelectedObject = (Transaction)e.Node.Tag;                
+                        trans.Properties.Add(new CustomProperty
+                        {
+                            Name = "Step " + cCount,
+                            Type = typeof(string),
+                            Desc = "Desciption",
+                            Cate = "5. Follow",
+                            DefaultValue = req.ToString()
+                        });
+                        cCount++;
+                    }
+
+                    propertyGrid1.SelectedObject = trans;
 
                 }
                 else if (e.Node != null && e.Node.Tag != null && e.Node.Tag is TransactionEvent)
@@ -411,7 +427,7 @@ namespace Transaction_Statistical.UControl
             }
         }
 
-       
+
     }
 
 }

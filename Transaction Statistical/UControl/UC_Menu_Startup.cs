@@ -11,6 +11,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Text.RegularExpressions;
 using System.Reflection;
+using Transaction_Statistical.Class;
 
 namespace Transaction_Statistical
 {
@@ -18,11 +19,11 @@ namespace Transaction_Statistical
     {
         public static Dictionary<int, string> Template = new Dictionary<int, string>()
         {
-            {0,"Cân Quỹ Theo Counter Trên Máy" },
-            {1,"Báo Cáo Giao Dịch Tài Chính" },
-            {2,"Báo Cáo Giao Dịch Tài Chính Không Thành Công" },
-            {3,"Báo Cáo Giao Dịch Tài Chính Bất Thường" },
-            {4,"Báo Cáo Hoạt Động Bất Thường" },
+            {(int)TemplateHelper.TEMPLATE.CanQuyTheoCouterTrenMay,"Cân Quỹ Theo Counter Trên Máy" },
+            {(int)TemplateHelper.TEMPLATE.BaoCaoGiaoDichTaiChinh,"BC GD Tài Chính" },
+            {(int)TemplateHelper.TEMPLATE.BaoCaoGiaoDichTaiChinhKhongThanhCong,"BC GD Tài Chính Không Thành Công" },
+            {(int)TemplateHelper.TEMPLATE.BaoCaoGiaoDichTaiChinhBatThuong,"BC GD Tài Chính Bất Thường" },
+            {(int)TemplateHelper.TEMPLATE.BaoCaoHoatDongBatThuong,"BC Hoạt Động Bất Thường" },
         };
         string TaskName = "AutoRunTransaction_";
         UC_Explorer uc_Explorer;

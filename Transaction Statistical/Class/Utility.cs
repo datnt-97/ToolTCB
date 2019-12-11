@@ -205,9 +205,9 @@ namespace Transaction_Statistical
     {
         //[Category("Standard")]
         //public string Name { get; set; }
-        private readonly List<CustomProperty> props = new List<CustomProperty>();
+        private List<CustomProperty> props = new List<CustomProperty>();
         [Browsable(false)]
-        public List<CustomProperty> Properties { get { return props; } }
+        public List<CustomProperty> Properties { get { return props; } set { props = value; } }
 
         private Dictionary<string, object> values = new Dictionary<string, object>();
 
@@ -276,7 +276,7 @@ namespace Transaction_Statistical
             set
             {
                 type = value;
-                DefaultValue = Activator.CreateInstance(value);
+                //DefaultValue = Activator.CreateInstance(value);
             }
         }
 
