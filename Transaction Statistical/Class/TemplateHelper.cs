@@ -13,6 +13,14 @@ namespace Transaction_Statistical.Class
 {
     class TemplateHelper
     {
+        public enum TEMPLATE
+        {
+            CanQuyTheoCouterTrenMay,
+            BaoCaoGiaoDichTaiChinh,
+            BaoCaoGiaoDichTaiChinhKhongThanhCong,
+            BaoCaoGiaoDichTaiChinhBatThuong,
+            BaoCaoHoatDongBatThuong,
+        }
 
         ExcelPackage excelPackage { get; set; }
         private const string formatDate = "dd/mm/yyy h:mm";
@@ -29,6 +37,7 @@ namespace Transaction_Statistical.Class
             this.excelPackage.Workbook.Properties.Title = Title;
             this.excelPackage.Workbook.Properties.Comments = Comments;
         }
+
         public void CanQuyTheoCouterTrenMay(string WorksheetsName, TableStyles tableStyles, Dictionary<DateTime, Cycle> ListCycle)
         {
             try
@@ -44,6 +53,28 @@ namespace Transaction_Statistical.Class
                 throw e;
             }
         }
+        public void BaoCaoHoatDongBatThuong(string WorksheetsName, TableStyles tableStyles, Dictionary<string, Dictionary<DateTime, TransactionEvent>> ListTransaction)
+        {
+            this.excelPackage.Workbook.Worksheets.Add(WorksheetsName);
+            var lastWS = excelPackage.Workbook.Worksheets.Last();
+            int index = 2;
+            foreach (var item in ListTransaction)
+            {
+                lastWS = DrawHDBT(lastWS, item.Value, item.Key, ref index);
+                index++;
+
+            }
+            this.excelPackage.Save();
+        }
+
+        public void BaoCaoGiaoDichTaiChinh(string WorksheetsName, TableStyles tableStyles, Dictionary<DateTime, Transaction> ListTransaction)
+        {
+            this.excelPackage.Workbook.Worksheets.Add(WorksheetsName);
+            var lastWS = excelPackage.Workbook.Worksheets.Last();
+            lastWS = DrawGDTC(lastWS, ListTransaction);
+            this.excelPackage.Save();
+        }
+
         private ExcelWorksheet DrawCounter(ExcelWorksheet worksheet, Dictionary<DateTime, Cycle> ListCycle)
         {
             try
@@ -217,42 +248,28 @@ namespace Transaction_Statistical.Class
             }
             return worksheet;
         }
-
-        public void BaoCaoGiaoDichTaiChinh(string WorksheetsName, TableStyles tableStyles)
-        {
-            this.excelPackage.Workbook.Worksheets.Add(WorksheetsName);
-            var lastWS = excelPackage.Workbook.Worksheets.Last();
-            lastWS = DrawHDTC(lastWS);
-            this.excelPackage.Save();
-        }
-
-        public void BaoCaoGiaoDichBatThuong(string WorksheetsName, TableStyles tableStyles)
-        {
-            this.excelPackage.Workbook.Worksheets.Add(WorksheetsName);
-            var lastWS = excelPackage.Workbook.Worksheets.Last();
-            lastWS = DrawHDBT(lastWS);
-            this.excelPackage.Save();
-        }
-        public void BaoCaoGiaoDichTaiChinh(string WorksheetsName, TableStyles tableStyles, Dictionary<DateTime, Transaction> ListTransaction)
-        {
-            this.excelPackage.Workbook.Worksheets.Add(WorksheetsName);
-            var lastWS = excelPackage.Workbook.Worksheets.Last();
-            lastWS = DrawGDTC(lastWS, ListTransaction);
-            this.excelPackage.Save();
-        }
-
-        private ExcelWorksheet DrawHDTC(ExcelWorksheet worksheet)
+        private ExcelWorksheet DrawHDBT(ExcelWorksheet worksheet, Dictionary<DateTime, TransactionEvent> ListTransaction, string atmID, ref int index)
         {
             try
             {
-                int index = 2;
-                int timesOpenTheCashDrawer = 5;
-                int timesOpenTechnicalChamber = 8;
-                int timesReboot = 5;
-                int timesDisconect = 5;
-                int timesMoneyWithdrawn = 5;
-                int timesWithdrawalStuck = 5;
-                int timesDepositStuck = 5;
+                var eventDevice = ListTransaction;
+                var openTheCashDrawer = eventDevice.Where(x => x.Value.TContent.Contains("Safe Door")).ToDictionary(d => d.Key, d => d.Value);
+                var openTechnicalChamber = eventDevice.Where(x => x.Value.TContent.Contains("Supervisor Mode")).ToDictionary(d => d.Key, d => d.Value);
+                var reboot = eventDevice.Where(x => x.Value.TContent.Contains("Restart process started by program")).ToDictionary(d => d.Key, d => d.Value);
+                var disconect = eventDevice.Where(x => x.Value.TContent.Contains("Communication off".ToUpper())).ToDictionary(d => d.Key, d => d.Value);
+                var moneyRetracted = eventDevice.Where(x => x.Value.TContent.Contains("Retract")).ToDictionary(d => d.Key, d => d.Value);
+                var withdrawalStuck = eventDevice.Where(x => x.Value.TContent.Contains("Withdrawal")).ToDictionary(d => d.Key, d => d.Value);
+                var depositStuck = eventDevice.Where(x => x.Value.TContent.Contains("Deposit")).ToDictionary(d => d.Key, d => d.Value);
+
+
+                int index_All = 2;
+                int timesOpenTheCashDrawer = openTheCashDrawer.Count();
+                int timesOpenTechnicalChamber = openTechnicalChamber.Count();
+                int timesReboot = reboot.Count();
+                int timesDisconect = disconect.Count();
+                int timesMoneyTracted = moneyRetracted.Count();
+                int timesWithdrawalStuck = withdrawalStuck.Count();
+                int timesDepositStuck = depositStuck.Count();
 
                 //DRAW CHUDE
                 using (ExcelRange rng = worksheet.Cells["A1:I1"])
@@ -274,25 +291,26 @@ namespace Transaction_Statistical.Class
 
                 //DRAW DATA
                 //Bao nhiêu lần mở cửa khoang tiền?
-                worksheet = DrawLoop(worksheet, ref index, timesOpenTheCashDrawer, "Bao nhiêu lần mở cửa khoang tiền?");
+                worksheet = DrawLoop(worksheet, ref index, openTheCashDrawer, "Bao nhiêu lần mở cửa khoang tiền?", atmID);
 
                 //Bao nhiêu lần mở cửa khoang kỹ thuật? 
-                worksheet = DrawLoop(worksheet, ref index, timesOpenTechnicalChamber, "Bao nhiêu lần mở cửa khoang kỹ thuật?");
+                worksheet = DrawLoop(worksheet, ref index, openTechnicalChamber, "Bao nhiêu lần mở cửa khoang kỹ thuật?", atmID);
 
                 //Bao nhiêu lần máy khởi động lại ?
-                worksheet = DrawLoop(worksheet, ref index, timesReboot, "Bao nhiêu lần máy khởi động lại ?");
+                worksheet = DrawLoop(worksheet, ref index, reboot, "Bao nhiêu lần máy khởi động lại ?", atmID);
 
                 //Bao nhiêu lần mất mạng
-                worksheet = DrawLoop(worksheet, ref index, timesDisconect, "Bao nhiêu lần mất mạng?");
+                worksheet = DrawLoop(worksheet, ref index, disconect, "Bao nhiêu lần mất mạng?", atmID);
 
                 //Bao nhiêu lần tiền bị thu hồi?
-                worksheet = DrawLoop(worksheet, ref index, timesMoneyWithdrawn, "Bao nhiêu lần tiền bị thu hồi?");
+                worksheet = DrawLoop(worksheet, ref index, moneyRetracted, "Bao nhiêu lần tiền bị thu hồi?", atmID);
 
                 //Bao nhiêu lần rút tiền bị kẹt?
-                worksheet = DrawLoop(worksheet, ref index, timesDepositStuck, "Bao nhiêu lần rút tiền bị kẹt?");
+                worksheet = DrawLoop(worksheet, ref index, depositStuck, "Bao nhiêu lần rút tiền bị kẹt?", atmID);
 
                 //Bao nhiêu lần nộp tiền bị kẹt?
-                worksheet = DrawLoop(worksheet, ref index, timesWithdrawalStuck, "Bao nhiêu lần nộp tiền bị kẹt?");
+                worksheet = DrawLoop(worksheet, ref index, withdrawalStuck, "Bao nhiêu lần nộp tiền bị kẹt?", atmID);
+
 
                 var allCells = worksheet.Cells[1, 1, worksheet.Dimension.End.Row, worksheet.Dimension.End.Column];
                 allCells.AutoFitColumns();
@@ -316,85 +334,12 @@ namespace Transaction_Statistical.Class
             }
             return worksheet;
         }
-        private ExcelWorksheet DrawHDBT(ExcelWorksheet worksheet)
+
+        private ExcelWorksheet DrawLoop(ExcelWorksheet worksheet, ref int index, Dictionary<DateTime, TransactionEvent> transactionEvent, string title, string atmID)
         {
             try
             {
-                int index = 2;
-                int timesOpenTheCashDrawer = 5;
-                int timesOpenTechnicalChamber = 8;
-                int timesReboot = 5;
-                int timesDisconect = 5;
-                int timesMoneyWithdrawn = 5;
-                int timesWithdrawalStuck = 5;
-                int timesDepositStuck = 5;
-
-                //DRAW CHUDE
-                using (ExcelRange rng = worksheet.Cells["A1:I1"])
-                {
-                    rng.Style.Fill.PatternType = OfficeOpenXml.Style.ExcelFillStyle.Solid;
-                    rng.Style.Fill.BackgroundColor.SetColor(Color.FromArgb(252, 228, 214));
-                    rng.Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
-                    rng.Style.VerticalAlignment = ExcelVerticalAlignment.Center;
-                }
-                worksheet.Cells["A1"].Value = "Nội dung";
-                worksheet.Cells["B1"].Value = "ATMID";
-                worksheet.Cells["C1"].Value = "Ngày tiếp quỹ";
-                worksheet.Cells["D1"].Value = "Ngày kiểm quỹ";
-                worksheet.Cells["E1"].Value = "Số lần";
-                worksheet.Cells["F1"].Value = "Date time";
-                worksheet.Cells["G1"].Value = "Hành động";
-                worksheet.Cells["H1"].Value = "Trace ID";
-                worksheet.Cells["I1"].Value = "Số tiền thu hồi của GD";
-
-                //DRAW DATA
-                //Bao nhiêu lần mở cửa khoang tiền?
-                worksheet = DrawLoop(worksheet, ref index, timesOpenTheCashDrawer, "Bao nhiêu lần mở cửa khoang tiền?");
-
-                //Bao nhiêu lần mở cửa khoang kỹ thuật? 
-                worksheet = DrawLoop(worksheet, ref index, timesOpenTechnicalChamber, "Bao nhiêu lần mở cửa khoang kỹ thuật?");
-
-                //Bao nhiêu lần máy khởi động lại ?
-                worksheet = DrawLoop(worksheet, ref index, timesReboot, "Bao nhiêu lần máy khởi động lại ?");
-
-                //Bao nhiêu lần mất mạng
-                worksheet = DrawLoop(worksheet, ref index, timesDisconect, "Bao nhiêu lần mất mạng?");
-
-                //Bao nhiêu lần tiền bị thu hồi?
-                worksheet = DrawLoop(worksheet, ref index, timesMoneyWithdrawn, "Bao nhiêu lần tiền bị thu hồi?");
-
-                //Bao nhiêu lần rút tiền bị kẹt?
-                worksheet = DrawLoop(worksheet, ref index, timesDepositStuck, "Bao nhiêu lần rút tiền bị kẹt?");
-
-                //Bao nhiêu lần nộp tiền bị kẹt?
-                worksheet = DrawLoop(worksheet, ref index, timesWithdrawalStuck, "Bao nhiêu lần nộp tiền bị kẹt?");
-
-                var allCells = worksheet.Cells[1, 1, worksheet.Dimension.End.Row, worksheet.Dimension.End.Column];
-                allCells.AutoFitColumns();
-                allCells.Style.Border.Top.Style = ExcelBorderStyle.Thin;
-                allCells.Style.Border.Bottom.Style = ExcelBorderStyle.Thin;
-                allCells.Style.Border.Left.Style = ExcelBorderStyle.Thin;
-                allCells.Style.Border.Right.Style = ExcelBorderStyle.Thin;
-
-                allCells.Style.Border.Top.Color.SetColor(Color.Black);
-                allCells.Style.Border.Bottom.Color.SetColor(Color.Black);
-                allCells.Style.Border.Left.Color.SetColor(Color.Black);
-                allCells.Style.Border.Right.Color.SetColor(Color.Black);
-                allCells.Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
-                allCells.Style.VerticalAlignment = ExcelVerticalAlignment.Center;
-
-                allCells.Style.WrapText = true;
-            }
-            catch (Exception e)
-            {
-                throw e;
-            }
-            return worksheet;
-        }
-        private ExcelWorksheet DrawLoop(ExcelWorksheet worksheet, ref int index, int times, string title)
-        {
-            try
-            {
+                int times = transactionEvent.Count();
                 int indexATMID = index + times - 1;
                 using (ExcelRange rng = worksheet.Cells[string.Format("A{0}:A{1}", index, times == 0 ? index : indexATMID + 1)])
                 {
@@ -408,22 +353,39 @@ namespace Transaction_Statistical.Class
                     rng.Value = times;
 
                 }
+                using (ExcelRange rng = worksheet.Cells[string.Format("B{0}:B{1}", index, times == 0 ? index : indexATMID + 1)])
+                {
+                    rng.Merge = true;
+                    rng.Value = atmID;
+                }
+                using (ExcelRange rng = worksheet.Cells[string.Format("C{0}:C{1}", index, times == 0 ? index : indexATMID + 1)])
+                {
+                    rng.Merge = true;
+                    rng.Value = "";
+                }
+                using (ExcelRange rng = worksheet.Cells[string.Format("D{0}:D{1}", index, times == 0 ? index : indexATMID + 1)])
+                {
+                    rng.Merge = true;
+                    rng.Value = "";
+                }
+                int indexList = 0;
                 for (int i = index; i <= indexATMID; i++)
                 {
-                    worksheet.Cells[i, 2].Value = "99100001";
+                    worksheet.Cells[i, 2].Value = atmID;
 
                     worksheet.Cells[i, 3].Style.Numberformat.Format = formatDate;
-                    worksheet.Cells[i, 3].Value = "01/24/2019  10:19:26 SA";
+                    worksheet.Cells[i, 3].Value = "";
 
                     worksheet.Cells[i, 4].Style.Numberformat.Format = formatDate;
-                    worksheet.Cells[i, 4].Value = "01/26/2019  9:19:16 SA";
+                    worksheet.Cells[i, 4].Value = "";
 
                     worksheet.Cells[i, 6].Style.Numberformat.Format = formatDate;
-                    worksheet.Cells[i, 6].Value = "01/26/2019  9:19:16 SA";
+                    worksheet.Cells[i, 6].Value = transactionEvent.ToArray()[indexList].Value.DateBegin;
 
-                    worksheet.Cells[i, 7].Value = "Safe Door : Opened";
-                    worksheet.Cells[i, 8].Value = "1099339359";
-                    worksheet.Cells[i, 9].Value = "5000000";
+                    worksheet.Cells[i, 7].Value = transactionEvent.ToArray()[indexList].Value.TContent;
+                    worksheet.Cells[i, 8].Value = "";
+                    worksheet.Cells[i, 9].Value = "";
+                    indexList++;
                 }
                 index += times + 1;
             }
@@ -434,6 +396,7 @@ namespace Transaction_Statistical.Class
 
             return worksheet;
         }
+
         private ExcelWorksheet DrawGDTC(ExcelWorksheet worksheet, Dictionary<DateTime, Transaction> ListTransaction)
         {
             try

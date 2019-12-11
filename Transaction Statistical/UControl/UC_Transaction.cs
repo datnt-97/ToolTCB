@@ -20,10 +20,11 @@ namespace Transaction_Statistical.UControl
     public partial class UC_Transaction : UserControl
     {
         SQLiteHelper sqlite;
-        List<Transaction> transactions = new List<Transaction>();       
+        List<Transaction> transactions = new List<Transaction>();
         UC_Explorer uc_Explorer;
         UC_Menu uc_Menu;
         List<string> sTransactionTypeDisplay = new List<string>();
+        DataGridView dataGrid;
         public UC_Transaction()
         {
             sqlite = new SQLiteHelper();
@@ -116,7 +117,7 @@ namespace Transaction_Statistical.UControl
 
         private void bt_Read_Click(object sender, EventArgs e)
         {
-           
+
             DirectoryFileUtilities df = new DirectoryFileUtilities();
             if (File.Exists(txt_Path.Text))
                 JournalAnalyze(new List<string> { txt_Path.Text });
@@ -153,7 +154,7 @@ namespace Transaction_Statistical.UControl
                         int countTransaction = kTerminal.Value.Where(x => (x.Value is Transaction)).ToList().Count;
                         int countTransactionEvent = kTerminal.Value.Where(x => (x.Value is TransactionEvent)).ToList().Count;
                         TreeNode ndTerminal = tre_LstTrans.Nodes.Add(kTerminal.Key, String.Format("Terminal ID: {0} - Total: {1} transactions", kTerminal.Key, kTerminal.Value.Count), "Terminal", "Terminal");
-
+                        ndTerminal.Tag = kTerminal.Value.Where(x => (x.Value is Cycle)).ToDictionary(x => x.Key, x => (Cycle)x.Value);
                         foreach (KeyValuePair<DateTime, object> kTransaction in kTerminal.Value.OrderBy(x => x.Key))
                         {
                             day = String.Format("{0:" + InitParametar.ReadTrans.FormatDate + "}", kTransaction.Key);
@@ -261,19 +262,28 @@ namespace Transaction_Statistical.UControl
                 else if (e.Node != null && e.Node.Tag != null && e.Node.Tag is Cycle)
                 {
                     var cycle = (Cycle)e.Node.Tag;
-                    fctxt_FullLog.Text = (e.Node.Tag as Cycle).LogTxt;
-                    AddLayoutEventCycle(cycle, panel4);
+                    showCycle(cycle);
                 }
-                else if (e.Node != null && e.Node.Tag != null && e.Node.Tag is List<KeyValuePair<DateTime, Cycle>>)
+                else if (e.Node != null && e.Node.Tag != null && e.Node.Tag is Dictionary<DateTime, Cycle>)
                 {
-                    var tagValue = ((List<KeyValuePair<DateTime, Cycle>>)e.Node.Tag).ToList();
-                    ListBox listBox = new ListBox();
-                    listBox.Dock = DockStyle.Fill;
-                    tagValue.ForEach(x =>
+                    resetView();
+                    var tagValue = ((Dictionary<DateTime, Cycle>)e.Node.Tag).ToList();
+                    tvListCycle.Nodes.Clear();
+                    tvListCycle.Scrollable = true;
+                    string textDisplay = "Terminal ID : " + e.Node.Name + " - Total Cycle : " + tagValue.Count;
+                    TreeNode ndCycle = tvListCycle.Nodes.Add(textDisplay, textDisplay);
+                    if (tagValue.Count > 0)
                     {
-                        listBox.Items.Add(x.Value.ToString());
-                    });
-                    panel4.Controls.Add(listBox);
+
+                        tagValue.ForEach(x =>
+                        {
+                            TreeNode ndItem = ndCycle.Nodes.Add(x.Key.ToString(), x.Value.ToString());
+                            ndItem.Tag = x.Value;
+                            ndItem.ImageKey = "Cycle";
+                            ndItem.SelectedImageKey = "Cycle";
+                        });
+                        ndCycle.Expand();
+                    }
                 }
             }
             catch (Exception ex)
@@ -281,69 +291,105 @@ namespace Transaction_Statistical.UControl
                 InitParametar.Send_Error(ex.ToString(), MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name);
             }
         }
-        private void AddLayoutEventCycle(Cycle cycle, Panel panel4)
+
+        private void tvListCycle_AfterSelect(object sender, TreeViewEventArgs e)
         {
-            if (panel4.Controls.Count > 0)
+
+            if (e.Node != null && e.Node.Tag != null && e.Node.Tag is Cycle)
             {
-                TabControl control = (TabControl)panel4.Controls[0];
-                panel4.Controls.Remove(control);
+                showCycle((Cycle)e.Node.Tag);
             }
+        }
+        private void resetView()
+        {
+            if (tvListCycle.Controls.Count > 0)
+            {
+                tvListCycle.Controls.Clear();
+            }
+            if (panel5.Controls.Count > 0)
+            {
+                panel5.Controls.RemoveAt(0);
+            }
+        }
+        private void showCycle(Cycle cycle)
+        {
+            if (panel5.Controls.Count > 0)
+            {
+                panel5.Controls.RemoveAt(0);
+            }
+            dataGrid = new DataGridView();
+
+            fctxt_FullLog.Text = cycle.LogTxt;
             var denoCount = cycle.DenominationCount.ToList();
             var cashCount = cycle.Cashcount_Out.ToList();
-
-            TabControl tabControlCycle = new TabControl();
-            tabControlCycle.Height = panel4.Height;
-            tabControlCycle.Width = panel4.Width;
-            tabControlCycle.Dock = DockStyle.Fill;
-            tabControlCycle.Name = "tcCycle";
-            TabPage tabPageCycle = new TabPage("Cycle Genaral");
-
-            PropertyGrid propertyGrid = new PropertyGrid();
-            propertyGrid.BrowsableAttributes = new AttributeCollection(new CategoryAttribute("1. Info"));
-            propertyGrid.Dock = DockStyle.Fill;
-            propertyGrid.SelectedObject = cycle;
-            tabPageCycle.Controls.Add(propertyGrid);
-            tabControlCycle.Controls.Add(tabPageCycle);
-
             if (denoCount != null)
             {
-                TabPage tabPageCycleDeno = new TabPage("Denomination Count");
-                DataGridView dataGrid = new DataGridView();
                 dataGrid.Dock = DockStyle.Fill;
-
                 BindingSource dtsDeno = new BindingSource();
-                dtsDeno.DataSource = typeof(Deno);
-                dataGrid.DataSource = dtsDeno;
+
+                int rowMidle = denoCount.Count / 2;
+                int rowMidleIdx = 0;
+                SortableBindingList<object> denoCountS = new SortableBindingList<object>();
                 denoCount.OrderByDescending(x => x.Value.Name).ToList().ForEach(x =>
                 {
-                    dtsDeno.Add(x.Value);
+                    object c = new
+                    {
+                        TerminalID = rowMidleIdx == rowMidle ? cycle.TerminalID : "",
+                        SettlementPeriodStart = rowMidleIdx == rowMidle ? cycle.SettlementPeriodDateBegin.ToString() : "",
+                        SettlementPeriodEnd = rowMidleIdx == rowMidle ? cycle.SettlementPeriodDateEnd.ToString() : "",
+                        Denomination = x.Value.Name,
+                        Dispensed = x.Value.Dispensed,
+                        Remaining = x.Value.Remaining,
+                        Retracted = x.Value.Retracted,
+                        Initial = x.Value.Initial,
+                    };
+                    rowMidleIdx++;
+                    denoCountS.Add(c);
                 });
-                tabPageCycleDeno.Controls.Add(dataGrid);
-                tabControlCycle.Controls.Add(tabPageCycleDeno);
-
-            }
-            if (cashCount != null)
-            {
-
-                TabPage tabPageCycleCash = new TabPage("Cash Count");
-                DataGridView dataGridCash = new DataGridView();
-                dataGridCash.Dock = DockStyle.Fill;
-                BindingSource dtsCash = new BindingSource();
-                dtsCash.DataSource = typeof(Cassette);
-                dataGridCash.DataSource = dtsCash;
-                cashCount.OrderByDescending(x => x.Value.Name).ToList().ForEach(x =>
+                dtsDeno.DataSource = denoCountS;
+                dataGrid.DataSource = dtsDeno;
+                //dataGrid.ColumnHeaderMouseClick = gridViewClickHeader(sender,, dataGrid);
+                dataGrid.CellPainting += new DataGridViewCellPaintingEventHandler(dataGridView1_CellPainting);
+                foreach (DataGridViewColumn column in dataGrid.Columns)
                 {
-                    dtsCash.Add(x.Value);
-                });
-                tabPageCycleCash.Controls.Add(dataGridCash);
-                tabControlCycle.Controls.Add(tabPageCycleCash);
+                    column.SortMode = DataGridViewColumnSortMode.Automatic;
+                }
+
+                dataGrid.AllowUserToAddRows = false;
+                dataGrid.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.DisplayedCells;
+                panel5.Controls.Add(dataGrid);
 
             }
-
-
-
-            panel4.Controls.Add(tabControlCycle);
         }
+        bool IsTheSameCellValue(int column, int row)
+        {
+            return column <= 2 && row < dataGrid.RowCount;
+
+        }
+        private void dataGridView1_CellPainting(object sender, DataGridViewCellPaintingEventArgs e)
+        {
+            e.AdvancedBorderStyle.Bottom = DataGridViewAdvancedCellBorderStyle.None;
+            if (e.RowIndex < 0)
+                return;
+            if (IsTheSameCellValue(e.ColumnIndex, e.RowIndex))
+            {
+                if (e.RowIndex == 0)
+                {
+                    e.AdvancedBorderStyle.Top = DataGridViewAdvancedCellBorderStyle.Single;
+                }
+                else
+                {
+                    e.AdvancedBorderStyle.Top = DataGridViewAdvancedCellBorderStyle.None;
+
+                }
+            }
+            else
+            {
+                e.AdvancedBorderStyle.Top = dataGrid.AdvancedCellBorderStyle.Top;
+            }
+
+        }
+
         private void tre_LstTrans_NodeMouseHover(object sender, TreeNodeMouseHoverEventArgs e)
         {
 
@@ -355,7 +401,7 @@ namespace Transaction_Statistical.UControl
             {
                 UC_ExportCus uc_MenuStartup = new UC_ExportCus();
                 uc_MenuStartup.Dock = DockStyle.Fill;
-                Frm_TemplateDefault frm= new Frm_TemplateDefault(uc_MenuStartup);
+                Frm_TemplateDefault frm = new Frm_TemplateDefault(uc_MenuStartup);
                 frm.titleCustom.Text = "File Export";
                 frm.ShowDialog();
             }
