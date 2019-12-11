@@ -63,6 +63,7 @@ namespace Transaction_Statistical.UControl
                 ComboBoxItem cb_tmp = cbo_LstTemplate.SelectedItem as ComboBoxItem;
                 InitParametar.TemplateTransactionID = cb_tmp.Value.ToString();
                 InitParametar.LoadTemplateInfo();
+
             }
             catch (Exception ex)
             {

@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.Drawing.Design;
 using System.Globalization;
 using System.IO;
 using System.Linq;
@@ -90,7 +92,8 @@ namespace Transaction_Statistical
                 DatabaseFile = PathDirectoryCurrentAppConfigData + "\\DB.s3db";
                 sqlite = new SQLiteHelper();
                 listTransaction = new Dictionary<string, Dictionary<DateTime, Transaction>>();
-               
+                ReadTrans = new ReadTransaction();
+
             }
             catch (Exception ex)
             {
@@ -156,7 +159,7 @@ namespace Transaction_Statistical
                 type.Name = r["Name"].ToString();
                 type.Identification = r["IdentificationTxt"].ToString();
                 type.Successful = r["SuccessfulTxt"].ToString();
-                type.Unsuccessful = r["UnsuccessfulTxt"].ToString();
+                type.UnSuccessful = r["UnsuccessfulTxt"].ToString();
                 listTransType[type.Name] = type;
             }
             #endregion
@@ -204,7 +207,7 @@ namespace Transaction_Statistical
         public string Name;
         public string Identification;
         public string Successful;
-        public string Unsuccessful;
+        public string UnSuccessful;
     }
 
     public class ReadTransaction
@@ -292,7 +295,7 @@ namespace Transaction_Statistical
                 type.Name = r["Name"].ToString();
                 type.Identification = r["IdentificationTxt"].ToString();
                 type.Successful = r["SuccessfulTxt"].ToString();
-                type.Unsuccessful = r["UnsuccessfulTxt"].ToString();
+                type.UnSuccessful = r["UnsuccessfulTxt"].ToString();
                 Template_TransType[type.Name] = type;
             }
             #endregion
@@ -317,7 +320,6 @@ namespace Transaction_Statistical
                     SplitTransactionEJ(ref Terminal, ref contenFile);
                     FindEventDevice2(currentDate, Terminal, ref contenFile);
                     FindCounterChanged(ref contenFile, ref ListCycle);
-
                     ListTransaction[Terminal] = ListTransaction[Terminal].OrderBy(d => d.Key).ToDictionary(k => k.Key, v => v.Value);
                 //    InitParametar.sTest += contenFile + Environment.NewLine;
                 }
@@ -434,6 +436,7 @@ namespace Transaction_Statistical
                             FindEventDevice(ref trans.TraceJournal_Remaining, trans.DateBegin, ref trans.ListEvent);
                             InitParametar.sTest += trans.TraceJournal_Remaining + Environment.NewLine;
                             trans.ListEvent = trans.ListEvent.OrderBy(d => d.Key).ToDictionary(k => k.Key, v => v.Value);
+                            SplitRequest(ref trans);
                             if (ListTransaction.ContainsKey(trans.Terminal))
                             {
                                 if (ListTransaction[trans.Terminal].ContainsKey(trans.DateBegin))
@@ -819,13 +822,15 @@ namespace Transaction_Statistical
                         }
                        else
                         {
-                            //tr
-                            //req = new TransactionRequest();
-                            //req.DateBegin = evt.DateBegin;
-                            //req.Status = TransactionRequest.StatusS.Succeeded;
+                            transaction.ListRequest[req.DateBegin] = req;
+                            req = new TransactionRequest();
+                            req.DateBegin = evt.DateBegin;
+                            req.Status = TransactionRequest.StatusS.Succeeded;
+                            CheckRequestName(evt.Data, ref req.Request);
                         }
                     }
                 }
+                transaction.ListRequest[req.DateBegin] = req;
                 return true;
             }
             catch (Exception ex)
@@ -838,12 +843,13 @@ namespace Transaction_Statistical
         {
             foreach (TransactionType type in Template_TransType.Values)
                 if (type.Identification.Split('|').Contains(operationCode)) { transactionType = type.Name; return true; }
+            transactionType = @"N/A: [" + operationCode + "]";
             return false;
         }
     }
 
     public class Transaction
-    {   
+    {
         public enum StatusS
         {
             Succeeded,
@@ -867,10 +873,10 @@ namespace Transaction_Statistical
         }
         public string TraceJournalFull;
         public Dictionary<DateTime, TransactionEvent> ListEvent = new Dictionary<DateTime, TransactionEvent>();
-        public Dictionary<DateTime, TransactionRequest> ListRequest = new Dictionary<DateTime, TransactionRequest>();
+
         public int Result;
 
-        
+
         [CategoryAttribute("1.Terminal"), DescriptionAttribute("Terminal ID")]
         public string Terminal { get; set; }
         string _status = "0000";
@@ -918,10 +924,9 @@ namespace Transaction_Statistical
         public string MachineSequenceNo { get; set; }
         TransactionType _type = TransactionType.Withdrawal;
         [CategoryAttribute("3. Transaction"), DescriptionAttribute("Type the transaction")]
-        public TransactionType Type
+        public string Type
         {
-            get { return _type; }
-            set { _type = value; }
+            get { return string.Join("=>", ListRequest.Values); }
         }
 
         [CategoryAttribute("3. Transaction"), DescriptionAttribute("Date of the transaction")]
@@ -934,81 +939,21 @@ namespace Transaction_Statistical
         [CategoryAttribute("3. Transaction"), DescriptionAttribute("End time of the transaction")]
         public string TimeEnd { get { return String.Format("{0:HH:mm:ss}", DateBegin); } }
 
-        //string _amount = "0";
+
         [CategoryAttribute("3. Transaction"), DescriptionAttribute("Amount")]
         public int Amount { get; set; }
-        [CategoryAttribute("4. Follow"), DescriptionAttribute("Follow of the transaction")]
+
+        public Dictionary<DateTime, TransactionRequest> ListRequest = new Dictionary<DateTime, TransactionRequest>();
+       
+       
+
+            [CategoryAttribute("5. Follow"), DescriptionAttribute("Follow of the transaction")]
         public string Follow
         {
             get { return string.Join("=>", ListEvent.Values); }           
         }
 
-
-        //string _cassette1 = string.Empty;
-        //[CategoryAttribute("CRM"), DescriptionAttribute("Cassette 1")]
-        //public string Cassette1
-        //{
-        //    get { return _cassette1; }
-        //    set { _cassette1 = value; }
-        //}
-
-        //string _cassette2 = string.Empty;
-        //[CategoryAttribute("CRM"), DescriptionAttribute("Cassette 2")]
-        //public string Cassette2
-        //{
-        //    get { return _cassette2; }
-        //    set { _cassette2 = value; }
-        //}
-
-        //string _cassette3 = string.Empty;
-        //[CategoryAttribute("CRM"), DescriptionAttribute("Cassette 3")]
-        //public string Cassette3
-        //{
-        //    get { return _cassette3; }
-        //    set { _cassette3 = value; }
-        //}
-
-        //string _cassette4 = string.Empty;
-        //[CategoryAttribute("CRM"), DescriptionAttribute("Cassette 4")]
-        //public string Cassette4
-        //{
-        //    get { return _cassette4; }
-        //    set { _cassette4 = value; }
-        //}
-
-        //string _cassette5 = string.Empty;
-        //[CategoryAttribute("CRM"), DescriptionAttribute("Cassette 5")]
-        //public string Cassette5
-        //{
-        //    get { return _cassette5; }
-        //    set { _cassette5 = value; }
-        //}
-
-        //string _cassette6 = string.Empty;
-        //[CategoryAttribute("CRM"), DescriptionAttribute("Cassette 6")]
-        //public string Cassette6
-        //{
-        //    get { return _cassette6; }
-        //    set { _cassette6 = value; }
-        //}
-
-        //string _cassette7 = string.Empty;
-        //[CategoryAttribute("CRM"), DescriptionAttribute("Cassette 7")]
-        //public string Cassette7
-        //{
-        //    get { return _cassette7; }
-        //    set { _cassette7 = value; }
-        //}
-
-        //string _cassette8 = string.Empty;
-        //[CategoryAttribute("CRM"), DescriptionAttribute("Cassette 8")]
-        //public string Cassette8
-        //{
-        //    get { return _cassette8; }
-        //    set { _cassette8 = value; }
-        //}
-
-
+      
 
         public Transaction()
         {
@@ -1020,6 +965,7 @@ namespace Transaction_Statistical
             return String.Format("{0:HH:mm:ss }", DateBegin) + ( CardType == Transaction.CardTypes.CardLess ? "Cardless: " + (DataInput.Count == 0 ? string.Empty : DataInput[0]) : "Card: " + CardNumber);
         }
     }
+   
     public class TransactionEvent
     {
         public enum Events
@@ -1090,6 +1036,11 @@ namespace Transaction_Statistical
                 { a += de.Amount; } return a; }
         }
         public int AmountRequest;
+         public override string ToString()
+        {
+            return Request;
+           // return String.Format("{0:HH:mm:ss }", DateBegin) + Request;
+        }
     }
 
 

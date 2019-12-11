@@ -39,6 +39,7 @@ namespace Transaction_Statistical.UControl
             this.txt_Path = new System.Windows.Forms.TextBox();
             this.gpBox_Actions = new System.Windows.Forms.GroupBox();
             this.pl_Actions = new System.Windows.Forms.FlowLayoutPanel();
+          
             this.tre_LstTrans = new System.Windows.Forms.TreeView();
             this.imageListTre = new System.Windows.Forms.ImageList(this.components);
             this.cb_FullTime = new System.Windows.Forms.CheckBox();
@@ -58,6 +59,7 @@ namespace Transaction_Statistical.UControl
             this.fctxt_FullLog = new FastColoredTextBoxNS.FastColoredTextBox();
             this.panel4 = new System.Windows.Forms.Panel();
             this.gpBox_Actions.SuspendLayout();
+            this.pl_Actions.SuspendLayout();
             this.panel1.SuspendLayout();
             this.panel2.SuspendLayout();
             this.panel3.SuspendLayout();
@@ -75,7 +77,7 @@ namespace Transaction_Statistical.UControl
             this.txt_Path.Name = "txt_Path";
             this.txt_Path.Size = new System.Drawing.Size(645, 22);
             this.txt_Path.TabIndex = 1;
-            this.txt_Path.Text = "d:\\06-NPSS\\Tool_TraSoat\\LOG tech\\LOG tech\\02-10-2019";
+            this.txt_Path.Text = "D:\\06-NPSS\\Tool_TraSoat\\LOG tech\\LOG tech\\02-10-2019\\99262001-20190917.txt";
             this.txt_Path.MouseClick += new System.Windows.Forms.MouseEventHandler(this.txt_Path_MouseEnter);
             // 
             // gpBox_Actions
@@ -92,11 +94,13 @@ namespace Transaction_Statistical.UControl
             // 
             // pl_Actions
             // 
+            this.pl_Actions.AutoScroll = true;
             this.pl_Actions.Dock = System.Windows.Forms.DockStyle.Fill;
             this.pl_Actions.Location = new System.Drawing.Point(3, 18);
             this.pl_Actions.Name = "pl_Actions";
             this.pl_Actions.Size = new System.Drawing.Size(639, 91);
             this.pl_Actions.TabIndex = 0;
+           
             // 
             // tre_LstTrans
             // 
@@ -334,7 +338,6 @@ namespace Transaction_Statistical.UControl
             this.fctxt_FullLog.Cursor = System.Windows.Forms.Cursors.IBeam;
             this.fctxt_FullLog.DisabledColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))));
             this.fctxt_FullLog.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.fctxt_FullLog.Font = new System.Drawing.Font("Courier New", 9.75F);
             this.fctxt_FullLog.ForeColor = System.Drawing.Color.White;
             this.fctxt_FullLog.IndentBackColor = System.Drawing.Color.DimGray;
             this.fctxt_FullLog.IsReplaceMode = false;
@@ -378,6 +381,8 @@ namespace Transaction_Statistical.UControl
             this.Name = "UC_Transaction";
             this.Size = new System.Drawing.Size(1354, 639);
             this.gpBox_Actions.ResumeLayout(false);
+            this.pl_Actions.ResumeLayout(false);
+            this.pl_Actions.PerformLayout();
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
             this.panel2.ResumeLayout(false);
@@ -409,5 +414,6 @@ namespace Transaction_Statistical.UControl
         private ImageList imageListTre;
         private AddOn.MinMaxButton btn_Export;
         private ImageList imageListControl;
+       
     }
 }
