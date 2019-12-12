@@ -246,6 +246,7 @@ namespace Transaction_Statistical.UControl
 
                     fctxt_FullLog.Text = (e.Node.Tag as Transaction).TraceJournalFull;
                     var trans = (Transaction)e.Node.Tag;
+                    trans.Properties = new List<CustomProperty>();
                     int cCount = 1;
                     foreach (var req in (e.Node.Tag as Transaction).ListEvent.Values)
                     {
