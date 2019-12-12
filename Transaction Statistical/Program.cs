@@ -16,7 +16,7 @@ namespace Transaction_Statistical
         static void Main(string[] args)
         { 
             InitParametar.Init();
-          //  InitParametar.AutoStart("Test23");
+          //  InitParametar.AutoStart("Test2");
             if (args.Length == 0)
             {               
                 Application.EnableVisualStyles();

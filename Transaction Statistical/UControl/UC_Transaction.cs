@@ -118,20 +118,29 @@ namespace Transaction_Statistical.UControl
 
         private void bt_Read_Click(object sender, EventArgs e)
         {
-
-            DirectoryFileUtilities df = new DirectoryFileUtilities();
-            if (File.Exists(txt_Path.Text))
-                JournalAnalyze(new List<string> { txt_Path.Text });
-            else if (Directory.Exists(txt_Path.Text))
+            try
             {
-                FileInfo[] files = df.GetAllFilePath(txt_Path.Text, InitParametar.ExtensionFile);
-                JournalAnalyze(files.Select(f => f.FullName).ToList());
-                tre_LstTrans.Nodes[0].Expand();
+                DirectoryFileUtilities df = new DirectoryFileUtilities();
+                if (File.Exists(txt_Path.Text))
+                    JournalAnalyze(new List<string> { txt_Path.Text });
+                else if (Directory.Exists(txt_Path.Text))
+                {
+                   
+                    FileInfo[] files = df.GetAllFilePath(txt_Path.Text, InitParametar.ExtensionFile);
+                    JournalAnalyze(files.Select(f => f.FullName).ToList());
+                    tre_LstTrans.Nodes[0].Expand();
+                    
+
+                }
+                else
+                    MessageBox.Show("File/Drectory not exist.", "Error File/Directory", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-            else
-                MessageBox.Show("File/Drectory not exist.", "Error File/Directory", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            catch(Exception ex)
+            {
+                InitParametar.Send_Error(ex.ToString(), MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name);
+            }
         }
-        private void JournalAnalyze(List<string> lsFile_Journal)
+        private async void JournalAnalyze(List<string> lsFile_Journal)
         {
             try
             {
@@ -145,8 +154,17 @@ namespace Transaction_Statistical.UControl
                     InitParametar.ReadTrans.StartDate = dateTimePicker_Start.Value;
                     InitParametar.ReadTrans.EndDate = dateTimePicker_End.Value;
                 }
-                if (InitParametar.ReadTrans.Reads(lsFile_Journal))
-                {
+
+
+                var watch = System.Diagnostics.Stopwatch.StartNew();
+                watch.Start();
+                if (await InitParametar.ReadTrans.Reads(lsFile_Journal))
+                { 
+                    //test time
+                    var mili = watch.ElapsedMilliseconds;
+                watch.Stop();
+                MessageBox.Show((mili / 1000).ToString());
+                    ///
                     btn_Export.Enabled = true;
                     string day;
                     foreach (KeyValuePair<string, Dictionary<DateTime, object>> kTerminal in InitParametar.ReadTrans.ListTransaction)
