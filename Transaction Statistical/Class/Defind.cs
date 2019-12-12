@@ -234,6 +234,7 @@ namespace Transaction_Statistical
         public Dictionary<string, string> Template_EventReceive;
         public Dictionary<string, string> Template_SplitTransactions;
         public Dictionary<string, string> Template_EventCounterChanged;
+        public Dictionary<string, string> Template_EventCashOutIn;
         public Dictionary<string, TransactionType> Template_TransType;
         public string FileExport;
         public string FileAuthor = @"Copyright © 2019, Công ty TNHH Giải pháp và Dịch vụ Nam Phương.";
@@ -253,6 +254,7 @@ namespace Transaction_Statistical
             if (Template_EventDevice == null) Template_EventDevice = new Dictionary<string, string>();
             if (Template_EventRequest == null) Template_EventRequest = new Dictionary<string, string>();
             if (Template_EventReceive == null) Template_EventReceive = new Dictionary<string, string>();
+            if (Template_EventCashOutIn == null) Template_EventCashOutIn = new Dictionary<string, string>();
             if (Template_SplitTransactions == null) Template_SplitTransactions = new Dictionary<string, string>();
             if (Template_EventCounterChanged == null) Template_EventCounterChanged = new Dictionary<string, string>();
 
@@ -283,6 +285,10 @@ namespace Transaction_Statistical
             cfg_data = sqlite.GetTableDataWith2ColumnName("CfgData", "Type_ID", "458", "Parent_ID", InitParametar.TemplateTransactionID);
             foreach (DataRow r in cfg_data.Rows)
                 Template_SplitTransactions[r["Field"].ToString()] = r["Data"].ToString();
+
+            cfg_data = sqlite.GetTableDataWith2ColumnName("CfgData", "Type_ID", "525", "Parent_ID", InitParametar.TemplateTransactionID);
+            foreach (DataRow r in cfg_data.Rows)
+                Template_EventCashOutIn[r["Field"].ToString()] = r["Data"].ToString();
 
             cfg_data = sqlite.GetTableDataWith2ColumnName("CfgData", "Type_ID", "459", "Parent_ID", InitParametar.TemplateTransactionID);
             foreach (DataRow r in cfg_data.Rows)
@@ -456,6 +462,7 @@ namespace Transaction_Statistical
                             FindEventRequest(ref trans.TraceJournal_Remaining, trans.DateBegin, ref trans.ListEvent);
                             FindEventReceive(ref trans.TraceJournal_Remaining, trans.DateBegin, ref trans.ListEvent);
                             FindEventDevice(ref trans.TraceJournal_Remaining, trans.DateBegin, ref trans.ListEvent);
+                            FindEventCashOutIn(ref trans.TraceJournal_Remaining, trans.DateBegin, ref trans.ListEvent, ref trans);
                             InitParametar.sTest += trans.TraceJournal_Remaining + Environment.NewLine;
                             trans.ListEvent = trans.ListEvent.OrderBy(d => d.Key).ToDictionary(k => k.Key, v => v.Value);
                             SplitRequest(ref trans);
@@ -664,7 +671,70 @@ namespace Transaction_Statistical
                                 DateCurrent = evt.DateBegin;
                             }
                             else
+                                evt.DateBegin = DateCurrent;                           
+                            if (eventList.ContainsKey(evt.DateBegin)) eventList[evt.DateBegin.AddMilliseconds(1)] = evt;
+                            else eventList[evt.DateBegin] = evt;
+                            sString = sString.Replace(regx.stringfind, string.Empty);
+                        }
+                    }
+                }
+                return true;
+            }
+            catch (Exception ex)
+            {
+                InitParametar.Send_Error(ex.ToString(), MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name);
+            }
+            return false;
+        }
+        private bool FindEventCashOutIn(ref string sString, DateTime DateCurrent, ref Dictionary<DateTime, TransactionEvent> eventList, ref Transaction tran)
+        {
+            try
+            {
+                Dictionary<int, RegesValue> lst = new Dictionary<int, RegesValue>();
+                TransactionEvent evt;
+
+                foreach (KeyValuePair<string, string> tmp in Template_EventCashOutIn)
+                {
+                    if (Regexs.RunPatternRegular(sString, tmp.Value, out lst))
+                    {
+                        foreach (RegesValue regx in lst.Values)
+                        {
+                            evt = new TransactionEvent();                            
+                            evt.Name = tmp.Key;
+                            evt.Status = TransactionEvent.StatusS.Succeeded;
+                            evt.TContent = regx.stringfind;
+                            if (regx.value.ContainsKey("Time") && !string.IsNullOrEmpty(regx.value["Time"]))
+                            {
+                                DateTime.TryParseExact(string.Format("{0:yyyyMMdd}", DateCurrent) + regx.value["Time"], "yyyyMMdd" + FormatTime, CultureInfo.InvariantCulture, DateTimeStyles.None, out evt.DateBegin);
+                                DateCurrent = evt.DateBegin;
+                            }
+                            else
                                 evt.DateBegin = DateCurrent;
+                            int node = 0;
+                            if (regx.value.ContainsKey("TimeSeparation"))
+                            {
+                                DateTime.TryParseExact(string.Format("{0:yyyyMMdd}", DateCurrent) + regx.value["TimeSeparation"], "yyyyMMdd" + FormatTime, CultureInfo.InvariantCulture, DateTimeStyles.None, out evt.DateBegin);
+                                evt.Type = TransactionEvent.Events.CashOut;
+                                if (regx.value.ContainsKey("Sep10k") && int.TryParse(regx.value["Sep10k"], out node)) tran.Value_10K -= node;
+                                if (regx.value.ContainsKey("Sep20k") && int.TryParse(regx.value["Sep20k"], out node)) tran.Value_20K -= node;
+                                if (regx.value.ContainsKey("Sep50k") && int.TryParse(regx.value["Sep50k"], out node)) tran.Value_50K -= node;
+                                if (regx.value.ContainsKey("Sep100k") && int.TryParse(regx.value["Sep100k"], out node)) tran.Value_100K -= node;
+                                if (int.TryParse(regx.value["Sep200k"], out node)) tran.Value_200K -= node;
+                                if (int.TryParse(regx.value["Sep500k"], out node)) tran.Value_500K -= node;
+                                if (int.TryParse(regx.value["Reject"], out node)) tran.Rejects += node;
+                            }
+                            if (regx.value.ContainsKey("TimeStored"))
+                               {
+                                evt.Type = TransactionEvent.Events.CashIn;
+                                DateTime.TryParseExact(string.Format("{0:yyyyMMdd}", DateCurrent) + regx.value["TimeStored"], "yyyyMMdd" + FormatTime, CultureInfo.InvariantCulture, DateTimeStyles.None, out evt.DateBegin);
+                                if (regx.value.ContainsKey("Sto10k") && int.TryParse(regx.value["Sto10k"], out node)) tran.Value_10K += node;
+                                if (regx.value.ContainsKey("Sto20k") && int.TryParse(regx.value["Sto20k"], out node)) tran.Value_20K += node;
+                                if (regx.value.ContainsKey("Sto50k") && int.TryParse(regx.value["Sto50k"], out node)) tran.Value_50K += node;
+                                if (int.TryParse(regx.value["Sto100k"], out node)) tran.Value_100K += node;
+                                if (int.TryParse(regx.value["Sto200k"], out node)) tran.Value_200K += node;
+                                if (int.TryParse(regx.value["Sto500k"], out node)) tran.Value_500K += node;
+                                //if (int.TryParse(regx.value["StoReject"], out node)) tran.Node_Rejects += node;
+                            }
                             if (eventList.ContainsKey(evt.DateBegin)) eventList[evt.DateBegin.AddMilliseconds(1)] = evt;
                             else eventList[evt.DateBegin] = evt;
                             sString = sString.Replace(regx.stringfind, string.Empty);
@@ -903,6 +973,13 @@ namespace Transaction_Statistical
             CardNumber,
             CardLess
         }
+        public int Value_10K;
+        public int Value_20K;
+        public int Value_50K;
+        public int Value_100K;
+        public int Value_200K;
+        public int Value_500K;
+        public int Rejects;
         public string TraceJournalFull;
         public Dictionary<DateTime, TransactionEvent> ListEvent = new Dictionary<DateTime, TransactionEvent>();
 
@@ -978,8 +1055,7 @@ namespace Transaction_Statistical
         public Dictionary<DateTime, TransactionRequest> ListRequest = new Dictionary<DateTime, TransactionRequest>();
 
 
-
-        [CategoryAttribute("5. Follow"), DescriptionAttribute("Follow of the transaction")]
+        [CategoryAttribute("6. Follow"), DescriptionAttribute("Follow of the transaction")]
         public string Follow
         {
             get { return string.Join("=>", ListEvent.Values); }
@@ -1017,7 +1093,9 @@ namespace Transaction_Statistical
             NotesRemoved,
             AddMoreDeposit,
             TransactionEnd,
-            Transaction
+            Transaction,
+                CashIn,
+                CashOut
         }
         public Events Type;
 

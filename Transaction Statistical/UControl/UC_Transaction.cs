@@ -23,13 +23,14 @@ namespace Transaction_Statistical.UControl
         List<Transaction> transactions = new List<Transaction>();
         UC_Explorer uc_Explorer;
         UC_Menu uc_Menu;
-        List<string> sTransactionTypeDisplay = new List<string>();
+        List<string> sTransactionTypeDisplay;
         DataGridView dataGrid;
         public UC_Transaction()
         {
             sqlite = new SQLiteHelper();
             InitializeComponent();
             Add_GUI();
+            sTransactionTypeDisplay = InitParametar.ReadTrans.Template_TransType.Keys.ToList();
         }
         #region design     
 
@@ -125,7 +126,7 @@ namespace Transaction_Statistical.UControl
             {
                 FileInfo[] files = df.GetAllFilePath(txt_Path.Text, InitParametar.ExtensionFile);
                 JournalAnalyze(files.Select(f => f.FullName).ToList());
-                tre_LstTrans.ExpandAll();
+                tre_LstTrans.Nodes[0].Expand();
             }
             else
                 MessageBox.Show("File/Drectory not exist.", "Error File/Directory", MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -167,7 +168,7 @@ namespace Transaction_Statistical.UControl
 
                             if (kTransaction.Value is Transaction)
                             {
-                                //if (!FilterDisplayTransaction((kTransaction.Value as Transaction).ListRequest.Values.ToList())) continue;
+                                if (!FilterDisplayTransaction((kTransaction.Value as Transaction).ListRequest.Values.ToList())) continue;
                                 TreeNode ndTransaction = ndDay.Nodes.Add(textDisplay, textDisplay);
                                 ndTransaction.Tag = kTransaction.Value;
                                 ndTransaction.ImageKey = "Flag";
@@ -236,7 +237,7 @@ namespace Transaction_Statistical.UControl
         {
             uc_Menu.SlideMenuShow();
         }
-        
+
         private void tre_LstTrans_AfterSelect(object sender, TreeViewEventArgs e)
         {
             try
@@ -248,6 +249,79 @@ namespace Transaction_Statistical.UControl
                     var trans = (Transaction)e.Node.Tag;
                     trans.Properties = new List<CustomProperty>();
                     int cCount = 1;
+                    if (trans.Value_10K != 0)
+                    {
+                        trans.Properties.Add(new CustomProperty
+                        {
+                            Name = cCount + ". 10,000 VND",
+                            Type = typeof(int),
+                            Desc = "Cash counter of In/Out",
+                            Cate = "5.Cash In / Out",
+                            DefaultValue = trans.Value_10K
+                        }); cCount += 1;
+                    }
+                    if (trans.Value_20K != 0)
+                    {
+                        trans.Properties.Add(new CustomProperty
+                        {
+                            Name = cCount + ". 20,000 VND",
+                            Type = typeof(int),
+                            Desc = "Cash counter of In/Out",
+                            Cate = "5.Cash In / Out",
+                            DefaultValue = trans.Value_20K
+                        });
+                        cCount += 1;
+                    }
+
+                    if (trans.Value_50K != 0)
+                    {
+                        trans.Properties.Add(new CustomProperty
+                        {
+                            Name = cCount + ". 50,000 VND",
+                            Type = typeof(int),
+                            Desc = "Cash counter of In/Out",
+                            Cate = "5.Cash In / Out",
+                            DefaultValue = trans.Value_50K
+                        });
+                        cCount += 1;
+                    }
+                    if (trans.Value_100K != 0)
+                    {
+                        trans.Properties.Add(new CustomProperty
+                        {
+                            Name = cCount + ". 100,000 VND",
+                            Type = typeof(int),
+                            Desc = "Cash counter of In/Out",
+                            Cate = "5.Cash In / Out",
+                            DefaultValue = trans.Value_100K
+                        });
+                        cCount += 1;
+                    }
+                    if (trans.Value_200K != 0)
+                    {
+                        trans.Properties.Add(new CustomProperty
+                        {
+                            Name = cCount + ". 200,000 VND",
+                            Type = typeof(int),
+                            Desc = "Cash counter of In/Out",
+                            Cate = "5.Cash In / Out",
+                            DefaultValue = trans.Value_200K
+                        });
+                        cCount += 1;
+                    }
+                    if (trans.Value_500K != 0)
+                    {
+                        trans.Properties.Add(new CustomProperty
+                        {
+                            Name = cCount + ". 500,000 VND",
+                            Type = typeof(int),
+                            Desc = "Cash counter of In/Out",
+                            Cate = "5.Cash In / Out",
+                            DefaultValue = trans.Value_500K
+                        });
+                        cCount += 1;
+                    }
+                    cCount = 1;
                     foreach (var req in (e.Node.Tag as Transaction).ListEvent.Values)
                     {
                         trans.Properties.Add(new CustomProperty
@@ -255,7 +329,7 @@ namespace Transaction_Statistical.UControl
                             Name = req.TTime,
                             Type = typeof(string),
                             Desc = req.ToString(),
-                            Cate = "5. Follow",
+                            Cate = "6. Follow",
                             DefaultValue = req.ToString()
                         });
                         cCount++;
@@ -265,10 +339,10 @@ namespace Transaction_Statistical.UControl
                     {
                         trans.Properties.Add(new CustomProperty
                         {
-                            Name = req.DateBegin.ToString(),
+                            Name = string.Format("{0:HH:mm:ss}", req.DateBegin),
                             Type = typeof(string),
                             Desc = req.ToString(),
-                            Cate = "4. Follow",
+                            Cate = "4. Requests",
                             DefaultValue = req.ToString()
                         });
                         cCount++;
