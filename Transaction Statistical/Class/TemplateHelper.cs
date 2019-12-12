@@ -523,7 +523,9 @@ namespace Transaction_Statistical.Class
                 for (int j = 0; j < trans.Count(); j++)
                 {
                     var itemTrans = trans[j].Value;
-                    var cycleOfTransction = cycles.Where(x => x.Value.SettlementPeriodDateBegin <= itemTrans.DateBegin && itemTrans.Terminal.Contains(x.Value.TerminalID)).OrderBy(x => x.Value.SettlementPeriodDateBegin).LastOrDefault().Value;
+                    var cycleOfTransction = cycles.Where(x => x.Value.SettlementPeriodDateBegin <= itemTrans.DateBegin
+                    && x.Value.SettlementPeriodDateEnd >= itemTrans.DateBegin
+                    && itemTrans.Terminal.Contains(x.Value.TerminalID)).OrderBy(x => x.Value.SettlementPeriodDateBegin).LastOrDefault().Value;
                     worksheet.Cells[indexData, index].Value = "";
                     worksheet.Cells[indexData, index + 1].Value = itemTrans.Type;
                     worksheet.Cells[indexData, index + 2].Value = itemTrans.Status;
@@ -533,7 +535,7 @@ namespace Transaction_Statistical.Class
                     worksheet.Cells[indexData, index + 6].Value = itemTrans.CardType == Transaction.CardTypes.CardLess ? "CardLess" : itemTrans.CardNumber;
                     worksheet.Cells[indexData, index + 7].Value = itemTrans.DataInput;
                     worksheet.Cells[indexData, index + 8].Value = itemTrans.DateBegin;
-                    worksheet.Cells[indexData, index + 8].Style.Numberformat.Format = "mm/dd/yyyy hh:mm:ss AM/PM";
+                    worksheet.Cells[indexData, index + 8].Style.Numberformat.Format = "dd/mm/yyyy hh:mm:ss AM/PM";
 
                     worksheet.Cells[indexData, index + 9].Value = itemTrans.Amount;
                     worksheet.Cells[indexData, index + 10].Value = "";
@@ -550,6 +552,7 @@ namespace Transaction_Statistical.Class
                     worksheet.Cells[indexData, index + 21].Value = "";
                     worksheet.Cells[indexData, index + 22].Value = "";
                     worksheet.Cells[indexData, index + 23].Value = "";
+                    worksheet.Cells[indexData, index + 24].Style.HorizontalAlignment = ExcelHorizontalAlignment.Left;
                     worksheet.Cells[indexData, index + 24].Value = itemTrans.Follow;
                     //worksheet.Cells[indexData, index + 25].Value = "";
                     indexData++;

@@ -137,7 +137,6 @@ E:\Project\NPS\ToolTCB\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Sta
 E:\Project\NPS\ToolTCB\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.UC_Menu_Startup.resources
 E:\Project\NPS\ToolTCB\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.UControl.UC_Transaction.resources
 E:\Project\NPS\ToolTCB\ToolTCB\Transaction Statistical\obj\Debug\Transaction Statistical.csproj.GenerateResource.cache
-E:\Project\NPS\ToolTCB\ToolTCB\Transaction Statistical\obj\Debug\Transaction Statistical.csproj.CoreCompileInputs.cache
 E:\Project\NPS\ToolTCB\ToolTCB\Transaction Statistical\obj\Debug\Transaction Statistical.csproj.CopyComplete
 E:\Project\NPS\ToolTCB\ToolTCB\Transaction Statistical\obj\Debug\Transaction Statistical.exe
 E:\Project\NPS\ToolTCB\ToolTCB\Transaction Statistical\obj\Debug\Transaction Statistical.pdb
@@ -184,3 +183,4 @@ D:\ToolTCB_Git\ToolTCB\Transaction Statistical\obj\Debug\Transaction Statistical
 D:\ToolTCB_Git\ToolTCB\Transaction Statistical\obj\Debug\Transaction Statistical.csproj.CopyComplete
 D:\ToolTCB_Git\ToolTCB\Transaction Statistical\obj\Debug\Transaction Statistical.exe
 D:\ToolTCB_Git\ToolTCB\Transaction Statistical\obj\Debug\Transaction Statistical.pdb
+E:\Project\NPS\ToolTCB\ToolTCB\Transaction Statistical\bin\Debug\FastColoredTextBox.xml

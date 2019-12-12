@@ -20,9 +20,9 @@ namespace Transaction_Statistical
         public static Dictionary<int, string> Template = new Dictionary<int, string>()
         {
             {(int)TemplateHelper.TEMPLATE.CanQuyTheoCouterTrenMay,"Cân Quỹ Theo Counter Trên Máy" },
-            {(int)TemplateHelper.TEMPLATE.BaoCaoGiaoDichTaiChinh,"BC GD Tài Chính" },
-            {(int)TemplateHelper.TEMPLATE.BaoCaoGiaoDichTaiChinhKhongThanhCong,"BC GD Tài Chính Không Thành Công" },
-            {(int)TemplateHelper.TEMPLATE.BaoCaoGiaoDichTaiChinhBatThuong,"BC GD Tài Chính Bất Thường" },
+            {(int)TemplateHelper.TEMPLATE.BaoCaoGiaoDichTaiChinh,"GD Tài Chính" },
+            {(int)TemplateHelper.TEMPLATE.BaoCaoGiaoDichTaiChinhKhongThanhCong,"GD Tài Chính Không Thành Công" },
+            {(int)TemplateHelper.TEMPLATE.BaoCaoGiaoDichTaiChinhBatThuong,"GD Tài Chính Bất Thường" },
             {(int)TemplateHelper.TEMPLATE.BaoCaoHoatDongBatThuong,"BC Hoạt Động Bất Thường" },
         };
         string TaskName = "AutoRunTransaction_";
@@ -262,6 +262,11 @@ namespace Transaction_Statistical
                 else
                     RemoveTask(dataGridView_lsPermissions.Rows[e.RowIndex].Cells[1].Value.ToString());
             }
+        }
+
+        private void UC_Menu_Startup_Load(object sender, EventArgs e)
+        {
+
         }
     }
 }

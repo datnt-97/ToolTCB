@@ -342,11 +342,11 @@ namespace Transaction_Statistical
                     });
 
                 }
-                UC_Info uc = new UC_Info(InitParametar.sTest);
-                uc.Dock = DockStyle.Fill;
-                Frm_TemplateDefault frm = new Frm_TemplateDefault(uc);
-                frm.titleCustom.Text = "Regular Expression trong C#";
-                frm.Show();
+                //UC_Info uc = new UC_Info(InitParametar.sTest);
+                //uc.Dock = DockStyle.Fill;
+                //Frm_TemplateDefault frm = new Frm_TemplateDefault(uc);
+                //frm.titleCustom.Text = "Regular Expression trong C#";
+                //frm.Show();
                 return true;
             }
             catch (Exception ex)
@@ -1447,7 +1447,7 @@ namespace Transaction_Statistical
         }
         public override string ToString()
         {
-            return "CYCLE START: " + DateBegin.ToString();
+            return "CYCLE START: " + settlementPeriodDateBegin.ToString();
         }
     }
     public class Deno
