@@ -265,8 +265,19 @@ namespace Transaction_Statistical.UControl
                             DefaultValue = req.ToString()
                         });
                         cCount++;
+                    }cCount = 1;
+                    foreach (var req in (e.Node.Tag as Transaction).ListRequest.Values)
+                    {
+                        trans.Properties.Add(new CustomProperty
+                        {
+                            Name = "Request " + cCount,
+                            Type = typeof(string),
+                            Desc = "Desciption",
+                            Cate = "4. Follow",
+                            DefaultValue = req.ToString()
+                        });
+                        cCount++;
                     }
-
                     propertyGrid1.SelectedObject = trans;
 
                 }
