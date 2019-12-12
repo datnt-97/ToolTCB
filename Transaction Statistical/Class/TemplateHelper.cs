@@ -535,7 +535,7 @@ namespace Transaction_Statistical.Class
                     worksheet.Cells[indexData, index + 6].Value = itemTrans.CardType == Transaction.CardTypes.CardLess ? "CardLess" : itemTrans.CardNumber;
                     worksheet.Cells[indexData, index + 7].Value = itemTrans.DataInput;
                     worksheet.Cells[indexData, index + 8].Value = itemTrans.DateBegin;
-                    worksheet.Cells[indexData, index + 8].Style.Numberformat.Format = "dd/mm/yyyy hh:mm:ss AM/PM";
+                    //worksheet.Cells[indexData, index + 8].Style.Numberformat.Format = "dd/mm/yyyy hh:mm:ss AM/PM";
 
                     worksheet.Cells[indexData, index + 9].Value = itemTrans.Amount;
                     worksheet.Cells[indexData, index + 10].Value = "";
