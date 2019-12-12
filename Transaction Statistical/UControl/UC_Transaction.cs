@@ -236,14 +236,7 @@ namespace Transaction_Statistical.UControl
         {
             uc_Menu.SlideMenuShow();
         }
-        public class ass : CustomObjectType
-        {
-            [CategoryAttribute("3. Transaction"), DescriptionAttribute("Type the transaction")]
-            public string Type
-            {
-                get { return "aaaaasdsdf"; }
-            }
-        }
+        
         private void tre_LstTrans_AfterSelect(object sender, TreeViewEventArgs e)
         {
             try
@@ -258,21 +251,22 @@ namespace Transaction_Statistical.UControl
                     {
                         trans.Properties.Add(new CustomProperty
                         {
-                            Name = "Step " + cCount,
+                            Name = req.TTime,
                             Type = typeof(string),
-                            Desc = "Desciption",
+                            Desc = req.ToString(),
                             Cate = "5. Follow",
                             DefaultValue = req.ToString()
                         });
                         cCount++;
-                    }cCount = 1;
+                    }
+                    cCount = 1;
                     foreach (var req in (e.Node.Tag as Transaction).ListRequest.Values)
                     {
                         trans.Properties.Add(new CustomProperty
                         {
-                            Name = "Request " + cCount,
+                            Name = req.DateBegin.ToString(),
                             Type = typeof(string),
-                            Desc = "Desciption",
+                            Desc = req.ToString(),
                             Cate = "4. Follow",
                             DefaultValue = req.ToString()
                         });
