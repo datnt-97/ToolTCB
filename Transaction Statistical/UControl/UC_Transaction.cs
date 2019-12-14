@@ -20,7 +20,6 @@ namespace Transaction_Statistical.UControl
     public partial class UC_Transaction : UserControl
     {
         SQLiteHelper sqlite;
-        List<Transaction> transactions = new List<Transaction>();
         UC_Explorer uc_Explorer;
         UC_Menu uc_Menu;
         List<string> sTransactionTypeDisplay;
@@ -120,13 +119,13 @@ namespace Transaction_Statistical.UControl
         {
             try
             {
+                
                 DirectoryFileUtilities df = new DirectoryFileUtilities();
                 if (File.Exists(txt_Path.Text))
                     JournalAnalyze(new List<string> { txt_Path.Text });
                 else if (Directory.Exists(txt_Path.Text))
                 {
-                   
-                    FileInfo[] files = df.GetAllFilePath(txt_Path.Text, InitParametar.ExtensionFile);
+                     FileInfo[] files = df.GetAllFilePath(txt_Path.Text, InitParametar.ExtensionFile);
                     JournalAnalyze(files.Select(f => f.FullName).ToList());
                     tre_LstTrans.Nodes[0].Expand();
                     
@@ -155,16 +154,16 @@ namespace Transaction_Statistical.UControl
                     InitParametar.ReadTrans.EndDate = dateTimePicker_End.Value;
                 }
 
-
-                var watch = System.Diagnostics.Stopwatch.StartNew();
-                watch.Start();
+                //var watch = System.Diagnostics.Stopwatch.StartNew();
+                //watch.Start();
+                   //test time
+                //    var mili = watch.ElapsedMilliseconds;
+                //watch.Stop();
+                //MessageBox.Show((mili / 1000).ToString());
+                //    ///
                 if (await InitParametar.ReadTrans.Reads(lsFile_Journal))
                 { 
-                    //test time
-                    var mili = watch.ElapsedMilliseconds;
-                watch.Stop();
-                MessageBox.Show((mili / 1000).ToString());
-                    ///
+                 
                     btn_Export.Enabled = true;
                     string day;
                     foreach (KeyValuePair<string, Dictionary<DateTime, object>> kTerminal in InitParametar.ReadTrans.ListTransaction)
@@ -186,7 +185,7 @@ namespace Transaction_Statistical.UControl
 
                             if (kTransaction.Value is Transaction)
                             {
-                                if (!FilterDisplayTransaction((kTransaction.Value as Transaction).ListRequest.Values.ToList())) continue;
+                                //if (!FilterDisplayTransaction((kTransaction.Value as Transaction).ListRequest.Values.ToList())) continue;
                                 TreeNode ndTransaction = ndDay.Nodes.Add(textDisplay, textDisplay);
                                 ndTransaction.Tag = kTransaction.Value;
                                 ndTransaction.ImageKey = "Flag";
