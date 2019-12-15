@@ -36,7 +36,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(37)))), ((int)(((byte)(37)))), ((int)(((byte)(38)))));
             this.Name = "UC_Menu_Dashboard";
-            this.Size = new System.Drawing.Size(863, 552);
+            this.Size = new System.Drawing.Size(932, 568);
             this.ResumeLayout(false);
 
         }

@@ -38,10 +38,9 @@
             // 
             this.label1.AutoSize = true;
             this.label1.ForeColor = System.Drawing.Color.White;
-            this.label1.Location = new System.Drawing.Point(2, 10);
-            this.label1.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.label1.Location = new System.Drawing.Point(3, 12);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(51, 13);
+            this.label1.Size = new System.Drawing.Size(67, 17);
             this.label1.TabIndex = 2;
             this.label1.Text = "Template";
             // 
@@ -53,10 +52,10 @@
             this.btn_Edit.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Blue;
             this.btn_Edit.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btn_Edit.ForeColor = System.Drawing.Color.White;
-            this.btn_Edit.Location = new System.Drawing.Point(225, 6);
-            this.btn_Edit.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.btn_Edit.Location = new System.Drawing.Point(300, 7);
+            this.btn_Edit.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.btn_Edit.Name = "btn_Edit";
-            this.btn_Edit.Size = new System.Drawing.Size(79, 25);
+            this.btn_Edit.Size = new System.Drawing.Size(105, 31);
             this.btn_Edit.TabIndex = 15;
             this.btn_Edit.Text = "Edit";
             this.btn_Edit.UseVisualStyleBackColor = true;
@@ -69,10 +68,10 @@
             this.cbo_LstTemplate.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.cbo_LstTemplate.ForeColor = System.Drawing.Color.White;
             this.cbo_LstTemplate.FormattingEnabled = true;
-            this.cbo_LstTemplate.Location = new System.Drawing.Point(57, 7);
-            this.cbo_LstTemplate.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.cbo_LstTemplate.Location = new System.Drawing.Point(76, 9);
+            this.cbo_LstTemplate.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.cbo_LstTemplate.Name = "cbo_LstTemplate";
-            this.cbo_LstTemplate.Size = new System.Drawing.Size(164, 21);
+            this.cbo_LstTemplate.Size = new System.Drawing.Size(217, 24);
             this.cbo_LstTemplate.TabIndex = 16;
             // 
             // btn_Apply
@@ -83,10 +82,10 @@
             this.btn_Apply.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Blue;
             this.btn_Apply.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btn_Apply.ForeColor = System.Drawing.Color.White;
-            this.btn_Apply.Location = new System.Drawing.Point(308, 6);
-            this.btn_Apply.Margin = new System.Windows.Forms.Padding(2);
+            this.btn_Apply.Location = new System.Drawing.Point(411, 7);
+            this.btn_Apply.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.btn_Apply.Name = "btn_Apply";
-            this.btn_Apply.Size = new System.Drawing.Size(79, 25);
+            this.btn_Apply.Size = new System.Drawing.Size(105, 31);
             this.btn_Apply.TabIndex = 17;
             this.btn_Apply.Text = "Apply";
             this.btn_Apply.UseVisualStyleBackColor = true;
@@ -94,16 +93,16 @@
             // 
             // UC_Menu_Overview
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(37)))), ((int)(((byte)(37)))), ((int)(((byte)(38)))));
             this.Controls.Add(this.btn_Apply);
             this.Controls.Add(this.cbo_LstTemplate);
             this.Controls.Add(this.btn_Edit);
             this.Controls.Add(this.label1);
-            this.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.Name = "UC_Menu_Overview";
-            this.Size = new System.Drawing.Size(747, 474);
+            this.Size = new System.Drawing.Size(932, 568);
             this.ResumeLayout(false);
             this.PerformLayout();
 

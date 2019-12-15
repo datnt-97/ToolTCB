@@ -116,21 +116,20 @@ namespace Transaction_Statistical.UControl
             }
         }
 
-        private void bt_Read_Click(object sender, EventArgs e)
+        private async void bt_Read_Click(object sender, EventArgs e)
         {
             try
             {
+                btn_Read.Enabled = false;
                 DirectoryFileUtilities df = new DirectoryFileUtilities();
                 if (File.Exists(txt_Path.Text))
-                    JournalAnalyze(new List<string> { txt_Path.Text });
+              await   JournalAnalyze(new List<string> { txt_Path.Text });
                 else if (Directory.Exists(txt_Path.Text))
                 {
                    
                     FileInfo[] files = df.GetAllFilePath(txt_Path.Text, InitParametar.ExtensionFile);
-                    JournalAnalyze(files.Select(f => f.FullName).ToList());
-                    tre_LstTrans.Nodes[0].Expand();
-                    
-
+                    await JournalAnalyze(files.Select(f => f.FullName).ToList());
+                    if (tre_LstTrans.Nodes.Count != 0) tre_LstTrans.Nodes[0].Expand();
                 }
                 else
                     MessageBox.Show("File/Drectory not exist.", "Error File/Directory", MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -139,8 +138,9 @@ namespace Transaction_Statistical.UControl
             {
                 InitParametar.Send_Error(ex.ToString(), MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name);
             }
+            btn_Read.Enabled = true;
         }
-        private async void JournalAnalyze(List<string> lsFile_Journal)
+        private async Task<bool> JournalAnalyze(List<string> lsFile_Journal)
         {
             try
             {
@@ -167,48 +167,80 @@ namespace Transaction_Statistical.UControl
                     ///
                     btn_Export.Enabled = true;
                     string day;
+                    int countDisplay = 10;
                     foreach (KeyValuePair<string, Dictionary<DateTime, object>> kTerminal in InitParametar.ReadTrans.ListTransaction)
                     {
                         int countCycle = kTerminal.Value.Where(x => (x.Value is Cycle)).ToList().Count;
                         int countTransaction = kTerminal.Value.Where(x => (x.Value is Transaction)).ToList().Count;
                         int countTransactionEvent = kTerminal.Value.Where(x => (x.Value is TransactionEvent)).ToList().Count;
-                        TreeNode ndTerminal = tre_LstTrans.Nodes.Add(kTerminal.Key, String.Format("Terminal ID: {0} - Total: {1} transactions", kTerminal.Key, kTerminal.Value.Count), "Terminal", "Terminal");
+                        TreeNode ndTerminal = tre_LstTrans.Nodes.Add(kTerminal.Key, String.Format("Terminal ID: [{0}] - Total: {1} transactions", kTerminal.Key, kTerminal.Value.Count), "Terminal", "Terminal");
                         ndTerminal.Tag = kTerminal.Value.Where(x => (x.Value is Cycle)).ToDictionary(x => x.Key, x => (Cycle)x.Value);
+                       
                         foreach (KeyValuePair<DateTime, object> kTransaction in kTerminal.Value.OrderBy(x => x.Key))
                         {
+                           
                             day = String.Format("{0:" + InitParametar.ReadTrans.FormatDate + "}", kTransaction.Key);
                             TreeNode ndDay = new TreeNode(day);
                             if (ndTerminal.Nodes.ContainsKey(day))
                                 ndDay = ndTerminal.Nodes[day];
                             else
+                            {                                        
                                 ndDay = ndTerminal.Nodes.Add(day, day, "Date", "DateOpen");
-                            string textDisplay = kTransaction.Value.ToString();
+                                ndDay.Text =String.Format("{0} Total: {1} transactions, {2} events",day, kTerminal.Value.Where(x => (x.Value is Transaction) && x.Key.ToString(InitParametar.ReadTrans.FormatDate).Equals(day)).ToList().Count, kTerminal.Value.Where(x => (x.Value is TransactionEvent) && x.Key.ToString(InitParametar.ReadTrans.FormatDate).Equals(day)).ToList().Count);
+                            }
+  
+                            if (countDisplay == ndDay.Nodes.Count) continue;
+                          ndDay.Tag = kTransaction.Key;
+                            AddTransactionToNode(ndDay, kTransaction.Key, kTerminal.Key, kTransaction.Value);
+                          // 
 
-                            if (kTransaction.Value is Transaction)
-                            {
-                                if (!FilterDisplayTransaction((kTransaction.Value as Transaction).ListRequest.Values.ToList())) continue;
-                                TreeNode ndTransaction = ndDay.Nodes.Add(textDisplay, textDisplay);
-                                ndTransaction.Tag = kTransaction.Value;
-                                ndTransaction.ImageKey = "Flag";
-                                ndTransaction.SelectedImageKey = "Flag_Success";
-                            }
-                            else if (kTransaction.Value is TransactionEvent)
-                            {
-                                TreeNode ndTransaction = ndDay.Nodes.Add(textDisplay, textDisplay);
-                                ndTransaction.Tag = kTransaction.Value;
-                                ndTransaction.ImageKey = "Device";
-                                ndTransaction.SelectedImageKey = "Device";
-                            }
-                            else
-                            {
-                                TreeNode ndTransaction = ndDay.Nodes.Add(textDisplay, textDisplay);
-                                ndTransaction.Tag = kTransaction.Value;
-                                ndTransaction.ImageKey = "Cycle";
-                                ndTransaction.SelectedImageKey = "Cycle";
-                            }
-                            ndDay.Text = day + " Total: " + ndDay.Nodes.Count + " transactions";
                         }
                     }
+                }
+                return true;
+            }
+            catch (Exception ex)
+            {
+                InitParametar.Send_Error(ex.ToString(), MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name);
+            }
+            return false;
+        }
+        private void AddTransactionToNode(TreeNode ndDay,DateTime date, string terminal, object obj)
+        {
+            try
+            {
+                DateTime dNode = (DateTime)ndDay.Tag;
+                if (!date.ToString(InitParametar.ReadTrans.FormatDate).Equals(dNode.ToString(InitParametar.ReadTrans.FormatDate))) return;               
+                string textDisplay = obj.ToString();
+                if (ndDay.Nodes.ContainsKey(textDisplay))
+                {
+                    return;
+                }
+                ndDay.Tag = date;
+
+                if (obj is Transaction)
+                {
+                    //if (!FilterDisplayTransaction((obj as Transaction).ListRequest.Values.ToList())) return;
+                    TreeNode ndTransaction = ndDay.Nodes.Add(textDisplay, textDisplay);
+                    ndTransaction.Tag = obj;
+                    ndTransaction.ImageKey = "Flag";
+                    ndTransaction.SelectedImageKey = "Flag_Success";                  
+                }
+                else if (obj is TransactionEvent)
+                {
+                    TreeNode ndTransaction = ndDay.Nodes.Add(textDisplay, textDisplay);
+                    ndTransaction.Tag = obj;
+                    ndTransaction.ImageKey = "Device";
+                    ndTransaction.SelectedImageKey = "Device";
+                    ndDay.Tag = (obj as TransactionEvent).DateBegin;
+                }
+                else
+                {
+                    TreeNode ndTransaction = ndDay.Nodes.Add(textDisplay, textDisplay);
+                    ndTransaction.Tag = obj;
+                    ndTransaction.ImageKey = "Cycle";
+                    ndTransaction.SelectedImageKey = "Cycle";
+                    ndDay.Tag = (obj as Cycle).DateBegin;
                 }
             }
             catch (Exception ex)
@@ -260,6 +292,10 @@ namespace Transaction_Statistical.UControl
         {
             try
             {
+                TreeNode ndRoot = e.Node;
+                while (ndRoot.Parent != null)
+                    ndRoot = ndRoot.Parent;
+                string terminal = ndRoot.Text.Substring(ndRoot.Text.IndexOf('[') + 1, ndRoot.Text.IndexOf(']') - ndRoot.Text.IndexOf('[') - 1);
                 if (e.Node != null && e.Node.Tag != null && e.Node.Tag is Transaction)
                 {
 
@@ -398,6 +434,12 @@ namespace Transaction_Statistical.UControl
                         });
                         ndCycle.Expand();
                     }
+                }
+                else if (e.Node != null && e.Node.Tag != null && e.Node.Tag is DateTime)
+                {
+                    DateTime dNode = (DateTime)e.Node.Tag;                    
+                    foreach (KeyValuePair<DateTime, object> kTransaction in InitParametar.ReadTrans.ListTransaction[terminal].OrderBy(x => x.Key))
+                        AddTransactionToNode(e.Node,kTransaction.Key, terminal, kTransaction.Value);
                 }
             }
             catch (Exception ex)

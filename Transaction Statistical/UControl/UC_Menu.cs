@@ -27,7 +27,7 @@ namespace Transaction_Statistical.UControl
             this.BackColor = System.Drawing.Color.Transparent;
             this.Location = new System.Drawing.Point(-10000, 100); 
           //  this.Location = new Point(-this.Width, this.Location.Y);
-            this.Size = new System.Drawing.Size(1066, 568);
+         
             _Parent.Controls.Add(this);
             this.BringToFront();
             this.SendToBack();
@@ -78,6 +78,13 @@ namespace Transaction_Statistical.UControl
             ucStartup.Location = new Point(pnl_Menu.Width, 1);
             ucStartup.TabIndex = btn_Startup.TabIndex;
             this.Controls.Add(ucStartup);
+
+            UC_Menu_History ucHistory = new UC_Menu_History();
+            ucHistory.Width = this.Width - 1 - pnl_Menu.Width;
+            ucHistory.Height = this.Height - 2;
+            ucHistory.Location = new Point(pnl_Menu.Width, 1);
+            ucHistory.TabIndex = btn_History.TabIndex;            
+            this.Controls.Add(ucHistory);
         }
 
         private void menu_MouseClick(object sender, MouseEventArgs e)

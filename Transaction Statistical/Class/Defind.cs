@@ -27,15 +27,10 @@ namespace Transaction_Statistical
         public static string PathDirectoryCurrentApp;//=Path.GetDirectoryName(Application.ExecutablePath);
         public static string PathDirectoryCurrentAppConfigData;//=Path.GetDirectoryName(Application.ExecutablePath);
         public static string PathDirectoryUtilities;// = PathDirectoryCurrentApp + "Utilities";
-        public static string PathDirectoryTempUsr;//= Path.GetTempPath() + "Analyze";
-        public static string PathDirectoryDocumentsUsr;
-        public static string FolderSystemLog;
+
+        public static string FolderSystemTrace;
         public static string DatabaseFile;
-        public static string listFileOpened;// = pathTempUsr + "\\ListFileOpened.ini";
-        public static string configFileTrace;// = pathConfig + "\\ConfigTraceFile.ini";
-        public static string configFileTraceDefault;
-        public static List<string> ListFileDeleteStartup;
-        public static string PathFileRecordDeletetStartup;
+ 
 
         //form enu
         public static bool ActiveFormMain;
@@ -55,6 +50,10 @@ namespace Transaction_Statistical
         public static Dictionary<string, string> listDateFormat;
         public static Dictionary<string, Dictionary<DateTime, Transaction>> listTransaction;
         public static string[] ExtensionFile = { "*.txt", "*.log" };
+
+        //log application
+        public static bool WriteApplication = true;
+        public static bool AutoRunMode;
         public static void Init()
         {
             try
@@ -70,26 +69,11 @@ namespace Transaction_Statistical
 
                 //VersionAnalyze.Date = DateTime.ParseExact("2013-04-07 16:40:52", "yyyy-MM-dd HH:mm:ss",System.Globalization.CultureInfo.InvariantCulture);
 
-                //USB
-
-                ///
-
                 //Init directory and file config
                 PathDirectoryCurrentApp = Path.GetDirectoryName(Application.ExecutablePath);
                 PathDirectoryUtilities = (PathDirectoryCurrentApp + "\\Utilities").Replace(@"\\", @"\");
+                FolderSystemTrace= (PathDirectoryCurrentApp + "\\Trace").Replace(@"\\", @"\");
                 PathDirectoryCurrentAppConfigData = PathDirectoryCurrentApp + @"\Config";
-                PathDirectoryTempUsr = (Path.GetTempPath() + "\\Analyze").Replace(@"\\", @"\");
-                PathDirectoryDocumentsUsr = (Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\Analyze").Replace(@"\\", @"\");
-                if (!Directory.Exists(PathDirectoryUtilities)) Directory.CreateDirectory(PathDirectoryUtilities);
-                if (!Directory.Exists(PathDirectoryTempUsr)) Directory.CreateDirectory(PathDirectoryTempUsr);
-                if (!Directory.Exists(PathDirectoryDocumentsUsr)) Directory.CreateDirectory(PathDirectoryDocumentsUsr);
-                if (!Directory.Exists(PathDirectoryCurrentApp) || !Directory.Exists(PathDirectoryUtilities) || !Directory.Exists(PathDirectoryTempUsr)) MessageBox.Show("Directory Application or directory temp profile user error.", "Error Directory.");
-                listFileOpened = (PathDirectoryDocumentsUsr + "\\ListFileOpened.ini").Replace(@"\\", @"\"); if (!File.Exists(listFileOpened)) File.Create(listFileOpened);
-
-                configFileTraceDefault = PathDirectoryCurrentApp + @"\config\ConfigTraceFile.ini";
-
-                PathFileRecordDeletetStartup = (PathDirectoryDocumentsUsr + "\\ListFileDeletetStartup.txt").Replace(@"\\", @"\"); if (!File.Exists(PathFileRecordDeletetStartup)) File.Create(PathFileRecordDeletetStartup);
-
                 DatabaseFile = PathDirectoryCurrentAppConfigData + "\\DB.s3db";
                 sqlite = new SQLiteHelper();
                 listTransaction = new Dictionary<string, Dictionary<DateTime, Transaction>>();
@@ -101,15 +85,28 @@ namespace Transaction_Statistical
                 InitParametar.Send_Error(ex.ToString(), MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name); ;
             }
         }
-        public static void AutoStart(string taskName)
+        public async static void AutoStart(string taskName)
         {
             try
             {
+                AutoRunMode = true;
+                WriteLogApplication(string.Format("{0:HH:mm:ss fff} Class: Auto Task", DateTime.Now),true,false);
+                WriteLogApplication("   => Task name: " + taskName, false, false);
+
                 DataRow rowTask = sqlite.GetRowDataWith2ColumnName("CfgData", "Field", taskName, "Type_ID", "511");
                 string[] data = rowTask["Data"].ToString().Split('|');
+                WriteLogApplication("   => Task data: " + rowTask["Data"].ToString(),false,false);
                 InitParametar.TemplateTransactionID = data[1];
-                LoadTemplateInfo();
+                WriteLogApplication("   => Template id: " + data[1], false, false);
+                if (!LoadTemplateInfo())
+                {
+                    WriteLogApplication("   => Load Template Info => Unsuccessfully", false, false);
+                    WriteLogApplication("   ==> Auto end, result => Unsuccessfully", false, true);
+                    return;
+                }
+                WriteLogApplication("   => Load Template Info => Successfully", false, false);
 
+                WriteLogApplication("   => Data source: " + data[2], false, false);
                 DirectoryFileUtilities df = new DirectoryFileUtilities();
                 List<string> lsFile_Journal = new List<string>();
                 if (File.Exists(data[2]))
@@ -118,61 +115,91 @@ namespace Transaction_Statistical
                 {
                     FileInfo[] files = df.GetAllFilePath(data[2], InitParametar.ExtensionFile);
                     lsFile_Journal = files.Select(f => f.FullName).ToList();
-
                 }
-                else
+                if (lsFile_Journal.Count == 0)
                 {
-                    // path not exist.
+                    WriteLogApplication("   => Found: 0 files", false, false);
+                    WriteLogApplication("   ==> Auto end, result => Unsuccessfully", false, true);
+                    return;
                 }
-                ReadTrans = new ReadTransaction();
-               ReadTrans.Reads(lsFile_Journal);
-               
-                    Dictionary<int, string> TemplateChoosen = data[4].Replace("[", "").Replace("]", "").Split(';').ToDictionary(x => int.Parse(x.Split(',')[0]), x => x.Split(',')[1]);
+                WriteLogApplication(string.Format("   => Found: {0} files", lsFile_Journal.Count), false, false);
 
-                    ReadTrans.Export(data[3], TemplateChoosen);
-              
+                WriteLogApplication(string.Format("   => Read begin: {0:HH:mm:ss fff} ", DateTime.Now), false, false);
+                var watch = System.Diagnostics.Stopwatch.StartNew(); watch.Start();
+                ReadTrans = new ReadTransaction();
+                await ReadTrans.Reads(lsFile_Journal);
+                watch.Stop();
+                int count = ReadTrans.ListTransaction.Values.LastOrDefault().Keys.Count;
+                WriteLogApplication(string.Format("   => Read time: {0} s\n   =>Transactions: {1}\n   =>Files: {2}", watch.ElapsedMilliseconds / 1000, count, lsFile_Journal.Count), false, false);
+                if (count == 0) { WriteLogApplication("   ==> Auto end, result => Unsuccessfully", false, true); return; }
+
+                Dictionary<int, string> TemplateChoosen = data[4].Replace("[", "").Replace("]", "").Split(';').ToDictionary(x => int.Parse(x.Split(',')[0]), x => x.Split(',')[1]);
+                watch.Start();
+                WriteLogApplication(string.Format("   => Export begin: {0:HH:mm:ss fff} ", DateTime.Now), false, false);
+                WriteLogApplication("   => Export destination: " + data[3], false, false);
+                WriteLogApplication("   => Export forms: " + TemplateChoosen.Values.ToString(), false, false);
+                if (TemplateChoosen.Count == 0) { WriteLogApplication("   ==> Auto end, result => Unsuccessfully", false, true); return; }
+
+                ReadTrans.Export(data[3], TemplateChoosen);
+                watch.Stop();
+                WriteLogApplication(string.Format("   => Export time:{0} s", watch.ElapsedMilliseconds / 1000), false, false);
+                WriteLogApplication(string.Format("   ==> File: {0}, size {1} kb", ReadTrans.FileExport, new FileInfo(ReadTrans.FileExport).Length / 1024), false, false);
+                WriteLogApplication("   ==> Auto end, result => Successfully", false, true);
+                return;
             }
             catch (Exception ex)
             {
                 InitParametar.Send_Error(ex.ToString(), MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name); ;
             }
-
+            WriteLogApplication("   ==> Auto end, result => Unsuccessfully", false, true);
         }
-        public static void LoadTemplateInfo()
+        public static bool LoadTemplateInfo()
         {
-            if (transactionTemplate == null) transactionTemplate = new Dictionary<TransactionEvent.Events, string>();
-            if (listTransType == null) listTransType = new Dictionary<string, TransactionType>(); else listTransType.Clear();
-            DataTable cfg_data = sqlite.GetTableDataWith2ColumnName("CfgData", "Type_ID", "67", "Parent_ID", InitParametar.TemplateTransactionID);
-            if (listDateFormat == null) listDateFormat = new Dictionary<string, string>(); else listDateFormat.Clear();
-
-            #region Read template
-            foreach (DataRow r in cfg_data.Rows)
+            try
             {
-                foreach (TransactionEvent.Events name in (TransactionEvent.Events[])Enum.GetValues(typeof(TransactionEvent.Events)))
+                if (transactionTemplate == null) transactionTemplate = new Dictionary<TransactionEvent.Events, string>();
+                if (listTransType == null) listTransType = new Dictionary<string, TransactionType>(); else listTransType.Clear();
+                DataTable cfg_data = sqlite.GetTableDataWith2ColumnName("CfgData", "Type_ID", "67", "Parent_ID", InitParametar.TemplateTransactionID);
+                if (listDateFormat == null) listDateFormat = new Dictionary<string, string>(); else listDateFormat.Clear();
+
+                foreach (DataRow r in cfg_data.Rows)
                 {
-                    if (r["Field"].Equals(name.ToString())) transactionTemplate[name] = r["Data"].ToString();
-                }
+                    foreach (TransactionEvent.Events name in (TransactionEvent.Events[])Enum.GetValues(typeof(TransactionEvent.Events)))
+                    {
+                        if (r["Field"].Equals(name.ToString())) transactionTemplate[name] = r["Data"].ToString();
+                    }
 
+                }
+                listTransType = new Dictionary<string, TransactionType>();
+                DataTable tb_transtype = sqlite.GetTableDataWithColumnName("Transactions", "TemplateID", InitParametar.TemplateTransactionID);
+                foreach (DataRow r in tb_transtype.Rows)
+                {
+                    TransactionType type = new TransactionType();
+                    type.Name = r["Name"].ToString();
+                    type.Identification = r["IdentificationTxt"].ToString();
+                    type.Successful = r["SuccessfulTxt"].ToString();
+                    type.UnSuccessful = r["UnsuccessfulTxt"].ToString();
+                    listTransType[type.Name] = type;
+                }
+               
+                return true;
             }
-            listTransType = new Dictionary<string, TransactionType>();
-            DataTable tb_transtype = sqlite.GetTableDataWithColumnName("Transactions", "TemplateID", InitParametar.TemplateTransactionID);
-            foreach (DataRow r in tb_transtype.Rows)
+            catch(Exception ex)
             {
-                TransactionType type = new TransactionType();
-                type.Name = r["Name"].ToString();
-                type.Identification = r["IdentificationTxt"].ToString();
-                type.Successful = r["SuccessfulTxt"].ToString();
-                type.UnSuccessful = r["UnsuccessfulTxt"].ToString();
-                listTransType[type.Name] = type;
+                Send_Error(ex.ToString(), MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name);
             }
-            #endregion
+            return false;
         }
 
         public static void Send_Error(string MsgError, string ClassName, string MethodName)
         {
             try
             {
-
+                if (WriteApplication)
+                {
+                    WriteLogApplication(string.Format("{0:HH:mm:ss fff} Class: {1}     Method: {2}\n{3}", DateTime.Now, ClassName, MethodName, MsgError), true, true);
+                }
+                if (AutoRunMode) return;
                 UC_Info msg = new UC_Info();
                 File.AppendAllText(@"D:\expert.log", MsgError);
                 msg.TextCustom.ReadOnly = false;
@@ -202,6 +229,38 @@ namespace Transaction_Statistical
             catch (Exception ex)
             {
                 Send_Error(ex.ToString(), MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name);
+            }
+            
+        }
+        public static void WriteLogApplication(string msg, bool lineBegin, bool lineEnd)
+        {
+            try
+            {
+                if (!Directory.Exists(FolderSystemTrace)) Directory.CreateDirectory(FolderSystemTrace);
+                string FileCcprot = string.Format("{0}\\{1:yyyyMMdd}.log", FolderSystemTrace, DateTime.Now);            
+                while (true)
+                {
+                    try
+                    {
+                        using (StreamWriter sw = new StreamWriter(FileCcprot, true))
+                        {
+                            if (lineBegin) sw.WriteLine("----------------------------------------------");
+                            sw.WriteLine(msg);
+                            if(lineEnd) sw.WriteLine("----------------------------------------------\n");
+                            sw.Flush();
+                            sw.Close();
+                            break;
+                        }
+                    }
+                    catch (Exception)
+                    {
+                        Thread.Sleep(100);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message + Environment.NewLine + FolderSystemTrace, "WriteLogApplication", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
     }
@@ -319,30 +378,19 @@ namespace Transaction_Statistical
                 DateTime currentDate = DateTime.MinValue;
 
                 ListTransaction = new Dictionary<string, Dictionary<DateTime, object>>();
-                string Terminal = "Terminal";
+                
                 ListCycle = new Dictionary<DateTime, Cycle>();
-                var sys = System.Diagnostics.Stopwatch.StartNew();
-                sys.Start();
                 foreach (string file in files)
                 {
                     string day = file.Substring(file.Length - 12, 8);
+                    string Terminal =Path.GetFileName(file).Substring(0, 8);
                     string contenFile = File.ReadAllText(file);
                     DateTime.TryParseExact(day, "yyyyMMdd", CultureInfo.InvariantCulture, DateTimeStyles.None, out currentDate);
                     
-                    await   SplitTransactionEJ(Terminal, contenFile);
-                    //FindEventDevice2(currentDate, Terminal, ref contenFile);
-                    //FindCounterChanged(ref contenFile, ref ListCycle);
-
-
-                    //ListTransaction[Terminal] = ListTransaction[Terminal].OrderBy(d => d.Key).ToDictionary(k => k.Key, v => v.Value);
-                    //    InitParametar.sTest += contenFile + Environment.NewLine;
+                   contenFile = await   SplitTransactionEJ(Terminal, contenFile);
+                    contenFile = await FindEventDevice2Async(currentDate, Terminal, contenFile);
+                    FindCounterChanged(ref contenFile, ref ListCycle);
                 }
-                MessageBox.Show((sys.ElapsedMilliseconds / 1000).ToString());
-
-                sys.Stop();
-
-                int i = ListTransaction.Values.LastOrDefault().Keys.Count;
-                InitParametar.sTest = i.ToString() + " transaction : " + (DateTime.Now - dateEnd).TotalSeconds.ToString() + " s =>" + ((DateTime.Now - dateEnd).TotalSeconds / i).ToString() + InitParametar.sTest + Environment.NewLine;
                 //CHANGE 6/12
                 var ListTransactionTemp = ListTransaction;
                 for (int c = 0; c < ListTransactionTemp.Count; c++)
@@ -356,12 +404,7 @@ namespace Transaction_Statistical
 
                     });
 
-                }
-                //UC_Info uc = new UC_Info(InitParametar.sTest);
-                //uc.Dock = DockStyle.Fill;
-                //Frm_TemplateDefault frm = new Frm_TemplateDefault(uc);
-                //frm.titleCustom.Text = "Regular Expression trong C#";
-                //frm.Show();
+                }               
                 return true;
             }
             catch (Exception ex)
@@ -440,7 +483,319 @@ namespace Transaction_Statistical
             }
             return false;
         }
-        private async Task<bool> SplitTransactionEJ( string TerminalID, string sString)
+        private async Task<string> SplitTransactionEJAsync(string TerminalID, string sString)
+        {
+            try
+            {
+                Dictionary<int, RegesValue> lst = new Dictionary<int, RegesValue>();
+                foreach (string reg in Template_SplitTransactions.Values)
+                {
+                    if (Regexs.RunPatternRegular(sString, reg, out lst))
+                    {
+
+                        // Transaction trans;
+                        List<Task<string>> tasks = new List<Task<string>>();
+                        foreach (KeyValuePair<int, RegesValue> key in lst)
+                        {
+                            var k = key.Value;
+                            var s = sString;
+                            tasks.Add(SplitTransactionEJ_InfoAsync(s, k));
+                        }
+                        var listS = await Task.WhenAll(tasks);
+                        foreach (var item in listS)
+                        {
+                            sString = sString.Replace(item, null);
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                InitParametar.Send_Error(ex.ToString(), MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name);
+            }
+            return sString;
+        }
+        private async Task<string> SplitTransactionEJ_InfoAsync(string sString, RegesValue val)
+        {
+            Transaction trans = new Transaction();
+
+            try
+            {
+                DateTime.TryParseExact(val.value["DateBegin"], "MM-dd-yyyy HH:mm:ss", CultureInfo.InvariantCulture, DateTimeStyles.None, out trans.DateBegin);
+                DateTime.TryParseExact(string.Format("{0:MM-dd-yyyy}", trans.DateBegin) + val.value["TimeEnd"], "MM-dd-yyyy" + FormatTime, CultureInfo.InvariantCulture, DateTimeStyles.None, out trans.DateEnd);
+                trans.DateEnd.AddDays(trans.DateBegin.Day);
+                trans.DateEnd.AddMonths(trans.DateBegin.Month);
+                trans.DateEnd.AddYears(trans.DateBegin.Year);
+
+                trans.Terminal = val.value["TerminalID"];
+                trans.MachineSequenceNo = val.value["MachineNo"];
+                trans.TraceJournalFull = trans.TraceJournal_Remaining = val.stringfind;
+
+                trans.TraceJournal_Remaining = trans.TraceJournal_Remaining.Replace(val.value["SStart"], null);
+                trans.TraceJournal_Remaining = trans.TraceJournal_Remaining.Replace(val.value["SEnd"], null);
+                List<Task<Transaction>> transactions = new List<Task<Transaction>>();
+
+                trans = await Task.Run(() => FindEventBeginInput(trans));
+                trans = await Task.Run(() => FindEventTransaction(trans, trans.DateBegin));
+                trans = await Task.Run(() => FindEventReceive(trans.DateBegin, trans));
+                trans = await Task.Run(() => FindEventDevice(trans, trans.DateBegin));
+                trans = await Task.Run(() => FindEventCashOutIn(trans.DateBegin, trans));
+
+                //FindEventBeginInput(ref trans.TraceJournal_Remaining, ref trans, ref trans.ListEvent);
+                //FindEventTransaction(ref trans.TraceJournal_Remaining, trans.DateBegin, ref trans.ListEvent);
+                //FindEventRequest(ref trans.TraceJournal_Remaining, trans.DateBegin, ref trans.ListEvent);
+                //FindEventReceive(ref trans.TraceJournal_Remaining, trans.DateBegin, ref trans.ListEvent);
+                ////  FindEventDevice(ref trans.TraceJournal_Remaining, trans.DateBegin, ref trans.ListEvent);
+                //FindEventCashOutIn(ref trans.TraceJournal_Remaining, trans.DateBegin, ref trans.ListEvent, ref trans);
+                //trans.ListEvent = trans.ListEvent.OrderBy(d => d.Key).ToDictionary(k => k.Key, v => v.Value);
+                SplitRequest(ref trans);
+                if (ListTransaction.ContainsKey(trans.Terminal))
+                {
+                    if (ListTransaction[trans.Terminal].ContainsKey(trans.DateBegin))
+                        trans.DateBegin.AddMilliseconds(1);
+                    ListTransaction[trans.Terminal][trans.DateBegin] = trans;
+                }
+                else
+                    ListTransaction[trans.Terminal] = new Dictionary<DateTime, object>() { { trans.DateBegin, trans } };
+
+                sString = sString.Replace(trans.TraceJournalFull, string.Empty);
+            }
+            catch (Exception ex)
+            {
+            }
+            return trans.TraceJournalFull;
+        }
+        private async Task<Transaction> FindEventTransaction(Transaction transaction, DateTime DateCurrent)
+        {
+            try
+            {
+                Dictionary<int, RegesValue> lst = new Dictionary<int, RegesValue>();
+                foreach (KeyValuePair<string, string> tmp in Template_EventTransaction)
+                {
+                    if (Regexs.RunPatternRegular(transaction.TraceJournal_Remaining, tmp.Value, out lst))
+                    {
+                        foreach (RegesValue regx in lst.Values)
+                        {
+                            await Task.Run(() =>
+                            {
+                                TransactionEvent evt = new TransactionEvent();
+                                evt.Name = tmp.Key;
+                                evt.Status = TransactionEvent.StatusS.Succeeded;
+                                evt.TContent = regx.stringfind;
+                                if (regx.value.ContainsKey("Time") && !string.IsNullOrEmpty(regx.value["Time"]))
+                                {
+                                    DateTime.TryParseExact(String.Format("{0:yyyyMMdd}", DateCurrent) + regx.value["Time"], "yyyyMMdd" + FormatTime, CultureInfo.InvariantCulture, DateTimeStyles.None, out evt.DateBegin);
+                                    DateCurrent = evt.DateBegin;
+                                }
+                                else
+                                    evt.DateBegin = DateCurrent.AddMilliseconds(10);
+                                if (transaction.ListEvent.ContainsKey(evt.DateBegin)) transaction.ListEvent[evt.DateBegin.AddMilliseconds(1)] = evt;
+                                else transaction.ListEvent[evt.DateBegin] = evt;
+                                transaction.TraceJournal_Remaining = transaction.TraceJournal_Remaining.Replace(regx.stringfind, string.Empty);
+                            });
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                InitParametar.Send_Error(ex.ToString(), MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name);
+            }
+            return transaction;
+        }
+        private async Task<Transaction> FindEventDevice(Transaction transaction, DateTime DateCurrent)
+        {
+            try
+            {
+                Dictionary<int, RegesValue> lst = new Dictionary<int, RegesValue>();
+                foreach (KeyValuePair<string, string> tmp in Template_EventDevice)
+                {
+                    if (Regexs.RunPatternRegular(transaction.TraceJournal_Remaining, tmp.Value, out lst))
+                    {
+                        foreach (RegesValue regx in lst.Values)
+                        {
+                            await Task.Run(() =>
+                            {
+                                TransactionEvent evt = new TransactionEvent();
+                                evt.Name = tmp.Key;
+                                evt.Status = TransactionEvent.StatusS.Succeeded;
+                                evt.TContent = regx.stringfind;
+                                if (regx.value.ContainsKey("Time") && !string.IsNullOrEmpty(regx.value["Time"]))
+                                {
+                                    DateTime.TryParseExact(string.Format("{0:yyyyMMdd}", DateCurrent) + regx.value["Time"], "yyyyMMdd" + FormatTime, CultureInfo.InvariantCulture, DateTimeStyles.None, out evt.DateBegin);
+                                    DateCurrent = evt.DateBegin;
+                                }
+                                else
+                                    evt.DateBegin = DateCurrent;
+                                if (transaction.ListEvent.ContainsKey(evt.DateBegin)) transaction.ListEvent[evt.DateBegin.AddMilliseconds(1)] = evt;
+                                else transaction.ListEvent[evt.DateBegin] = evt;
+                                transaction.TraceJournal_Remaining = transaction.TraceJournal_Remaining.Replace(regx.stringfind, string.Empty);
+                            });
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                InitParametar.Send_Error(ex.ToString(), MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name);
+            }
+
+            return transaction;
+        }
+        private async Task<Transaction> FindEventBeginInput(Transaction transaction)
+        {
+            try
+            {
+                Dictionary<int, RegesValue> lst = new Dictionary<int, RegesValue>();
+                TransactionEvent evt;
+                DateTime DateCurrent = transaction.DateBegin;
+                foreach (KeyValuePair<string, string> tmp in Template_EventBeginInput)
+                {
+                    if (Regexs.RunPatternRegular(transaction.TraceJournal_Remaining, tmp.Value, out lst))
+                    {
+                        foreach (RegesValue regx in lst.Values)
+                        {
+                            await Task.Run(() =>
+                            {
+                                evt = new TransactionEvent();
+                                evt.Name = tmp.Key;
+                                evt.Status = TransactionEvent.StatusS.Succeeded;
+                                evt.TContent = regx.stringfind;
+                                if (regx.value.ContainsKey("Time") && !string.IsNullOrEmpty(regx.value["Time"]))
+                                {
+                                    DateTime.TryParseExact(String.Format("{0:yyyyMMdd}", DateCurrent) + regx.value["Time"], "yyyyMMdd" + FormatTime, CultureInfo.InvariantCulture, DateTimeStyles.None, out evt.DateBegin);
+                                    DateCurrent = evt.DateBegin;
+                                }
+                                else
+                                    evt.DateBegin = DateCurrent.AddMilliseconds(10);
+                                if (regx.value["Data"].StartsWith("("))
+                                    transaction.DataInput.Add(regx.value["Data"]);
+                                else
+                                {
+                                    transaction.CardType = Transaction.CardTypes.CardNumber;
+                                    transaction.CardNumber = regx.value["Data"];
+                                }
+                                if (transaction.ListEvent.ContainsKey(evt.DateBegin)) transaction.ListEvent[evt.DateBegin.AddMilliseconds(1)] = evt;
+                                else transaction.ListEvent[evt.DateBegin] = evt;
+                                transaction.TraceJournal_Remaining = transaction.TraceJournal_Remaining.Replace(regx.stringfind, string.Empty);
+                            });
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                InitParametar.Send_Error(ex.ToString(), MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name);
+            }
+            return transaction;
+
+        }
+        private async Task<Transaction> FindEventReceive(DateTime DateCurrent, Transaction tran)
+        {
+            try
+            {
+                Dictionary<int, RegesValue> lst = new Dictionary<int, RegesValue>();
+                foreach (KeyValuePair<string, string> tmp in Template_EventReceive)
+                {
+                    if (Regexs.RunPatternRegular(tran.TraceJournal_Remaining, tmp.Value, out lst))
+                    {
+                        foreach (RegesValue regx in lst.Values)
+                        {
+                            await Task.Run(() =>
+                            {
+                                TransactionEvent evt = new TransactionEvent();
+                                evt.Name = tmp.Key;
+                                evt.Status = TransactionEvent.StatusS.Succeeded;
+                                evt.TContent = regx.stringfind;
+                                if (regx.value.ContainsKey("Time") && !string.IsNullOrEmpty(regx.value["Time"]))
+                                {
+                                    DateTime.TryParseExact(String.Format("{0:yyyyMMdd}", DateCurrent) + regx.value["Time"], "yyyyMMdd" + FormatTime, CultureInfo.InvariantCulture, DateTimeStyles.None, out evt.DateBegin);
+                                    DateCurrent = evt.DateBegin;
+                                }
+                                else
+                                    evt.DateBegin = DateCurrent.AddMilliseconds(10);
+                                if (tran.ListEvent.ContainsKey(evt.DateBegin)) tran.ListEvent[evt.DateBegin.AddMilliseconds(1)] = evt;
+                                else tran.ListEvent[evt.DateBegin] = evt;
+                                tran.TraceJournal_Remaining = tran.TraceJournal_Remaining.Replace(regx.stringfind, string.Empty);
+                            });
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                InitParametar.Send_Error(ex.ToString(), MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name);
+            }
+            return tran;
+        }
+        private async Task<Transaction> FindEventCashOutIn(DateTime DateCurrent, Transaction tran)
+        {
+            try
+            {
+                Dictionary<int, RegesValue> lst = new Dictionary<int, RegesValue>();
+
+                foreach (KeyValuePair<string, string> tmp in Template_EventCashOutIn)
+                {
+                    if (Regexs.RunPatternRegular(tran.TraceJournal_Remaining, tmp.Value, out lst))
+                    {
+                        foreach (RegesValue regx in lst.Values)
+                        {
+                            await Task.Run(() =>
+                            {
+                                TransactionEvent evt = new TransactionEvent();
+                                evt.Name = tmp.Key;
+                                evt.Status = TransactionEvent.StatusS.Succeeded;
+                                evt.TContent = regx.stringfind;
+                                if (regx.value.ContainsKey("Time") && !string.IsNullOrEmpty(regx.value["Time"]))
+                                {
+                                    DateTime.TryParseExact(string.Format("{0:yyyyMMdd}", DateCurrent) + regx.value["Time"], "yyyyMMdd" + FormatTime, CultureInfo.InvariantCulture, DateTimeStyles.None, out evt.DateBegin);
+                                    DateCurrent = evt.DateBegin;
+                                }
+                                else
+                                    evt.DateBegin = DateCurrent;
+                                int node = 0;
+                                if (regx.value.ContainsKey("TimeSeparation"))
+                                {
+                                    DateTime.TryParseExact(string.Format("{0:yyyyMMdd}", DateCurrent) + regx.value["TimeSeparation"], "yyyyMMdd" + FormatTime, CultureInfo.InvariantCulture, DateTimeStyles.None, out evt.DateBegin);
+                                    evt.Type = TransactionEvent.Events.CashOut;
+                                    if (regx.value.ContainsKey("Sep10k") && int.TryParse(regx.value["Sep10k"], out node)) tran.Value_10K -= node;
+                                    if (regx.value.ContainsKey("Sep20k") && int.TryParse(regx.value["Sep20k"], out node)) tran.Value_20K -= node;
+                                    if (regx.value.ContainsKey("Sep50k") && int.TryParse(regx.value["Sep50k"], out node)) tran.Value_50K -= node;
+                                    if (regx.value.ContainsKey("Sep100k") && int.TryParse(regx.value["Sep100k"], out node)) tran.Value_100K -= node;
+                                    if (int.TryParse(regx.value["Sep200k"], out node)) tran.Value_200K -= node;
+                                    if (int.TryParse(regx.value["Sep500k"], out node)) tran.Value_500K -= node;
+                                    if (int.TryParse(regx.value["Reject"], out node)) tran.Rejects += node;
+                                }
+                                if (regx.value.ContainsKey("TimeStored"))
+                                {
+                                    evt.Type = TransactionEvent.Events.CashIn;
+                                    DateTime.TryParseExact(string.Format("{0:yyyyMMdd}", DateCurrent) + regx.value["TimeStored"], "yyyyMMdd" + FormatTime, CultureInfo.InvariantCulture, DateTimeStyles.None, out evt.DateBegin);
+                                    if (regx.value.ContainsKey("Sto10k") && int.TryParse(regx.value["Sto10k"], out node)) tran.Value_10K += node;
+                                    if (regx.value.ContainsKey("Sto20k") && int.TryParse(regx.value["Sto20k"], out node)) tran.Value_20K += node;
+                                    if (regx.value.ContainsKey("Sto50k") && int.TryParse(regx.value["Sto50k"], out node)) tran.Value_50K += node;
+                                    if (int.TryParse(regx.value["Sto100k"], out node)) tran.Value_100K += node;
+                                    if (int.TryParse(regx.value["Sto200k"], out node)) tran.Value_200K += node;
+                                    if (int.TryParse(regx.value["Sto500k"], out node)) tran.Value_500K += node;
+                                    //if (int.TryParse(regx.value["StoReject"], out node)) tran.Node_Rejects += node;
+                                }
+                                if (tran.ListEvent.ContainsKey(evt.DateBegin)) tran.ListEvent[evt.DateBegin.AddMilliseconds(1)] = evt;
+                                else tran.ListEvent[evt.DateBegin] = evt;
+                                tran.TraceJournal_Remaining = tran.TraceJournal_Remaining.Replace(regx.stringfind, string.Empty);
+                            });
+
+                        }
+                    }
+                }
+
+            }
+            catch (Exception ex)
+            {
+                InitParametar.Send_Error(ex.ToString(), MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name);
+            }
+            return tran;
+        }
+
+        private async Task<string> SplitTransactionEJ( string TerminalID, string sString)
         {
             try
             {
@@ -453,40 +808,7 @@ namespace Transaction_Statistical
                         foreach (KeyValuePair<int, RegesValue> key in lst)
                         {
                             await Task.Run(() => SplitTransactionEJ_Info(key.Value));
-                           // new Thread(() => SplitTransactionEJ_Info(key.Value)).Start();
-                             //trans = new Transaction();
-                            //DateTime.TryParseExact(key.Value.value["DateBegin"], "MM-dd-yyyy HH:mm:ss", CultureInfo.InvariantCulture, DateTimeStyles.None, out trans.DateBegin);
-                            //DateTime.TryParseExact(string.Format("{0:MM-dd-yyyy}", trans.DateBegin) + key.Value.value["TimeEnd"], "MM-dd-yyyy" + FormatTime, CultureInfo.InvariantCulture, DateTimeStyles.None, out trans.DateEnd);
-                            //trans.DateEnd.AddDays(trans.DateBegin.Day);
-                            //trans.DateEnd.AddMonths(trans.DateBegin.Month);
-                            //trans.DateEnd.AddYears(trans.DateBegin.Year);
-
-                            //trans.Terminal = TerminalID = key.Value.value["TerminalID"];
-                            //trans.MachineSequenceNo = key.Value.value["MachineNo"];
-                            //trans.TraceJournalFull = trans.TraceJournal_Remaining = key.Value.stringfind;
-
-                            //trans.TraceJournal_Remaining = trans.TraceJournal_Remaining.Replace(key.Value.value["SStart"], null);
-                            //trans.TraceJournal_Remaining = trans.TraceJournal_Remaining.Replace(key.Value.value["SEnd"], null);
-
-                            //FindEventBeginInput(ref trans.TraceJournal_Remaining, ref trans, ref trans.ListEvent);
-                            //FindEventTransaction(ref trans.TraceJournal_Remaining, trans.DateBegin, ref trans.ListEvent);
-                            //FindEventRequest(ref trans.TraceJournal_Remaining, trans.DateBegin, ref trans.ListEvent);
-                            //FindEventReceive(ref trans.TraceJournal_Remaining, trans.DateBegin, ref trans.ListEvent);
-                            //FindEventDevice(ref trans.TraceJournal_Remaining, trans.DateBegin, ref trans.ListEvent);
-                            //FindEventCashOutIn(ref trans.TraceJournal_Remaining, trans.DateBegin, ref trans.ListEvent, ref trans);
-                            //InitParametar.sTest += trans.TraceJournal_Remaining + Environment.NewLine;
-                            //trans.ListEvent = trans.ListEvent.OrderBy(d => d.Key).ToDictionary(k => k.Key, v => v.Value);
-                            //SplitRequest(ref trans);
-                            //if (ListTransaction.ContainsKey(trans.Terminal))
-                            //{
-                            //    if (ListTransaction[trans.Terminal].ContainsKey(trans.DateBegin))
-                            //        trans.DateBegin.AddMilliseconds(1);
-                            //    ListTransaction[trans.Terminal][trans.DateBegin] = trans;
-                            //}
-                            //else
-                            //    ListTransaction[trans.Terminal] = new Dictionary<DateTime, object>() { { trans.DateBegin, trans } };
-
-                          //  sString = sString.Replace(trans.TraceJournalFull, string.Empty);
+                            sString = sString.Replace(key.Value.stringfind, string.Empty);                           
                         }
                     }
                 }
@@ -495,7 +817,7 @@ namespace Transaction_Statistical
             {
                 InitParametar.Send_Error(ex.ToString(), MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name);
             }
-            return false;
+            return sString;
         }
         private void SplitTransactionEJ_Info(RegesValue val)
         {
@@ -537,6 +859,7 @@ namespace Transaction_Statistical
             }
             catch(Exception ex)
             {
+                InitParametar.Send_Error(ex.ToString(), MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name);
             }
         }
         private bool FindCounterChanged(ref string sString, ref Dictionary<DateTime, Cycle> Cycles)
@@ -682,6 +1005,32 @@ namespace Transaction_Statistical
             return false;
         }
 
+        private async Task<string> FindEventDevice2Async(DateTime DateCurrent, string Terminal, string sString)
+        {
+            Transaction transaction = new Transaction();
+
+            try
+            {
+                transaction.TraceJournal_Remaining = sString;
+                Dictionary<DateTime, TransactionEvent> t = new Dictionary<DateTime, TransactionEvent>();
+                transaction = await Task.Run(() => FindEventDevice(transaction, DateCurrent));
+                if (transaction.ListEvent.Count > 0)
+                {
+
+                    foreach (KeyValuePair<DateTime, TransactionEvent> vars in transaction.ListEvent)
+                    {
+
+                        if (ListTransaction[Terminal].ContainsKey(vars.Key)) ListTransaction[Terminal].Add(vars.Key.AddMilliseconds(1), vars.Value);
+                        else ListTransaction[Terminal].Add(vars.Key, vars.Value);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                InitParametar.Send_Error(ex.ToString(), MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name);
+            }
+            return transaction.TraceJournal_Remaining;
+        }
         private bool FindEventDevice2(DateTime DateCurrent, string Terminal, ref string sString)
         {
             try
@@ -1097,9 +1446,10 @@ namespace Transaction_Statistical
         public DateTime DateEnd;
 
         [CategoryAttribute("3. Transaction"), DescriptionAttribute("Start time of the transaction")]
-        public string TimeStart { get { return String.Format("{0:HH:mm:ss}", DateEnd); } }
+        public string TimeStart { get { return String.Format("{0:HH:mm:ss}", DateBegin); } }
+
         [CategoryAttribute("3. Transaction"), DescriptionAttribute("End time of the transaction")]
-        public string TimeEnd { get { return String.Format("{0:HH:mm:ss}", DateBegin); } }
+        public string TimeEnd { get { return String.Format("{0:HH:mm:ss}", DateEnd); } }
 
 
         [CategoryAttribute("3. Transaction"), DescriptionAttribute("Amount")]

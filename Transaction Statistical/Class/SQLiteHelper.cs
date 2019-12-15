@@ -1466,7 +1466,7 @@ namespace Transaction_Statistical
         {
             try
             {
-                string Pathlog = InitParametar.FolderSystemLog + @"\" + string.Format("{0:yyyyMMdd}", DateTime.Now);
+                string Pathlog = InitParametar.FolderSystemTrace + @"\" + string.Format("{0:yyyyMMdd}", DateTime.Now);
                 string FileLog = Pathlog + @"\SQL.log";
                 if (!Directory.Exists(Pathlog))
                 {
@@ -1489,7 +1489,7 @@ namespace Transaction_Statistical
         {
             try
             {
-                string Pathlog = InitParametar.FolderSystemLog + @"\" + string.Format("{0:yyyyMMdd}", DateTime.Now);
+                string Pathlog = InitParametar.FolderSystemTrace + @"\" + string.Format("{0:yyyyMMdd}", DateTime.Now);
                 string FileLog = Pathlog + @"\" + TID + ".log";
                 if (!Directory.Exists(Pathlog))
                 {
