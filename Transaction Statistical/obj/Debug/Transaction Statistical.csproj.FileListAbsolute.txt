@@ -145,9 +145,6 @@ D:\ToolTCB_Git\ToolTCB\Transaction Statistical\bin\Debug\EntityFramework.dll
 D:\ToolTCB_Git\ToolTCB\Transaction Statistical\bin\Debug\EntityFramework.SqlServer.dll
 D:\ToolTCB_Git\ToolTCB\Transaction Statistical\bin\Debug\EPPlus.dll
 D:\ToolTCB_Git\ToolTCB\Transaction Statistical\bin\Debug\FastColoredTextBox.dll
-D:\ToolTCB_Git\ToolTCB\Transaction Statistical\bin\Debug\MetroFramework.Design.dll
-D:\ToolTCB_Git\ToolTCB\Transaction Statistical\bin\Debug\MetroFramework.dll
-D:\ToolTCB_Git\ToolTCB\Transaction Statistical\bin\Debug\MetroFramework.Fonts.dll
 D:\ToolTCB_Git\ToolTCB\Transaction Statistical\bin\Debug\System.Data.SQLite.dll
 D:\ToolTCB_Git\ToolTCB\Transaction Statistical\bin\Debug\System.Data.SQLite.EF6.dll
 D:\ToolTCB_Git\ToolTCB\Transaction Statistical\bin\Debug\System.Data.SQLite.Linq.dll
@@ -265,3 +262,5 @@ D:\Project\ToolTCB\ToolTCB\Transaction Statistical\obj\Debug\Transaction Statist
 D:\Project\ToolTCB\ToolTCB\Transaction Statistical\obj\Debug\Transaction Statistical.csproj.CopyComplete
 D:\Project\ToolTCB\ToolTCB\Transaction Statistical\obj\Debug\Transaction Statistical.exe
 D:\Project\ToolTCB\ToolTCB\Transaction Statistical\obj\Debug\Transaction Statistical.pdb
+D:\ToolTCB_Git\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.UControl.UC_Menu_History.resources
+D:\ToolTCB_Git\ToolTCB\Transaction Statistical\bin\Debug\CheckComboBox.dll

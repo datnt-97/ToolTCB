@@ -85,7 +85,7 @@ namespace Transaction_Statistical
                 InitParametar.Send_Error(ex.ToString(), MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name); ;
             }
         }
-        public async static void AutoStart(string taskName)
+        public async static Task<bool> AutoStart(string taskName)
         {
             try
             {
@@ -102,7 +102,7 @@ namespace Transaction_Statistical
                 {
                     WriteLogApplication("   => Load Template Info => Unsuccessfully", false, false);
                     WriteLogApplication("   ==> Auto end, result => Unsuccessfully", false, true);
-                    return;
+                    return false;
                 }
                 WriteLogApplication("   => Load Template Info => Successfully", false, false);
 
@@ -120,38 +120,48 @@ namespace Transaction_Statistical
                 {
                     WriteLogApplication("   => Found: 0 files", false, false);
                     WriteLogApplication("   ==> Auto end, result => Unsuccessfully", false, true);
-                    return;
+                    return false;
+
                 }
                 WriteLogApplication(string.Format("   => Found: {0} files", lsFile_Journal.Count), false, false);
 
                 WriteLogApplication(string.Format("   => Read begin: {0:HH:mm:ss fff} ", DateTime.Now), false, false);
                 var watch = System.Diagnostics.Stopwatch.StartNew(); watch.Start();
                 ReadTrans = new ReadTransaction();
-                await ReadTrans.Reads(lsFile_Journal);
+                if (!await ReadTrans.Reads(lsFile_Journal))
+                {
+                    WriteLogApplication("   ==> Auto end, result => Unsuccessfully", false, true); return false;
+                    ;
+                }
                 watch.Stop();
                 int count = ReadTrans.ListTransaction.Values.LastOrDefault().Keys.Count;
                 WriteLogApplication(string.Format("   => Read time: {0} s\n   =>Transactions: {1}\n   =>Files: {2}", watch.ElapsedMilliseconds / 1000, count, lsFile_Journal.Count), false, false);
-                if (count == 0) { WriteLogApplication("   ==> Auto end, result => Unsuccessfully", false, true); return; }
-
                 Dictionary<int, string> TemplateChoosen = data[4].Replace("[", "").Replace("]", "").Split(';').ToDictionary(x => int.Parse(x.Split(',')[0]), x => x.Split(',')[1]);
+
                 watch.Start();
                 WriteLogApplication(string.Format("   => Export begin: {0:HH:mm:ss fff} ", DateTime.Now), false, false);
                 WriteLogApplication("   => Export destination: " + data[3], false, false);
                 WriteLogApplication("   => Export forms: " + TemplateChoosen.Values.ToString(), false, false);
-                if (TemplateChoosen.Count == 0) { WriteLogApplication("   ==> Auto end, result => Unsuccessfully", false, true); return; }
-
+                if (TemplateChoosen.Count == 0)
+                {
+                    WriteLogApplication("   ==> Auto end, result => Unsuccessfully", false, true); return false;
+                }
                 ReadTrans.Export(data[3], TemplateChoosen);
                 watch.Stop();
                 WriteLogApplication(string.Format("   => Export time:{0} s", watch.ElapsedMilliseconds / 1000), false, false);
                 WriteLogApplication(string.Format("   ==> File: {0}, size {1} kb", ReadTrans.FileExport, new FileInfo(ReadTrans.FileExport).Length / 1024), false, false);
                 WriteLogApplication("   ==> Auto end, result => Successfully", false, true);
-                return;
+                return false;
+
             }
             catch (Exception ex)
             {
                 InitParametar.Send_Error(ex.ToString(), MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name); ;
+                WriteLogApplication(ex.Message, false, true);
             }
             WriteLogApplication("   ==> Auto end, result => Unsuccessfully", false, true);
+            return true;
+
         }
         public static bool LoadTemplateInfo()
         {
@@ -380,13 +390,13 @@ namespace Transaction_Statistical
                 DateTime currentDate = DateTime.MinValue;
 
                 ListTransaction = new Dictionary<string, Dictionary<DateTime, object>>();
-                ProgressBar progressBar = new ProgressBar();
-                progressBar.Width = 300;
-                progressBar.Maximum = files.Count;
-                progressBar.Step = 1;
-                Frm_TemplateDefault frm = new Frm_TemplateDefault(progressBar);
+                //ProgressBar progressBar = new ProgressBar();
+                //progressBar.Width = 300;
+                //progressBar.Maximum = files.Count;
+                //progressBar.Step = 1;
+                //Frm_TemplateDefault frm = new Frm_TemplateDefault(progressBar);
 
-                frm.Show();
+                //frm.Show();
                 ListCycle = new Dictionary<DateTime, Cycle>();
                 foreach (string file in files)
                 {
@@ -400,7 +410,7 @@ namespace Transaction_Statistical
                     contenFile = await SplitTransactionEJ(Terminal, contenFile);
                     contenFile = await FindEventDevice2Async(currentDate, Terminal, contenFile);
                     FindCounterChanged(ref contenFile, ref ListCycle);
-                    progressBar.PerformStep();
+                    //progressBar.PerformStep();
                 }
                 //CHANGE 6/12
                 var ListTransactionTemp = ListTransaction;
@@ -412,7 +422,6 @@ namespace Transaction_Statistical
                     cycles.ForEach(x =>
                     {
                         ListTransaction.FirstOrDefault(x1 => x1.Key == item.Key).Value.Add(x.Key, x.Value);
-
                     });
 
                 }
@@ -828,7 +837,7 @@ namespace Transaction_Statistical
                 //FindEventReceive(ref trans.TraceJournal_Remaining, trans.DateBegin, ref trans.ListEvent);
                 //FindEventDevice(ref trans.TraceJournal_Remaining, trans.DateBegin, ref trans.ListEvent);
                 //FindEventCashOutIn(ref trans.TraceJournal_Remaining, trans.DateBegin, ref trans.ListEvent, ref trans);
-                trans.ListEvent = trans.ListEvent.OrderBy(d => d.Key).ToDictionary(k => k.Key, v => v.Value);
+                //trans.ListEvent = trans.ListEvent.OrderBy(d => d.Key).ToDictionary(k => k.Key, v => v.Value);
                 SplitRequest(ref trans);
                 if (ListTransaction.ContainsKey(trans.Terminal))
                 {
@@ -1060,32 +1069,32 @@ namespace Transaction_Statistical
             }
             return transaction.TraceJournal_Remaining;
         }
-        private bool FindEventDevice2(DateTime DateCurrent, string Terminal, ref string sString)
-        {
-            Transaction transaction = new Transaction();
+        //private bool FindEventDevice2(DateTime DateCurrent, string Terminal, ref string sString)
+        //{
+        //    Transaction transaction = new Transaction();
 
-            try
-            {
-                transaction.TraceJournal_Remaining = sString;
-                Dictionary<DateTime, TransactionEvent> t = new Dictionary<DateTime, TransactionEvent>();
-                transaction = await Task.Run(() => FindEventDevice(transaction, DateCurrent));
-                if (transaction.ListEvent.Count > 0)
-                {
+        //    try
+        //    {
+        //        transaction.TraceJournal_Remaining = sString;
+        //        Dictionary<DateTime, TransactionEvent> t = new Dictionary<DateTime, TransactionEvent>();
+        //        transaction = await Task.Run(() => FindEventDevice(transaction, DateCurrent));
+        //        if (transaction.ListEvent.Count > 0)
+        //        {
 
-                    foreach (KeyValuePair<DateTime, TransactionEvent> vars in transaction.ListEvent)
-                    {
+        //            foreach (KeyValuePair<DateTime, TransactionEvent> vars in transaction.ListEvent)
+        //            {
 
-                        if (ListTransaction[Terminal].ContainsKey(vars.Key)) ListTransaction[Terminal].Add(vars.Key.AddMilliseconds(1), vars.Value);
-                        else ListTransaction[Terminal].Add(vars.Key, vars.Value);
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                InitParametar.Send_Error(ex.ToString(), MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name);
-            }
-            return transaction.TraceJournal_Remaining;
-        }
+        //                if (ListTransaction[Terminal].ContainsKey(vars.Key)) ListTransaction[Terminal].Add(vars.Key.AddMilliseconds(1), vars.Value);
+        //                else ListTransaction[Terminal].Add(vars.Key, vars.Value);
+        //            }
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        InitParametar.Send_Error(ex.ToString(), MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name);
+        //    }
+        //    return transaction.TraceJournal_Remaining;
+        //}
         private bool FindEventDevice(ref string sString, DateTime DateCurrent, ref Dictionary<DateTime, TransactionEvent> eventList)
         {
             try

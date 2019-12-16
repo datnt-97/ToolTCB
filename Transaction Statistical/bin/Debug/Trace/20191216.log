@@ -1,0 +1,60 @@
+----------------------------------------------
+11:16:00 161 Class: Auto Task
+   => Task name: tesst
+   => Task data: 11:16;DAILY;;1|65|D:\99147001_EJF|D:\99147001_EJF|[0, Cân Quỹ Theo Counter Trên Máy];[1, GD Tài Chính];[2, GD Tài Chính Không Thành Công];[3, GD Tài Chính Bất Thường];[4, BC Hoạt Động Bất Thường]
+   => Template id: 65
+   => Load Template Info => Successfully
+   => Data source: D:\99147001_EJF
+   => Found: 8 files
+   => Read begin: 11:16:00 205 
+   => Read time: 4 s
+   =>Transactions: 1364
+   =>Files: 8
+   => Export begin: 11:16:04 861 
+   => Export destination: D:\99147001_EJF
+   => Export forms: System.Collections.Generic.Dictionary`2+ValueCollection[System.Int32,System.String]
+   => Export time:6 s
+   ==> File: D:\99147001_EJF\TransactionStatistical_20191216_11-16.xlsx, size 402 kb
+   ==> Auto end, result => Successfully
+----------------------------------------------
+
+----------------------------------------------
+11:17:10 569 Class: Auto Task
+   => Task name: tesst
+   => Task data: 11:16;DAILY;;1|65|D:\99147001_EJF|D:\99147001_EJF|[0, Cân Quỹ Theo Counter Trên Máy];[1, GD Tài Chính];[2, GD Tài Chính Không Thành Công];[3, GD Tài Chính Bất Thường];[4, BC Hoạt Động Bất Thường]
+   => Template id: 65
+   => Load Template Info => Successfully
+   => Data source: D:\99147001_EJF
+   => Found: 8 files
+   => Read begin: 11:17:10 623 
+   => Read time: 4 s
+   =>Transactions: 1362
+   =>Files: 8
+   => Export begin: 11:17:15 573 
+   => Export destination: D:\99147001_EJF
+   => Export forms: System.Collections.Generic.Dictionary`2+ValueCollection[System.Int32,System.String]
+   => Export time:7 s
+   ==> File: D:\99147001_EJF\TransactionStatistical_20191216_11-17.xlsx, size 402 kb
+   ==> Auto end, result => Successfully
+----------------------------------------------
+
+----------------------------------------------
+11:17:57 595 Class: Auto Task
+   => Task name: tesst
+   => Task data: 11:16;DAILY;;1|65|D:\99147001_EJF|D:\99147001_EJF|[0, Cân Quỹ Theo Counter Trên Máy];[1, GD Tài Chính];[2, GD Tài Chính Không Thành Công];[3, GD Tài Chính Bất Thường];[4, BC Hoạt Động Bất Thường]
+   => Template id: 65
+   => Load Template Info => Successfully
+   => Data source: D:\99147001_EJF
+   => Found: 8 files
+   => Read begin: 11:17:57 648 
+   => Read time: 4 s
+   =>Transactions: 1364
+   =>Files: 8
+   => Export begin: 11:18:02 407 
+   => Export destination: D:\99147001_EJF
+   => Export forms: System.Collections.Generic.Dictionary`2+ValueCollection[System.Int32,System.String]
+   => Export time:7 s
+   ==> File: D:\99147001_EJF\TransactionStatistical_20191216_11-18.xlsx, size 403 kb
+   ==> Auto end, result => Successfully
+----------------------------------------------
+

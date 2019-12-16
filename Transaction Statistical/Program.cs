@@ -14,21 +14,25 @@ namespace Transaction_Statistical
         /// </summary>
         [STAThread]
         static void Main(string[] args)
-        { 
+        {
             InitParametar.Init();
-         //   args = new string[] { "Test" };
+            //args = new string[] { "Task" };
             if (args.Length == 0)
-            {               
+            {
                 Application.EnableVisualStyles();
                 Application.SetCompatibleTextRenderingDefault(false);
-              //  Application.Run(new Frm_LoadingApp());
+                //  Application.Run(new Frm_LoadingApp());
                 Application.Run(new Frm_Main());
             }
             else
             {
                 //Auto start - not GUI               
-                InitParametar.AutoStart(args[0]);
+                AsyncMain(args).GetAwaiter().GetResult();
             }
+        }
+        private static async Task AsyncMain(string[] args)
+        {
+            await InitParametar.AutoStart(args[0]);
         }
     }
 }
