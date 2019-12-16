@@ -224,3 +224,44 @@ D:\05-TEMP\Source\GitHub\ToolTCB 15-12\Transaction Statistical\obj\Debug\Transac
 D:\05-TEMP\Source\GitHub\ToolTCB 15-12\Transaction Statistical\obj\Debug\Transaction Statistical.csproj.CopyComplete
 D:\05-TEMP\Source\GitHub\ToolTCB 15-12\Transaction Statistical\obj\Debug\Transaction Statistical.exe
 D:\05-TEMP\Source\GitHub\ToolTCB 15-12\Transaction Statistical\obj\Debug\Transaction Statistical.pdb
+D:\Project\ToolTCB\ToolTCB\Transaction Statistical\bin\Debug\Transaction Statistical.exe.config
+D:\Project\ToolTCB\ToolTCB\Transaction Statistical\bin\Debug\Transaction Statistical.exe
+D:\Project\ToolTCB\ToolTCB\Transaction Statistical\bin\Debug\Transaction Statistical.pdb
+D:\Project\ToolTCB\ToolTCB\Transaction Statistical\bin\Debug\CheckComboBox.dll
+D:\Project\ToolTCB\ToolTCB\Transaction Statistical\bin\Debug\EntityFramework.dll
+D:\Project\ToolTCB\ToolTCB\Transaction Statistical\bin\Debug\EntityFramework.SqlServer.dll
+D:\Project\ToolTCB\ToolTCB\Transaction Statistical\bin\Debug\EPPlus.dll
+D:\Project\ToolTCB\ToolTCB\Transaction Statistical\bin\Debug\FastColoredTextBox.dll
+D:\Project\ToolTCB\ToolTCB\Transaction Statistical\bin\Debug\System.Data.SQLite.dll
+D:\Project\ToolTCB\ToolTCB\Transaction Statistical\bin\Debug\System.Data.SQLite.EF6.dll
+D:\Project\ToolTCB\ToolTCB\Transaction Statistical\bin\Debug\System.Data.SQLite.Linq.dll
+D:\Project\ToolTCB\ToolTCB\Transaction Statistical\bin\Debug\FastColoredTextBox.pdb
+D:\Project\ToolTCB\ToolTCB\Transaction Statistical\bin\Debug\FastColoredTextBox.xml
+D:\Project\ToolTCB\ToolTCB\Transaction Statistical\bin\Debug\EntityFramework.xml
+D:\Project\ToolTCB\ToolTCB\Transaction Statistical\bin\Debug\EntityFramework.SqlServer.xml
+D:\Project\ToolTCB\ToolTCB\Transaction Statistical\bin\Debug\EPPlus.xml
+D:\Project\ToolTCB\ToolTCB\Transaction Statistical\bin\Debug\System.Data.SQLite.xml
+D:\Project\ToolTCB\ToolTCB\Transaction Statistical\bin\Debug\System.Data.SQLite.dll.config
+D:\Project\ToolTCB\ToolTCB\Transaction Statistical\obj\Debug\Transaction Statistical.csprojAssemblyReference.cache
+D:\Project\ToolTCB\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.AddOn.ButtonMenu.resources
+D:\Project\ToolTCB\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.AddOn.TabControlX.resources
+D:\Project\ToolTCB\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.AddOn.TabPanelControl.resources
+D:\Project\ToolTCB\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.Frm_TemplateDefault.resources
+D:\Project\ToolTCB\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.Frm_Main.resources
+D:\Project\ToolTCB\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.Frm_LoadingApp.resources
+D:\Project\ToolTCB\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.Frm.test.resources
+D:\Project\ToolTCB\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.Properties.Resources.resources
+D:\Project\ToolTCB\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.UC_CfgTemplate.resources
+D:\Project\ToolTCB\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.UC_Explorer.resources
+D:\Project\ToolTCB\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.UControl.UC_ExportCus.resources
+D:\Project\ToolTCB\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.UControl.UC_Menu_History.resources
+D:\Project\ToolTCB\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.UC_Info.resources
+D:\Project\ToolTCB\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.UControl.UC_Menu.resources
+D:\Project\ToolTCB\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.UControl.UC_Menu_Dashboard.resources
+D:\Project\ToolTCB\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.UControl.UC_Menu_Overview.resources
+D:\Project\ToolTCB\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.UC_Menu_Startup.resources
+D:\Project\ToolTCB\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.UControl.UC_Transaction.resources
+D:\Project\ToolTCB\ToolTCB\Transaction Statistical\obj\Debug\Transaction Statistical.csproj.GenerateResource.cache
+D:\Project\ToolTCB\ToolTCB\Transaction Statistical\obj\Debug\Transaction Statistical.csproj.CopyComplete
+D:\Project\ToolTCB\ToolTCB\Transaction Statistical\obj\Debug\Transaction Statistical.exe
+D:\Project\ToolTCB\ToolTCB\Transaction Statistical\obj\Debug\Transaction Statistical.pdb

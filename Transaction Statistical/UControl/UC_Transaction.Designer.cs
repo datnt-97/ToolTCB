@@ -79,7 +79,7 @@ namespace Transaction_Statistical.UControl
             this.txt_Path.Name = "txt_Path";
             this.txt_Path.Size = new System.Drawing.Size(645, 22);
             this.txt_Path.TabIndex = 1;
-            this.txt_Path.Text = "D:\\06-NPSS\\Tool_TraSoat\\LOG tech\\LOG tech\\02-10-2019\\99262001-20190917.txt";
+            this.txt_Path.Text = @"D:\99147001_EJF";
             this.txt_Path.MouseClick += new System.Windows.Forms.MouseEventHandler(this.txt_Path_MouseEnter);
             // 
             // gpBox_Actions
