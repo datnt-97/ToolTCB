@@ -535,23 +535,25 @@ namespace Transaction_Statistical.Class
                     worksheet.Cells[indexData, index + 6].Value = itemTrans.CardType == Transaction.CardTypes.CardLess ? "CardLess" : itemTrans.CardNumber;
                     worksheet.Cells[indexData, index + 7].Value = itemTrans.DataInput;
                     worksheet.Cells[indexData, index + 8].Value = itemTrans.DateBegin;
-                    //worksheet.Cells[indexData, index + 8].Style.Numberformat.Format = "dd/mm/yyyy hh:mm:ss AM/PM";
+                    worksheet.Cells[indexData, index + 8].Style.Numberformat.Format = "MM-dd-yyyy HH:mm:ss";
 
-                    worksheet.Cells[indexData, index + 9].Value = itemTrans.Amount;
-                    worksheet.Cells[indexData, index + 10].Value = "";
-                    worksheet.Cells[indexData, index + 11].Value = "";
-                    worksheet.Cells[indexData, index + 12].Value = "";
-                    worksheet.Cells[indexData, index + 13].Value = "";
-                    worksheet.Cells[indexData, index + 14].Value = "";
-                    worksheet.Cells[indexData, index + 15].Value = "";
-                    worksheet.Cells[indexData, index + 16].Value = "";
-                    worksheet.Cells[indexData, index + 17].Value = "";
-                    worksheet.Cells[indexData, index + 18].Value = "";
-                    worksheet.Cells[indexData, index + 19].Value = "";
-                    worksheet.Cells[indexData, index + 20].Value = "";
-                    worksheet.Cells[indexData, index + 21].Value = "";
-                    worksheet.Cells[indexData, index + 22].Value = "";
-                    worksheet.Cells[indexData, index + 23].Value = "";
+                    worksheet.Cells[indexData, index + 9].Value = Math.Abs(itemTrans.Value_500K * 500000) + Math.Abs(itemTrans.Value_200K * 200000) +
+                    Math.Abs(itemTrans.Value_100K * 100000) + Math.Abs(itemTrans.Value_50K * 50000) + Math.Abs(itemTrans.Value_20K * 20000) +
+                    Math.Abs(itemTrans.Value_10K * 10000);
+                    worksheet.Cells[indexData, index + 10].Value = itemTrans.Value_500K;
+                    worksheet.Cells[indexData, index + 11].Value = 0;
+                    worksheet.Cells[indexData, index + 12].Value = itemTrans.Value_200K;
+                    worksheet.Cells[indexData, index + 13].Value = 0;
+                    worksheet.Cells[indexData, index + 14].Value = itemTrans.Value_10K;
+                    worksheet.Cells[indexData, index + 15].Value = 0;
+                    worksheet.Cells[indexData, index + 16].Value = itemTrans.Value_50K;
+                    worksheet.Cells[indexData, index + 17].Value = 0;
+                    worksheet.Cells[indexData, index + 18].Value = itemTrans.Value_20K;
+                    worksheet.Cells[indexData, index + 19].Value = 0;
+                    worksheet.Cells[indexData, index + 20].Value = itemTrans.Value_10K;
+                    worksheet.Cells[indexData, index + 21].Value = 0;
+                    worksheet.Cells[indexData, index + 22].Value = itemTrans.Rejects;
+                    worksheet.Cells[indexData, index + 23].Value = 0;
                     worksheet.Cells[indexData, index + 24].Style.HorizontalAlignment = ExcelHorizontalAlignment.Left;
                     worksheet.Cells[indexData, index + 24].Value = itemTrans.Follow;
                     //worksheet.Cells[indexData, index + 25].Value = "";

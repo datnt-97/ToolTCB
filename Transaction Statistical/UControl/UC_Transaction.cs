@@ -127,9 +127,11 @@ namespace Transaction_Statistical.UControl
                 {
                      FileInfo[] files = df.GetAllFilePath(txt_Path.Text, InitParametar.ExtensionFile);
                     JournalAnalyze(files.Select(f => f.FullName).ToList());
-                    tre_LstTrans.Nodes[0].Expand();
-                    
+                    if (tre_LstTrans.Nodes.Count > 0)
+                    {
+                        tre_LstTrans.Nodes[0].Expand();
 
+                    }
                 }
                 else
                     MessageBox.Show("File/Drectory not exist.", "Error File/Directory", MessageBoxButtons.OK, MessageBoxIcon.Error);
