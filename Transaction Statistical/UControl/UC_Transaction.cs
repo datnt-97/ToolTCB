@@ -20,7 +20,6 @@ namespace Transaction_Statistical.UControl
     public partial class UC_Transaction : UserControl
     {
         SQLiteHelper sqlite;
-        List<Transaction> transactions = new List<Transaction>();
         UC_Explorer uc_Explorer;
         UC_Menu uc_Menu;
         List<string> sTransactionTypeDisplay;
@@ -155,16 +154,16 @@ namespace Transaction_Statistical.UControl
                     InitParametar.ReadTrans.EndDate = dateTimePicker_End.Value;
                 }
 
-
-                var watch = System.Diagnostics.Stopwatch.StartNew();
-                watch.Start();
+                //var watch = System.Diagnostics.Stopwatch.StartNew();
+                //watch.Start();
+                   //test time
+                //    var mili = watch.ElapsedMilliseconds;
+                //watch.Stop();
+                //MessageBox.Show((mili / 1000).ToString());
+                //    ///
                 if (await InitParametar.ReadTrans.Reads(lsFile_Journal))
                 { 
-                    //test time
-                    var mili = watch.ElapsedMilliseconds;
-                watch.Stop();
-                MessageBox.Show((mili / 1000).ToString());
-                    ///
+                 
                     btn_Export.Enabled = true;
                     string day;
                     int countDisplay = 10;

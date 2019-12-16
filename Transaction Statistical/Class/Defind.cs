@@ -302,6 +302,8 @@ namespace Transaction_Statistical
         public string FileComment = @"Hotline: 1900 633 412 \nEmail: np.support @npss.vn\nWeb: http://npss.vn";
         //DAT : 6/12/2019
         public Dictionary<DateTime, Cycle> ListCycle = null;
+        public Dictionary<DateTime, TransactionEvent> ListEvent = null;
+        public Dictionary<DateTime, TransactionRequest> ListRequest = null;
         public ReadTransaction()
         {
             sqlite = new SQLiteHelper();
@@ -388,6 +390,8 @@ namespace Transaction_Statistical
                 ListCycle = new Dictionary<DateTime, Cycle>();
                 foreach (string file in files)
                 {
+                    ListRequest = new Dictionary<DateTime, TransactionRequest>();
+                    ListEvent = new Dictionary<DateTime, TransactionEvent>();
                     string day = file.Substring(file.Length - 12, 8);
                     string Terminal = Path.GetFileName(file).Substring(0, 8);
                     string contenFile = File.ReadAllText(file);
@@ -886,6 +890,7 @@ namespace Transaction_Statistical
                 InitParametar.Send_Error(ex.ToString(), MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name);
             }
         }
+
         private bool FindCounterChanged(ref string sString, ref Dictionary<DateTime, Cycle> Cycles)
         {
             try
@@ -1057,21 +1062,29 @@ namespace Transaction_Statistical
         }
         private bool FindEventDevice2(DateTime DateCurrent, string Terminal, ref string sString)
         {
+            Transaction transaction = new Transaction();
+
             try
             {
+                transaction.TraceJournal_Remaining = sString;
                 Dictionary<DateTime, TransactionEvent> t = new Dictionary<DateTime, TransactionEvent>();
-                if (FindEventDevice(ref sString, DateCurrent, ref t))
-                    foreach (KeyValuePair<DateTime, TransactionEvent> var in t)
+                transaction = await Task.Run(() => FindEventDevice(transaction, DateCurrent));
+                if (transaction.ListEvent.Count > 0)
+                {
+
+                    foreach (KeyValuePair<DateTime, TransactionEvent> vars in transaction.ListEvent)
                     {
-                        if (ListTransaction[Terminal].ContainsKey(var.Key)) ListTransaction[Terminal].Add(var.Key.AddMilliseconds(1), var.Value);
-                        else ListTransaction[Terminal].Add(var.Key, var.Value);
+
+                        if (ListTransaction[Terminal].ContainsKey(vars.Key)) ListTransaction[Terminal].Add(vars.Key.AddMilliseconds(1), vars.Value);
+                        else ListTransaction[Terminal].Add(vars.Key, vars.Value);
                     }
+                }
             }
             catch (Exception ex)
             {
                 InitParametar.Send_Error(ex.ToString(), MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name);
             }
-            return false;
+            return transaction.TraceJournal_Remaining;
         }
         private bool FindEventDevice(ref string sString, DateTime DateCurrent, ref Dictionary<DateTime, TransactionEvent> eventList)
         {
@@ -1188,6 +1201,7 @@ namespace Transaction_Statistical
                     {
                         foreach (RegesValue regx in lst.Values)
                         {
+
                             evt = new TransactionEvent();
                             evt.Name = tmp.Key;
                             evt.Status = TransactionEvent.StatusS.Succeeded;
@@ -2033,6 +2047,31 @@ namespace Transaction_Statistical
         public Cassette()
         {
 
+        }
+    }
+    public class EventData
+    {
+        private string sString;
+        private Dictionary<DateTime, TransactionEvent> eventList;
+        private Transaction transaction;
+
+        public string SString { get => sString; set => sString = value; }
+        public Dictionary<DateTime, TransactionEvent> EventList { get => eventList; set => eventList = value; }
+        public Transaction Transaction { get => transaction; set => transaction = value; }
+
+        public EventData(string sString, Dictionary<DateTime, TransactionEvent> eventList, Transaction transaction)
+        {
+            this.sString = sString;
+            this.eventList = eventList;
+            this.transaction = transaction;
+        }
+        public EventData(string sString, Dictionary<DateTime, TransactionEvent> eventList)
+        {
+            this.sString = sString;
+            this.eventList = eventList;
+        }
+        public EventData()
+        {
         }
     }
 }
