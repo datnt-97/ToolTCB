@@ -389,7 +389,7 @@ namespace Transaction_Statistical
             }
             #endregion
         }
-        public async Task<bool> Reads(List<string> files, TextProgressBar process=null)
+        public async Task<bool> Reads(List<string> files, TextProgressBar process = null)
         {
 
             try
@@ -399,8 +399,8 @@ namespace Transaction_Statistical
                 DateTime currentDate = DateTime.MinValue;
 
                 ListTransaction = new Dictionary<string, Dictionary<DateTime, object>>();
-                
-                if(process!=null)
+
+                if (process != null)
                 {
                     process.CustomText = string.Format("Found: {0} files.", files.Count);
                     process.Step = (process.Maximum - process.Value) / files.Count;
@@ -424,7 +424,7 @@ namespace Transaction_Statistical
                     contenFile = await SplitTransactionEJ(Terminal, contenFile);
                     contenFile = await FindEventDevice2Async(currentDate, Terminal, contenFile);
                     FindCounterChanged(ref contenFile, ref ListCycle);
-                    
+
                 }
                 //CHANGE 6/12
                 var ListTransactionTemp = ListTransaction;
@@ -534,10 +534,10 @@ namespace Transaction_Statistical
                         {
                             //await Task.Run(() => SplitTransactionEJ_Info(key.Value));
                             tasks.Add(SplitTransactionEJ_InfoAsync(key.Value));
-                            sString = sString.Replace(key.Value.stringfind, string.Empty);
                         }
                         await Task.WhenAll(tasks);
                     }
+                    sString = Regex.Replace(sString, reg, string.Empty);
                 }
             }
             catch (Exception ex)
@@ -863,7 +863,7 @@ namespace Transaction_Statistical
         }
         #endregion
 
-       
+
 
         private bool FindCounterChanged(ref string sString, ref Dictionary<DateTime, Cycle> Cycles)
         {
@@ -1034,7 +1034,7 @@ namespace Transaction_Statistical
             }
             return transaction.TraceJournal_Remaining;
         }
- 
+
         private bool SplitRequest(ref Transaction transaction)
         {
             try
