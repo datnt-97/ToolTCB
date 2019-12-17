@@ -51,6 +51,9 @@ namespace Transaction_Statistical.UControl
         #endregion
         private void Add_GUI()
         {
+            prb_Process.Location = btn_Read.Location;
+            prb_Process.ProgressColor = btn_Read.BZBackColor;
+
             uc_Explorer = new UC_Explorer();
             uc_Menu = new UC_Menu(this);
 
@@ -119,13 +122,15 @@ namespace Transaction_Statistical.UControl
         {
             try
             {
-                btn_Read.Enabled = false;
+                prb_Process.Size = btn_Read.Size;
+                prb_Process.Value = 0;
+                prb_Process.Update();
                 DirectoryFileUtilities df = new DirectoryFileUtilities();
                 if (File.Exists(txt_Path.Text))
-              await   JournalAnalyze(new List<string> { txt_Path.Text });
+                    await JournalAnalyze(new List<string> { txt_Path.Text });
                 else if (Directory.Exists(txt_Path.Text))
                 {
-                   
+
                     FileInfo[] files = df.GetAllFilePath(txt_Path.Text, InitParametar.ExtensionFile);
                     await JournalAnalyze(files.Select(f => f.FullName).ToList());
                     if (tre_LstTrans.Nodes.Count != 0) tre_LstTrans.Nodes[0].Expand();
@@ -133,17 +138,18 @@ namespace Transaction_Statistical.UControl
                 else
                     MessageBox.Show("File/Drectory not exist.", "Error File/Directory", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 InitParametar.Send_Error(ex.ToString(), MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name);
             }
-            btn_Read.Enabled = true;
-        }
+            prb_Process.Size = new Size(0, 0);
+        } 
         private async Task<bool> JournalAnalyze(List<string> lsFile_Journal)
-        {
+        { 
+            
+                    
             try
             {
-
                 tre_LstTrans.Nodes.Clear();
                 btn_Export.Enabled = false;
                 propertyGrid1.SelectedObject = null;
@@ -161,9 +167,9 @@ namespace Transaction_Statistical.UControl
                 //watch.Stop();
                 //MessageBox.Show((mili / 1000).ToString());
                 //    ///
-                if (await InitParametar.ReadTrans.Reads(lsFile_Journal))
-                { 
-                 
+                if (await InitParametar.ReadTrans.Reads(lsFile_Journal, prb_Process))
+                {
+                    prb_Process.CustomText = "Show data";
                     btn_Export.Enabled = true;
                     string day;
                     int countDisplay = 10;

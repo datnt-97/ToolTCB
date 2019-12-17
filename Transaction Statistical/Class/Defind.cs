@@ -380,7 +380,7 @@ namespace Transaction_Statistical
             }
             #endregion
         }
-        public async Task<bool> Reads(List<string> files)
+        public async Task<bool> Reads(List<string> files, TextProgressBar process=null)
         {
 
             try
@@ -390,16 +390,21 @@ namespace Transaction_Statistical
                 DateTime currentDate = DateTime.MinValue;
 
                 ListTransaction = new Dictionary<string, Dictionary<DateTime, object>>();
-                //ProgressBar progressBar = new ProgressBar();
-                //progressBar.Width = 300;
-                //progressBar.Maximum = files.Count;
-                //progressBar.Step = 1;
-                //Frm_TemplateDefault frm = new Frm_TemplateDefault(progressBar);
+                
+                if(process!=null)
+                {
+                    process.CustomText = string.Format("Found: {0} files.", files.Count);
+                    process.Step = (process.Maximum - process.Value) / files.Count;
+                }
 
-                //frm.Show();
                 ListCycle = new Dictionary<DateTime, Cycle>();
                 foreach (string file in files)
                 {
+                    if (process != null)
+                    {
+                        process.CustomText = string.Format("Reading.. [{0}]", Path.GetFileName(file));
+                        process.PerformStep();
+                    }
                     ListRequest = new Dictionary<DateTime, TransactionRequest>();
                     ListEvent = new Dictionary<DateTime, TransactionEvent>();
                     string day = file.Substring(file.Length - 12, 8);
@@ -410,7 +415,7 @@ namespace Transaction_Statistical
                     contenFile = await SplitTransactionEJ(Terminal, contenFile);
                     contenFile = await FindEventDevice2Async(currentDate, Terminal, contenFile);
                     FindCounterChanged(ref contenFile, ref ListCycle);
-                    //progressBar.PerformStep();
+                    
                 }
                 //CHANGE 6/12
                 var ListTransactionTemp = ListTransaction;

@@ -47,6 +47,7 @@ namespace Transaction_Statistical.UControl
             this.label1 = new System.Windows.Forms.Label();
             this.dateTimePicker_Start = new System.Windows.Forms.DateTimePicker();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.prb_Process = new Transaction_Statistical.TextProgressBar();
             this.btn_Menu = new Transaction_Statistical.AddOn.ButtonMenu();
             this.btn_Read = new Transaction_Statistical.AddOn.ButtonZ();
             this.panel2 = new System.Windows.Forms.Panel();
@@ -74,12 +75,12 @@ namespace Transaction_Statistical.UControl
             this.txt_Path.BackColor = System.Drawing.Color.DimGray;
             this.txt_Path.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.txt_Path.ForeColor = System.Drawing.Color.White;
-            this.txt_Path.Location = new System.Drawing.Point(19, 185);
+            this.txt_Path.Location = new System.Drawing.Point(13, 185);
             this.txt_Path.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.txt_Path.Name = "txt_Path";
-            this.txt_Path.Size = new System.Drawing.Size(645, 22);
+            this.txt_Path.Size = new System.Drawing.Size(651, 22);
             this.txt_Path.TabIndex = 1;
-            this.txt_Path.Text = @"D:\99147001_EJF";
+            this.txt_Path.Text = "D:\\06-NPSS\\Tool_TraSoat\\LOG tech\\LOG tech\\60File";
             this.txt_Path.MouseClick += new System.Windows.Forms.MouseEventHandler(this.txt_Path_MouseEnter);
             // 
             // gpBox_Actions
@@ -87,11 +88,11 @@ namespace Transaction_Statistical.UControl
             this.gpBox_Actions.Controls.Add(this.pl_Actions);
             this.gpBox_Actions.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.gpBox_Actions.ForeColor = System.Drawing.Color.White;
-            this.gpBox_Actions.Location = new System.Drawing.Point(19, 59);
+            this.gpBox_Actions.Location = new System.Drawing.Point(13, 59);
             this.gpBox_Actions.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.gpBox_Actions.Name = "gpBox_Actions";
             this.gpBox_Actions.Padding = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.gpBox_Actions.Size = new System.Drawing.Size(645, 112);
+            this.gpBox_Actions.Size = new System.Drawing.Size(651, 112);
             this.gpBox_Actions.TabIndex = 2;
             this.gpBox_Actions.TabStop = false;
             this.gpBox_Actions.Text = "Actions";
@@ -103,12 +104,12 @@ namespace Transaction_Statistical.UControl
             this.pl_Actions.Location = new System.Drawing.Point(3, 17);
             this.pl_Actions.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.pl_Actions.Name = "pl_Actions";
-            this.pl_Actions.Size = new System.Drawing.Size(639, 93);
+            this.pl_Actions.Size = new System.Drawing.Size(645, 93);
             this.pl_Actions.TabIndex = 0;
             // 
             // tre_LstTrans
             // 
-            this.tre_LstTrans.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+            this.tre_LstTrans.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left)));
             this.tre_LstTrans.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(37)))), ((int)(((byte)(37)))), ((int)(((byte)(38)))));
             this.tre_LstTrans.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
@@ -201,6 +202,7 @@ namespace Transaction_Statistical.UControl
             // 
             // panel1
             // 
+            this.panel1.Controls.Add(this.prb_Process);
             this.panel1.Controls.Add(this.label2);
             this.panel1.Controls.Add(this.btn_Menu);
             this.panel1.Controls.Add(this.label1);
@@ -217,6 +219,20 @@ namespace Transaction_Statistical.UControl
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(675, 639);
             this.panel1.TabIndex = 4;
+            // 
+            // prb_Process
+            // 
+            this.prb_Process.CustomText = "Reading start..";
+            this.prb_Process.Location = new System.Drawing.Point(3, 212);
+            this.prb_Process.Maximum = 1000;
+            this.prb_Process.Name = "prb_Process";
+            this.prb_Process.ProgressColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(120)))), ((int)(((byte)(240)))));
+            this.prb_Process.Size = new System.Drawing.Size(0, 0);
+            this.prb_Process.Step = 1;
+            this.prb_Process.TabIndex = 0;
+            this.prb_Process.TextColor = System.Drawing.Color.White;
+            this.prb_Process.TextFont = new System.Drawing.Font("Microsoft Sans Serif", 7.8F);
+            this.prb_Process.VisualMode = Transaction_Statistical.ProgressBarDisplayMode.TextAndPercentage;
             // 
             // btn_Menu
             // 
@@ -265,8 +281,8 @@ namespace Transaction_Statistical.UControl
             // 
             // propertyGrid1
             // 
-            this.propertyGrid1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-            | System.Windows.Forms.AnchorStyles.Left)
+            this.propertyGrid1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.propertyGrid1.Location = new System.Drawing.Point(3, 65);
             this.propertyGrid1.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
@@ -316,8 +332,8 @@ namespace Transaction_Statistical.UControl
             // 
             // panel3
             // 
-            this.panel3.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-            | System.Windows.Forms.AnchorStyles.Left)
+            this.panel3.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.panel3.BackColor = System.Drawing.Color.Transparent;
             this.panel3.Controls.Add(this.fctxt_FullLog);
@@ -376,7 +392,7 @@ namespace Transaction_Statistical.UControl
             // 
             // panel4
             // 
-            this.panel4.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+            this.panel4.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.panel4.BackColor = System.Drawing.Color.Transparent;
             this.panel4.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
@@ -394,7 +410,7 @@ namespace Transaction_Statistical.UControl
             this.tvListCycle.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tvListCycle.ForeColor = System.Drawing.Color.White;
             this.tvListCycle.Location = new System.Drawing.Point(0, 0);
-            this.tvListCycle.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.tvListCycle.Margin = new System.Windows.Forms.Padding(4);
             this.tvListCycle.Name = "tvListCycle";
             this.tvListCycle.Size = new System.Drawing.Size(264, 190);
             this.tvListCycle.TabIndex = 0;
@@ -402,7 +418,7 @@ namespace Transaction_Statistical.UControl
             // 
             // panel5
             // 
-            this.panel5.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+            this.panel5.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.panel5.BackColor = System.Drawing.Color.Transparent;
             this.panel5.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
@@ -461,5 +477,6 @@ namespace Transaction_Statistical.UControl
         private ImageList imageListControl;
         private Panel panel5;
         private TreeView tvListCycle;
+        private TextProgressBar prb_Process;
     }
 }

@@ -83,6 +83,9 @@
     <Compile Include="AddOn\buttonX.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="AddOn\TextProcessBar.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="AddOn\TreeNodeX.cs" />
     <Compile Include="AddOn\buttonZ.cs">
       <SubType>Component</SubType>
