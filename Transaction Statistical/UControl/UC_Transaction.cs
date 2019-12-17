@@ -22,14 +22,12 @@ namespace Transaction_Statistical.UControl
         SQLiteHelper sqlite;
         UC_Explorer uc_Explorer;
         UC_Menu uc_Menu;
-        List<string> sTransactionTypeDisplay;
         DataGridView dataGrid;
         public UC_Transaction()
         {
             sqlite = new SQLiteHelper();
             InitializeComponent();
             Add_GUI();
-            sTransactionTypeDisplay = InitParametar.ReadTrans.Template_TransType.Keys.ToList();
         }
         #region design     
 
@@ -57,53 +55,17 @@ namespace Transaction_Statistical.UControl
             uc_Explorer = new UC_Explorer();
             uc_Menu = new UC_Menu(this);
 
-            CheckBox cb = new CheckBox();
-            cb.Text = "ALL";
-            cb.Checked = true;
-            cb.CheckedChanged += new EventHandler(ckb_Actions_All_CheckedChanged);
-            pl_Actions.Controls.Add(cb);
+            InitParametar.ReadTrans.Template_TransType.Values.ToList().ForEach(x => cbo_Trans.Items.Add(x.Name, true));
+            foreach (string s in Enum.GetNames(typeof(Transaction.StatusS)))
+                cbo_Trans_Status.Items.Add(s, true);
 
-            foreach (string name in Enum.GetNames(typeof(Transaction.StatusS)))
-            {
-                cb = new CheckBox();
-                cb.Text = name;
-                cb.Checked = true;
-                //   cb.CheckedChanged += new EventHandler(cb_Action_CheckedChanged);
-                pl_Actions.Controls.Add(cb);
-            }
-            InitParametar.ReadTrans.Template_TransType.Values.ToList().ForEach(x =>
-            {
-                cb = new CheckBox();
-                cb.Text = x.Name;
-                cb.Checked = true;
-                cb.Tag = x;
-                cb.CheckedChanged += new EventHandler(cb_Action_CheckedChanged);
-                pl_Actions.Controls.Add(cb);
-            });
-
+            InitParametar.ReadTrans.Template_EventDevice_Select.Clear();
+            InitParametar.ReadTrans.Template_EventDevice.Keys.ToList().ForEach(x => cbo_Event.Items.Add(x, false));
+            foreach (string s in Enum.GetNames(typeof(TransactionEvent.StatusS)))
+                cbo_Event_Status.Items.Add(s, false);
         }
-        private void ckb_Actions_All_CheckedChanged(object sender, EventArgs e)
-        {
-            try
-            {
-                foreach (CheckBox chk in pl_Actions.Controls)
-                {
-                    chk.Checked = (sender as CheckBox).Checked;
-                }
-            }
-            catch { }
-        }
-        private void cb_Action_CheckedChanged(object sender, EventArgs e)
-        {
-            try
-            {
-                if ((sender as CheckBox).Checked)
-                    sTransactionTypeDisplay.Add((sender as CheckBox).Text);
-                else
-                    sTransactionTypeDisplay.Remove((sender as CheckBox).Text);
-            }
-            catch { }
-        }
+       
+       
         private void cb_FullTime_CheckedChanged(object sender, EventArgs e)
         {
             if (cb_FullTime.Checked)
@@ -123,7 +85,7 @@ namespace Transaction_Statistical.UControl
             try
             {
                 prb_Process.Size = btn_Read.Size;
-                prb_Process.Value = 0;
+                prb_Process.Value = 10;
                 prb_Process.Update();
                 DirectoryFileUtilities df = new DirectoryFileUtilities();
                 if (File.Exists(txt_Path.Text))
@@ -143,13 +105,15 @@ namespace Transaction_Statistical.UControl
                 InitParametar.Send_Error(ex.ToString(), MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name);
             }
             prb_Process.Size = new Size(0, 0);
-        } 
+        }
         private async Task<bool> JournalAnalyze(List<string> lsFile_Journal)
-        { 
-            
-                    
+        {
+
+
             try
             {
+                prb_Process.CustomText = string.Format("Found: {0} files.", lsFile_Journal.Count);
+                prb_Process.Value += 10;
                 tre_LstTrans.Nodes.Clear();
                 btn_Export.Enabled = false;
                 propertyGrid1.SelectedObject = null;
@@ -160,13 +124,6 @@ namespace Transaction_Statistical.UControl
                     InitParametar.ReadTrans.EndDate = dateTimePicker_End.Value;
                 }
 
-                //var watch = System.Diagnostics.Stopwatch.StartNew();
-                //watch.Start();
-                   //test time
-                //    var mili = watch.ElapsedMilliseconds;
-                //watch.Stop();
-                //MessageBox.Show((mili / 1000).ToString());
-                //    ///
                 if (await InitParametar.ReadTrans.Reads(lsFile_Journal, prb_Process))
                 {
                     prb_Process.CustomText = "Show data";
@@ -180,24 +137,24 @@ namespace Transaction_Statistical.UControl
                         int countTransactionEvent = kTerminal.Value.Where(x => (x.Value is TransactionEvent)).ToList().Count;
                         TreeNode ndTerminal = tre_LstTrans.Nodes.Add(kTerminal.Key, String.Format("Terminal ID: [{0}] - Total: {1} transactions", kTerminal.Key, kTerminal.Value.Count), "Terminal", "Terminal");
                         ndTerminal.Tag = kTerminal.Value.Where(x => (x.Value is Cycle)).ToDictionary(x => x.Key, x => (Cycle)x.Value);
-                       
+
                         foreach (KeyValuePair<DateTime, object> kTransaction in kTerminal.Value.OrderBy(x => x.Key))
                         {
-                           
+
                             day = String.Format("{0:" + InitParametar.ReadTrans.FormatDate + "}", kTransaction.Key);
                             TreeNode ndDay = new TreeNode(day);
                             if (ndTerminal.Nodes.ContainsKey(day))
                                 ndDay = ndTerminal.Nodes[day];
                             else
-                            {                                        
+                            {
                                 ndDay = ndTerminal.Nodes.Add(day, day, "Date", "DateOpen");
-                                ndDay.Text =String.Format("{0} Total: {1} transactions, {2} events",day, kTerminal.Value.Where(x => (x.Value is Transaction) && x.Key.ToString(InitParametar.ReadTrans.FormatDate).Equals(day)).ToList().Count, kTerminal.Value.Where(x => (x.Value is TransactionEvent) && x.Key.ToString(InitParametar.ReadTrans.FormatDate).Equals(day)).ToList().Count);
+                                ndDay.Text = String.Format("{0} Total: {1} transactions, {2} events", day, kTerminal.Value.Where(x => (x.Value is Transaction) && x.Key.ToString(InitParametar.ReadTrans.FormatDate).Equals(day)).ToList().Count, kTerminal.Value.Where(x => (x.Value is TransactionEvent) && x.Key.ToString(InitParametar.ReadTrans.FormatDate).Equals(day)).ToList().Count);
                             }
-  
+
                             if (countDisplay == ndDay.Nodes.Count) continue;
-                          ndDay.Tag = kTransaction.Key;
+                            ndDay.Tag = kTransaction.Key;
                             AddTransactionToNode(ndDay, kTransaction.Key, kTerminal.Key, kTransaction.Value);
-                          // 
+                            // 
 
                         }
                     }
@@ -210,12 +167,12 @@ namespace Transaction_Statistical.UControl
             }
             return false;
         }
-        private void AddTransactionToNode(TreeNode ndDay,DateTime date, string terminal, object obj)
+        private void AddTransactionToNode(TreeNode ndDay, DateTime date, string terminal, object obj)
         {
             try
             {
                 DateTime dNode = (DateTime)ndDay.Tag;
-                if (!date.ToString(InitParametar.ReadTrans.FormatDate).Equals(dNode.ToString(InitParametar.ReadTrans.FormatDate))) return;               
+                if (!date.ToString(InitParametar.ReadTrans.FormatDate).Equals(dNode.ToString(InitParametar.ReadTrans.FormatDate))) return;
                 string textDisplay = obj.ToString();
                 if (ndDay.Nodes.ContainsKey(textDisplay))
                 {
@@ -229,7 +186,7 @@ namespace Transaction_Statistical.UControl
                     TreeNode ndTransaction = ndDay.Nodes.Add(textDisplay, textDisplay);
                     ndTransaction.Tag = obj;
                     ndTransaction.ImageKey = "Flag";
-                    ndTransaction.SelectedImageKey = "Flag_Success";                  
+                    ndTransaction.SelectedImageKey = "Flag_Success";
                 }
                 else if (obj is TransactionEvent)
                 {
@@ -253,10 +210,7 @@ namespace Transaction_Statistical.UControl
                 InitParametar.Send_Error(ex.ToString(), MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name);
             }
         }
-        private bool FilterDisplayTransaction(List<TransactionRequest> names)
-        {
-            return names.Any(x => sTransactionTypeDisplay.Contains(x.Request));
-        }
+       
         private bool GetDateFromFormatLine(string row, string rowFormat, Dictionary<string, string> listDateFormat, out DateTime date)
         {
             date = DateTime.Now;
@@ -442,9 +396,9 @@ namespace Transaction_Statistical.UControl
                 }
                 else if (e.Node != null && e.Node.Tag != null && e.Node.Tag is DateTime)
                 {
-                    DateTime dNode = (DateTime)e.Node.Tag;                    
+                    DateTime dNode = (DateTime)e.Node.Tag;
                     foreach (KeyValuePair<DateTime, object> kTransaction in InitParametar.ReadTrans.ListTransaction[terminal].OrderBy(x => x.Key))
-                        AddTransactionToNode(e.Node,kTransaction.Key, terminal, kTransaction.Value);
+                        AddTransactionToNode(e.Node, kTransaction.Key, terminal, kTransaction.Value);
                 }
             }
             catch (Exception ex)
@@ -555,7 +509,6 @@ namespace Transaction_Statistical.UControl
         {
 
         }
-
         private void btn_Export_Click(object sender, EventArgs e)
         {
             try
@@ -572,7 +525,35 @@ namespace Transaction_Statistical.UControl
             }
         }
 
+        private void cbo_CheckAll_SelectedValueChanged(object sender, EventArgs e)
+        {
+            if ((sender as CheckComboBoxTest.CheckedComboBox).CheckedItems.Count == (sender as CheckComboBoxTest.CheckedComboBox).Items.Count)
+                (sender as CheckComboBoxTest.CheckedComboBox).Text = "All";
+            else if ((sender as CheckComboBoxTest.CheckedComboBox).CheckedItems.Count == 0)
+                (sender as CheckComboBoxTest.CheckedComboBox).Text = "N/A";
+        }
 
+        private void cbo_Trans_TextChanged(object sender, EventArgs e)
+        {
+            if ((sender as CheckComboBoxTest.CheckedComboBox).CheckedItems.Count == (sender as CheckComboBoxTest.CheckedComboBox).Items.Count)
+                (sender as CheckComboBoxTest.CheckedComboBox).Text = "All";
+            else if ((sender as CheckComboBoxTest.CheckedComboBox).CheckedItems.Count == 0)
+                (sender as CheckComboBoxTest.CheckedComboBox).Text = "N/A";
+            InitParametar.ReadTrans.Template_TransType_Select.Clear();
+            foreach (var cb in cbo_Trans.CheckedItems)
+                InitParametar.ReadTrans.Template_TransType_Select[cb.ToString()] = InitParametar.ReadTrans.Template_TransType[cb.ToString()];
+        }
+
+        private void cbo_Event_TextChanged(object sender, EventArgs e)
+        {
+            if ((sender as CheckComboBoxTest.CheckedComboBox).CheckedItems.Count == (sender as CheckComboBoxTest.CheckedComboBox).Items.Count)
+                (sender as CheckComboBoxTest.CheckedComboBox).Text = "All";
+            else if ((sender as CheckComboBoxTest.CheckedComboBox).CheckedItems.Count == 0)
+                (sender as CheckComboBoxTest.CheckedComboBox).Text = "N/A";
+            InitParametar.ReadTrans.Template_EventDevice_Select.Clear();
+            foreach (var cb in cbo_Event.CheckedItems)
+                InitParametar.ReadTrans.Template_EventDevice_Select[cb.ToString()] = InitParametar.ReadTrans.Template_EventDevice[cb.ToString()];
+        }
     }
 
 }

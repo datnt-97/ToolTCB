@@ -38,7 +38,14 @@ namespace Transaction_Statistical.UControl
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(UC_Transaction));
             this.txt_Path = new System.Windows.Forms.TextBox();
             this.gpBox_Actions = new System.Windows.Forms.GroupBox();
-            this.pl_Actions = new System.Windows.Forms.FlowLayoutPanel();
+            this.label5 = new System.Windows.Forms.Label();
+            this.cbo_Event_Status = new CheckComboBoxTest.CheckedComboBox();
+            this.label6 = new System.Windows.Forms.Label();
+            this.cbo_Event = new CheckComboBoxTest.CheckedComboBox();
+            this.label4 = new System.Windows.Forms.Label();
+            this.cbo_Trans_Status = new CheckComboBoxTest.CheckedComboBox();
+            this.label3 = new System.Windows.Forms.Label();
+            this.cbo_Trans = new CheckComboBoxTest.CheckedComboBox();
             this.tre_LstTrans = new System.Windows.Forms.TreeView();
             this.imageListTre = new System.Windows.Forms.ImageList(this.components);
             this.cb_FullTime = new System.Windows.Forms.CheckBox();
@@ -85,7 +92,14 @@ namespace Transaction_Statistical.UControl
             // 
             // gpBox_Actions
             // 
-            this.gpBox_Actions.Controls.Add(this.pl_Actions);
+            this.gpBox_Actions.Controls.Add(this.label5);
+            this.gpBox_Actions.Controls.Add(this.cbo_Event_Status);
+            this.gpBox_Actions.Controls.Add(this.label6);
+            this.gpBox_Actions.Controls.Add(this.cbo_Event);
+            this.gpBox_Actions.Controls.Add(this.label4);
+            this.gpBox_Actions.Controls.Add(this.cbo_Trans_Status);
+            this.gpBox_Actions.Controls.Add(this.label3);
+            this.gpBox_Actions.Controls.Add(this.cbo_Trans);
             this.gpBox_Actions.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.gpBox_Actions.ForeColor = System.Drawing.Color.White;
             this.gpBox_Actions.Location = new System.Drawing.Point(13, 59);
@@ -97,15 +111,119 @@ namespace Transaction_Statistical.UControl
             this.gpBox_Actions.TabStop = false;
             this.gpBox_Actions.Text = "Actions";
             // 
-            // pl_Actions
+            // label5
             // 
-            this.pl_Actions.AutoScroll = true;
-            this.pl_Actions.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.pl_Actions.Location = new System.Drawing.Point(3, 17);
-            this.pl_Actions.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.pl_Actions.Name = "pl_Actions";
-            this.pl_Actions.Size = new System.Drawing.Size(645, 93);
-            this.pl_Actions.TabIndex = 0;
+            this.label5.AutoSize = true;
+            this.label5.ForeColor = System.Drawing.Color.White;
+            this.label5.Location = new System.Drawing.Point(396, 65);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(48, 17);
+            this.label5.TabIndex = 47;
+            this.label5.Text = "Status";
+            // 
+            // cbo_Event_Status
+            // 
+            this.cbo_Event_Status.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(37)))), ((int)(((byte)(37)))), ((int)(((byte)(38)))));
+            this.cbo_Event_Status.CheckOnClick = true;
+            this.cbo_Event_Status.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawVariable;
+            this.cbo_Event_Status.DropDownHeight = 1;
+            this.cbo_Event_Status.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.cbo_Event_Status.ForeColor = System.Drawing.Color.White;
+            this.cbo_Event_Status.FormattingEnabled = true;
+            this.cbo_Event_Status.IntegralHeight = false;
+            this.cbo_Event_Status.Location = new System.Drawing.Point(450, 62);
+            this.cbo_Event_Status.Name = "cbo_Event_Status";
+            this.cbo_Event_Status.Size = new System.Drawing.Size(191, 23);
+            this.cbo_Event_Status.TabIndex = 46;
+            this.cbo_Event_Status.Text = "N/A";
+            this.cbo_Event_Status.ValueSeparator = ", ";
+            this.cbo_Event_Status.SelectedValueChanged += new System.EventHandler(this.cbo_CheckAll_SelectedValueChanged);
+            this.cbo_Event_Status.TextChanged += new System.EventHandler(this.cbo_CheckAll_SelectedValueChanged);
+            // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.ForeColor = System.Drawing.Color.White;
+            this.label6.Location = new System.Drawing.Point(6, 65);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(97, 17);
+            this.label6.TabIndex = 45;
+            this.label6.Text = "Device events";
+            // 
+            // cbo_Event
+            // 
+            this.cbo_Event.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(37)))), ((int)(((byte)(37)))), ((int)(((byte)(38)))));
+            this.cbo_Event.CheckOnClick = true;
+            this.cbo_Event.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawVariable;
+            this.cbo_Event.DropDownHeight = 1;
+            this.cbo_Event.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.cbo_Event.ForeColor = System.Drawing.Color.White;
+            this.cbo_Event.FormattingEnabled = true;
+            this.cbo_Event.IntegralHeight = false;
+            this.cbo_Event.Location = new System.Drawing.Point(115, 62);
+            this.cbo_Event.Name = "cbo_Event";
+            this.cbo_Event.Size = new System.Drawing.Size(262, 23);
+            this.cbo_Event.TabIndex = 44;
+            this.cbo_Event.Text = "N/A";
+            this.cbo_Event.ValueSeparator = ", ";
+            this.cbo_Event.TextChanged += new System.EventHandler(this.cbo_Event_TextChanged);
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.ForeColor = System.Drawing.Color.White;
+            this.label4.Location = new System.Drawing.Point(396, 26);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(48, 17);
+            this.label4.TabIndex = 43;
+            this.label4.Text = "Status";
+            // 
+            // cbo_Trans_Status
+            // 
+            this.cbo_Trans_Status.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(37)))), ((int)(((byte)(37)))), ((int)(((byte)(38)))));
+            this.cbo_Trans_Status.CheckOnClick = true;
+            this.cbo_Trans_Status.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawVariable;
+            this.cbo_Trans_Status.DropDownHeight = 1;
+            this.cbo_Trans_Status.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.cbo_Trans_Status.ForeColor = System.Drawing.Color.White;
+            this.cbo_Trans_Status.FormattingEnabled = true;
+            this.cbo_Trans_Status.IntegralHeight = false;
+            this.cbo_Trans_Status.Location = new System.Drawing.Point(450, 23);
+            this.cbo_Trans_Status.Name = "cbo_Trans_Status";
+            this.cbo_Trans_Status.Size = new System.Drawing.Size(191, 23);
+            this.cbo_Trans_Status.TabIndex = 42;
+            this.cbo_Trans_Status.Text = "All";
+            this.cbo_Trans_Status.ValueSeparator = ", ";
+            this.cbo_Trans_Status.SelectedValueChanged += new System.EventHandler(this.cbo_CheckAll_SelectedValueChanged);
+            this.cbo_Trans_Status.TextChanged += new System.EventHandler(this.cbo_CheckAll_SelectedValueChanged);
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.ForeColor = System.Drawing.Color.White;
+            this.label3.Location = new System.Drawing.Point(13, 26);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(90, 17);
+            this.label3.TabIndex = 41;
+            this.label3.Text = "Transactions";
+            // 
+            // cbo_Trans
+            // 
+            this.cbo_Trans.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(37)))), ((int)(((byte)(37)))), ((int)(((byte)(38)))));
+            this.cbo_Trans.CheckOnClick = true;
+            this.cbo_Trans.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawVariable;
+            this.cbo_Trans.DropDownHeight = 1;
+            this.cbo_Trans.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.cbo_Trans.ForeColor = System.Drawing.Color.White;
+            this.cbo_Trans.FormattingEnabled = true;
+            this.cbo_Trans.IntegralHeight = false;
+            this.cbo_Trans.Location = new System.Drawing.Point(115, 23);
+            this.cbo_Trans.Name = "cbo_Trans";
+            this.cbo_Trans.Size = new System.Drawing.Size(262, 23);
+            this.cbo_Trans.TabIndex = 40;
+            this.cbo_Trans.Text = "All";
+            this.cbo_Trans.ValueSeparator = ", ";
+            this.cbo_Trans.TextChanged += new System.EventHandler(this.cbo_Trans_TextChanged);
             // 
             // tre_LstTrans
             // 
@@ -443,6 +561,7 @@ namespace Transaction_Statistical.UControl
             this.Name = "UC_Transaction";
             this.Size = new System.Drawing.Size(1355, 639);
             this.gpBox_Actions.ResumeLayout(false);
+            this.gpBox_Actions.PerformLayout();
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
             this.panel2.ResumeLayout(false);
@@ -456,7 +575,6 @@ namespace Transaction_Statistical.UControl
         #endregion
         private System.Windows.Forms.TextBox txt_Path;
         private System.Windows.Forms.GroupBox gpBox_Actions;
-        private System.Windows.Forms.FlowLayoutPanel pl_Actions;
         private System.Windows.Forms.DateTimePicker dateTimePicker_Start;
         private System.Windows.Forms.CheckBox cb_FullTime;
         private System.Windows.Forms.Label label2;
@@ -478,5 +596,13 @@ namespace Transaction_Statistical.UControl
         private Panel panel5;
         private TreeView tvListCycle;
         private TextProgressBar prb_Process;
+        private Label label5;
+        private CheckComboBoxTest.CheckedComboBox cbo_Event_Status;
+        private Label label6;
+        private CheckComboBoxTest.CheckedComboBox cbo_Event;
+        private Label label4;
+        private CheckComboBoxTest.CheckedComboBox cbo_Trans_Status;
+        private Label label3;
+        private CheckComboBoxTest.CheckedComboBox cbo_Trans;
     }
 }
