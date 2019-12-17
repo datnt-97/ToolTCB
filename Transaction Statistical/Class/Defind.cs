@@ -499,7 +499,7 @@ namespace Transaction_Statistical
                                     template.BaoCaoGiaoDichTaiChinh(item.Value, OfficeOpenXml.Table.TableStyles.Custom, transaction, cycle);
                                     break;
                                 case (int)TemplateHelper.TEMPLATE.BaoCaoHoatDongBatThuong:
-                                    template.BaoCaoHoatDongBatThuong(item.Value, OfficeOpenXml.Table.TableStyles.Custom, transactionEvent);
+                                    template.BaoCaoHoatDongBatThuong(item.Value, OfficeOpenXml.Table.TableStyles.Custom, ListTransaction);
                                     break;
                             }
                         }
