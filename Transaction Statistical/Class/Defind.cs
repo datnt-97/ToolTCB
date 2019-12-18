@@ -383,6 +383,8 @@ namespace Transaction_Statistical
                 }
 
                 ListCycle = new Dictionary<DateTime, Cycle>();
+                //var w = System.Diagnostics.Stopwatch.StartNew();
+                //w.Start();
                 foreach (string file in files)
                 {
                     if (process != null)
@@ -402,6 +404,9 @@ namespace Transaction_Statistical
                     FindCounterChanged(ref contenFile, ref ListCycle);
 
                 }
+                //w.Stop();
+
+                //MessageBox.Show(w.ElapsedMilliseconds.ToString());
                 //CHANGE 6/12
                 var ListTransactionTemp = ListTransaction;
                 for (int c = 0; c < ListTransactionTemp.Count; c++)
