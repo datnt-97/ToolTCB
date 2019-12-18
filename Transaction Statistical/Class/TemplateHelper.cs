@@ -53,18 +53,44 @@ namespace Transaction_Statistical.Class
                 throw e;
             }
         }
-        public void BaoCaoHoatDongBatThuong(string WorksheetsName, TableStyles tableStyles, Dictionary<string, Dictionary<DateTime, TransactionEvent>> ListTransaction)
+        private class TerminalInfo
         {
-            this.excelPackage.Workbook.Worksheets.Add(WorksheetsName);
-            var lastWS = excelPackage.Workbook.Worksheets.Last();
-            int index = 2;
-            foreach (var item in ListTransaction)
-            {
-                lastWS = DrawHDBT(lastWS, item.Value, item.Key, ref index);
-                index++;
+            string terID;
+            DateTime begin;
+            DateTime end;
 
+            public string TerID { get => terID; set => terID = value; }
+            public DateTime Begin { get => begin; set => begin = value; }
+            public DateTime End { get => end; set => end = value; }
+
+            public TerminalInfo(string terID, DateTime begin, DateTime end)
+            {
+                TerID = terID ?? throw new ArgumentNullException(nameof(terID));
+                Begin = begin;
+                End = end;
             }
-            this.excelPackage.Save();
+        }
+        public void BaoCaoHoatDongBatThuong(string WorksheetsName, TableStyles tableStyles, Dictionary<string, Dictionary<DateTime, object>> ListTransaction)
+        {
+            try
+            {
+                this.excelPackage.Workbook.Worksheets.Add(WorksheetsName);
+                var lastWS = excelPackage.Workbook.Worksheets.Last();
+                int index = 2;
+                foreach (var item in ListTransaction)
+                {
+                    var cycles = item.Value.Where(x => x.Value is Cycle).ToDictionary(x => x.Key, x => (Cycle)x.Value);
+                    var events = item.Value.Where(x => x.Value is TransactionEvent).ToDictionary(x => x.Key, x => (TransactionEvent)x.Value);
+                    lastWS = DrawHDBT(lastWS, events, cycles, item.Key, ref index);
+                    index++;
+                }
+                this.excelPackage.Save();
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+
         }
 
         public void BaoCaoGiaoDichTaiChinh(string WorksheetsName, TableStyles tableStyles, Dictionary<DateTime, Transaction> ListTransaction, Dictionary<DateTime, Cycle> cycles)
@@ -248,84 +274,150 @@ namespace Transaction_Statistical.Class
             }
             return worksheet;
         }
-        private ExcelWorksheet DrawHDBT(ExcelWorksheet worksheet, Dictionary<DateTime, TransactionEvent> ListTransaction, string atmID, ref int index)
+        private ExcelWorksheet DrawHDBT(ExcelWorksheet worksheet, Dictionary<DateTime, TransactionEvent> ListTransaction, Dictionary<DateTime, Cycle> Cycles, string atmID, ref int index)
         {
             try
             {
-                var eventDevice = ListTransaction;
-                var openTheCashDrawer = eventDevice.Where(x => x.Value.TContent.Contains("Safe Door")).ToDictionary(d => d.Key, d => d.Value);
-                var openTechnicalChamber = eventDevice.Where(x => x.Value.TContent.Contains("Supervisor Mode")).ToDictionary(d => d.Key, d => d.Value);
-                var reboot = eventDevice.Where(x => x.Value.TContent.Contains("Restart process started by program")).ToDictionary(d => d.Key, d => d.Value);
-                var disconect = eventDevice.Where(x => x.Value.TContent.Contains("Communication off".ToUpper())).ToDictionary(d => d.Key, d => d.Value);
-                var moneyRetracted = eventDevice.Where(x => x.Value.TContent.Contains("Retract")).ToDictionary(d => d.Key, d => d.Value);
-                var withdrawalStuck = eventDevice.Where(x => x.Value.TContent.Contains("Withdrawal")).ToDictionary(d => d.Key, d => d.Value);
-                var depositStuck = eventDevice.Where(x => x.Value.TContent.Contains("Deposit")).ToDictionary(d => d.Key, d => d.Value);
 
-
-                int index_All = 2;
-                int timesOpenTheCashDrawer = openTheCashDrawer.Count();
-                int timesOpenTechnicalChamber = openTechnicalChamber.Count();
-                int timesReboot = reboot.Count();
-                int timesDisconect = disconect.Count();
-                int timesMoneyTracted = moneyRetracted.Count();
-                int timesWithdrawalStuck = withdrawalStuck.Count();
-                int timesDepositStuck = depositStuck.Count();
-
-                //DRAW CHUDE
-                using (ExcelRange rng = worksheet.Cells["A1:I1"])
+                foreach (var itemC in Cycles)
                 {
-                    rng.Style.Fill.PatternType = OfficeOpenXml.Style.ExcelFillStyle.Solid;
-                    rng.Style.Fill.BackgroundColor.SetColor(Color.FromArgb(252, 228, 214));
-                    rng.Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
-                    rng.Style.VerticalAlignment = ExcelVerticalAlignment.Center;
+                    var eventDevice = ListTransaction;
+                    var openTheCashDrawer = eventDevice.Where(x => x.Value.TContent.Contains("Safe Door")
+                    && x.Value.DateBegin > itemC.Value.SettlementPeriodDateBegin
+                    && x.Value.DateBegin < itemC.Value.SettlementPeriodDateEnd)
+                        .ToDictionary(d => d.Key, d => d.Value);
+                    var openTechnicalChamber = eventDevice.Where(x => x.Value.TContent.Contains("Supervisor Mode")
+                     && x.Value.DateBegin > itemC.Value.SettlementPeriodDateBegin
+                    && x.Value.DateBegin < itemC.Value.SettlementPeriodDateEnd)
+                        .ToDictionary(d => d.Key, d => d.Value);
+                    var reboot = eventDevice.Where(x => x.Value.TContent.Contains("Restart process started by program")
+                     && x.Value.DateBegin > itemC.Value.SettlementPeriodDateBegin
+                    && x.Value.DateBegin < itemC.Value.SettlementPeriodDateEnd)
+                        .ToDictionary(d => d.Key, d => d.Value);
+                    var disconect = eventDevice.Where(x => x.Value.TContent.Contains("Communication off".ToUpper())
+                     && x.Value.DateBegin > itemC.Value.SettlementPeriodDateBegin
+                    && x.Value.DateBegin < itemC.Value.SettlementPeriodDateEnd)
+                        .ToDictionary(d => d.Key, d => d.Value);
+                    var moneyRetracted = eventDevice.Where(x => x.Value.TContent.Contains("Retract")
+                     && x.Value.DateBegin > itemC.Value.SettlementPeriodDateBegin
+                    && x.Value.DateBegin < itemC.Value.SettlementPeriodDateEnd)
+                        .ToDictionary(d => d.Key, d => d.Value);
+                    var withdrawalStuck = eventDevice.Where(x => x.Value.TContent.Contains("Withdrawal")
+                     && x.Value.DateBegin > itemC.Value.SettlementPeriodDateBegin
+                    && x.Value.DateBegin < itemC.Value.SettlementPeriodDateEnd)
+                        .ToDictionary(d => d.Key, d => d.Value);
+                    var depositStuck = eventDevice.Where(x => x.Value.TContent.Contains("Deposit")
+                     && x.Value.DateBegin > itemC.Value.SettlementPeriodDateBegin
+                    && x.Value.DateBegin < itemC.Value.SettlementPeriodDateEnd)
+                        .ToDictionary(d => d.Key, d => d.Value);
+
+                    int timesOpenTheCashDrawer = openTheCashDrawer.Count();
+                    int timesOpenTechnicalChamber = openTechnicalChamber.Count();
+                    int timesReboot = reboot.Count();
+                    int timesDisconect = disconect.Count();
+                    int timesMoneyTracted = moneyRetracted.Count();
+                    int timesWithdrawalStuck = withdrawalStuck.Count();
+                    int timesDepositStuck = depositStuck.Count();
+
+                    //DRAW CHUDE
+                    using (ExcelRange rng = worksheet.Cells["A1:I1"])
+                    {
+                        rng.Style.Fill.PatternType = OfficeOpenXml.Style.ExcelFillStyle.Solid;
+                        rng.Style.Fill.BackgroundColor.SetColor(Color.FromArgb(252, 228, 214));
+                        rng.Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+                        rng.Style.VerticalAlignment = ExcelVerticalAlignment.Center;
+                    }
+                    worksheet.Cells["A1"].Value = "Nội dung";
+                    worksheet.Cells["B1"].Value = "ATMID";
+                    worksheet.Cells["C1"].Value = "Ngày tiếp quỹ";
+                    worksheet.Cells["D1"].Value = "Ngày kiểm quỹ";
+                    worksheet.Cells["E1"].Value = "Số lần";
+                    worksheet.Cells["F1"].Value = "Date time";
+                    worksheet.Cells["G1"].Value = "Hành động";
+                    worksheet.Cells["H1"].Value = "Trace ID";
+                    worksheet.Cells["I1"].Value = "Số tiền thu hồi của GD";
+                    int mrg = (timesOpenTheCashDrawer > 1 ? timesOpenTheCashDrawer : 1)
+                        + (timesOpenTechnicalChamber > 1 ? timesOpenTechnicalChamber : 1) +
+                        (timesReboot > 1 ? timesReboot : 1) +
+                       (timesDisconect > 1 ? timesDisconect : 1) +
+                        (timesMoneyTracted > 1 ? timesMoneyTracted : 1) +
+                        (timesWithdrawalStuck > 1 ? timesWithdrawalStuck : 1) +
+                        (timesDepositStuck > 1 ? timesDepositStuck : 1);
+                    int mrgE = index + mrg - 1;
+                    using (ExcelRange rng = worksheet.Cells[string.Format("B{0}:B{1}", index, mrgE)])
+                    {
+                        rng.Merge = true;
+                        rng.Value = atmID;
+                    }
+                    using (ExcelRange rng = worksheet.Cells[string.Format("C{0}:C{1}", index, mrgE)])
+                    {
+                        rng.Merge = true;
+                        rng.Value = itemC.Value.SettlementPeriodDateBegin.ToString();
+                    }
+                    using (ExcelRange rng = worksheet.Cells[string.Format("D{0}:D{1}", index, mrgE)])
+                    {
+                        rng.Merge = true;
+                        rng.Value = itemC.Value.SettlementPeriodDateEnd.ToString();
+                    }
+                    //DRAW DATA
+                    //Bao nhiêu lần mở cửa khoang tiền?
+                    int temp = index;
+                    worksheet = DrawLoop(worksheet, ref temp, openTheCashDrawer, "Bao nhiêu lần mở cửa khoang tiền?", atmID
+                        , itemC.Value.SettlementPeriodDateBegin, itemC.Value.SettlementPeriodDateEnd);
+
+                    //Bao nhiêu lần mở cửa khoang kỹ thuật? 
+                    worksheet = DrawLoop(worksheet, ref temp, openTechnicalChamber, "Bao nhiêu lần mở cửa khoang kỹ thuật?", atmID
+                        , itemC.Value.SettlementPeriodDateBegin, itemC.Value.SettlementPeriodDateEnd);
+
+                    //Bao nhiêu lần máy khởi động lại ?
+                    worksheet = DrawLoop(worksheet, ref temp, reboot, "Bao nhiêu lần máy khởi động lại ?", atmID
+                        , itemC.Value.SettlementPeriodDateBegin, itemC.Value.SettlementPeriodDateEnd);
+
+                    //Bao nhiêu lần mất mạng
+                    worksheet = DrawLoop(worksheet, ref temp, disconect, "Bao nhiêu lần mất mạng?", atmID
+                        , itemC.Value.SettlementPeriodDateBegin, itemC.Value.SettlementPeriodDateEnd);
+
+                    //Bao nhiêu lần tiền bị thu hồi?
+                    worksheet = DrawLoop(worksheet, ref temp, moneyRetracted, "Bao nhiêu lần tiền bị thu hồi?", atmID
+                        , itemC.Value.SettlementPeriodDateBegin, itemC.Value.SettlementPeriodDateEnd);
+
+                    //Bao nhiêu lần rút tiền bị kẹt?
+                    worksheet = DrawLoop(worksheet, ref temp, depositStuck, "Bao nhiêu lần rút tiền bị kẹt?", atmID
+                        , itemC.Value.SettlementPeriodDateBegin, itemC.Value.SettlementPeriodDateEnd);
+
+                    //Bao nhiêu lần nộp tiền bị kẹt?
+                    worksheet = DrawLoop(worksheet, ref temp, withdrawalStuck, "Bao nhiêu lần nộp tiền bị kẹt?", atmID
+                        , itemC.Value.SettlementPeriodDateBegin, itemC.Value.SettlementPeriodDateEnd);
+
+                    using (ExcelRange rng = worksheet.Cells[string.Format("A{0}:I{1}", index, mrgE)])
+                    {
+                        rng.Style.Border.Top.Style = ExcelBorderStyle.Thin;
+                        rng.Style.Border.Bottom.Style = ExcelBorderStyle.Thin;
+                        rng.Style.Border.Left.Style = ExcelBorderStyle.Thin;
+                        rng.Style.Border.Right.Style = ExcelBorderStyle.Thin;
+
+                        rng.Style.Border.Top.Color.SetColor(Color.Black);
+                        rng.Style.Border.Bottom.Color.SetColor(Color.Black);
+                        rng.Style.Border.Left.Color.SetColor(Color.Black);
+                        rng.Style.Border.Right.Color.SetColor(Color.Black);
+                    }
+                    index = mrgE + 2;
                 }
-                worksheet.Cells["A1"].Value = "Nội dung";
-                worksheet.Cells["B1"].Value = "ATMID";
-                worksheet.Cells["C1"].Value = "Ngày tiếp quỹ";
-                worksheet.Cells["D1"].Value = "Ngày kiểm quỹ";
-                worksheet.Cells["E1"].Value = "Số lần";
-                worksheet.Cells["F1"].Value = "Date time";
-                worksheet.Cells["G1"].Value = "Hành động";
-                worksheet.Cells["H1"].Value = "Trace ID";
-                worksheet.Cells["I1"].Value = "Số tiền thu hồi của GD";
-
-                //DRAW DATA
-                //Bao nhiêu lần mở cửa khoang tiền?
-                worksheet = DrawLoop(worksheet, ref index, openTheCashDrawer, "Bao nhiêu lần mở cửa khoang tiền?", atmID);
-
-                //Bao nhiêu lần mở cửa khoang kỹ thuật? 
-                worksheet = DrawLoop(worksheet, ref index, openTechnicalChamber, "Bao nhiêu lần mở cửa khoang kỹ thuật?", atmID);
-
-                //Bao nhiêu lần máy khởi động lại ?
-                worksheet = DrawLoop(worksheet, ref index, reboot, "Bao nhiêu lần máy khởi động lại ?", atmID);
-
-                //Bao nhiêu lần mất mạng
-                worksheet = DrawLoop(worksheet, ref index, disconect, "Bao nhiêu lần mất mạng?", atmID);
-
-                //Bao nhiêu lần tiền bị thu hồi?
-                worksheet = DrawLoop(worksheet, ref index, moneyRetracted, "Bao nhiêu lần tiền bị thu hồi?", atmID);
-
-                //Bao nhiêu lần rút tiền bị kẹt?
-                worksheet = DrawLoop(worksheet, ref index, depositStuck, "Bao nhiêu lần rút tiền bị kẹt?", atmID);
-
-                //Bao nhiêu lần nộp tiền bị kẹt?
-                worksheet = DrawLoop(worksheet, ref index, withdrawalStuck, "Bao nhiêu lần nộp tiền bị kẹt?", atmID);
 
 
                 var allCells = worksheet.Cells[1, 1, worksheet.Dimension.End.Row, worksheet.Dimension.End.Column];
                 allCells.AutoFitColumns();
-                allCells.Style.Border.Top.Style = ExcelBorderStyle.Thin;
-                allCells.Style.Border.Bottom.Style = ExcelBorderStyle.Thin;
-                allCells.Style.Border.Left.Style = ExcelBorderStyle.Thin;
-                allCells.Style.Border.Right.Style = ExcelBorderStyle.Thin;
+                //allCells.Style.Border.Top.Style = ExcelBorderStyle.Thin;
+                //allCells.Style.Border.Bottom.Style = ExcelBorderStyle.Thin;
+                //allCells.Style.Border.Left.Style = ExcelBorderStyle.Thin;
+                //allCells.Style.Border.Right.Style = ExcelBorderStyle.Thin;
 
-                allCells.Style.Border.Top.Color.SetColor(Color.Black);
-                allCells.Style.Border.Bottom.Color.SetColor(Color.Black);
-                allCells.Style.Border.Left.Color.SetColor(Color.Black);
-                allCells.Style.Border.Right.Color.SetColor(Color.Black);
+                //allCells.Style.Border.Top.Color.SetColor(Color.Black);
+                //allCells.Style.Border.Bottom.Color.SetColor(Color.Black);
+                //allCells.Style.Border.Left.Color.SetColor(Color.Black);
+                //allCells.Style.Border.Right.Color.SetColor(Color.Black);
                 allCells.Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
                 allCells.Style.VerticalAlignment = ExcelVerticalAlignment.Center;
-
                 allCells.Style.WrapText = true;
             }
             catch (Exception e)
@@ -335,59 +427,36 @@ namespace Transaction_Statistical.Class
             return worksheet;
         }
 
-        private ExcelWorksheet DrawLoop(ExcelWorksheet worksheet, ref int index, Dictionary<DateTime, TransactionEvent> transactionEvent, string title, string atmID)
+        private ExcelWorksheet DrawLoop(ExcelWorksheet worksheet, ref int index,
+            Dictionary<DateTime, TransactionEvent> transactionEvent, string title, string atmID,
+            DateTime begin, DateTime end)
         {
             try
             {
                 int times = transactionEvent.Count();
-                int indexATMID = index + times - 1;
-                using (ExcelRange rng = worksheet.Cells[string.Format("A{0}:A{1}", index, times == 0 ? index : indexATMID + 1)])
+                int indexATMID = index + times;
+                using (ExcelRange rng = worksheet.Cells[string.Format("A{0}:A{1}", index, times <= 1 ? index : indexATMID - 1)])
                 {
                     rng.Merge = true;
                     rng.Value = title;
-
                 }
-                using (ExcelRange rng = worksheet.Cells[string.Format("E{0}:E{1}", index, times == 0 ? index : indexATMID + 1)])
+                using (ExcelRange rng = worksheet.Cells[string.Format("E{0}:E{1}", index, times <= 1 ? index : indexATMID - 1)])
                 {
                     rng.Merge = true;
                     rng.Value = times;
 
                 }
-                using (ExcelRange rng = worksheet.Cells[string.Format("B{0}:B{1}", index, times == 0 ? index : indexATMID + 1)])
-                {
-                    rng.Merge = true;
-                    rng.Value = atmID;
-                }
-                using (ExcelRange rng = worksheet.Cells[string.Format("C{0}:C{1}", index, times == 0 ? index : indexATMID + 1)])
-                {
-                    rng.Merge = true;
-                    rng.Value = "";
-                }
-                using (ExcelRange rng = worksheet.Cells[string.Format("D{0}:D{1}", index, times == 0 ? index : indexATMID + 1)])
-                {
-                    rng.Merge = true;
-                    rng.Value = "";
-                }
-                int indexList = 0;
-                for (int i = index; i <= indexATMID; i++)
-                {
-                    worksheet.Cells[i, 2].Value = atmID;
 
-                    worksheet.Cells[i, 3].Style.Numberformat.Format = formatDate;
-                    worksheet.Cells[i, 3].Value = "";
-
-                    worksheet.Cells[i, 4].Style.Numberformat.Format = formatDate;
-                    worksheet.Cells[i, 4].Value = "";
-
-                    worksheet.Cells[i, 6].Style.Numberformat.Format = formatDate;
-                    worksheet.Cells[i, 6].Value = transactionEvent.ToArray()[indexList].Value.DateBegin;
-
-                    worksheet.Cells[i, 7].Value = transactionEvent.ToArray()[indexList].Value.TContent;
-                    worksheet.Cells[i, 8].Value = "";
-                    worksheet.Cells[i, 9].Value = "";
-                    indexList++;
+                for (int i = 0; i < transactionEvent.Count; i++)
+                {
+                    worksheet.Cells[index + i, 6].Style.Numberformat.Format = formatDate;
+                    worksheet.Cells[index + i, 6].Value = transactionEvent.ToArray()[i].Value.DateBegin;
+                    worksheet.Cells[index + i, 7].Value = transactionEvent.ToArray()[i].Value.TContent;
+                    worksheet.Cells[index + i, 8].Value = "";
+                    worksheet.Cells[index + i, 9].Value = "";
                 }
-                index += times + 1;
+                index = times <= 1 ? index + 1 : indexATMID;
+
             }
             catch (Exception ex)
             {
@@ -557,7 +626,7 @@ namespace Transaction_Statistical.Class
                     worksheet.Cells[indexData, index + 24].Style.HorizontalAlignment = ExcelHorizontalAlignment.Left;
                     worksheet.Cells[indexData, index + 24].Value = itemTrans.FullFollow;
                     //worksheet.Cells[indexData, index + 25].Value = "";
-                    indexData++;
+                    //indexData++;
                 }
 
                 var allCells = worksheet.Cells[1, 1, worksheet.Dimension.End.Row, worksheet.Dimension.End.Column];

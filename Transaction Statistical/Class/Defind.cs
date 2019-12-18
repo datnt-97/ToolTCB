@@ -475,7 +475,7 @@ namespace Transaction_Statistical
                                     template.BaoCaoGiaoDichTaiChinh(item.Value, OfficeOpenXml.Table.TableStyles.Custom, transaction, cycle);
                                     break;
                                 case (int)TemplateHelper.TEMPLATE.BaoCaoHoatDongBatThuong:
-                                    template.BaoCaoHoatDongBatThuong(item.Value, OfficeOpenXml.Table.TableStyles.Custom, transactionEvent);
+                                    template.BaoCaoHoatDongBatThuong(item.Value, OfficeOpenXml.Table.TableStyles.Custom, ListTransaction);
                                     break;
                             }
                         }
@@ -510,10 +510,10 @@ namespace Transaction_Statistical
                         {
                             //await Task.Run(() => SplitTransactionEJ_Info(key.Value));
                             tasks.Add(SplitTransactionEJ_InfoAsync(key.Value));
-                            sString = sString.Replace(key.Value.stringfind, string.Empty);
                         }
                         await Task.WhenAll(tasks);
                     }
+                    sString = Regex.Replace(sString, reg, string.Empty);
                 }
             }
             catch (Exception ex)
