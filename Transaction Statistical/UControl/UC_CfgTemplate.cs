@@ -94,9 +94,9 @@ namespace Transaction_Statistical
                     entr.ColumnName.Add("IdentificationTxt");
                     entr.Content.Add(fctxt_Identification.Text);
                     entr.ColumnName.Add("SuccessfulTxt");
-                    entr.Content.Add(fctxt_Successful.Text);
+                    entr.Content.Add(cbo_Transaction_Success.Text);
                     entr.ColumnName.Add("UnsuccessfulTxt");
-                    entr.Content.Add(fctxt_Unsuccessful.Text);
+                    entr.Content.Add(cbo_Transaction_UnSuccess.Text);
                     sqlite.UpdateEntry("Transactions", entr, "ID", item.Value.ToString());
                     MessageBox.Show("Save transaction [" + item.Text + "] info successful", "Save transaction info", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     btn_Transaction_Refresh_Click(null, null);
@@ -130,9 +130,9 @@ namespace Transaction_Statistical
                     entr.ColumnName.Add("IdentificationTxt");
                     entr.Content.Add(fctxt_Identification.Text);
                     entr.ColumnName.Add("SuccessfulTxt");
-                    entr.Content.Add(fctxt_Successful.Text);
+                    entr.Content.Add(cbo_Transaction_Success.Text);
                     entr.ColumnName.Add("UnsuccessfulTxt");
-                    entr.Content.Add(fctxt_Unsuccessful.Text);
+                    entr.Content.Add(cbo_Transaction_UnSuccess.Text);
                     sqlite.CreateEntry("Transactions", entr);
                     MessageBox.Show("Add transaction [" + cbo_Transactions.Text + "] info successful", "Add transaction info", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     btn_Transaction_Refresh_Click(null, null);
@@ -325,8 +325,20 @@ namespace Transaction_Statistical
                 btn_Transaction_Save.Enabled = true;
                 btn_Transaction_Add.Enabled = false;
                 fctxt_Identification.Text = r["IdentificationTxt"].ToString();
-                fctxt_Successful.Text = r["SuccessfulTxt"].ToString();
-                fctxt_Unsuccessful.Text = r["UnsuccessfulTxt"].ToString(); ;
+                //fctxt_Successful.Text = r["SuccessfulTxt"].ToString();
+                //fctxt_Unsuccessful.Text = r["UnsuccessfulTxt"].ToString();  
+                cbo_Transaction_Success.Items.Clear();
+                cbo_Transaction_UnSuccess.Items.Clear();
+
+                DataTable cfg_data = sqlite.GetTableDataWithColumnName("CfgData", "Parent_ID", template_ID);
+                foreach (DataRow row in cfg_data.Rows)
+                {
+                    if (row["Type_ID"].ToString().Equals("525") || row["Type_ID"].ToString().Equals("456"))
+                    {
+                        cbo_Transaction_Success.Items.Add(row["Field"], r["SuccessfulTxt"].ToString().Split(',').Contains(row["Field"]));
+                        cbo_Transaction_UnSuccess.Items.Add(row["Field"], r["UnsuccessfulTxt"].ToString().Split(',').Contains(row["Field"]));
+                    }
+                }
             }
             else
             {

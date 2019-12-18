@@ -25,7 +25,10 @@ namespace Transaction_Statistical.UControl
 
         private void btn_Refresh_Click(object sender, EventArgs e)
         {
-            string reg = @"[-]+\r(?<Trace>(?<Time>(\d+:\d+:\d+))\s+\d+\s+Class:\s+(?<Class>(.+))[\s\S]*?)\r[-]+";
+            string reg = @"[-]+
+(?<Trace>(?<Time>(\d+:\d+:\d+))\s+\d+\s+Class:\s+(?<Class>.*)
+[\s\S]*?)
+[-]+";
             cbo_Keyword_LstKeyword.Items.Clear();
             int n = 0;
 

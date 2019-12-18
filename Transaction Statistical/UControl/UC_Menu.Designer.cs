@@ -30,13 +30,14 @@
         {
             this.pnl_BorderLeft = new System.Windows.Forms.Panel();
             this.pnl_Menu = new System.Windows.Forms.Panel();
+            this.pnl_BorderLeftMenu = new System.Windows.Forms.FlowLayoutPanel();
+            this.pnl_BorderTop = new System.Windows.Forms.Panel();
+            this.pnl_BorderBottom = new System.Windows.Forms.Panel();
+            this.lv_Version = new System.Windows.Forms.Label();
             this.btn_History = new Transaction_Statistical.AddOn.ButtonZ();
             this.btn_Startup = new Transaction_Statistical.AddOn.ButtonZ();
             this.btn_Dashboard = new Transaction_Statistical.AddOn.ButtonZ();
             this.btn_Overview = new Transaction_Statistical.AddOn.ButtonZ();
-            this.pnl_BorderLeftMenu = new System.Windows.Forms.FlowLayoutPanel();
-            this.pnl_BorderTop = new System.Windows.Forms.Panel();
-            this.pnl_BorderBottom = new System.Windows.Forms.Panel();
             this.pnl_Menu.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -52,6 +53,7 @@
             // pnl_Menu
             // 
             this.pnl_Menu.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.pnl_Menu.Controls.Add(this.lv_Version);
             this.pnl_Menu.Controls.Add(this.btn_History);
             this.pnl_Menu.Controls.Add(this.btn_Startup);
             this.pnl_Menu.Controls.Add(this.btn_Dashboard);
@@ -62,6 +64,44 @@
             this.pnl_Menu.Name = "pnl_Menu";
             this.pnl_Menu.Size = new System.Drawing.Size(149, 568);
             this.pnl_Menu.TabIndex = 1;
+            // 
+            // pnl_BorderLeftMenu
+            // 
+            this.pnl_BorderLeftMenu.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(120)))), ((int)(((byte)(240)))));
+            this.pnl_BorderLeftMenu.Dock = System.Windows.Forms.DockStyle.Right;
+            this.pnl_BorderLeftMenu.Location = new System.Drawing.Point(148, 0);
+            this.pnl_BorderLeftMenu.Name = "pnl_BorderLeftMenu";
+            this.pnl_BorderLeftMenu.Size = new System.Drawing.Size(1, 568);
+            this.pnl_BorderLeftMenu.TabIndex = 0;
+            // 
+            // pnl_BorderTop
+            // 
+            this.pnl_BorderTop.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(120)))), ((int)(((byte)(240)))));
+            this.pnl_BorderTop.Dock = System.Windows.Forms.DockStyle.Top;
+            this.pnl_BorderTop.Location = new System.Drawing.Point(149, 0);
+            this.pnl_BorderTop.Name = "pnl_BorderTop";
+            this.pnl_BorderTop.Size = new System.Drawing.Size(932, 1);
+            this.pnl_BorderTop.TabIndex = 2;
+            // 
+            // pnl_BorderBottom
+            // 
+            this.pnl_BorderBottom.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(120)))), ((int)(((byte)(240)))));
+            this.pnl_BorderBottom.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.pnl_BorderBottom.Location = new System.Drawing.Point(149, 567);
+            this.pnl_BorderBottom.Name = "pnl_BorderBottom";
+            this.pnl_BorderBottom.Size = new System.Drawing.Size(932, 1);
+            this.pnl_BorderBottom.TabIndex = 3;
+            // 
+            // lv_Version
+            // 
+            this.lv_Version.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.lv_Version.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lv_Version.ForeColor = System.Drawing.Color.White;
+            this.lv_Version.Location = new System.Drawing.Point(0, 507);
+            this.lv_Version.Name = "lv_Version";
+            this.lv_Version.Size = new System.Drawing.Size(148, 61);
+            this.lv_Version.TabIndex = 4;
+            this.lv_Version.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             // 
             // btn_History
             // 
@@ -154,33 +194,6 @@
             this.btn_Overview.UseVisualStyleBackColor = true;
             this.btn_Overview.MouseClick += new System.Windows.Forms.MouseEventHandler(this.menu_MouseClick);
             // 
-            // pnl_BorderLeftMenu
-            // 
-            this.pnl_BorderLeftMenu.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(120)))), ((int)(((byte)(240)))));
-            this.pnl_BorderLeftMenu.Dock = System.Windows.Forms.DockStyle.Right;
-            this.pnl_BorderLeftMenu.Location = new System.Drawing.Point(148, 0);
-            this.pnl_BorderLeftMenu.Name = "pnl_BorderLeftMenu";
-            this.pnl_BorderLeftMenu.Size = new System.Drawing.Size(1, 568);
-            this.pnl_BorderLeftMenu.TabIndex = 0;
-            // 
-            // pnl_BorderTop
-            // 
-            this.pnl_BorderTop.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(120)))), ((int)(((byte)(240)))));
-            this.pnl_BorderTop.Dock = System.Windows.Forms.DockStyle.Top;
-            this.pnl_BorderTop.Location = new System.Drawing.Point(149, 0);
-            this.pnl_BorderTop.Name = "pnl_BorderTop";
-            this.pnl_BorderTop.Size = new System.Drawing.Size(932, 1);
-            this.pnl_BorderTop.TabIndex = 2;
-            // 
-            // pnl_BorderBottom
-            // 
-            this.pnl_BorderBottom.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(120)))), ((int)(((byte)(240)))));
-            this.pnl_BorderBottom.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.pnl_BorderBottom.Location = new System.Drawing.Point(149, 567);
-            this.pnl_BorderBottom.Name = "pnl_BorderBottom";
-            this.pnl_BorderBottom.Size = new System.Drawing.Size(932, 1);
-            this.pnl_BorderBottom.TabIndex = 3;
-            // 
             // UC_Menu
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
@@ -208,5 +221,6 @@
         private AddOn.ButtonZ btn_Dashboard;
         private System.Windows.Forms.Panel pnl_BorderTop;
         private System.Windows.Forms.Panel pnl_BorderBottom;
+        private System.Windows.Forms.Label lv_Version;
     }
 }

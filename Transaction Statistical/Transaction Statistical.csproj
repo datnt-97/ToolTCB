@@ -196,6 +196,12 @@
     <Compile Include="UControl\UC_Menu_Startup.Designer.cs">
       <DependentUpon>UC_Menu_Startup.cs</DependentUpon>
     </Compile>
+    <Compile Include="UControl\UC_NewTemplate.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UControl\UC_NewTemplate.Designer.cs">
+      <DependentUpon>UC_NewTemplate.cs</DependentUpon>
+    </Compile>
     <Compile Include="UControl\UC_Transaction.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -259,6 +265,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="UControl\UC_Menu_Startup.resx">
       <DependentUpon>UC_Menu_Startup.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UControl\UC_NewTemplate.resx">
+      <DependentUpon>UC_NewTemplate.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UControl\UC_Transaction.resx">
       <DependentUpon>UC_Transaction.cs</DependentUpon>

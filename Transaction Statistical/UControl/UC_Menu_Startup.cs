@@ -59,7 +59,7 @@ namespace Transaction_Statistical
                     cb.Text = R["Field"].ToString();
                     cb.Value = R["ID"].ToString();
                     cbo_LstTemplate.Items.Add(cb);
-                    if (cb.Value.Equals(InitParametar.TemplateTransactionID.ToString())) cbo_LstTemplate.SelectedItem = cb;
+                    if (cb.Value.Equals(InitParametar.ReadTrans.TemplateTransactionID.ToString())) cbo_LstTemplate.SelectedItem = cb;
                 }
                 BindingSource bindingSource = new BindingSource();
                 bindingSource.DataSource = UC_Menu_Startup.Template;

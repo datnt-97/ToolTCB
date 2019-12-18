@@ -22,6 +22,10 @@ namespace Transaction_Statistical
 {
     public class InitParametar
     {
+        public static string SAuthor = @"Copyright © 2019, Công ty TNHH Giải pháp và Dịch vụ Nam Phương.";
+        public static string STitle = @"Transaction Statistical";
+        public static string SComment = @"Hotline: 1900 633 412 \nEmail: np.support @npss.vn\nWeb: http://npss.vn";
+
         public static string sTest = string.Empty;
         public static SQLiteHelper sqlite;
         public static string PathDirectoryCurrentApp;//=Path.GetDirectoryName(Application.ExecutablePath);
@@ -44,12 +48,7 @@ namespace Transaction_Statistical
 
         /// Transaction Template
         public static ReadTransaction ReadTrans;
-        public static string TemplateTransactionID = "65";
-        public static Dictionary<TransactionEvent.Events, string> transactionTemplate;
-        public static Dictionary<string, TransactionType> listTransType;
-        public static Dictionary<string, string> listDateFormat;
-        public static Dictionary<string, Dictionary<DateTime, Transaction>> listTransaction;
-        public static string[] ExtensionFile = { "*.txt", "*.log" };
+
 
         //log application
         public static bool WriteApplication = true;
@@ -76,7 +75,7 @@ namespace Transaction_Statistical
                 PathDirectoryCurrentAppConfigData = PathDirectoryCurrentApp + @"\Config";
                 DatabaseFile = PathDirectoryCurrentAppConfigData + "\\DB.s3db";
                 sqlite = new SQLiteHelper();
-                listTransaction = new Dictionary<string, Dictionary<DateTime, Transaction>>();
+                //   listTransaction = new Dictionary<string, Dictionary<DateTime, Transaction>>();
                 ReadTrans = new ReadTransaction();
 
             }
@@ -96,9 +95,9 @@ namespace Transaction_Statistical
                 DataRow rowTask = sqlite.GetRowDataWith2ColumnName("CfgData", "Field", taskName, "Type_ID", "511");
                 string[] data = rowTask["Data"].ToString().Split('|');
                 WriteLogApplication("   => Task data: " + rowTask["Data"].ToString(), false, false);
-                InitParametar.TemplateTransactionID = data[1];
+                ReadTrans.TemplateTransactionID = data[1];
                 WriteLogApplication("   => Template id: " + data[1], false, false);
-                if (!LoadTemplateInfo())
+                if (!ReadTrans.LoadTemplateInfo())
                 {
                     WriteLogApplication("   => Load Template Info => Unsuccessfully", false, false);
                     WriteLogApplication("   ==> Auto end, result => Unsuccessfully", false, true);
@@ -113,7 +112,7 @@ namespace Transaction_Statistical
                     lsFile_Journal.Add(data[2]);
                 else if (Directory.Exists(data[2]))
                 {
-                    FileInfo[] files = df.GetAllFilePath(data[2], InitParametar.ExtensionFile);
+                    FileInfo[] files = df.GetAllFilePath(data[2], ReadTrans.ExtensionFile);
                     lsFile_Journal = files.Select(f => f.FullName).ToList();
                 }
                 if (lsFile_Journal.Count == 0)
@@ -163,43 +162,7 @@ namespace Transaction_Statistical
             return true;
 
         }
-        public static bool LoadTemplateInfo()
-        {
-            try
-            {
-                if (transactionTemplate == null) transactionTemplate = new Dictionary<TransactionEvent.Events, string>();
-                if (listTransType == null) listTransType = new Dictionary<string, TransactionType>(); else listTransType.Clear();
-                DataTable cfg_data = sqlite.GetTableDataWith2ColumnName("CfgData", "Type_ID", "67", "Parent_ID", InitParametar.TemplateTransactionID);
-                if (listDateFormat == null) listDateFormat = new Dictionary<string, string>(); else listDateFormat.Clear();
 
-                foreach (DataRow r in cfg_data.Rows)
-                {
-                    foreach (TransactionEvent.Events name in (TransactionEvent.Events[])Enum.GetValues(typeof(TransactionEvent.Events)))
-                    {
-                        if (r["Field"].Equals(name.ToString())) transactionTemplate[name] = r["Data"].ToString();
-                    }
-
-                }
-                listTransType = new Dictionary<string, TransactionType>();
-                DataTable tb_transtype = sqlite.GetTableDataWithColumnName("Transactions", "TemplateID", InitParametar.TemplateTransactionID);
-                foreach (DataRow r in tb_transtype.Rows)
-                {
-                    TransactionType type = new TransactionType();
-                    type.Name = r["Name"].ToString();
-                    type.Identification = r["IdentificationTxt"].ToString();
-                    type.Successful = r["SuccessfulTxt"].ToString();
-                    type.UnSuccessful = r["UnsuccessfulTxt"].ToString();
-                    listTransType[type.Name] = type;
-                }
-
-                return true;
-            }
-            catch (Exception ex)
-            {
-                Send_Error(ex.ToString(), MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name);
-            }
-            return false;
-        }
 
         public static void Send_Error(string MsgError, string ClassName, string MethodName)
         {
@@ -207,7 +170,7 @@ namespace Transaction_Statistical
             {
                 if (WriteApplication)
                 {
-                    WriteLogApplication(string.Format("{0:HH:mm:ss fff} Class: {1}     Method: {2}\n{3}", DateTime.Now, ClassName, MethodName, MsgError), true, true);
+                    WriteLogApplication(string.Format("{0:HH:mm:ss fff} Class: {1}\nMethod: {2}\n{3}", DateTime.Now, ClassName, MethodName, MsgError), true, true);
                 }
                 if (AutoRunMode) return;
                 UC_Info msg = new UC_Info();
@@ -291,8 +254,9 @@ namespace Transaction_Statistical
         public string FormatDateTime = "MM - dd - yyyy HH:mm:ss";
         public string FormatDateTime_2 = "MM-dd-yyyy HH:mm:ss";
 
-        public string TemplateTransactionID = "65";
+        public string TemplateTransactionID;
         public Dictionary<TransactionEvent.Events, string> transactionTemplate;
+        public string[] ExtensionFile = { "*.txt", "*.log" };
 
         public Dictionary<string, Dictionary<DateTime, object>> ListTransaction;
         public DateTime StartDate = DateTime.MinValue;
@@ -310,9 +274,7 @@ namespace Transaction_Statistical
         public Dictionary<string, TransactionType> Template_TransType_Select;
 
         public string FileExport;
-        public string FileAuthor = @"Copyright © 2019, Công ty TNHH Giải pháp và Dịch vụ Nam Phương.";
-        public string FileTitle = @"Transaction Statistical";
-        public string FileComment = @"Hotline: 1900 633 412 \nEmail: np.support @npss.vn\nWeb: http://npss.vn";
+
         //DAT : 6/12/2019
         public Dictionary<DateTime, Cycle> ListCycle = null;
         public Dictionary<DateTime, TransactionEvent> ListEvent = null;
@@ -322,74 +284,88 @@ namespace Transaction_Statistical
             sqlite = new SQLiteHelper();
             LoadTemplateInfo();
         }
-        public void LoadTemplateInfo()
+        public bool LoadTemplateInfo()
         {
-            Template_EventDevice_Select = new Dictionary<string, string>();
-
-            if (Template_EventTransaction == null) Template_EventTransaction = new Dictionary<string, string>();
-            if (Template_EventBeginInput == null) Template_EventBeginInput = new Dictionary<string, string>();
-            if (Template_EventDevice == null) Template_EventDevice = new Dictionary<string, string>();
-            if (Template_EventRequest == null) Template_EventRequest = new Dictionary<string, string>();
-            if (Template_EventReceive == null) Template_EventReceive = new Dictionary<string, string>();
-            if (Template_EventCashOutIn == null) Template_EventCashOutIn = new Dictionary<string, string>();
-            if (Template_SplitTransactions == null) Template_SplitTransactions = new Dictionary<string, string>();
-            if (Template_EventCounterChanged == null) Template_EventCounterChanged = new Dictionary<string, string>();
-
-            if (Template_TransType == null) Template_TransType = new Dictionary<string, TransactionType>(); else Template_TransType.Clear();
-
-
-            #region Read template
-            DataTable cfg_data = sqlite.GetTableDataWith2ColumnName("CfgData", "Type_ID", "456", "Parent_ID", InitParametar.TemplateTransactionID);
-            foreach (DataRow r in cfg_data.Rows)
-                Template_EventTransaction[r["Field"].ToString()] = r["Data"].ToString();
-
-            cfg_data = sqlite.GetTableDataWith2ColumnName("CfgData", "Type_ID", "479", "Parent_ID", InitParametar.TemplateTransactionID);
-            foreach (DataRow r in cfg_data.Rows)
-                Template_EventBeginInput[r["Field"].ToString()] = r["Data"].ToString();
-
-            cfg_data = sqlite.GetTableDataWith2ColumnName("CfgData", "Type_ID", "457", "Parent_ID", InitParametar.TemplateTransactionID);
-            foreach (DataRow r in cfg_data.Rows)
+            try
             {
-                Template_EventDevice[r["Field"].ToString()] = r["Data"].ToString();
-                Template_EventDevice_Select[r["Field"].ToString()] = r["Data"].ToString();
+                if (string.IsNullOrEmpty(TemplateTransactionID)) TemplateTransactionID = LoadTemplateID();
+
+                Template_EventDevice_Select = new Dictionary<string, string>();
+                if (Template_EventTransaction == null) Template_EventTransaction = new Dictionary<string, string>();
+                if (Template_EventBeginInput == null) Template_EventBeginInput = new Dictionary<string, string>();
+                if (Template_EventDevice == null) Template_EventDevice = new Dictionary<string, string>();
+                if (Template_EventRequest == null) Template_EventRequest = new Dictionary<string, string>();
+                if (Template_EventReceive == null) Template_EventReceive = new Dictionary<string, string>();
+                if (Template_EventCashOutIn == null) Template_EventCashOutIn = new Dictionary<string, string>();
+                if (Template_SplitTransactions == null) Template_SplitTransactions = new Dictionary<string, string>();
+                if (Template_EventCounterChanged == null) Template_EventCounterChanged = new Dictionary<string, string>();
+
+                if (Template_TransType == null) Template_TransType = new Dictionary<string, TransactionType>(); else Template_TransType.Clear();
+
+                DataTable cfg_data = sqlite.GetTableDataWith2ColumnName("CfgData", "Type_ID", "456", "Parent_ID", TemplateTransactionID);
+                foreach (DataRow r in cfg_data.Rows)
+                    Template_EventTransaction[r["Field"].ToString()] = r["Data"].ToString();
+
+                cfg_data = sqlite.GetTableDataWith2ColumnName("CfgData", "Type_ID", "479", "Parent_ID", TemplateTransactionID);
+                foreach (DataRow r in cfg_data.Rows)
+                    Template_EventBeginInput[r["Field"].ToString()] = r["Data"].ToString();
+
+                cfg_data = sqlite.GetTableDataWith2ColumnName("CfgData", "Type_ID", "457", "Parent_ID", TemplateTransactionID);
+                foreach (DataRow r in cfg_data.Rows)
+                {
+                    Template_EventDevice[r["Field"].ToString()] = r["Data"].ToString();
+                    Template_EventDevice_Select[r["Field"].ToString()] = r["Data"].ToString();
+                }
+                cfg_data = sqlite.GetTableDataWith2ColumnName("CfgData", "Type_ID", "471", "Parent_ID", TemplateTransactionID);
+                foreach (DataRow r in cfg_data.Rows)
+                    Template_EventRequest[r["Field"].ToString()] = r["Data"].ToString();
+
+                cfg_data = sqlite.GetTableDataWith2ColumnName("CfgData", "Type_ID", "472", "Parent_ID", TemplateTransactionID);
+                foreach (DataRow r in cfg_data.Rows)
+                    Template_EventReceive[r["Field"].ToString()] = r["Data"].ToString();
+
+                cfg_data = sqlite.GetTableDataWith2ColumnName("CfgData", "Type_ID", "458", "Parent_ID", TemplateTransactionID);
+                foreach (DataRow r in cfg_data.Rows)
+                    Template_SplitTransactions[r["Field"].ToString()] = r["Data"].ToString();
+
+                cfg_data = sqlite.GetTableDataWith2ColumnName("CfgData", "Type_ID", "525", "Parent_ID", TemplateTransactionID);
+                foreach (DataRow r in cfg_data.Rows)
+                    Template_EventCashOutIn[r["Field"].ToString()] = r["Data"].ToString();
+
+                cfg_data = sqlite.GetTableDataWith2ColumnName("CfgData", "Type_ID", "459", "Parent_ID", TemplateTransactionID);
+                foreach (DataRow r in cfg_data.Rows)
+                    Template_EventCounterChanged[r["Field"].ToString()] = r["Data"].ToString();
+
+
+                Template_TransType = new Dictionary<string, TransactionType>();
+                Template_TransType_Select = new Dictionary<string, TransactionType>();
+                DataTable tb_transtype = sqlite.GetTableDataWithColumnName("Transactions", "TemplateID", TemplateTransactionID);
+                foreach (DataRow r in tb_transtype.Rows)
+                {
+                    TransactionType type = new TransactionType();
+                    type.Name = r["Name"].ToString();
+                    type.Identification = r["IdentificationTxt"].ToString();
+                    type.Successful = r["SuccessfulTxt"].ToString();
+                    type.UnSuccessful = r["UnsuccessfulTxt"].ToString();
+                    Template_TransType[type.Name] = type;
+                    Template_TransType_Select[type.Name] = type;
+                }
+                return true;
             }
-            cfg_data = sqlite.GetTableDataWith2ColumnName("CfgData", "Type_ID", "471", "Parent_ID", InitParametar.TemplateTransactionID);
-            foreach (DataRow r in cfg_data.Rows)
-                Template_EventRequest[r["Field"].ToString()] = r["Data"].ToString();
-
-            cfg_data = sqlite.GetTableDataWith2ColumnName("CfgData", "Type_ID", "472", "Parent_ID", InitParametar.TemplateTransactionID);
-            foreach (DataRow r in cfg_data.Rows)
-                Template_EventReceive[r["Field"].ToString()] = r["Data"].ToString();
-
-            cfg_data = sqlite.GetTableDataWith2ColumnName("CfgData", "Type_ID", "458", "Parent_ID", InitParametar.TemplateTransactionID);
-            foreach (DataRow r in cfg_data.Rows)
-                Template_SplitTransactions[r["Field"].ToString()] = r["Data"].ToString();
-
-            cfg_data = sqlite.GetTableDataWith2ColumnName("CfgData", "Type_ID", "525", "Parent_ID", InitParametar.TemplateTransactionID);
-            foreach (DataRow r in cfg_data.Rows)
-                Template_EventCashOutIn[r["Field"].ToString()] = r["Data"].ToString();
-
-            cfg_data = sqlite.GetTableDataWith2ColumnName("CfgData", "Type_ID", "459", "Parent_ID", InitParametar.TemplateTransactionID);
-            foreach (DataRow r in cfg_data.Rows)
-                Template_EventCounterChanged[r["Field"].ToString()] = r["Data"].ToString();
-
-
-            Template_TransType = new Dictionary<string, TransactionType>();
-            Template_TransType_Select = new Dictionary<string, TransactionType>();
-            DataTable tb_transtype = sqlite.GetTableDataWithColumnName("Transactions", "TemplateID", InitParametar.TemplateTransactionID);
-            foreach (DataRow r in tb_transtype.Rows)
+            catch (Exception ex)
             {
-                TransactionType type = new TransactionType();
-                type.Name = r["Name"].ToString();
-                type.Identification = r["IdentificationTxt"].ToString();
-                type.Successful = r["SuccessfulTxt"].ToString();
-                type.UnSuccessful = r["UnsuccessfulTxt"].ToString();
-                Template_TransType[type.Name] = type;
-                Template_TransType_Select[type.Name] = type;
+                InitParametar.Send_Error(ex.ToString(), MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name);
             }
-            #endregion
+            return false;
         }
-        public async Task<bool> Reads(List<string> files, TextProgressBar process=null)
+        public string LoadTemplateID()
+        {
+            DataTable cfg_vendor = InitParametar.sqlite.GetTableDataWith2ColumnName("CfgData", "Type_ID", "60", "Parent_ID", "54");
+            foreach (DataRow R in cfg_vendor.Rows)
+                if (R["Field"].ToString().EndsWith(@"(default)")) return R["ID"].ToString();
+            return string.Empty;
+        }
+        public async Task<bool> Reads(List<string> files, TextProgressBar process = null)
         {
 
             try
@@ -399,8 +375,8 @@ namespace Transaction_Statistical
                 DateTime currentDate = DateTime.MinValue;
 
                 ListTransaction = new Dictionary<string, Dictionary<DateTime, object>>();
-                
-                if(process!=null)
+
+                if (process != null)
                 {
                     process.CustomText = string.Format("Found: {0} files.", files.Count);
                     process.Step = (process.Maximum - process.Value) / files.Count;
@@ -424,7 +400,7 @@ namespace Transaction_Statistical
                     contenFile = await SplitTransactionEJ(Terminal, contenFile);
                     contenFile = await FindEventDevice2Async(currentDate, Terminal, contenFile);
                     FindCounterChanged(ref contenFile, ref ListCycle);
-                    
+
                 }
                 //CHANGE 6/12
                 var ListTransactionTemp = ListTransaction;
@@ -480,7 +456,7 @@ namespace Transaction_Statistical
                     Stream stream = null;
                     using (var excelPackage = new ExcelPackage(stream ?? new MemoryStream()))
                     {
-                        TemplateHelper template = new TemplateHelper(FileAuthor, FileTitle, FileComment, excelPackage);
+                        TemplateHelper template = new TemplateHelper(InitParametar.SAuthor, InitParametar.STitle, InitParametar.SComment, excelPackage);
                         // Tạo buffer memory stream để hứng file excel
                         foreach (var item in templateChoosen)
                         {
@@ -562,8 +538,9 @@ namespace Transaction_Statistical
                             {
                                 TransactionEvent evt = new TransactionEvent();
                                 evt.Name = tmp.Key;
-                                evt.Status = TransactionEvent.StatusS.Succeeded;
+                                evt.Status = Status.Types.Succeeded;
                                 evt.TContent = regx.stringfind;
+                                evt.Type = TransactionEvent.Events.Transaction;
                                 if (regx.value.ContainsKey("Time") && !string.IsNullOrEmpty(regx.value["Time"]))
                                 {
                                     DateTime.TryParseExact(String.Format("{0:yyyyMMdd}", DateCurrent) + regx.value["Time"], "yyyyMMdd" + FormatTime, CultureInfo.InvariantCulture, DateTimeStyles.None, out evt.DateBegin);
@@ -600,7 +577,7 @@ namespace Transaction_Statistical
                             {
                                 TransactionEvent evt = new TransactionEvent();
                                 evt.Name = tmp.Key;
-                                evt.Status = TransactionEvent.StatusS.Succeeded;
+                                evt.Status = Status.Types.Succeeded;
                                 evt.TContent = regx.stringfind;
                                 if (regx.value.ContainsKey("Time") && !string.IsNullOrEmpty(regx.value["Time"]))
                                 {
@@ -641,7 +618,7 @@ namespace Transaction_Statistical
                             {
                                 evt = new TransactionEvent();
                                 evt.Name = tmp.Key;
-                                evt.Status = TransactionEvent.StatusS.Succeeded;
+                                evt.Status = Status.Types.Succeeded;
                                 evt.TContent = regx.stringfind;
                                 if (regx.value.ContainsKey("Time") && !string.IsNullOrEmpty(regx.value["Time"]))
                                 {
@@ -687,7 +664,7 @@ namespace Transaction_Statistical
                             {
                                 TransactionEvent evt = new TransactionEvent();
                                 evt.Name = tmp.Key;
-                                evt.Status = TransactionEvent.StatusS.Succeeded;
+                                evt.Status = Status.Types.Succeeded;
                                 evt.TContent = regx.stringfind;
                                 if (regx.value.ContainsKey("Time") && !string.IsNullOrEmpty(regx.value["Time"]))
                                 {
@@ -726,7 +703,7 @@ namespace Transaction_Statistical
                             {
                                 TransactionEvent evt = new TransactionEvent();
                                 evt.Name = tmp.Key;
-                                evt.Status = TransactionEvent.StatusS.Succeeded;
+                                evt.Status = Status.Types.Succeeded;
                                 evt.TContent = regx.stringfind;
                                 if (regx.value.ContainsKey("Time") && !string.IsNullOrEmpty(regx.value["Time"]))
                                 {
@@ -793,7 +770,7 @@ namespace Transaction_Statistical
                             {
                                 TransactionEvent evt = new TransactionEvent();
                                 evt.Name = tmp.Key;
-                                evt.Status = TransactionEvent.StatusS.Succeeded;
+                                evt.Status = Status.Types.Unknow;
                                 evt.TContent = regx.stringfind;
                                 evt.Type = TransactionEvent.Events.TransactionReqSend;
                                 if (regx.value.ContainsKey("Data")) evt.Data = regx.value["Data"];
@@ -839,13 +816,14 @@ namespace Transaction_Statistical
                 trans.TraceJournal_Remaining = trans.TraceJournal_Remaining.Replace(val.value["SEnd"], null);
 
                 trans = await Task.Run(() => FindEventBeginInput(trans));
-                trans = await Task.Run(() => FindEventTransaction(trans, trans.DateBegin));
                 trans = await Task.Run(() => FindEventRequest(trans.DateBegin, trans));
+                trans = await Task.Run(() => FindEventTransaction(trans, trans.DateBegin));
+
                 trans = await Task.Run(() => FindEventReceive(trans.DateBegin, trans));
                 trans = await Task.Run(() => FindEventDevice(trans, trans.DateBegin));
                 trans = await Task.Run(() => FindEventCashOutIn(trans.DateBegin, trans));
-
-                SplitRequest(ref trans);
+                trans = await Task.Run(() => SplitRequest(trans));
+                //  SplitRequest(ref trans);
                 if (ListTransaction.ContainsKey(trans.Terminal))
                 {
                     if (ListTransaction[trans.Terminal].ContainsKey(trans.DateBegin))
@@ -863,7 +841,7 @@ namespace Transaction_Statistical
         }
         #endregion
 
-       
+
 
         private bool FindCounterChanged(ref string sString, ref Dictionary<DateTime, Cycle> Cycles)
         {
@@ -1034,59 +1012,63 @@ namespace Transaction_Statistical
             }
             return transaction.TraceJournal_Remaining;
         }
- 
-        private bool SplitRequest(ref Transaction transaction)
+
+        private async Task<Transaction> SplitRequest(Transaction transaction)
         {
             try
             {
                 TransactionRequest req = new TransactionRequest();
                 req.DateBegin = transaction.DateBegin;
-                req.Status = TransactionRequest.StatusS.Succeeded;
+                req.Status = Status.Types.UnSucceeded;
                 foreach (TransactionEvent evt in transaction.ListEvent.Values)
                 {
                     if (evt.Type.Equals(TransactionEvent.Events.TransactionReqSend))
                     {
-                        if (string.IsNullOrEmpty(req.Request))
-                        {
-                            CheckRequestName(evt.Data, ref req.Request);
-                        }
-                        else
-                        {
-                            transaction.ListRequest[req.DateBegin] = req;
-                            req = new TransactionRequest();
-                            req.DateBegin = evt.DateBegin;
-                            req.Status = TransactionRequest.StatusS.Succeeded;
-                            CheckRequestName(evt.Data, ref req.Request);
-                        }
+                        req = new TransactionRequest();
+                        req.DateBegin = evt.DateBegin;
+                        req.Status = Status.Types.UnSucceeded;
+                        if (CheckRequestName(evt.Data, ref req.Request)) transaction.ListRequest[req.DateBegin] = req;
+                    }
+                    else if (transaction.ListRequest.Count != 0 && (evt.Type.Equals(TransactionEvent.Events.Transaction) || evt.Type.Equals(TransactionEvent.Events.CashIn) || evt.Type.Equals(TransactionEvent.Events.CashOut)))
+                    {
+                        string name = transaction.ListRequest.LastOrDefault().Value.Request;
+                        if (!Template_TransType_Select.ContainsKey(name)) continue;
+                        if (Template_TransType_Select[name].Successful.Split(',').Contains(evt.Name))
+                            transaction.ListRequest.LastOrDefault().Value.Status = Status.Types.Succeeded;
+                        else if (Template_TransType_Select[name].UnSuccessful.Split(',').Contains(evt.Name))
+                            transaction.ListRequest.LastOrDefault().Value.Status = Status.Types.UnSucceeded;
                     }
                 }
-                transaction.ListRequest[req.DateBegin] = req;
-                return true;
             }
             catch (Exception ex)
             {
                 InitParametar.Send_Error(ex.ToString(), MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name);
             }
-            return false;
+            return transaction;
         }
         private bool CheckRequestName(string operationCode, ref string transactionType)
         {
             foreach (TransactionType type in Template_TransType_Select.Values)
                 if (type.Identification.Split('|').Contains(operationCode)) { transactionType = type.Name; return true; }
-            transactionType = @"N/A: [" + operationCode + "]";
+            // transactionType = @"N/A: [" + operationCode + "]";
             return false;
         }
     }
 
-    public class Transaction : CustomObjectType
+    public class Status
     {
-        public enum StatusS
+        public enum Types
         {
             Succeeded,
             UnSucceeded,
             Warning,
+            Unknow,
             Error
         }
+    }
+    public class Transaction : CustomObjectType
+    {
+
         public enum TransactionType
         {
             Alls,
@@ -1108,6 +1090,8 @@ namespace Transaction_Statistical
         public int Value_200K;
         public int Value_500K;
         public int Rejects;
+        public int Amount { get { return (Value_10K * 10000 + Value_20K * 20000 + Value_50K * 50000 + Value_100K * 100000 + Value_200K * 200000 + Value_500K * 500000); } }
+
         public string TraceJournalFull;
         public Dictionary<DateTime, TransactionEvent> ListEvent = new Dictionary<DateTime, TransactionEvent>();
 
@@ -1176,16 +1160,11 @@ namespace Transaction_Statistical
 
         [CategoryAttribute("3. Transaction"), DescriptionAttribute("End time of the transaction")]
         public string TimeEnd { get { return String.Format("{0:HH:mm:ss}", DateEnd); } }
-
-
-        [CategoryAttribute("3. Transaction"), DescriptionAttribute("Amount")]
-        public int Amount { get; set; }
-
         public Dictionary<DateTime, TransactionRequest> ListRequest = new Dictionary<DateTime, TransactionRequest>();
 
 
         [CategoryAttribute("6. Follow"), DescriptionAttribute("Follow of the transaction")]
-        public string Follow
+        public string FullFollow
         {
             get { return string.Join("=>", ListEvent.Values); }
         }
@@ -1228,17 +1207,10 @@ namespace Transaction_Statistical
         }
         public Events Type;
 
-        public enum StatusS
-        {
-            Succeeded,
-            UnSucceeded,
-            Warning,
-            Error
-        }
         public string Data;
         public DateTime DateBegin;
         [CategoryAttribute("Event"), DescriptionAttribute("Status of the Event")]
-        public StatusS Status { get; set; }
+        public Status.Types Status { get; set; }
         [CategoryAttribute("Event"), DescriptionAttribute("Name of the Event")]
         public string Name { get; set; }
         [CategoryAttribute("Event"), DescriptionAttribute("Date of the Event")]
@@ -1259,14 +1231,7 @@ namespace Transaction_Statistical
         public string Request;
         public DateTime DateBegin;
         public DateTime DateEnd;
-        public enum StatusS
-        {
-            Succeeded,
-            UnSucceeded,
-            Warning,
-            Error
-        }
-        public StatusS Status { get; set; }
+        public Status.Types Status { get; set; }
         public List<Denomination> LstDenomination = new List<Denomination>();
         public int AmountDeposit
         {

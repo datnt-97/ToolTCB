@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Reflection;
 
 namespace Transaction_Statistical.UControl
 {
@@ -32,6 +33,7 @@ namespace Transaction_Statistical.UControl
             this.BringToFront();
             this.SendToBack();
             _Parent.Controls.SetChildIndex(this, 0);
+            
         }
         public void SlideMenuShow()
         {
@@ -58,6 +60,7 @@ namespace Transaction_Statistical.UControl
 
         private void addUserCfg()
         {
+            lv_Version.Text = "Version " + Assembly.GetExecutingAssembly().GetName().Version.ToString() + "\nCopyright © 2019, NPSS";
             ucOVerview = new UC_Menu_Overview();
             ucOVerview.Width = this.Width - 1 - pnl_Menu.Width;
             ucOVerview.Height = this.Height - 2;

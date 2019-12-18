@@ -13,6 +13,7 @@ using System.Drawing.Imaging;
 using System.Drawing.Drawing2D;
 using System.Threading;
 using System.Diagnostics;
+using System.Timers;
 
 namespace Transaction_Statistical
 {
@@ -34,6 +35,10 @@ namespace Transaction_Statistical
             textBoxShow = _textBoxShow;
         }
        
+        private void OnTimedEvent(Object source, ElapsedEventArgs e)
+        {
+            uc_Explorer_MouseLeave(null, null);
+        }
         public UC_Explorer()
         {
             InitializeComponent();
@@ -62,7 +67,7 @@ namespace Transaction_Statistical
                 this.Size = new System.Drawing.Size(_textBoxShow.Width, 0);
                 SlideExplorerShow(null, null);
             }
-            this.SelectPath(textBoxShow.Text);
+            this.SelectPath(textBoxShow.Text);            
         }
         private void uc_Explorer_MouseLeave(object sender, EventArgs e)
         {
@@ -86,17 +91,18 @@ namespace Transaction_Statistical
                 if (showExplorer)
                 {
                     this.Height += 5;
-                    if (this.Height >= 500)                  
-                        break;
+                    if (this.Height >= 500)
+                    break; 
                 }
                 else
                 {
                     this.Height -= 3;
-                    if (this.Height == 0) break;
+                    if (this.Height <= 0) break; 
                 }
                 this.Update();
             }
             runningShowExplorer = false;
+           
         }
 
         public void SelectPath(string path)

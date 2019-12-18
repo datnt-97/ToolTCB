@@ -555,7 +555,7 @@ namespace Transaction_Statistical.Class
                     worksheet.Cells[indexData, index + 22].Value = itemTrans.Rejects;
                     worksheet.Cells[indexData, index + 23].Value = 0;
                     worksheet.Cells[indexData, index + 24].Style.HorizontalAlignment = ExcelHorizontalAlignment.Left;
-                    worksheet.Cells[indexData, index + 24].Value = itemTrans.Follow;
+                    worksheet.Cells[indexData, index + 24].Value = itemTrans.FullFollow;
                     //worksheet.Cells[indexData, index + 25].Value = "";
                     indexData++;
                 }

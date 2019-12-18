@@ -56,13 +56,15 @@ namespace Transaction_Statistical.UControl
             uc_Menu = new UC_Menu(this);
 
             InitParametar.ReadTrans.Template_TransType.Values.ToList().ForEach(x => cbo_Trans.Items.Add(x.Name, true));
-            foreach (string s in Enum.GetNames(typeof(Transaction.StatusS)))
+            foreach (string s in Enum.GetNames(typeof(Status.Types)))
+            {
                 cbo_Trans_Status.Items.Add(s, true);
-
+                cbo_Event_Status.Items.Add(s, false);
+            }
             InitParametar.ReadTrans.Template_EventDevice_Select.Clear();
             InitParametar.ReadTrans.Template_EventDevice.Keys.ToList().ForEach(x => cbo_Event.Items.Add(x, false));
-            foreach (string s in Enum.GetNames(typeof(TransactionEvent.StatusS)))
-                cbo_Event_Status.Items.Add(s, false);
+           // foreach (string s in Enum.GetNames(typeof(TransactionEvent.StatusS)))
+             //   cbo_Event_Status.Items.Add(s, false);
         }
        
        
@@ -87,18 +89,22 @@ namespace Transaction_Statistical.UControl
                 prb_Process.Size = btn_Read.Size;
                 prb_Process.Value = 10;
                 prb_Process.Update();
+                tre_LstTrans.Nodes.Clear(); tvListCycle.Nodes.Clear(); panel5.Controls.Clear(); fctxt_FullLog.Text = string.Empty; this.Update();
                 DirectoryFileUtilities df = new DirectoryFileUtilities();
                 if (File.Exists(txt_Path.Text))
                     await JournalAnalyze(new List<string> { txt_Path.Text });
                 else if (Directory.Exists(txt_Path.Text))
                 {
 
-                    FileInfo[] files = df.GetAllFilePath(txt_Path.Text, InitParametar.ExtensionFile);
-                    await JournalAnalyze(files.Select(f => f.FullName).ToList());
-                    if (tre_LstTrans.Nodes.Count != 0) tre_LstTrans.Nodes[0].Expand();
+                    FileInfo[] files = df.GetAllFilePath(txt_Path.Text, InitParametar.ReadTrans.ExtensionFile);
+                    await JournalAnalyze(files.Select(f => f.FullName).ToList());        
                 }
                 else
                     MessageBox.Show("File/Drectory not exist.", "Error File/Directory", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                if (tre_LstTrans.Nodes.Count != 0)
+                {
+                    tre_LstTrans.Nodes[0].Expand(); tre_LstTrans.SelectedNode = tre_LstTrans.Nodes[0];
+                }
             }
             catch (Exception ex)
             {
@@ -114,7 +120,7 @@ namespace Transaction_Statistical.UControl
             {
                 prb_Process.CustomText = string.Format("Found: {0} files.", lsFile_Journal.Count);
                 prb_Process.Value += 10;
-                tre_LstTrans.Nodes.Clear();
+               
                 btn_Export.Enabled = false;
                 propertyGrid1.SelectedObject = null;
                 fctxt_FullLog.Text = string.Empty;
@@ -154,8 +160,7 @@ namespace Transaction_Statistical.UControl
                             if (countDisplay == ndDay.Nodes.Count) continue;
                             ndDay.Tag = kTransaction.Key;
                             AddTransactionToNode(ndDay, kTransaction.Key, kTerminal.Key, kTransaction.Value);
-                            // 
-
+                            
                         }
                     }
                 }
@@ -261,6 +266,17 @@ namespace Transaction_Statistical.UControl
                     fctxt_FullLog.Text = (e.Node.Tag as Transaction).TraceJournalFull;
                     var trans = (Transaction)e.Node.Tag;
                     trans.Properties = new List<CustomProperty>();
+
+                    CultureInfo cultureInfo = new CultureInfo("vn-VN");
+                        trans.Properties.Add(new CustomProperty
+                        {
+                            Name ="Amount",
+                            Type = typeof(string),
+                            Desc = "Total amount",
+                            Cate = "3. Transaction",
+                            DefaultValue = String.Format("{0:#,###} VND", trans.Amount)
+                }); 
+                   
                     int cCount = 1;
                     if (trans.Value_10K != 0)
                     {
@@ -341,9 +357,9 @@ namespace Transaction_Statistical.UControl
                         {
                             Name = req.TTime,
                             Type = typeof(string),
-                            Desc = req.ToString(),
+                            Desc = req.ToString() + " -> " + req.Status,
                             Cate = "6. Follow",
-                            DefaultValue = req.ToString()
+                            DefaultValue = req.ToString() + " -> " + req.Status
                         });
                         cCount++;
                     }
@@ -354,9 +370,9 @@ namespace Transaction_Statistical.UControl
                         {
                             Name = string.Format("{0:HH:mm:ss}", req.DateBegin),
                             Type = typeof(string),
-                            Desc = req.ToString(),
+                            Desc = req.ToString() + " -> " + req.Status,
                             Cate = "4. Requests",
-                            DefaultValue = req.ToString()
+                            DefaultValue = req.ToString() + " -> " + req.Status
                         });
                         cCount++;
                     }
@@ -393,6 +409,7 @@ namespace Transaction_Statistical.UControl
                         });
                         ndCycle.Expand();
                     }
+                    if (tvListCycle.Nodes[0].Nodes.Count != 0) tvListCycle.SelectedNode = tvListCycle.Nodes[0].Nodes[0];
                 }
                 else if (e.Node != null && e.Node.Tag != null && e.Node.Tag is DateTime)
                 {
@@ -433,6 +450,7 @@ namespace Transaction_Statistical.UControl
                 panel5.Controls.RemoveAt(0);
             }
             dataGrid = new DataGridView();
+            dataGrid.BackgroundColor = Color.FromArgb(37, 37, 38);
 
             fctxt_FullLog.Text = cycle.LogTxt;
             var denoCount = cycle.DenominationCount.ToList();
