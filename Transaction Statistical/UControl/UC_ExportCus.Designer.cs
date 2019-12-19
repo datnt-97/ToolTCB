@@ -35,7 +35,6 @@
             this.btn_Export = new System.Windows.Forms.Button();
             this.chb_Open = new System.Windows.Forms.CheckBox();
             this.prgExport = new System.Windows.Forms.ProgressBar();
-            this.lblPercent = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // label7
@@ -125,22 +124,11 @@
             this.prgExport.Size = new System.Drawing.Size(420, 5);
             this.prgExport.TabIndex = 35;
             // 
-            // lblPercent
-            // 
-            this.lblPercent.AutoSize = true;
-            this.lblPercent.ForeColor = System.Drawing.Color.White;
-            this.lblPercent.Location = new System.Drawing.Point(117, 128);
-            this.lblPercent.Name = "lblPercent";
-            this.lblPercent.Size = new System.Drawing.Size(24, 13);
-            this.lblPercent.TabIndex = 36;
-            this.lblPercent.Text = "0 %";
-            // 
             // UC_ExportCus
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(37)))), ((int)(((byte)(37)))), ((int)(((byte)(38)))));
-            this.Controls.Add(this.lblPercent);
             this.Controls.Add(this.prgExport);
             this.Controls.Add(this.chb_Open);
             this.Controls.Add(this.btn_Export);
@@ -165,6 +153,5 @@
         public System.Windows.Forms.TextBox txt_Destination;
         private System.Windows.Forms.CheckBox chb_Open;
         private System.Windows.Forms.ProgressBar prgExport;
-        private System.Windows.Forms.Label lblPercent;
     }
 }

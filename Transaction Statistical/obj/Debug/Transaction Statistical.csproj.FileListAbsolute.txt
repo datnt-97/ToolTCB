@@ -104,9 +104,6 @@ E:\Project\NPS\ToolTCB\ToolTCB\Transaction Statistical\bin\Debug\EntityFramework
 E:\Project\NPS\ToolTCB\ToolTCB\Transaction Statistical\bin\Debug\EntityFramework.SqlServer.dll
 E:\Project\NPS\ToolTCB\ToolTCB\Transaction Statistical\bin\Debug\EPPlus.dll
 E:\Project\NPS\ToolTCB\ToolTCB\Transaction Statistical\bin\Debug\FastColoredTextBox.dll
-E:\Project\NPS\ToolTCB\ToolTCB\Transaction Statistical\bin\Debug\MetroFramework.Design.dll
-E:\Project\NPS\ToolTCB\ToolTCB\Transaction Statistical\bin\Debug\MetroFramework.dll
-E:\Project\NPS\ToolTCB\ToolTCB\Transaction Statistical\bin\Debug\MetroFramework.Fonts.dll
 E:\Project\NPS\ToolTCB\ToolTCB\Transaction Statistical\bin\Debug\System.Data.SQLite.dll
 E:\Project\NPS\ToolTCB\ToolTCB\Transaction Statistical\bin\Debug\System.Data.SQLite.EF6.dll
 E:\Project\NPS\ToolTCB\ToolTCB\Transaction Statistical\bin\Debug\System.Data.SQLite.Linq.dll
@@ -266,3 +263,6 @@ D:\ToolTCB_Git\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical
 D:\ToolTCB_Git\ToolTCB\Transaction Statistical\bin\Debug\CheckComboBox.dll
 D:\05-TEMP\Source\GitHub\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.UControl.UC_NewTemplate.resources
 D:\ToolTCB_Git\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.UControl.UC_NewTemplate.resources
+E:\Project\NPS\ToolTCB\ToolTCB\Transaction Statistical\bin\Debug\CheckComboBox.dll
+E:\Project\NPS\ToolTCB\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.UControl.UC_Menu_History.resources
+E:\Project\NPS\ToolTCB\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.UControl.UC_NewTemplate.resources

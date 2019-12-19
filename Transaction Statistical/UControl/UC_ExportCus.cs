@@ -59,7 +59,7 @@ namespace Transaction_Statistical.UControl
                 prgExport.Step = 1;
                 var w = System.Diagnostics.Stopwatch.StartNew();
                 w.Start();
-                if (InitParametar.ReadTrans.Export(txt_Destination.Text, TemplateChoosen, prgExport, lblPercent))
+                if (InitParametar.ReadTrans.Export(txt_Destination.Text, TemplateChoosen, prgExport))
                 {
                     w.Stop();
                     MessageBox.Show("Export successfully. (Execute : " + (w.ElapsedMilliseconds).ToString() + " ms)", "Export", MessageBoxButtons.OK, MessageBoxIcon.Information);

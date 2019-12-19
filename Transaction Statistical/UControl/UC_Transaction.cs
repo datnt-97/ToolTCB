@@ -63,11 +63,11 @@ namespace Transaction_Statistical.UControl
             }
             InitParametar.ReadTrans.Template_EventDevice_Select.Clear();
             InitParametar.ReadTrans.Template_EventDevice.Keys.ToList().ForEach(x => cbo_Event.Items.Add(x, false));
-           // foreach (string s in Enum.GetNames(typeof(TransactionEvent.StatusS)))
-             //   cbo_Event_Status.Items.Add(s, false);
+            // foreach (string s in Enum.GetNames(typeof(TransactionEvent.StatusS)))
+            //   cbo_Event_Status.Items.Add(s, false);
         }
-       
-       
+
+
         private void cb_FullTime_CheckedChanged(object sender, EventArgs e)
         {
             if (cb_FullTime.Checked)
@@ -97,7 +97,7 @@ namespace Transaction_Statistical.UControl
                 {
 
                     FileInfo[] files = df.GetAllFilePath(txt_Path.Text, InitParametar.ReadTrans.ExtensionFile);
-                    await JournalAnalyze(files.Select(f => f.FullName).ToList());        
+                    await JournalAnalyze(files.Select(f => f.FullName).ToList());
                 }
                 else
                     MessageBox.Show("File/Drectory not exist.", "Error File/Directory", MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -120,7 +120,7 @@ namespace Transaction_Statistical.UControl
             {
                 prb_Process.CustomText = string.Format("Found: {0} files.", lsFile_Journal.Count);
                 prb_Process.Value += 10;
-               
+
                 btn_Export.Enabled = false;
                 propertyGrid1.SelectedObject = null;
                 fctxt_FullLog.Text = string.Empty;
@@ -160,7 +160,7 @@ namespace Transaction_Statistical.UControl
                             if (countDisplay == ndDay.Nodes.Count) continue;
                             ndDay.Tag = kTransaction.Key;
                             AddTransactionToNode(ndDay, kTransaction.Key, kTerminal.Key, kTransaction.Value);
-                            
+
                         }
                     }
                 }
@@ -215,7 +215,7 @@ namespace Transaction_Statistical.UControl
                 InitParametar.Send_Error(ex.ToString(), MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name);
             }
         }
-       
+
         private bool GetDateFromFormatLine(string row, string rowFormat, Dictionary<string, string> listDateFormat, out DateTime date)
         {
             date = DateTime.Now;
@@ -268,15 +268,15 @@ namespace Transaction_Statistical.UControl
                     trans.Properties = new List<CustomProperty>();
 
                     CultureInfo cultureInfo = new CultureInfo("vn-VN");
-                        trans.Properties.Add(new CustomProperty
-                        {
-                            Name ="Amount",
-                            Type = typeof(string),
-                            Desc = "Total amount",
-                            Cate = "3. Transaction",
-                            DefaultValue = String.Format("{0:#,###} VND", trans.Amount)
-                }); 
-                   
+                    trans.Properties.Add(new CustomProperty
+                    {
+                        Name = "Amount",
+                        Type = typeof(string),
+                        Desc = "Total amount",
+                        Cate = "3. Transaction",
+                        DefaultValue = String.Format("{0:#,###} VND", trans.Amount)
+                    });
+
                     int cCount = 1;
                     if (trans.Value_10K != 0)
                     {
