@@ -419,15 +419,7 @@ namespace Transaction_Statistical.Class
 
                 var allCells = worksheet.Cells[1, 1, worksheet.Dimension.End.Row, worksheet.Dimension.End.Column];
                 allCells.AutoFitColumns();
-                //allCells.Style.Border.Top.Style = ExcelBorderStyle.Thin;
-                //allCells.Style.Border.Bottom.Style = ExcelBorderStyle.Thin;
-                //allCells.Style.Border.Left.Style = ExcelBorderStyle.Thin;
-                //allCells.Style.Border.Right.Style = ExcelBorderStyle.Thin;
-
-                //allCells.Style.Border.Top.Color.SetColor(Color.Black);
-                //allCells.Style.Border.Bottom.Color.SetColor(Color.Black);
-                //allCells.Style.Border.Left.Color.SetColor(Color.Black);
-                //allCells.Style.Border.Right.Color.SetColor(Color.Black);
+             
                 allCells.Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
                 allCells.Style.VerticalAlignment = ExcelVerticalAlignment.Center;
                 allCells.Style.WrapText = true;
@@ -604,12 +596,13 @@ namespace Transaction_Statistical.Class
                 for (int j = 0; j < trans.Count(); j++)
                 {
                     var itemTrans = trans[j].Value;
+                    var requestLast = itemTrans.ListRequest.Values.LastOrDefault();
                     var cycleOfTransction = cycles.Where(x => x.Value.SettlementPeriodDateBegin <= itemTrans.DateBegin
                     && x.Value.SettlementPeriodDateEnd >= itemTrans.DateBegin
                     && itemTrans.Terminal.Contains(x.Value.TerminalID)).OrderBy(x => x.Value.SettlementPeriodDateBegin).LastOrDefault().Value;
                     worksheet.Cells[indexData, index].Value = "";
                     worksheet.Cells[indexData, index + 1].Value = itemTrans.Type;
-                    worksheet.Cells[indexData, index + 2].Value = itemTrans.Status;
+                    worksheet.Cells[indexData, index + 2].Value = requestLast != null ? requestLast.Status.ToString() : "";
                     worksheet.Cells[indexData, index + 3].Value = itemTrans.Terminal;
                     worksheet.Cells[indexData, index + 4].Value = cycleOfTransction != null ? cycleOfTransction.SettlementPeriodDateBegin.ToString() : "";
                     worksheet.Cells[indexData, index + 5].Value = cycleOfTransction != null ? cycleOfTransction.SettlementPeriodDateEnd.ToString() : "";

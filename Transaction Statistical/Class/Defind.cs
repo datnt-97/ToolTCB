@@ -145,7 +145,7 @@ namespace Transaction_Statistical
                 {
                     WriteLogApplication("   ==> Auto end, result => Unsuccessfully", false, true); return false;
                 }
-                ReadTrans.Export(data[3], TemplateChoosen);
+                ReadTrans.Export(data[3], TemplateChoosen, null, null);
                 watch.Stop();
                 WriteLogApplication(string.Format("   => Export time:{0} s", watch.ElapsedMilliseconds / 1000), false, false);
                 WriteLogApplication(string.Format("   ==> File: {0}, size {1} kb", ReadTrans.FileExport, new FileInfo(ReadTrans.FileExport).Length / 1024), false, false);
@@ -387,11 +387,7 @@ namespace Transaction_Statistical
                 //w.Start();
                 foreach (string file in files)
                 {
-                    if (process != null)
-                    {
-                        process.CustomText = string.Format("Reading.. [{0}]", Path.GetFileName(file));
-                        process.PerformStep();
-                    }
+
                     ListRequest = new Dictionary<DateTime, TransactionRequest>();
                     ListEvent = new Dictionary<DateTime, TransactionEvent>();
                     string day = file.Substring(file.Length - 12, 8);
@@ -402,6 +398,11 @@ namespace Transaction_Statistical
                     contenFile = await SplitTransactionEJ(Terminal, contenFile);
                     contenFile = await FindEventDevice2Async(currentDate, Terminal, contenFile);
                     FindCounterChanged(ref contenFile, ref ListCycle);
+                    if (process != null)
+                    {
+                        process.CustomText = string.Format("Reading.. [{0}]", Path.GetFileName(file));
+                        process.PerformStep();
+                    }
 
                 }
                 //w.Stop();
@@ -429,8 +430,9 @@ namespace Transaction_Statistical
             return false;
         }
 
-        public bool Export(string exportDestination, Dictionary<int, string> templateChoosen)
+        public bool Export(string exportDestination, Dictionary<int, string> templateChoosen, ProgressBar progress, Label label)
         {
+           
             try
             {
                 FileExport = exportDestination;
@@ -455,7 +457,13 @@ namespace Transaction_Statistical
                            group => group.Key,
                            group => group.First().Value).ToDictionary(d => d.Key, d => (Transaction)d.Value);
                     });
-                    var transactionEvent = ListTransaction.ToDictionary(d => d.Key, d => d.Value.Where(x => x.Value is TransactionEvent).ToDictionary(k => k.Key, k => (TransactionEvent)k.Value));
+                    var transactionUnsuccess = new Dictionary<DateTime, Transaction>();
+                    transactionUnsuccess = transaction.Where(x => x.Value.ListRequest.Values.LastOrDefault() != null && x.Value.ListRequest.Values.LastOrDefault().Status == Status.Types.UnSucceeded).ToDictionary(x => x.Key, x => x.Value);
+
+                    var transactionUnnomal = new Dictionary<DateTime, Transaction>();
+                    transactionUnnomal = transaction.Where(x => x.Value.ListEvent.Values.Count == 0).ToDictionary(x => x.Key, x => x.Value);
+
+                    //var transactionEvent = ListTransaction.ToDictionary(d => d.Key, d => d.Value.Where(x => x.Value is TransactionEvent).ToDictionary(k => k.Key, k => (TransactionEvent)k.Value));
 
 
                     Stream stream = null;
@@ -463,6 +471,7 @@ namespace Transaction_Statistical
                     {
                         TemplateHelper template = new TemplateHelper(InitParametar.SAuthor, InitParametar.STitle, InitParametar.SComment, excelPackage);
                         // Tạo buffer memory stream để hứng file excel
+                        int i = 0;
                         foreach (var item in templateChoosen)
                         {
                             switch (item.Key)
@@ -474,15 +483,25 @@ namespace Transaction_Statistical
                                     template.BaoCaoGiaoDichTaiChinh(item.Value, OfficeOpenXml.Table.TableStyles.Custom, transaction, cycle);
                                     break;
                                 case (int)TemplateHelper.TEMPLATE.BaoCaoGiaoDichTaiChinhKhongThanhCong:
-                                    template.BaoCaoGiaoDichTaiChinh(item.Value, OfficeOpenXml.Table.TableStyles.Custom, transaction, cycle);
+                                    template.BaoCaoGiaoDichTaiChinh(item.Value, OfficeOpenXml.Table.TableStyles.Custom, transactionUnsuccess, cycle);
                                     break;
                                 case (int)TemplateHelper.TEMPLATE.BaoCaoGiaoDichTaiChinhBatThuong:
-                                    template.BaoCaoGiaoDichTaiChinh(item.Value, OfficeOpenXml.Table.TableStyles.Custom, transaction, cycle);
+                                    template.BaoCaoGiaoDichTaiChinh(item.Value, OfficeOpenXml.Table.TableStyles.Custom, transactionUnnomal, cycle);
                                     break;
                                 case (int)TemplateHelper.TEMPLATE.BaoCaoHoatDongBatThuong:
                                     template.BaoCaoHoatDongBatThuong(item.Value, OfficeOpenXml.Table.TableStyles.Custom, ListTransaction);
                                     break;
                             }
+                            if (progress != null && label != null)
+                            {
+                                float textPer = (100 * (i + 1)) / templateChoosen.Count;
+                                progress.PerformStep();
+                                label.Text = textPer.ToString("0.0") + "%";
+
+                                progress.Refresh();
+                                label.Refresh();
+                            }
+                            i++;
                         }
                         stream = template.getStream();
                         var buffer = stream as MemoryStream;
