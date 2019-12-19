@@ -145,7 +145,7 @@ namespace Transaction_Statistical
                 {
                     WriteLogApplication("   ==> Auto end, result => Unsuccessfully", false, true); return false;
                 }
-                ReadTrans.Export(data[3], TemplateChoosen);
+                ReadTrans.Export(data[3], TemplateChoosen, null);
                 watch.Stop();
                 WriteLogApplication(string.Format("   => Export time:{0} s", watch.ElapsedMilliseconds / 1000), false, false);
                 WriteLogApplication(string.Format("   ==> File: {0}, size {1} kb", ReadTrans.FileExport, new FileInfo(ReadTrans.FileExport).Length / 1024), false, false);
@@ -365,69 +365,18 @@ namespace Transaction_Statistical
                 if (R["Field"].ToString().EndsWith(@"(default)")) return R["ID"].ToString();
             return string.Empty;
         }
-        public async Task<bool> Reads(List<string> files, TextProgressBar process = null)
+
+
+        public bool Export(string exportDestination, Dictionary<int, string> templateChoosen, ProgressBar progress)
         {
 
             try
             {
-                DateTime dateBegin = DateTime.MinValue;
-                DateTime dateEnd = DateTime.Now;
-                DateTime currentDate = DateTime.MinValue;
-
-                ListTransaction = new Dictionary<string, Dictionary<DateTime, object>>();
-
-                if (process != null)
+                if (!Directory.Exists(exportDestination))
                 {
-                    process.CustomText = string.Format("Found: {0} files.", files.Count);
-                    process.Step = (process.Maximum - process.Value) / files.Count;
+                    MessageBox.Show(exportDestination + " not exists !", "Error", MessageBoxButtons.OK, MessageBoxIcon.Stop);
+                    return false;
                 }
-
-                ListCycle = new Dictionary<DateTime, Cycle>();
-                foreach (string file in files)
-                {
-                    if (process != null)
-                    {
-                        process.CustomText = string.Format("Reading.. [{0}]", Path.GetFileName(file));
-                        process.PerformStep();
-                    }
-                    ListRequest = new Dictionary<DateTime, TransactionRequest>();
-                    ListEvent = new Dictionary<DateTime, TransactionEvent>();
-                    string day = file.Substring(file.Length - 12, 8);
-                    string Terminal = Path.GetFileName(file).Substring(0, 8);
-                    string contenFile = File.ReadAllText(file);
-                    DateTime.TryParseExact(day, "yyyyMMdd", CultureInfo.InvariantCulture, DateTimeStyles.None, out currentDate);
-
-                    contenFile = await SplitTransactionEJ(Terminal, contenFile);
-                    contenFile = await FindEventDevice2Async(currentDate, Terminal, contenFile);
-                    FindCounterChanged(ref contenFile, ref ListCycle);
-
-                }
-                //CHANGE 6/12
-                var ListTransactionTemp = ListTransaction;
-                for (int c = 0; c < ListTransactionTemp.Count; c++)
-                {
-                    var item = ListTransactionTemp.ToArray()[c];
-                    var itemValue = item.Value.ToList(); ;
-                    var cycles = ListCycle.Where(x => x.Value.TerminalID.Contains(item.Key)).ToList();
-                    cycles.ForEach(x =>
-                    {
-                        ListTransaction.FirstOrDefault(x1 => x1.Key == item.Key).Value.Add(x.Key, x.Value);
-                    });
-
-                }
-                return true;
-            }
-            catch (Exception ex)
-            {
-                InitParametar.Send_Error(ex.ToString(), MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name);
-            }
-            return false;
-        }
-
-        public bool Export(string exportDestination, Dictionary<int, string> templateChoosen)
-        {
-            try
-            {
                 FileExport = exportDestination;
                 if (Directory.Exists(exportDestination))
                     FileExport = exportDestination + string.Format("\\TransactionStatistical_{0:yyyyMMdd_HH-mm}.xlsx", DateTime.Now);
@@ -450,7 +399,13 @@ namespace Transaction_Statistical
                            group => group.Key,
                            group => group.First().Value).ToDictionary(d => d.Key, d => (Transaction)d.Value);
                     });
-                    var transactionEvent = ListTransaction.ToDictionary(d => d.Key, d => d.Value.Where(x => x.Value is TransactionEvent).ToDictionary(k => k.Key, k => (TransactionEvent)k.Value));
+                    var transactionUnsuccess = new Dictionary<DateTime, Transaction>();
+                    transactionUnsuccess = transaction.Where(x => x.Value.ListRequest.Values.LastOrDefault() != null && x.Value.ListRequest.Values.LastOrDefault().Status == Status.Types.UnSucceeded).ToDictionary(x => x.Key, x => x.Value);
+
+                    var transactionUnnomal = new Dictionary<DateTime, Transaction>();
+                    transactionUnnomal = transaction.Where(x => x.Value.ListEvent.Values.Count == 0).ToDictionary(x => x.Key, x => x.Value);
+
+                    //var transactionEvent = ListTransaction.ToDictionary(d => d.Key, d => d.Value.Where(x => x.Value is TransactionEvent).ToDictionary(k => k.Key, k => (TransactionEvent)k.Value));
 
 
                     Stream stream = null;
@@ -458,6 +413,7 @@ namespace Transaction_Statistical
                     {
                         TemplateHelper template = new TemplateHelper(InitParametar.SAuthor, InitParametar.STitle, InitParametar.SComment, excelPackage);
                         // Tạo buffer memory stream để hứng file excel
+                        int i = 0;
                         foreach (var item in templateChoosen)
                         {
                             switch (item.Key)
@@ -469,15 +425,21 @@ namespace Transaction_Statistical
                                     template.BaoCaoGiaoDichTaiChinh(item.Value, OfficeOpenXml.Table.TableStyles.Custom, transaction, cycle);
                                     break;
                                 case (int)TemplateHelper.TEMPLATE.BaoCaoGiaoDichTaiChinhKhongThanhCong:
-                                    template.BaoCaoGiaoDichTaiChinh(item.Value, OfficeOpenXml.Table.TableStyles.Custom, transaction, cycle);
+                                    template.BaoCaoGiaoDichTaiChinh(item.Value, OfficeOpenXml.Table.TableStyles.Custom, transactionUnsuccess, cycle);
                                     break;
                                 case (int)TemplateHelper.TEMPLATE.BaoCaoGiaoDichTaiChinhBatThuong:
-                                    template.BaoCaoGiaoDichTaiChinh(item.Value, OfficeOpenXml.Table.TableStyles.Custom, transaction, cycle);
+                                    template.BaoCaoGiaoDichTaiChinh(item.Value, OfficeOpenXml.Table.TableStyles.Custom, transactionUnnomal, cycle);
                                     break;
                                 case (int)TemplateHelper.TEMPLATE.BaoCaoHoatDongBatThuong:
                                     template.BaoCaoHoatDongBatThuong(item.Value, OfficeOpenXml.Table.TableStyles.Custom, ListTransaction);
                                     break;
                             }
+                            if (progress != null)
+                            {
+                                float textPer = (100 * (i + 1)) / templateChoosen.Count;
+                                progress.PerformStep();
+                            }
+                            i++;
                         }
                         stream = template.getStream();
                         var buffer = stream as MemoryStream;
@@ -495,6 +457,70 @@ namespace Transaction_Statistical
         }
 
 
+        public async Task<bool> Reads(List<string> files, TextProgressBar process = null)
+        {
+
+            try
+            {
+                DateTime dateBegin = DateTime.MinValue;
+                DateTime dateEnd = DateTime.Now;
+                DateTime currentDate = DateTime.MinValue;
+
+                ListTransaction = new Dictionary<string, Dictionary<DateTime, object>>();
+
+                if (process != null)
+                {
+                    process.CustomText = string.Format("Found: {0} files.", files.Count);
+                    process.Step = (process.Maximum - process.Value) / files.Count;
+                }
+
+                ListCycle = new Dictionary<DateTime, Cycle>();
+                var w = System.Diagnostics.Stopwatch.StartNew();
+                w.Start();
+                foreach (string file in files)
+                {
+
+                    ListRequest = new Dictionary<DateTime, TransactionRequest>();
+                    ListEvent = new Dictionary<DateTime, TransactionEvent>();
+                    string day = file.Substring(file.Length - 12, 8);
+                    string Terminal = Path.GetFileName(file).Substring(0, 8);
+                    string contenFile = File.ReadAllText(file);
+                    DateTime.TryParseExact(day, "yyyyMMdd", CultureInfo.InvariantCulture, DateTimeStyles.None, out currentDate);
+
+                    contenFile = await SplitTransactionEJ(Terminal, contenFile);
+                    contenFile = await FindEventDevice2Async(currentDate, Terminal, contenFile);
+                    FindCounterChangedAsync(contenFile);
+                    if (process != null)
+                    {
+                        process.CustomText = string.Format("Reading.. [{0}]", Path.GetFileName(file));
+                        process.PerformStep();
+                    }
+
+                }
+                w.Stop();
+
+                MessageBox.Show(w.ElapsedMilliseconds.ToString());
+                //CHANGE 6/12
+                var ListTransactionTemp = ListTransaction;
+                for (int c = 0; c < ListTransactionTemp.Count; c++)
+                {
+                    var item = ListTransactionTemp.ToArray()[c];
+                    var itemValue = item.Value.ToList(); ;
+                    var cycles = ListCycle.Where(x => x.Value.TerminalID.Contains(item.Key)).ToList();
+                    cycles.ForEach(x =>
+                    {
+                        ListTransaction.FirstOrDefault(x1 => x1.Key == item.Key).Value.Add(x.Key, x.Value);
+                    });
+
+                }
+                return true;
+            }
+            catch (Exception ex)
+            {
+                InitParametar.Send_Error(ex.ToString(), MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name);
+            }
+            return false;
+        }
         private async Task<string> SplitTransactionEJ(string TerminalID, string sString)
         {
             try
@@ -819,12 +845,11 @@ namespace Transaction_Statistical
                 trans = await Task.Run(() => FindEventBeginInput(trans));
                 trans = await Task.Run(() => FindEventRequest(trans.DateBegin, trans));
                 trans = await Task.Run(() => FindEventTransaction(trans, trans.DateBegin));
-
                 trans = await Task.Run(() => FindEventReceive(trans.DateBegin, trans));
                 trans = await Task.Run(() => FindEventDevice(trans, trans.DateBegin));
                 trans = await Task.Run(() => FindEventCashOutIn(trans.DateBegin, trans));
                 trans = await Task.Run(() => SplitRequest(trans));
-                //  SplitRequest(ref trans);
+                //SplitRequest(ref trans);
                 if (ListTransaction.ContainsKey(trans.Terminal))
                 {
                     if (ListTransaction[trans.Terminal].ContainsKey(trans.DateBegin))
@@ -844,7 +869,7 @@ namespace Transaction_Statistical
 
 
 
-        private bool FindCounterChanged(ref string sString, ref Dictionary<DateTime, Cycle> Cycles)
+        private bool FindCounterChangedAsync(string sString)
         {
             try
             {
@@ -862,7 +887,7 @@ namespace Transaction_Statistical
                             evt.Name = reg.Value;
                             evt.Log = key.Value.stringfind;
 
-                            if (key.Value.value.ContainsKey("Settlement"))
+                            if (key.Value.value.ContainsKey("StartDateTime"))
                             {
                                 cycleItem = new Cycle();
                                 cycleItem.LogTxt = key.Value.stringfind;
@@ -881,15 +906,9 @@ namespace Transaction_Statistical
                                 cycleItem.SerialNo = key.Value.value["SerialNo"].FirstOrDefault().Value;
 
                                 //GET CASH COUNT OUT 
-                                if (key.Value.value.ContainsKey("CashCount") && key.Value.value.ContainsKey("ListCassette"))
+                                if (key.Value.value.ContainsKey("NameCassette"))
                                 {
-                                    var dateCashCountValue = key.Value.value["TimeCashCount"].FirstOrDefault().Value;
-                                    var dateCashCount = DateTime.ParseExact(
-                                        string.Format("{0} {1}",
-                                        date.Split(' ')[0],
-                                        dateCashCountValue),
-                                        FormatDateTime_2,
-                                        CultureInfo.InvariantCulture);
+
                                     var NameCassette = key.Value.value["NameCassette"].ToArray();
                                     var TypeCassette = key.Value.value["Type"].ToArray();
                                     var DenomiCassette = key.Value.value["Denomi"].ToArray();
@@ -911,16 +930,8 @@ namespace Transaction_Statistical
 
                                 }
                                 //GET DENOMINATION COUNT 
-                                if (key.Value.value.ContainsKey("DenomiationCount")
-                                    && key.Value.value.ContainsKey("ListDeno") && key.Value.value.ContainsKey("DenoListRetract"))
+                                if (key.Value.value.ContainsKey("Name") && key.Value.value.ContainsKey("NameDenoRetract"))
                                 {
-                                    var dateDenominationCountValue = key.Value.value["TimeCashCount"].FirstOrDefault().Value;
-                                    var dateDenominationCount = DateTime.ParseExact(
-                                        string.Format("{0} {1}",
-                                        date.Split(' ')[0],
-                                        dateDenominationCountValue),
-                                        FormatDateTime_2,
-                                        CultureInfo.InvariantCulture);
                                     var NameDenomi = key.Value.value["Name"].ToArray();
                                     var DispensedDenomi = key.Value.value["Dispensed"].ToArray();
                                     var DepositedDenomi = key.Value.value["Deposited"].ToArray();
@@ -959,25 +970,26 @@ namespace Transaction_Statistical
                                     }
 
                                 }
-                                if (!Cycles.ContainsKey(startSettlement))
+                                if (!ListCycle.ContainsKey(startSettlement))
                                 {
-                                    var exItem = Cycles.Where(x => x.Value.SettlementPeriodDateBegin == cycleItem.SettlementPeriodDateBegin
+                                    var exItem = ListCycle.Where(x => x.Value.SettlementPeriodDateBegin == cycleItem.SettlementPeriodDateBegin
                                     && x.Value.SettlementPeriodDateEnd == cycleItem.SettlementPeriodDateEnd).FirstOrDefault();
                                     if (exItem.Value != null)
                                     {
-                                        Cycles.Remove(exItem.Key);
-                                        Cycles.Add(startSettlement, cycleItem);
+                                        ListCycle.Remove(exItem.Key);
+                                        ListCycle.Add(startSettlement, cycleItem);
                                     }
                                     else
                                     {
-                                        Cycles.Add(startSettlement, cycleItem);
+                                        ListCycle.Add(startSettlement, cycleItem);
                                     }
                                 }
                             }
-                            sString.Replace(key.Value.stringfind, null);
+                            //sString.Replace(key.Value.stringfind, null);
                         }
 
                     }
+
                 }
             }
             catch (Exception ex)
@@ -1001,7 +1013,6 @@ namespace Transaction_Statistical
 
                     foreach (KeyValuePair<DateTime, TransactionEvent> vars in transaction.ListEvent)
                     {
-
                         if (ListTransaction[Terminal].ContainsKey(vars.Key)) ListTransaction[Terminal].Add(vars.Key.AddMilliseconds(1), vars.Value);
                         else ListTransaction[Terminal].Add(vars.Key, vars.Value);
                     }
@@ -1023,22 +1034,29 @@ namespace Transaction_Statistical
                 req.Status = Status.Types.UnSucceeded;
                 foreach (TransactionEvent evt in transaction.ListEvent.Values)
                 {
-                    if (evt.Type.Equals(TransactionEvent.Events.TransactionReqSend))
+                    await Task.Run(() =>
                     {
-                        req = new TransactionRequest();
-                        req.DateBegin = evt.DateBegin;
-                        req.Status = Status.Types.UnSucceeded;
-                        if (CheckRequestName(evt.Data, ref req.Request)) transaction.ListRequest[req.DateBegin] = req;
-                    }
-                    else if (transaction.ListRequest.Count != 0 && (evt.Type.Equals(TransactionEvent.Events.Transaction) || evt.Type.Equals(TransactionEvent.Events.CashIn) || evt.Type.Equals(TransactionEvent.Events.CashOut)))
-                    {
-                        string name = transaction.ListRequest.LastOrDefault().Value.Request;
-                        if (!Template_TransType_Select.ContainsKey(name)) continue;
-                        if (Template_TransType_Select[name].Successful.Split(',').Contains(evt.Name))
-                            transaction.ListRequest.LastOrDefault().Value.Status = Status.Types.Succeeded;
-                        else if (Template_TransType_Select[name].UnSuccessful.Split(',').Contains(evt.Name))
-                            transaction.ListRequest.LastOrDefault().Value.Status = Status.Types.UnSucceeded;
-                    }
+                        if (evt.Type.Equals(TransactionEvent.Events.TransactionReqSend))
+                        {
+                            req = new TransactionRequest();
+                            req.DateBegin = evt.DateBegin;
+                            req.Status = Status.Types.UnSucceeded;
+                            if (CheckRequestName(evt.Data, ref req.Request)) transaction.ListRequest[req.DateBegin] = req;
+                        }
+                        else if (transaction.ListRequest.Count != 0 && (evt.Type.Equals(TransactionEvent.Events.Transaction) || evt.Type.Equals(TransactionEvent.Events.CashIn) || evt.Type.Equals(TransactionEvent.Events.CashOut)))
+                        {
+                            string name = transaction.ListRequest.LastOrDefault().Value.Request;
+                            if (Template_TransType_Select.ContainsKey(name))
+                            {
+                                if (Template_TransType_Select[name].Successful.Split(',').Contains(evt.Name))
+                                    transaction.ListRequest.LastOrDefault().Value.Status = Status.Types.Succeeded;
+                                else if (Template_TransType_Select[name].UnSuccessful.Split(',').Contains(evt.Name))
+                                    transaction.ListRequest.LastOrDefault().Value.Status = Status.Types.UnSucceeded;
+                            }
+
+                        }
+                    });
+
                 }
             }
             catch (Exception ex)
@@ -1413,7 +1431,7 @@ namespace Transaction_Statistical
             listResult = new Dictionary<int, RegesValue>();
             try
             {
-                Regex myRegex = new Regex(sReg, RegexOptions.ExplicitCapture, TimeSpan.FromSeconds(5));
+                Regex myRegex = new Regex(sReg, RegexOptions.ExplicitCapture);
                 MatchCollection m = myRegex.Matches(sString);
                 Match ma = myRegex.Match(sString);
                 if (m.Count != 0)
@@ -1449,9 +1467,8 @@ namespace Transaction_Statistical
             listResult = new Dictionary<int, RegesValueWithPatternOfGroup>();
             try
             {
-                Regex myRegex = new Regex(sReg, RegexOptions.ExplicitCapture, TimeSpan.FromSeconds(5));
+                Regex myRegex = new Regex(sReg, RegexOptions.ExplicitCapture);
                 MatchCollection m = myRegex.Matches(sString);
-                Match ma = myRegex.Match(sString);
                 if (m.Count != 0)
                 {
                     foreach (Match n in m)
@@ -1485,6 +1502,7 @@ namespace Transaction_Statistical
             }
             return false;
         }
+
 
     }
     public class UIHelper
@@ -1645,17 +1663,6 @@ namespace Transaction_Statistical
         public string Log { get => log; set => log = value; }
         public override string ToString()
         {
-            //StringBuilder sb = new StringBuilder();
-            //sb.Append(this.Dispensed);
-            //sb.Append(",");
-            //sb.Append(this.Dispensed);
-            //sb.Append(",");
-            //sb.Append(this.Deposited);
-            //sb.Append(",");
-            //sb.Append(this.Remaining);
-            //sb.Append(",");
-            //sb.Append(this.Retracted);
-            //return sb.ToString();
             return string.Format("Dispensed: {0}, Dispensed: {1}, Deposited: {2}, Remaining: {3}, Retracted: {4}, Initial: {5}",
                 Dispensed, Dispensed, Deposited, Remaining, Retracted, Initial);
         }

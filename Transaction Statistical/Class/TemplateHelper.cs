@@ -77,6 +77,25 @@ namespace Transaction_Statistical.Class
                 this.excelPackage.Workbook.Worksheets.Add(WorksheetsName);
                 var lastWS = excelPackage.Workbook.Worksheets.Last();
                 int index = 2;
+                //DRAW CHUDE
+                using (ExcelRange rng = lastWS.Cells["A1:I1"])
+                {
+                    rng.Style.Fill.PatternType = OfficeOpenXml.Style.ExcelFillStyle.Solid;
+                    rng.Style.Fill.BackgroundColor.SetColor(Color.FromArgb(252, 228, 214));
+                    rng.Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+                    rng.Style.VerticalAlignment = ExcelVerticalAlignment.Center;
+
+                    rng.Style.Border.Top.Style = ExcelBorderStyle.Thin;
+                    rng.Style.Border.Bottom.Style = ExcelBorderStyle.Thin;
+                    rng.Style.Border.Left.Style = ExcelBorderStyle.Thin;
+                    rng.Style.Border.Right.Style = ExcelBorderStyle.Thin;
+
+
+                    rng.Style.Border.Top.Color.SetColor(Color.Black);
+                    rng.Style.Border.Bottom.Color.SetColor(Color.Black);
+                    rng.Style.Border.Left.Color.SetColor(Color.Black);
+                    rng.Style.Border.Right.Color.SetColor(Color.Black);
+                }
                 foreach (var item in ListTransaction)
                 {
                     var cycles = item.Value.Where(x => x.Value is Cycle).ToDictionary(x => x.Key, x => (Cycle)x.Value);
@@ -319,14 +338,7 @@ namespace Transaction_Statistical.Class
                     int timesWithdrawalStuck = withdrawalStuck.Count();
                     int timesDepositStuck = depositStuck.Count();
 
-                    //DRAW CHUDE
-                    using (ExcelRange rng = worksheet.Cells["A1:I1"])
-                    {
-                        rng.Style.Fill.PatternType = OfficeOpenXml.Style.ExcelFillStyle.Solid;
-                        rng.Style.Fill.BackgroundColor.SetColor(Color.FromArgb(252, 228, 214));
-                        rng.Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
-                        rng.Style.VerticalAlignment = ExcelVerticalAlignment.Center;
-                    }
+
                     worksheet.Cells["A1"].Value = "Nội dung";
                     worksheet.Cells["B1"].Value = "ATMID";
                     worksheet.Cells["C1"].Value = "Ngày tiếp quỹ";
@@ -407,15 +419,7 @@ namespace Transaction_Statistical.Class
 
                 var allCells = worksheet.Cells[1, 1, worksheet.Dimension.End.Row, worksheet.Dimension.End.Column];
                 allCells.AutoFitColumns();
-                //allCells.Style.Border.Top.Style = ExcelBorderStyle.Thin;
-                //allCells.Style.Border.Bottom.Style = ExcelBorderStyle.Thin;
-                //allCells.Style.Border.Left.Style = ExcelBorderStyle.Thin;
-                //allCells.Style.Border.Right.Style = ExcelBorderStyle.Thin;
-
-                //allCells.Style.Border.Top.Color.SetColor(Color.Black);
-                //allCells.Style.Border.Bottom.Color.SetColor(Color.Black);
-                //allCells.Style.Border.Left.Color.SetColor(Color.Black);
-                //allCells.Style.Border.Right.Color.SetColor(Color.Black);
+             
                 allCells.Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
                 allCells.Style.VerticalAlignment = ExcelVerticalAlignment.Center;
                 allCells.Style.WrapText = true;
@@ -592,12 +596,13 @@ namespace Transaction_Statistical.Class
                 for (int j = 0; j < trans.Count(); j++)
                 {
                     var itemTrans = trans[j].Value;
+                    var requestLast = itemTrans.ListRequest.Values.LastOrDefault();
                     var cycleOfTransction = cycles.Where(x => x.Value.SettlementPeriodDateBegin <= itemTrans.DateBegin
                     && x.Value.SettlementPeriodDateEnd >= itemTrans.DateBegin
                     && itemTrans.Terminal.Contains(x.Value.TerminalID)).OrderBy(x => x.Value.SettlementPeriodDateBegin).LastOrDefault().Value;
                     worksheet.Cells[indexData, index].Value = "";
                     worksheet.Cells[indexData, index + 1].Value = itemTrans.Type;
-                    worksheet.Cells[indexData, index + 2].Value = itemTrans.Status;
+                    worksheet.Cells[indexData, index + 2].Value = requestLast != null ? requestLast.Status.ToString() : "";
                     worksheet.Cells[indexData, index + 3].Value = itemTrans.Terminal;
                     worksheet.Cells[indexData, index + 4].Value = cycleOfTransction != null ? cycleOfTransction.SettlementPeriodDateBegin.ToString() : "";
                     worksheet.Cells[indexData, index + 5].Value = cycleOfTransction != null ? cycleOfTransction.SettlementPeriodDateEnd.ToString() : "";
@@ -609,24 +614,24 @@ namespace Transaction_Statistical.Class
                     worksheet.Cells[indexData, index + 9].Value = Math.Abs(itemTrans.Value_500K * 500000) + Math.Abs(itemTrans.Value_200K * 200000) +
                     Math.Abs(itemTrans.Value_100K * 100000) + Math.Abs(itemTrans.Value_50K * 50000) + Math.Abs(itemTrans.Value_20K * 20000) +
                     Math.Abs(itemTrans.Value_10K * 10000);
-                    worksheet.Cells[indexData, index + 10].Value = itemTrans.Value_500K;
+                    worksheet.Cells[indexData, index + 10].Value = Math.Abs(itemTrans.Value_500K);
                     worksheet.Cells[indexData, index + 11].Value = 0;
-                    worksheet.Cells[indexData, index + 12].Value = itemTrans.Value_200K;
+                    worksheet.Cells[indexData, index + 12].Value = Math.Abs(itemTrans.Value_200K);
                     worksheet.Cells[indexData, index + 13].Value = 0;
-                    worksheet.Cells[indexData, index + 14].Value = itemTrans.Value_10K;
+                    worksheet.Cells[indexData, index + 14].Value = Math.Abs(itemTrans.Value_10K);
                     worksheet.Cells[indexData, index + 15].Value = 0;
-                    worksheet.Cells[indexData, index + 16].Value = itemTrans.Value_50K;
+                    worksheet.Cells[indexData, index + 16].Value = Math.Abs(itemTrans.Value_50K);
                     worksheet.Cells[indexData, index + 17].Value = 0;
-                    worksheet.Cells[indexData, index + 18].Value = itemTrans.Value_20K;
+                    worksheet.Cells[indexData, index + 18].Value = Math.Abs(itemTrans.Value_20K);
                     worksheet.Cells[indexData, index + 19].Value = 0;
-                    worksheet.Cells[indexData, index + 20].Value = itemTrans.Value_10K;
+                    worksheet.Cells[indexData, index + 20].Value = Math.Abs(itemTrans.Value_10K);
                     worksheet.Cells[indexData, index + 21].Value = 0;
-                    worksheet.Cells[indexData, index + 22].Value = itemTrans.Rejects;
+                    worksheet.Cells[indexData, index + 22].Value = Math.Abs(itemTrans.Rejects);
                     worksheet.Cells[indexData, index + 23].Value = 0;
                     worksheet.Cells[indexData, index + 24].Style.HorizontalAlignment = ExcelHorizontalAlignment.Left;
                     worksheet.Cells[indexData, index + 24].Value = itemTrans.FullFollow;
                     //worksheet.Cells[indexData, index + 25].Value = "";
-                    //indexData++;
+                    indexData++;
                 }
 
                 var allCells = worksheet.Cells[1, 1, worksheet.Dimension.End.Row, worksheet.Dimension.End.Column];

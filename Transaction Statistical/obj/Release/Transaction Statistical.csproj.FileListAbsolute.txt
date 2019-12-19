@@ -63,9 +63,6 @@ E:\Project\NPS\ToolTCB\ToolTCB\Transaction Statistical\bin\Release\EntityFramewo
 E:\Project\NPS\ToolTCB\ToolTCB\Transaction Statistical\bin\Release\EntityFramework.SqlServer.dll
 E:\Project\NPS\ToolTCB\ToolTCB\Transaction Statistical\bin\Release\EPPlus.dll
 E:\Project\NPS\ToolTCB\ToolTCB\Transaction Statistical\bin\Release\FastColoredTextBox.dll
-E:\Project\NPS\ToolTCB\ToolTCB\Transaction Statistical\bin\Release\MetroFramework.Design.dll
-E:\Project\NPS\ToolTCB\ToolTCB\Transaction Statistical\bin\Release\MetroFramework.dll
-E:\Project\NPS\ToolTCB\ToolTCB\Transaction Statistical\bin\Release\MetroFramework.Fonts.dll
 E:\Project\NPS\ToolTCB\ToolTCB\Transaction Statistical\bin\Release\System.Data.SQLite.dll
 E:\Project\NPS\ToolTCB\ToolTCB\Transaction Statistical\bin\Release\System.Data.SQLite.EF6.dll
 E:\Project\NPS\ToolTCB\ToolTCB\Transaction Statistical\bin\Release\System.Data.SQLite.Linq.dll
@@ -94,7 +91,9 @@ E:\Project\NPS\ToolTCB\ToolTCB\Transaction Statistical\obj\Release\Transaction_S
 E:\Project\NPS\ToolTCB\ToolTCB\Transaction Statistical\obj\Release\Transaction_Statistical.UC_Menu_Startup.resources
 E:\Project\NPS\ToolTCB\ToolTCB\Transaction Statistical\obj\Release\Transaction_Statistical.UControl.UC_Transaction.resources
 E:\Project\NPS\ToolTCB\ToolTCB\Transaction Statistical\obj\Release\Transaction Statistical.csproj.GenerateResource.cache
-E:\Project\NPS\ToolTCB\ToolTCB\Transaction Statistical\obj\Release\Transaction Statistical.csproj.CoreCompileInputs.cache
 E:\Project\NPS\ToolTCB\ToolTCB\Transaction Statistical\obj\Release\Transaction Statistical.csproj.CopyComplete
 E:\Project\NPS\ToolTCB\ToolTCB\Transaction Statistical\obj\Release\Transaction Statistical.exe
 E:\Project\NPS\ToolTCB\ToolTCB\Transaction Statistical\obj\Release\Transaction Statistical.pdb
+E:\Project\NPS\ToolTCB\ToolTCB\Transaction Statistical\bin\Release\CheckComboBox.dll
+E:\Project\NPS\ToolTCB\ToolTCB\Transaction Statistical\obj\Release\Transaction_Statistical.UControl.UC_Menu_History.resources
+E:\Project\NPS\ToolTCB\ToolTCB\Transaction Statistical\obj\Release\Transaction_Statistical.UControl.UC_NewTemplate.resources
