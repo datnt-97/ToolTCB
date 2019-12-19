@@ -39,13 +39,13 @@ namespace Transaction_Statistical.UControl
             this.txt_Path = new System.Windows.Forms.TextBox();
             this.gpBox_Actions = new System.Windows.Forms.GroupBox();
             this.label5 = new System.Windows.Forms.Label();
-            this.cbo_Event_Status = new CheckComboBoxTest.CheckedComboBox();
+            this.cbo_Event_Status = new CheckedComboBox();
             this.label6 = new System.Windows.Forms.Label();
-            this.cbo_Event = new CheckComboBoxTest.CheckedComboBox();
+            this.cbo_Event = new CheckedComboBox();
             this.label4 = new System.Windows.Forms.Label();
-            this.cbo_Trans_Status = new CheckComboBoxTest.CheckedComboBox();
+            this.cbo_Trans_Status = new CheckedComboBox();
             this.label3 = new System.Windows.Forms.Label();
-            this.cbo_Trans = new CheckComboBoxTest.CheckedComboBox();
+            this.cbo_Trans = new CheckedComboBox();
             this.tre_LstTrans = new System.Windows.Forms.TreeView();
             this.imageListTre = new System.Windows.Forms.ImageList(this.components);
             this.cb_FullTime = new System.Windows.Forms.CheckBox();
@@ -597,12 +597,12 @@ namespace Transaction_Statistical.UControl
         private TreeView tvListCycle;
         private TextProgressBar prb_Process;
         private Label label5;
-        private CheckComboBoxTest.CheckedComboBox cbo_Event_Status;
+        private CheckedComboBox cbo_Event_Status;
         private Label label6;
-        private CheckComboBoxTest.CheckedComboBox cbo_Event;
+        private CheckedComboBox cbo_Event;
         private Label label4;
-        private CheckComboBoxTest.CheckedComboBox cbo_Trans_Status;
+        private CheckedComboBox cbo_Trans_Status;
         private Label label3;
-        private CheckComboBoxTest.CheckedComboBox cbo_Trans;
+        private CheckedComboBox cbo_Trans;
     }
 }

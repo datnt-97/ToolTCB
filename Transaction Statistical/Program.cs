@@ -21,7 +21,7 @@ namespace Transaction_Statistical
             {
                 Application.EnableVisualStyles();
                 Application.SetCompatibleTextRenderingDefault(false);
-                //  Application.Run(new Frm_LoadingApp());
+                                               //  Application.Run(new Frm_LoadingApp());
                 Application.Run(new Frm_Main());
             }
             else

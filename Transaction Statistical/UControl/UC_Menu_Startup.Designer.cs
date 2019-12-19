@@ -38,12 +38,12 @@
             this.txt_TaskName = new System.Windows.Forms.TextBox();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.pnl_Month = new System.Windows.Forms.Panel();
-            this.cbo_Month = new CheckComboBoxTest.CheckedComboBox();
+            this.cbo_Month = new CheckedComboBox();
             this.label10 = new System.Windows.Forms.Label();
             this.label11 = new System.Windows.Forms.Label();
             this.Nud_Day = new System.Windows.Forms.NumericUpDown();
             this.pnl_Week = new System.Windows.Forms.Panel();
-            this.cbo_Week = new CheckComboBoxTest.CheckedComboBox();
+            this.cbo_Week = new CheckedComboBox();
             this.label9 = new System.Windows.Forms.Label();
             this.label8 = new System.Windows.Forms.Label();
             this.cbo_TypeStart = new System.Windows.Forms.ComboBox();
@@ -605,8 +605,8 @@
         private System.Windows.Forms.Label label8;
         private System.Windows.Forms.Panel pnl_Month;
         private System.Windows.Forms.Panel pnl_Week;
-        private CheckComboBoxTest.CheckedComboBox cbo_Month;
-        private CheckComboBoxTest.CheckedComboBox cbo_Week;
+        private CheckedComboBox cbo_Month;
+        private CheckedComboBox cbo_Week;
         private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn4;
         private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn5;
         private System.Windows.Forms.DataGridViewCheckBoxColumn dataGridViewCheckBoxColumn5;

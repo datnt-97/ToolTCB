@@ -53,10 +53,10 @@
             this.btn_Keyword_Import = new System.Windows.Forms.Button();
             this.btn_Keyword_Run = new System.Windows.Forms.Button();
             this.grp_Transaction = new System.Windows.Forms.GroupBox();
-            this.cbo_Transaction_UnSuccess = new CheckComboBoxTest.CheckedComboBox();
+            this.cbo_Transaction_UnSuccess = new CheckedComboBox();
             this.label4 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
-            this.cbo_Transaction_Success = new CheckComboBoxTest.CheckedComboBox();
+            this.cbo_Transaction_Success = new CheckedComboBox();
             this.btn_Transaction_Refresh = new System.Windows.Forms.Button();
             this.cbo_Transactions = new System.Windows.Forms.ComboBox();
             this.btn_Transaction_Add = new System.Windows.Forms.Button();
@@ -770,9 +770,9 @@
         private System.Windows.Forms.Button btn_Transaction_Refresh;
         private System.Windows.Forms.ComboBox cbo_Keyword_Typelog;
         private System.Windows.Forms.Button btn_RunTest2;
-        private CheckComboBoxTest.CheckedComboBox cbo_Transaction_UnSuccess;
+        private CheckedComboBox cbo_Transaction_UnSuccess;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Label label3;
-        private CheckComboBoxTest.CheckedComboBox cbo_Transaction_Success;
+        private CheckedComboBox cbo_Transaction_Success;
     }
 }

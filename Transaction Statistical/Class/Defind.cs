@@ -579,6 +579,7 @@ namespace Transaction_Statistical
                                 evt.Name = tmp.Key;
                                 evt.Status = Status.Types.Succeeded;
                                 evt.TContent = regx.stringfind;
+                                evt.Type = TransactionEvent.Events.Device;
                                 if (regx.value.ContainsKey("Time") && !string.IsNullOrEmpty(regx.value["Time"]))
                                 {
                                     DateTime.TryParseExact(string.Format("{0:yyyyMMdd}", DateCurrent) + regx.value["Time"], "yyyyMMdd" + FormatTime, CultureInfo.InvariantCulture, DateTimeStyles.None, out evt.DateBegin);
@@ -1202,6 +1203,7 @@ namespace Transaction_Statistical
             AddMoreDeposit,
             TransactionEnd,
             Transaction,
+            Device,
             CashIn,
             CashOut
         }

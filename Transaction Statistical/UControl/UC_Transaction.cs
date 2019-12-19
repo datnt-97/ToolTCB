@@ -545,18 +545,18 @@ namespace Transaction_Statistical.UControl
 
         private void cbo_CheckAll_SelectedValueChanged(object sender, EventArgs e)
         {
-            if ((sender as CheckComboBoxTest.CheckedComboBox).CheckedItems.Count == (sender as CheckComboBoxTest.CheckedComboBox).Items.Count)
-                (sender as CheckComboBoxTest.CheckedComboBox).Text = "All";
-            else if ((sender as CheckComboBoxTest.CheckedComboBox).CheckedItems.Count == 0)
-                (sender as CheckComboBoxTest.CheckedComboBox).Text = "N/A";
+            if ((sender as CheckedComboBox).CheckedItems.Count == (sender as CheckedComboBox).Items.Count)
+                (sender as CheckedComboBox).Text = "All";
+            else if ((sender as CheckedComboBox).CheckedItems.Count == 0)
+                (sender as CheckedComboBox).Text = "N/A";
         }
 
         private void cbo_Trans_TextChanged(object sender, EventArgs e)
         {
-            if ((sender as CheckComboBoxTest.CheckedComboBox).CheckedItems.Count == (sender as CheckComboBoxTest.CheckedComboBox).Items.Count)
-                (sender as CheckComboBoxTest.CheckedComboBox).Text = "All";
-            else if ((sender as CheckComboBoxTest.CheckedComboBox).CheckedItems.Count == 0)
-                (sender as CheckComboBoxTest.CheckedComboBox).Text = "N/A";
+            if ((sender as CheckedComboBox).CheckedItems.Count == (sender as CheckedComboBox).Items.Count)
+                (sender as CheckedComboBox).Text = "All";
+            else if ((sender as CheckedComboBox).CheckedItems.Count == 0)
+                (sender as CheckedComboBox).Text = "N/A";
             InitParametar.ReadTrans.Template_TransType_Select.Clear();
             foreach (var cb in cbo_Trans.CheckedItems)
                 InitParametar.ReadTrans.Template_TransType_Select[cb.ToString()] = InitParametar.ReadTrans.Template_TransType[cb.ToString()];
@@ -564,14 +564,15 @@ namespace Transaction_Statistical.UControl
 
         private void cbo_Event_TextChanged(object sender, EventArgs e)
         {
-            if ((sender as CheckComboBoxTest.CheckedComboBox).CheckedItems.Count == (sender as CheckComboBoxTest.CheckedComboBox).Items.Count)
-                (sender as CheckComboBoxTest.CheckedComboBox).Text = "All";
-            else if ((sender as CheckComboBoxTest.CheckedComboBox).CheckedItems.Count == 0)
-                (sender as CheckComboBoxTest.CheckedComboBox).Text = "N/A";
+            if ((sender as CheckedComboBox).CheckedItems.Count == (sender as CheckedComboBox).Items.Count)
+                (sender as CheckedComboBox).Text = "All";
+            else if ((sender as CheckedComboBox).CheckedItems.Count == 0)
+                (sender as CheckedComboBox).Text = "N/A";
             InitParametar.ReadTrans.Template_EventDevice_Select.Clear();
             foreach (var cb in cbo_Event.CheckedItems)
                 InitParametar.ReadTrans.Template_EventDevice_Select[cb.ToString()] = InitParametar.ReadTrans.Template_EventDevice[cb.ToString()];
         }
+
     }
 
 }
