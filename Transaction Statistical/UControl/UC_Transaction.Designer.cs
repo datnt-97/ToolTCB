@@ -87,7 +87,7 @@ namespace Transaction_Statistical.UControl
             this.txt_Path.Name = "txt_Path";
             this.txt_Path.Size = new System.Drawing.Size(651, 22);
             this.txt_Path.TabIndex = 1;
-            this.txt_Path.Text = @"E:\Project\NPS\Document\Month08\Month08\99280001-BinhDuong_";
+            this.txt_Path.Text = @"";
             this.txt_Path.MouseClick += new System.Windows.Forms.MouseEventHandler(this.txt_Path_MouseEnter);
             // 
             // gpBox_Actions
