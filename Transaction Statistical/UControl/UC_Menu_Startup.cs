@@ -36,7 +36,7 @@ namespace Transaction_Statistical
         Process process;
         public UC_Menu_Startup()
         {
-            InitializeComponent();
+            InitializeComponent2();
             uc_Explorer = new UC_Explorer();
             sqlite = new SQLiteHelper();
             process = new Process();

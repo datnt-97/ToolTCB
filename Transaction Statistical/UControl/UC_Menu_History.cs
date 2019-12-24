@@ -15,7 +15,7 @@ namespace Transaction_Statistical.UControl
     {
         public UC_Menu_History()
         {
-            InitializeComponent();
+            InitializeComponent2();
         }
 
         private void UC_History_Load(object sender, EventArgs e)

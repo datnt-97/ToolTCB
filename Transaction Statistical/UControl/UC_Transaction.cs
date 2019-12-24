@@ -22,14 +22,14 @@ namespace Transaction_Statistical.UControl
         SQLiteHelper sqlite;
         UC_Explorer uc_Explorer;
         UC_Menu uc_Menu;
-        DataGridView dataGrid;
+        Mode_DataGridView dataGrid;
         public UC_Transaction()
         {
             sqlite = new SQLiteHelper();
-            InitializeComponent();
-            Add_GUI();
+            InitializeComponent2();
+            Add_GUI();           
         }
-        #region design     
+        #region design             
 
         private void txt_Path_MouseEnter(object sender, EventArgs e)
         {
@@ -49,6 +49,7 @@ namespace Transaction_Statistical.UControl
         #endregion
         private void Add_GUI()
         {
+            cb_FullTime.Checked = true;
             prb_Process.Location = btn_Read.Location;
             prb_Process.ProgressColor = btn_Read.BZBackColor;
 
@@ -129,8 +130,13 @@ namespace Transaction_Statistical.UControl
                     InitParametar.ReadTrans.StartDate = dateTimePicker_Start.Value;
                     InitParametar.ReadTrans.EndDate = dateTimePicker_End.Value;
                 }
+                else
+                {
+                    InitParametar.ReadTrans.StartDate = DateTime.MinValue;
+                    InitParametar.ReadTrans.EndDate = DateTime.MaxValue;
+                }
 
-                if (await InitParametar.ReadTrans.Reads(lsFile_Journal, prb_Process))
+                if (await InitParametar.ReadTrans.Reads(lsFile_Journal,  prb_Process))
                 {
                     prb_Process.CustomText = "Show data";
                     btn_Export.Enabled = true;
@@ -190,8 +196,8 @@ namespace Transaction_Statistical.UControl
                     //if (!FilterDisplayTransaction((obj as Transaction).ListRequest.Values.ToList())) return;
                     TreeNode ndTransaction = ndDay.Nodes.Add(textDisplay, textDisplay);
                     ndTransaction.Tag = obj;
-                    ndTransaction.ImageKey = "Flag";
-                    ndTransaction.SelectedImageKey = "Flag_Success";
+                    ndTransaction.ImageKey = "Flag_" + (obj as Transaction).Status;
+                    ndTransaction.SelectedImageKey = "Flag";
                 }
                 else if (obj is TransactionEvent)
                 {
@@ -449,15 +455,21 @@ namespace Transaction_Statistical.UControl
             {
                 panel5.Controls.RemoveAt(0);
             }
-            dataGrid = new DataGridView();
-            dataGrid.BackgroundColor = Color.FromArgb(37, 37, 38);
+            dataGrid = new Mode_DataGridView();
+            dataGrid.BackgroundColor = InitGUI.Custom.Cycle_Background.DisplayColor;
+            dataGrid.ForeColor = InitGUI.Custom.Cycle_Text.DisplayColor;
+            dataGrid.DefaultCellStyle.BackColor = InitGUI.Custom.Cycle_Background.DisplayColor;
+            dataGrid.RowHeadersVisible = false;
+            dataGrid.BorderStyle = BorderStyle.None;
+            dataGrid.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+            dataGrid.AllowUserToAddRows = false;
+            dataGrid.Dock = DockStyle.Fill;
 
             fctxt_FullLog.Text = cycle.LogTxt;
             var denoCount = cycle.DenominationCount.ToList();
             var cashCount = cycle.Cashcount_Out.ToList();
             if (denoCount != null)
             {
-                dataGrid.Dock = DockStyle.Fill;
                 BindingSource dtsDeno = new BindingSource();
 
                 int rowMidle = denoCount.Count / 2;
@@ -480,6 +492,9 @@ namespace Transaction_Statistical.UControl
                     denoCountS.Add(c);
                 });
                 dtsDeno.DataSource = denoCountS;
+               // dataGrid.RowTemplate.Resizable = DataGridViewTriState.True;
+                dataGrid.RowTemplate.Height = (panel5.Height - dataGrid.ColumnHeadersHeight) / denoCountS.Count;
+
                 dataGrid.DataSource = dtsDeno;
                 //dataGrid.ColumnHeaderMouseClick = gridViewClickHeader(sender,, dataGrid);
                 dataGrid.CellPainting += new DataGridViewCellPaintingEventHandler(dataGridView1_CellPainting);
@@ -487,11 +502,8 @@ namespace Transaction_Statistical.UControl
                 {
                     column.SortMode = DataGridViewColumnSortMode.Automatic;
                 }
-
-                dataGrid.AllowUserToAddRows = false;
-                dataGrid.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.DisplayedCells;
-                panel5.Controls.Add(dataGrid);
-
+               // dataGrid.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.DisplayedCells;
+                panel5.Controls.Add(dataGrid);               
             }
         }
         bool IsTheSameCellValue(int column, int row)

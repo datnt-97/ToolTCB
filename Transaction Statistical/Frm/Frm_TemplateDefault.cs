@@ -15,10 +15,15 @@ namespace Transaction_Statistical
     {
         public Frm_TemplateDefault(Control ctrAdd)
         {
-            InitializeComponent();
+            InitializeComponent2();
             this.Width = ctrAdd.Width + 4;
             this.Height = ctrAdd.Height + 34;
             pnl_Main.Controls.Add(ctrAdd);
+
+            InitGUI.Custom.Frm_TopToolbar.OnColorHandler += InitializeComponent_Refresh;
+            InitGUI.Custom.Frm_Border.OnColorHandler += InitializeComponent_Refresh;
+            InitGUI.Custom.Frm_TextTilte.OnColorHandler += InitializeComponent_Refresh;
+            InitGUI.Custom.Frm_Background.OnColorHandler += InitializeComponent_Refresh;
         }
         #region Design GUI
         bool isTopPanelDragged = false;

@@ -26,7 +26,7 @@
         /// Required method for Designer support - do not modify
         /// the contents of this method with the code editor.
         /// </summary>
-        private void InitializeComponent()
+        private void InitializeComponent2()
         {
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Frm_TemplateDefault));
@@ -48,13 +48,13 @@
             // 
             // TopBorderPanel
             // 
-            this.TopBorderPanel.BackColor = System.Drawing.Color.Blue;
+            this.TopBorderPanel.BackColor = InitGUI.Custom.Frm_Border.DisplayColor;
             this.TopBorderPanel.Cursor = System.Windows.Forms.Cursors.SizeNS;
             this.TopBorderPanel.Dock = System.Windows.Forms.DockStyle.Top;
             this.TopBorderPanel.Location = new System.Drawing.Point(0, 0);
-            this.TopBorderPanel.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.TopBorderPanel.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.TopBorderPanel.Name = "TopBorderPanel";
-            this.TopBorderPanel.Size = new System.Drawing.Size(1000, 1);
+            this.TopBorderPanel.Size = new System.Drawing.Size(1333, 1);
             this.TopBorderPanel.TabIndex = 0;
             this.TopBorderPanel.MouseDown += new System.Windows.Forms.MouseEventHandler(this.TopBorderPanel_MouseDown);
             this.TopBorderPanel.MouseMove += new System.Windows.Forms.MouseEventHandler(this.TopBorderPanel_MouseMove);
@@ -64,16 +64,16 @@
             // 
             this.TopPanel.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.TopPanel.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(37)))), ((int)(((byte)(37)))), ((int)(((byte)(38)))));
+            this.TopPanel.BackColor = InitGUI.Custom.Frm_TopToolbar.DisplayColor;
             this.TopPanel.Controls.Add(this.titleCustom);
             this.TopPanel.Controls.Add(this.iconCustom);
             this.TopPanel.Controls.Add(this.maxBtnCustom);
             this.TopPanel.Controls.Add(this.minBtnCustom);
             this.TopPanel.Controls.Add(this.closebtnCustom);
             this.TopPanel.Location = new System.Drawing.Point(0, 1);
-            this.TopPanel.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.TopPanel.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.TopPanel.Name = "TopPanel";
-            this.TopPanel.Size = new System.Drawing.Size(1000, 24);
+            this.TopPanel.Size = new System.Drawing.Size(1333, 30);
             this.TopPanel.TabIndex = 1;
             this.TopPanel.MouseDown += new System.Windows.Forms.MouseEventHandler(this.TopPanel_MouseDown);
             this.TopPanel.MouseMove += new System.Windows.Forms.MouseEventHandler(this.TopPanel_MouseMove);
@@ -85,11 +85,10 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.titleCustom.BackColor = System.Drawing.Color.Transparent;
             this.titleCustom.Font = new System.Drawing.Font("Arial", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.titleCustom.ForeColor = System.Drawing.Color.White;
-            this.titleCustom.Location = new System.Drawing.Point(34, 6);
-            this.titleCustom.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.titleCustom.ForeColor = InitGUI.Custom.Frm_TextTilte.DisplayColor;
+            this.titleCustom.Location = new System.Drawing.Point(45, 7);
             this.titleCustom.Name = "titleCustom";
-            this.titleCustom.Size = new System.Drawing.Size(860, 14);
+            this.titleCustom.Size = new System.Drawing.Size(1147, 17);
             this.titleCustom.TabIndex = 8;
             this.titleCustom.Text = "Template";
             this.titleCustom.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -99,15 +98,15 @@
             // 
             // iconCustom
             // 
-            this.iconCustom.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(37)))), ((int)(((byte)(37)))), ((int)(((byte)(38)))));
+            this.iconCustom.BackColor = System.Drawing.Color.Transparent;
             this.iconCustom.BackgroundImage = global::Transaction_Statistical.Properties.Resources.favticon;
             this.iconCustom.ErrorImage = global::Transaction_Statistical.Properties.Resources.favticon;
             this.iconCustom.Image = global::Transaction_Statistical.Properties.Resources.favticon;
             this.iconCustom.InitialImage = global::Transaction_Statistical.Properties.Resources.favticon;
-            this.iconCustom.Location = new System.Drawing.Point(7, 0);
-            this.iconCustom.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.iconCustom.Location = new System.Drawing.Point(9, 0);
+            this.iconCustom.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.iconCustom.Name = "iconCustom";
-            this.iconCustom.Size = new System.Drawing.Size(22, 24);
+            this.iconCustom.Size = new System.Drawing.Size(29, 30);
             this.iconCustom.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.iconCustom.TabIndex = 7;
             this.iconCustom.TabStop = false;
@@ -115,18 +114,18 @@
             // maxBtnCustom
             // 
             this.maxBtnCustom.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.maxBtnCustom.BZBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(37)))), ((int)(((byte)(37)))), ((int)(((byte)(38)))));
+            this.maxBtnCustom.BZBackColor = InitGUI.Custom.Frm_TopToolbar.DisplayColor;
             this.maxBtnCustom.CFormState = Transaction_Statistical.AddOn.MinMaxButton.CustomFormState.Normal;
             this.maxBtnCustom.DisplayText = "_";
             this.maxBtnCustom.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.maxBtnCustom.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.maxBtnCustom.ForeColor = System.Drawing.Color.White;
-            this.maxBtnCustom.Location = new System.Drawing.Point(940, 0);
-            this.maxBtnCustom.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.maxBtnCustom.ForeColor = InitGUI.Custom.Frm_TextTilte.DisplayColor;
+            this.maxBtnCustom.Location = new System.Drawing.Point(1253, 0);
+            this.maxBtnCustom.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.maxBtnCustom.MouseClickColor1 = System.Drawing.Color.Silver;
             this.maxBtnCustom.MouseHoverColor = System.Drawing.Color.Gray;
             this.maxBtnCustom.Name = "maxBtnCustom";
-            this.maxBtnCustom.Size = new System.Drawing.Size(30, 24);
+            this.maxBtnCustom.Size = new System.Drawing.Size(40, 30);
             this.maxBtnCustom.TabIndex = 5;
             this.maxBtnCustom.Text = "minMaxButton1";
             this.maxBtnCustom.TextLocation_X = 6;
@@ -138,18 +137,18 @@
             // 
             this.minBtnCustom.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.minBtnCustom.BorderLeft = false;
-            this.minBtnCustom.BZBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(37)))), ((int)(((byte)(37)))), ((int)(((byte)(38)))));
+            this.minBtnCustom.BZBackColor = InitGUI.Custom.Frm_TopToolbar.DisplayColor;
             this.minBtnCustom.DisplayText = "_";
             this.minBtnCustom.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.minBtnCustom.Font = new System.Drawing.Font("Microsoft YaHei UI", 18F, System.Drawing.FontStyle.Bold);
-            this.minBtnCustom.ForeColor = System.Drawing.Color.White;
-            this.minBtnCustom.Location = new System.Drawing.Point(910, 0);
-            this.minBtnCustom.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.minBtnCustom.ForeColor = InitGUI.Custom.Frm_TextTilte.DisplayColor;
+            this.minBtnCustom.Location = new System.Drawing.Point(1213, 0);
+            this.minBtnCustom.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.minBtnCustom.MouseClickColor1 = System.Drawing.Color.Silver;
             this.minBtnCustom.MouseHoverColor = System.Drawing.Color.Gray;
             this.minBtnCustom.Name = "minBtnCustom";
             this.minBtnCustom.NotchangeAfterMouseUP = false;
-            this.minBtnCustom.Size = new System.Drawing.Size(30, 24);
+            this.minBtnCustom.Size = new System.Drawing.Size(40, 30);
             this.minBtnCustom.TabIndex = 1;
             this.minBtnCustom.Text = "_";
             this.minBtnCustom.TextLocation_X = 4;
@@ -162,18 +161,18 @@
             // 
             this.closebtnCustom.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.closebtnCustom.BorderLeft = false;
-            this.closebtnCustom.BZBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(37)))), ((int)(((byte)(37)))), ((int)(((byte)(38)))));
+            this.closebtnCustom.BZBackColor = InitGUI.Custom.Frm_TopToolbar.DisplayColor;
             this.closebtnCustom.DisplayText = "X";
             this.closebtnCustom.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.closebtnCustom.Font = new System.Drawing.Font("Microsoft YaHei UI", 11.25F, System.Drawing.FontStyle.Bold);
-            this.closebtnCustom.ForeColor = System.Drawing.Color.White;
-            this.closebtnCustom.Location = new System.Drawing.Point(970, 0);
-            this.closebtnCustom.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.closebtnCustom.ForeColor = InitGUI.Custom.Frm_TextTilte.DisplayColor;
+            this.closebtnCustom.Location = new System.Drawing.Point(1293, 0);
+            this.closebtnCustom.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.closebtnCustom.MouseClickColor1 = System.Drawing.Color.FromArgb(((int)(((byte)(150)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
             this.closebtnCustom.MouseHoverColor = System.Drawing.Color.Gray;
             this.closebtnCustom.Name = "closebtnCustom";
             this.closebtnCustom.NotchangeAfterMouseUP = false;
-            this.closebtnCustom.Size = new System.Drawing.Size(30, 24);
+            this.closebtnCustom.Size = new System.Drawing.Size(40, 30);
             this.closebtnCustom.TabIndex = 0;
             this.closebtnCustom.Text = "X";
             this.closebtnCustom.TextLocation_X = 6;
@@ -184,13 +183,13 @@
             // 
             // LeftPanel
             // 
-            this.LeftPanel.BackColor = System.Drawing.Color.Blue;
+            this.LeftPanel.BackColor = InitGUI.Custom.Frm_Border.DisplayColor;
             this.LeftPanel.Cursor = System.Windows.Forms.Cursors.SizeWE;
             this.LeftPanel.Dock = System.Windows.Forms.DockStyle.Left;
             this.LeftPanel.Location = new System.Drawing.Point(0, 1);
-            this.LeftPanel.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.LeftPanel.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.LeftPanel.Name = "LeftPanel";
-            this.LeftPanel.Size = new System.Drawing.Size(1, 431);
+            this.LeftPanel.Size = new System.Drawing.Size(1, 531);
             this.LeftPanel.TabIndex = 2;
             this.LeftPanel.MouseDown += new System.Windows.Forms.MouseEventHandler(this.LeftPanel_MouseDown);
             this.LeftPanel.MouseMove += new System.Windows.Forms.MouseEventHandler(this.LeftPanel_MouseMove);
@@ -198,13 +197,13 @@
             // 
             // RightPanel
             // 
-            this.RightPanel.BackColor = System.Drawing.Color.Blue;
+            this.RightPanel.BackColor = InitGUI.Custom.Frm_Border.DisplayColor;
             this.RightPanel.Cursor = System.Windows.Forms.Cursors.SizeWE;
             this.RightPanel.Dock = System.Windows.Forms.DockStyle.Right;
-            this.RightPanel.Location = new System.Drawing.Point(999, 1);
-            this.RightPanel.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.RightPanel.Location = new System.Drawing.Point(1332, 1);
+            this.RightPanel.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.RightPanel.Name = "RightPanel";
-            this.RightPanel.Size = new System.Drawing.Size(1, 431);
+            this.RightPanel.Size = new System.Drawing.Size(1, 531);
             this.RightPanel.TabIndex = 3;
             this.RightPanel.MouseDown += new System.Windows.Forms.MouseEventHandler(this.RightPanel_MouseDown);
             this.RightPanel.MouseMove += new System.Windows.Forms.MouseEventHandler(this.RightPanel_MouseMove);
@@ -212,13 +211,13 @@
             // 
             // BottomPanel
             // 
-            this.BottomPanel.BackColor = System.Drawing.Color.Blue;
+            this.BottomPanel.BackColor = InitGUI.Custom.Frm_Border.DisplayColor;
             this.BottomPanel.Cursor = System.Windows.Forms.Cursors.SizeNS;
             this.BottomPanel.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.BottomPanel.Location = new System.Drawing.Point(1, 431);
-            this.BottomPanel.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.BottomPanel.Location = new System.Drawing.Point(1, 531);
+            this.BottomPanel.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.BottomPanel.Name = "BottomPanel";
-            this.BottomPanel.Size = new System.Drawing.Size(998, 1);
+            this.BottomPanel.Size = new System.Drawing.Size(1331, 1);
             this.BottomPanel.TabIndex = 4;
             this.BottomPanel.MouseDown += new System.Windows.Forms.MouseEventHandler(this.BottomPanel_MouseDown);
             this.BottomPanel.MouseMove += new System.Windows.Forms.MouseEventHandler(this.BottomPanel_MouseMove);
@@ -229,19 +228,19 @@
             this.pnl_Main.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.pnl_Main.Location = new System.Drawing.Point(3, 24);
-            this.pnl_Main.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.pnl_Main.Location = new System.Drawing.Point(4, 30);
+            this.pnl_Main.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.pnl_Main.Name = "pnl_Main";
-            this.pnl_Main.Size = new System.Drawing.Size(994, 402);
+            this.pnl_Main.Size = new System.Drawing.Size(1325, 495);
             this.pnl_Main.TabIndex = 5;
             this.pnl_Main.Paint += new System.Windows.Forms.PaintEventHandler(this.pnl_Main_Paint);
             // 
             // Frm_TemplateDefault
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(37)))), ((int)(((byte)(37)))), ((int)(((byte)(38)))));
-            this.ClientSize = new System.Drawing.Size(1000, 432);
+            this.BackColor = InitGUI.Custom.Frm_Background.DisplayColor;
+            this.ClientSize = new System.Drawing.Size(1333, 532);
             this.Controls.Add(this.pnl_Main);
             this.Controls.Add(this.BottomPanel);
             this.Controls.Add(this.RightPanel);
@@ -250,7 +249,7 @@
             this.Controls.Add(this.TopBorderPanel);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.Name = "Frm_TemplateDefault";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Transaction Statistical";
@@ -259,7 +258,22 @@
             this.ResumeLayout(false);
 
         }
-
+        private void InitializeComponent_Refresh(object sender, System.Drawing.Color e)
+        {
+            this.TopBorderPanel.BackColor = InitGUI.Custom.Frm_Border.DisplayColor;
+            this.titleCustom.ForeColor = InitGUI.Custom.Frm_TextTilte.DisplayColor;
+            this.TopPanel.BackColor = InitGUI.Custom.Frm_TopToolbar.DisplayColor;
+            this.maxBtnCustom.BZBackColor = InitGUI.Custom.Frm_TopToolbar.DisplayColor;
+            this.maxBtnCustom.ForeColor = InitGUI.Custom.Frm_TextTilte.DisplayColor;
+            this.minBtnCustom.BZBackColor = InitGUI.Custom.Frm_TopToolbar.DisplayColor;
+            this.minBtnCustom.ForeColor = InitGUI.Custom.Frm_TextTilte.DisplayColor;
+            this.closebtnCustom.BZBackColor = InitGUI.Custom.Frm_TopToolbar.DisplayColor;
+            this.closebtnCustom.ForeColor = InitGUI.Custom.Frm_TextTilte.DisplayColor;
+            this.LeftPanel.BackColor = InitGUI.Custom.Frm_Border.DisplayColor;
+            this.RightPanel.BackColor = InitGUI.Custom.Frm_Border.DisplayColor;
+            this.BottomPanel.BackColor = InitGUI.Custom.Frm_Border.DisplayColor;
+            this.BackColor = InitGUI.Custom.Frm_Background.DisplayColor;
+        }
         #endregion
 
         private System.Windows.Forms.Panel TopBorderPanel;

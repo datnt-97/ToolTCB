@@ -18,10 +18,14 @@ namespace Transaction_Statistical
         string template_ID;
         public UC_CfgTemplate(string Template_ID)
         {
-            InitializeComponent();
+            InitializeComponent2();
             sqlite = new SQLiteHelper();
             template_ID = Template_ID;
             LoadTypeLog();
+        }
+        private void ChangedColor(object sender, Color e)
+        {
+           
         }
         private void LoadTypeLog()
         {

@@ -18,21 +18,20 @@ namespace Transaction_Statistical.UControl
         bool showMenu = false;
         public UC_Menu()
         {
-            InitializeComponent();
+            InitializeComponent2();
            addUserCfg();          
         }
         public UC_Menu(Control _Parent)
         {
-            InitializeComponent();
+            InitializeComponent2();
             addUserCfg();
             this.BackColor = System.Drawing.Color.Transparent;
             this.Location = new System.Drawing.Point(-10000, 100); 
           //  this.Location = new Point(-this.Width, this.Location.Y);
          
-            _Parent.Controls.Add(this);
-            this.BringToFront();
-            this.SendToBack();
+            _Parent.Controls.Add(this);           
             _Parent.Controls.SetChildIndex(this, 0);
+
             
         }
         public void SlideMenuShow()
@@ -66,6 +65,7 @@ namespace Transaction_Statistical.UControl
             ucOVerview.Height = this.Height - 2;
             ucOVerview.Location = new Point(pnl_Menu.Width, 1);
             ucOVerview.TabIndex = btn_Overview.TabIndex;
+            ucOVerview.BackColor = InitGUI.Custom.Menu_RightBckgd.DisplayColor;
             this.Controls.Add(ucOVerview);
 
             UC_Menu_Dashboard ucDashboard = new UC_Menu_Dashboard();
@@ -73,6 +73,7 @@ namespace Transaction_Statistical.UControl
             ucDashboard.Height = this.Height - 2;
             ucDashboard.Location = new Point(pnl_Menu.Width, 1);
             ucDashboard.TabIndex = btn_Dashboard.TabIndex;
+            ucDashboard.BackColor = InitGUI.Custom.Menu_RightBckgd.DisplayColor;
             this.Controls.Add(ucDashboard);
 
             UC_Menu_Startup ucStartup = new UC_Menu_Startup();
@@ -80,24 +81,26 @@ namespace Transaction_Statistical.UControl
             ucStartup.Height = this.Height - 2;
             ucStartup.Location = new Point(pnl_Menu.Width, 1);
             ucStartup.TabIndex = btn_Startup.TabIndex;
+            ucStartup.BackColor = InitGUI.Custom.Menu_RightBckgd.DisplayColor;
             this.Controls.Add(ucStartup);
 
             UC_Menu_History ucHistory = new UC_Menu_History();
             ucHistory.Width = this.Width - 1 - pnl_Menu.Width;
             ucHistory.Height = this.Height - 2;
             ucHistory.Location = new Point(pnl_Menu.Width, 1);
-            ucHistory.TabIndex = btn_History.TabIndex;            
+            ucHistory.TabIndex = btn_History.TabIndex;
+            ucHistory.BackColor = InitGUI.Custom.Menu_RightBckgd.DisplayColor;
             this.Controls.Add(ucHistory);
         }
 
         private void menu_MouseClick(object sender, MouseEventArgs e)
         {
-            (sender as AddOn.ButtonZ).BZBackColor = (sender as AddOn.ButtonZ).BackColor = Color.FromArgb(20, 120, 240);
+            (sender as AddOn.ButtonZ).BZBackColor = (sender as AddOn.ButtonZ).BackColor = InitGUI.Custom.Menu_Button.DisplayColor;
             foreach (Control ctr in pnl_Menu.Controls)
             {
                 if (ctr.TabIndex != (sender as AddOn.ButtonZ).TabIndex && ctr is AddOn.ButtonZ)
                 {
-                    (ctr as AddOn.ButtonZ).BZBackColor = Color.FromArgb(64, 64, 64);
+                    (ctr as AddOn.ButtonZ).BZBackColor = InitGUI.Custom.Menu_LeftBckgd.DisplayColor;
                     (ctr as AddOn.ButtonZ).Clicked = false;
                 }
             }

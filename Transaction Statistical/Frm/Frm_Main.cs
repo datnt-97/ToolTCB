@@ -9,28 +9,14 @@ namespace Transaction_Statistical
     {
         public Frm_Main()
         {
-            InitializeComponent();
-
-            //uc_cfgtemplate uc_templatecfg = new uc_cfgtemplate("65");
-            //uc_templatecfg.dock = dockstyle.fill;
-            //frm_templatedefault frm_templatecfg = new frm_templatedefault(uc_templatecfg);
-            //frm_templatecfg.titlecustom.text = "template config";
-            //frm_templatecfg.show();
-
-            //UC_Menu_Startup uc_MenuStartup = new UC_Menu_Startup();
-            //uc_MenuStartup.Dock = DockStyle.Fill;
-            //Frm_TemplateDefault frm_Startup = new Frm_TemplateDefault(uc_MenuStartup);
-            //frm_Startup.titleCustom.Text = "Startup";
-            //frm_Startup.ShowDialog();
-
+            InitializeComponent2();
 
             TabPanelControl tpc = new TabPanelControl();
             tpc.Dock = DockStyle.Fill;
             UControl.UC_Transaction uc_Transaction = new UControl.UC_Transaction();
             uc_Transaction.Dock = DockStyle.Fill;
             tpc.Controls.Add(uc_Transaction);
-            tabControlX1.AddTab("Transaction Statistical", tpc, false);
-
+            tabControlX1.AddTab("Transaction Statistical", tpc, false);          
         }
         #region Design GUI
         bool isTopPanelDragged = false;
@@ -44,6 +30,7 @@ namespace Transaction_Statistical
         Point _normalWindowLocation = Point.Empty;
         //**********************************************************************
         //top border panel
+       
         private void TopBorderPanel_MouseDown(object sender, MouseEventArgs e)
         {
             if (e.Button == MouseButtons.Left)

@@ -69,7 +69,7 @@ namespace Transaction_Statistical.AddOn
         public MinMaxButton()
         {
             this.Size = new System.Drawing.Size(31, 24);
-            this.ForeColor = Color.White;
+         //   this.ForeColor = Color.White;
             this.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.Text = "";
             text = this.Text;

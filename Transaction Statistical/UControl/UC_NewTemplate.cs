@@ -15,7 +15,7 @@ namespace Transaction_Statistical.UControl
     {
         public UC_NewTemplate()
         {
-            InitializeComponent();
+            InitializeComponent2();
             LoadInfo();
         }
         public void LoadInfo()

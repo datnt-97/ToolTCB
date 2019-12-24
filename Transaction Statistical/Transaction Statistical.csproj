@@ -77,6 +77,12 @@
     <Compile Include="AddOn\buttonMenu.cs">
       <SubType>UserControl</SubType>
     </Compile>
+    <Compile Include="AddOn\ButtonSetColor.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="AddOn\ButtonSetColor.Designer.cs">
+      <DependentUpon>ButtonSetColor.cs</DependentUpon>
+    </Compile>
     <Compile Include="AddOn\buttonX.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -86,6 +92,7 @@
     <Compile Include="AddOn\CheckboxCombobox.Designer.cs">
       <DependentUpon>CheckboxCombobox.cs</DependentUpon>
     </Compile>
+    <Compile Include="AddOn\InitGUI.cs" />
     <Compile Include="AddOn\TextProcessBar.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -151,6 +158,12 @@
     <Compile Include="UControl\UC_CfgTemplate.Designer.cs">
       <DependentUpon>UC_CfgTemplate.cs</DependentUpon>
     </Compile>
+    <Compile Include="UControl\UC_CustomTemplate.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UControl\UC_CustomTemplate.Designer.cs">
+      <DependentUpon>UC_CustomTemplate.cs</DependentUpon>
+    </Compile>
     <Compile Include="UControl\UC_Explorer.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -214,6 +227,9 @@
     <EmbeddedResource Include="AddOn\buttonMenu.resx">
       <DependentUpon>buttonMenu.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="AddOn\ButtonSetColor.resx">
+      <DependentUpon>ButtonSetColor.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="AddOn\TabControlX.resx">
       <DependentUpon>TabControlX.cs</DependentUpon>
     </EmbeddedResource>
@@ -244,6 +260,9 @@
     </Compile>
     <EmbeddedResource Include="UControl\UC_CfgTemplate.resx">
       <DependentUpon>UC_CfgTemplate.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UControl\UC_CustomTemplate.resx">
+      <DependentUpon>UC_CustomTemplate.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UControl\UC_Explorer.resx">
       <DependentUpon>UC_Explorer.cs</DependentUpon>

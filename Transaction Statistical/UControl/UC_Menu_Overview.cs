@@ -13,22 +13,35 @@ namespace Transaction_Statistical.UControl
 {
     public partial class UC_Menu_Overview : UserControl
     {
+        Mode_Button bt_Custom;
         public UC_Menu_Overview()
         {
-            InitializeComponent();
+            InitializeComponent2();
             LoadInfo();
         }
         public void LoadInfo()
         {
             try
             {
+                bt_Custom.Visible = false;
+                if (InitGUI.Mode == InitGUI_Mode.Dark) rd_Mode_Dark.Checked = true;
+                else if (InitGUI.Mode == InitGUI_Mode.Light) rd_Mode_Ligh.Checked = true;
+                else
+                {
+                    rd_Mode_Custom.Checked = true;
+                    bt_Custom.Visible = true;
+                }
+                rd_Mode_Dark.CheckedChanged += new System.EventHandler(Style_Select);
+                rd_Mode_Ligh.CheckedChanged += new System.EventHandler(Style_Select);
+                rd_Mode_Custom.CheckedChanged += new System.EventHandler(Style_Select);
+
                 cbo_LstTemplate.Items.Clear();
                 DataTable cfg_vendor = InitParametar.sqlite.GetTableDataWith2ColumnName("CfgData", "Type_ID", "60", "Parent_ID", "54");
                 foreach (DataRow R in cfg_vendor.Rows)
                 {
                     ComboBoxItem cb = new ComboBoxItem();
                     cb.Text = R["Field"].ToString();
-                    cb.Value = R["ID"].ToString();
+                    cb.Value = R["ID"].ToString();                    
                     cbo_LstTemplate.Items.Add(cb);
                     // if (cb.Value.Equals(InitParametar.TemplateTransactionID.ToString())) cbo_LstTemplate.SelectedItem = cb;
                     if (cb.Text.EndsWith(@"(default)"))
@@ -42,7 +55,38 @@ namespace Transaction_Statistical.UControl
                 InitParametar.Send_Error(ex.ToString(), MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name);
             }
         }
+        private void Style_Select(object sender, EventArgs e)
+        {
+            if (!(sender as Mode_RadioButton).Checked) return;
+            if ((sender as Mode_RadioButton).Text.Equals(InitGUI_Mode.Custom.ToString()))
+                bt_Custom.Visible = true;
+            else
+                bt_Custom.Visible = false;
+            if (InitParametar.sqlite.Update1Entry("CfgData", "Field", (sender as Mode_RadioButton).Text, "ID", "52"))
+                MessageBox.Show("Update successfuly.\n You need restart application.", "Update style");
+            else
+                MessageBox.Show("Update unsuccessfuly", "Update style", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            InitGUI.Init();
+        }
 
+        
+        private void btn_Edit_Custom_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                if (InitGUI.Custom.IsDisposed) InitGUI.Custom = new GUI_Custom();
+                Frm_TemplateDefault frm = new Frm_TemplateDefault(InitGUI.Custom);
+                frm.titleCustom.Text = "Edit Custom Template";
+                frm.Show();
+                Control ctr = this.Parent;
+                while (ctr != null)
+                    if (ctr is UC_Menu) { (ctr as UC_Menu).SlideMenuShow(); break; }
+            }
+            catch (Exception ex)
+            {
+                InitParametar.Send_Error(ex.ToString(), MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name);
+            }
+        }
         private void btn_Edit_Click(object sender, EventArgs e)
         {
             try
@@ -69,7 +113,6 @@ namespace Transaction_Statistical.UControl
                 InitParametar.ReadTrans.LoadTemplateInfo();
                 if (!cb_tmp.Text.EndsWith(@"(default)"))
                 {
-
                     DataTable cfg_vendor = InitParametar.sqlite.GetTableDataWith2ColumnName("CfgData", "Type_ID", "60", "Parent_ID", "54");
                     foreach (DataRow R in cfg_vendor.Rows)
                     {
@@ -117,5 +160,6 @@ namespace Transaction_Statistical.UControl
                 MessageBox.Show("Delete fail.\n" + ex.Message, "Delete template config", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+               
     }
 }

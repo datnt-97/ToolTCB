@@ -7,7 +7,7 @@ using System.Diagnostics;
 
 namespace Transaction_Statistical
 {
-    public class CheckedComboBox : ComboBox
+    public class CheckedComboBox : Mode_ComboBox
     {
         /// <summary>
         /// Internal class to represent the dropdown list of the CheckedComboBox
@@ -186,7 +186,7 @@ namespace Transaction_Statistical
                 this.ControlBox = false;
                 this.Controls.Add(this.cclb);
                 this.ForeColor = System.Drawing.SystemColors.ControlText;
-                this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
+                this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
                 this.MinimizeBox = false;
                 this.Name = "ccbParent";
                 this.StartPosition = System.Windows.Forms.FormStartPosition.Manual;

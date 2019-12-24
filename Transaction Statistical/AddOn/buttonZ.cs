@@ -18,7 +18,7 @@ namespace Transaction_Statistical.AddOn
         private String text = "_";
         public bool borderLeft = false;
         public bool notchangeAfterMouseUP = false;
-        Panel pnl_Left;
+        public Panel pnl_Left;
         public bool Clicked = false;
 
         public bool BorderLeft

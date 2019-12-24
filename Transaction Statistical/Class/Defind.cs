@@ -237,6 +237,7 @@ namespace Transaction_Statistical
             }
         }
     }
+   
     public class TransactionType
     {
         public string Name;
@@ -367,7 +368,7 @@ namespace Transaction_Statistical
         }
 
 
-        public bool Export(string exportDestination, Dictionary<int, string> templateChoosen, ProgressBar progress)
+        public bool Export(string exportDestination, Dictionary<int, string> templateChoosen, TextProgressBar progress)
         {
 
             try
@@ -416,9 +417,11 @@ namespace Transaction_Statistical
                         int i = 0;
                         foreach (var item in templateChoosen)
                         {
+                            progress.CustomText = item.Value;
                             switch (item.Key)
                             {
                                 case (int)TemplateHelper.TEMPLATE.CanQuyTheoCouterTrenMay:
+                                   
                                     template.CanQuyTheoCouterTrenMay(item.Value, OfficeOpenXml.Table.TableStyles.Custom, cycle);
                                     break;
                                 case (int)TemplateHelper.TEMPLATE.BaoCaoGiaoDichTaiChinh:
@@ -436,7 +439,7 @@ namespace Transaction_Statistical
                             }
                             if (progress != null)
                             {
-                                float textPer = (100 * (i + 1)) / templateChoosen.Count;
+                               // float textPer = (100 * (i + 1)) / templateChoosen.Count;
                                 progress.PerformStep();
                             }
                             i++;
@@ -462,8 +465,6 @@ namespace Transaction_Statistical
 
             try
             {
-                DateTime dateBegin = DateTime.MinValue;
-                DateTime dateEnd = DateTime.Now;
                 DateTime currentDate = DateTime.MinValue;
 
                 ListTransaction = new Dictionary<string, Dictionary<DateTime, object>>();
@@ -487,15 +488,17 @@ namespace Transaction_Statistical
                     string contenFile = File.ReadAllText(file);
                     DateTime.TryParseExact(day, "yyyyMMdd", CultureInfo.InvariantCulture, DateTimeStyles.None, out currentDate);
 
-                    contenFile = await SplitTransactionEJ(Terminal, contenFile);
-                    contenFile = await FindEventDevice2Async(currentDate, Terminal, contenFile);
-                    FindCounterChangedAsync(contenFile);
-                    if (process != null)
+                    if (currentDate.Year >= StartDate.Year && currentDate.Month >= StartDate.Month && currentDate.Day >= StartDate.Day && currentDate.Year <= EndDate.Year && currentDate.Month <= EndDate.Month && currentDate.Day <= EndDate.Day)
                     {
-                        process.CustomText = string.Format("Reading.. [{0}]", Path.GetFileName(file));
-                        process.PerformStep();
+                        contenFile = await SplitTransactionEJ(Terminal, contenFile);
+                        contenFile = await FindEventDevice2Async(currentDate, Terminal, contenFile);
+                        FindCounterChangedAsync(contenFile);
+                        if (process != null)
+                        {
+                            process.CustomText = string.Format("Reading.. [{0}]", Path.GetFileName(file));
+                            process.PerformStep();
+                        }
                     }
-
                 }
                 w.Stop();
 
@@ -830,6 +833,7 @@ namespace Transaction_Statistical
             try
             {
                 DateTime.TryParseExact(val.value["DateBegin"], "MM-dd-yyyy HH:mm:ss", CultureInfo.InvariantCulture, DateTimeStyles.None, out trans.DateBegin);
+                if (DateTime.Compare(trans.DateBegin, StartDate) < 0 || DateTime.Compare(trans.DateBegin, EndDate) > 0) return;
                 DateTime.TryParseExact(string.Format("{0:MM-dd-yyyy}", trans.DateBegin) + val.value["TimeEnd"], "MM-dd-yyyy" + FormatTime, CultureInfo.InvariantCulture, DateTimeStyles.None, out trans.DateEnd);
                 trans.DateEnd.AddDays(trans.DateBegin.Day);
                 trans.DateEnd.AddMonths(trans.DateBegin.Month);
@@ -897,6 +901,7 @@ namespace Transaction_Statistical
                                 var settlementPeriodDateBegin = key.Value.value["Start"].FirstOrDefault().Value;
                                 var settlementPeriodDateEnd = key.Value.value["End"].FirstOrDefault().Value;
                                 var startSettlement = DateTime.ParseExact(date, FormatDateTime_2, CultureInfo.InvariantCulture);
+                                if (DateTime.Compare(startSettlement, StartDate) < 0 || DateTime.Compare(startSettlement, EndDate) > 0) continue;
                                 var periodDateBegin = DateTime.ParseExact(settlementPeriodDateBegin, FormatDateTime_2, CultureInfo.InvariantCulture);
                                 var periodDateEnd = DateTime.ParseExact(settlementPeriodDateEnd, FormatDateTime_2, CultureInfo.InvariantCulture);
                                 cycleItem.SettlementPeriodDateBegin = periodDateBegin;
@@ -1010,10 +1015,11 @@ namespace Transaction_Statistical
                 transaction = await Task.Run(() => FindEventDevice(transaction, DateCurrent));
                 if (transaction.ListEvent.Count > 0)
                 {
-
                     foreach (KeyValuePair<DateTime, TransactionEvent> vars in transaction.ListEvent)
                     {
-                        if (ListTransaction[Terminal].ContainsKey(vars.Key)) ListTransaction[Terminal].Add(vars.Key.AddMilliseconds(1), vars.Value);
+                        if (DateTime.Compare(vars.Key, StartDate) < 0 || DateTime.Compare(vars.Key, EndDate) > 0) continue;
+                        if (!ListTransaction.ContainsKey(Terminal)) ListTransaction[Terminal] = new Dictionary<DateTime, object>();
+                        else if (ListTransaction[Terminal].ContainsKey(vars.Key)) ListTransaction[Terminal].Add(vars.Key.AddMilliseconds(1), vars.Value);
                         else ListTransaction[Terminal].Add(vars.Key, vars.Value);
                     }
                 }
@@ -1032,6 +1038,7 @@ namespace Transaction_Statistical
                 TransactionRequest req = new TransactionRequest();
                 req.DateBegin = transaction.DateBegin;
                 req.Status = Status.Types.UnSucceeded;
+                transaction.Status = Status.Types.Warning.ToString();
                 foreach (TransactionEvent evt in transaction.ListEvent.Values)
                 {
                     await Task.Run(() =>
@@ -1049,9 +1056,15 @@ namespace Transaction_Statistical
                             if (Template_TransType_Select.ContainsKey(name))
                             {
                                 if (Template_TransType_Select[name].Successful.Split(',').Contains(evt.Name))
+                                {
                                     transaction.ListRequest.LastOrDefault().Value.Status = Status.Types.Succeeded;
+                                    transaction.Status = Status.Types.Succeeded.ToString();
+                                }
                                 else if (Template_TransType_Select[name].UnSuccessful.Split(',').Contains(evt.Name))
+                                {
                                     transaction.ListRequest.LastOrDefault().Value.Status = Status.Types.UnSucceeded;
+                                    transaction.Status = Status.Types.UnSucceeded.ToString();
+                                }
                             }
 
                         }
@@ -1270,8 +1283,7 @@ namespace Transaction_Statistical
             // return String.Format("{0:HH:mm:ss }", DateBegin) + Request;
         }
     }
-
-
+    
 
     public class RegesValue
     {
@@ -1292,140 +1304,7 @@ namespace Transaction_Statistical
 
     }
     public class Regexs
-    {
-        //public static Dictionary<int, RegesValue> RunPatternRegular(string sString, string sReg, bool ShowMessage)
-        //{
-
-        //    Dictionary<int, RegesValue> listResult = new Dictionary<int, RegesValue>();
-
-        //    try
-        //    {
-
-        //        Regex myRegex = new Regex(sReg);
-        //        MatchCollection m = myRegex.Matches(sString);
-        //        if (m.Count != 0)
-        //        {
-        //            // m.Groups[""].Captures.
-
-        //            List<string> listVar = new List<string>();
-        //            bool var1 = false;
-        //            bool var2 = false;
-        //            string var = string.Empty;
-        //            foreach (char c in sReg)
-        //            {
-        //                if (c == '?')
-        //                {
-        //                    var1 = true;
-        //                }
-        //                else if (c == '<') var2 = true;
-        //                else if (c == '>') { var1 = var2 = false; listVar.Add(var); var = string.Empty; }
-        //                else if (var1 && var2)
-        //                {
-        //                    var += c;
-        //                }
-        //            }
-        //            int k = 0;
-        //            string result = string.Empty;
-        //            foreach (Match n in m)
-        //            {
-        //                RegesValue results = new RegesValue();
-        //                results.stringfind = n.ToString();
-        //                results.index = n.Index;
-
-        //                k++;
-        //                string value = string.Empty;
-        //                foreach (string group in listVar)
-        //                {
-
-        //                    value += Environment.NewLine + group + " : " + n.Groups[group];
-        //                    results.value[group] = n.Groups[group].ToString();
-        //                }
-        //                result = "Found map: " + k.ToString() + "/" + m.Count.ToString() + Environment.NewLine + "-----------Map string-----------" + Environment.NewLine + n.Value + Environment.NewLine + "-----------Group map-----------" + value + Environment.NewLine;
-        //                listResult[n.Index] = results;
-        //            }
-        //            if (ShowMessage)
-        //            {
-        //                Message_Form frm = new Message_Form("Run Test Result", result);
-        //              frm.Show();
-        //            }
-
-        //        }
-        //        else
-        //        {
-        //            if (ShowMessage) MessageBox.Show("Not math :(", "Test fail", MessageBoxButtons.OK);
-        //        }
-        //    }
-        //    catch (Exception ex)
-        //    { InitParametar.Send_Error(ex.ToString(), MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name); }
-        //    return listResult;
-        //}
-        //public static bool RunPatternRegular(string sString, string sReg, bool ShowMessage, out Dictionary<int, RegesValue> listResult)
-        //{
-
-        //    listResult = new Dictionary<int, RegesValue>();
-        //    try
-        //    {
-
-        //        Regex myRegex = new Regex(sReg);
-        //        MatchCollection m = myRegex.Matches(sString);
-        //        if (m.Count != 0)
-        //        {
-        //            // m.Groups[""].Captures.
-
-        //            List<string> listVar = new List<string>();
-        //            bool var1 = false;
-        //            bool var2 = false;
-        //            string var = string.Empty;
-        //            foreach (char c in sReg)
-        //            {
-        //                if (c == '?')
-        //                {
-        //                    var1 = true;
-        //                }
-        //                else if (c == '<') var2 = true;
-        //                else if (c == '>') { var1 = var2 = false; listVar.Add(var); var = string.Empty; }
-        //                else if (var1 && var2)
-        //                {
-        //                    var += c;
-        //                }
-        //            }
-        //            int k = 0;
-        //            string result = string.Empty;
-        //            foreach (Match n in m)
-        //            {
-        //                RegesValue results = new RegesValue();
-        //                results.stringfind = n.ToString();
-        //                results.index = n.Index;
-
-        //                k++;
-        //                string value = string.Empty;
-        //                foreach (string group in listVar)
-        //                {
-
-        //                    value += Environment.NewLine + group + " : " + n.Groups[group];
-        //                    results.value[group] = n.Groups[group].ToString();
-        //                }
-        //                result = "Found map: " + k.ToString() + "/" + m.Count.ToString() + Environment.NewLine + "-----------Map string-----------" + Environment.NewLine + n.Value + Environment.NewLine + "-----------Group map-----------" + value + Environment.NewLine;
-        //                listResult[n.Index] = results;
-        //            }
-        //            if (ShowMessage)
-        //            {
-        //                Message_Form frm = new Message_Form("Run Test Result", result);
-        //                frm.Show();
-        //            }
-        //            return true;
-        //        }
-        //        else
-        //        {
-        //            if (ShowMessage) MessageBox.Show("Not math :(", "Test fail", MessageBoxButtons.OK);
-        //            else return false;
-
-        //        }
-        //    }
-        //    catch (Exception ex)
-        //    { InitParametar.Send_Error(ex.ToString(), MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name); }
-        //    return false;
-        //}
+    {        
         public static bool RunPatternRegular(string sString, string sReg, out Dictionary<int, RegesValue> listResult)
         {
             listResult = new Dictionary<int, RegesValue>();

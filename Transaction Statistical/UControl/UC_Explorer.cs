@@ -295,7 +295,7 @@ namespace Transaction_Statistical
 
         private void tre_Explorer_DoubleClick(object sender, EventArgs e)
         {
-            if (tre_Explorer.SelectedNode.Tag is FileInfo)
+            if (tre_Explorer.SelectedNode !=null && tre_Explorer.SelectedNode.Tag is FileInfo)
             {
                 string path = (tre_Explorer.SelectedNode.Tag as FileInfo).FullName;
                 Thread th_file = new Thread(() => OpenFile(path, false));

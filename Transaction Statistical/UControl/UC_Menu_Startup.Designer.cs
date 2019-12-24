@@ -26,41 +26,41 @@
         /// Required method for Designer support - do not modify 
         /// the contents of this method with the code editor.
         /// </summary>
-        private void InitializeComponent()
+        private void InitializeComponent2()
         {
             this.components = new System.ComponentModel.Container();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
-            this.label1 = new System.Windows.Forms.Label();
-            this.txt_Source = new System.Windows.Forms.TextBox();
-            this.txt_Destination = new System.Windows.Forms.TextBox();
+            this.label1 = new Mode_Label();
+            this.txt_Source = new Mode_TextBox();
+            this.txt_Destination = new Mode_TextBox();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
-            this.txt_TaskName = new System.Windows.Forms.TextBox();
-            this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.txt_TaskName = new Mode_TextBox();
+            this.groupBox1 = new Mode_GroupBox();
             this.pnl_Month = new System.Windows.Forms.Panel();
             this.cbo_Month = new CheckedComboBox();
-            this.label10 = new System.Windows.Forms.Label();
-            this.label11 = new System.Windows.Forms.Label();
+            this.label10 = new Mode_Label();
+            this.label11 = new Mode_Label();
             this.Nud_Day = new System.Windows.Forms.NumericUpDown();
             this.pnl_Week = new System.Windows.Forms.Panel();
             this.cbo_Week = new CheckedComboBox();
-            this.label9 = new System.Windows.Forms.Label();
-            this.label8 = new System.Windows.Forms.Label();
-            this.cbo_TypeStart = new System.Windows.Forms.ComboBox();
-            this.label7 = new System.Windows.Forms.Label();
-            this.ckbl_Forms = new System.Windows.Forms.CheckedListBox();
-            this.cbo_LstTemplate = new System.Windows.Forms.ComboBox();
-            this.label6 = new System.Windows.Forms.Label();
-            this.btn_Add = new System.Windows.Forms.Button();
-            this.btn_Save = new System.Windows.Forms.Button();
-            this.label5 = new System.Windows.Forms.Label();
-            this.label4 = new System.Windows.Forms.Label();
-            this.txt_HH = new System.Windows.Forms.TextBox();
-            this.label3 = new System.Windows.Forms.Label();
-            this.label2 = new System.Windows.Forms.Label();
-            this.btn_Remove = new System.Windows.Forms.Button();
-            this.groupBox3 = new System.Windows.Forms.GroupBox();
-            this.dataGridView_lsPermissions = new System.Windows.Forms.DataGridView();
+            this.label9 = new Mode_Label();
+            this.label8 = new Mode_Label();
+            this.cbo_TypeStart = new Mode_ComboBox();
+            this.label7 = new Mode_Label();
+            this.ckbl_Forms = new Mode_CheckedListBox();
+            this.cbo_LstTemplate = new Mode_ComboBox();
+            this.label6 = new Mode_Label();
+            this.btn_Add = new Mode_Button();
+            this.btn_Save = new Mode_Button();
+            this.label5 = new Mode_Label();
+            this.label4 = new Mode_Label();
+            this.txt_HH = new Mode_TextBox();
+            this.label3 = new Mode_Label();
+            this.label2 = new Mode_Label();
+            this.btn_Remove = new Mode_Button();
+            this.groupBox3 = new Mode_GroupBox();
+            this.dataGridView_lsPermissions = new Mode_DataGridView();
             this.dataGridViewTextBoxColumn4 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.dataGridViewTextBoxColumn5 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.dataGridViewCheckBoxColumn5 = new System.Windows.Forms.DataGridViewCheckBoxColumn();
@@ -77,8 +77,8 @@
             // 
             // label1
             // 
+            this.label1.ForeColor = InitGUI.Custom.Menu_Text.DisplayColor;
             this.label1.AutoSize = true;
-            this.label1.ForeColor = System.Drawing.Color.White;
             this.label1.Location = new System.Drawing.Point(91, 107);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(54, 17);
@@ -87,11 +87,11 @@
             // 
             // txt_Source
             // 
+            this.txt_Source.BackColor = InitGUI.Custom.Menu_RightBckgd.DisplayColor;
+            this.txt_Source.ForeColor = InitGUI.Custom.Menu_Text.DisplayColor;
             this.txt_Source.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.Suggest;
             this.txt_Source.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.FileSystem;
-            this.txt_Source.BackColor = System.Drawing.Color.DimGray;
             this.txt_Source.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.txt_Source.ForeColor = System.Drawing.Color.White;
             this.txt_Source.Location = new System.Drawing.Point(155, 131);
             this.txt_Source.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.txt_Source.Name = "txt_Source";
@@ -101,11 +101,11 @@
             // 
             // txt_Destination
             // 
+            this.txt_Destination.BackColor = InitGUI.Custom.Menu_RightBckgd.DisplayColor;
+            this.txt_Destination.ForeColor = InitGUI.Custom.Menu_Text.DisplayColor;
             this.txt_Destination.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.Suggest;
             this.txt_Destination.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.FileSystem;
-            this.txt_Destination.BackColor = System.Drawing.Color.DimGray;
             this.txt_Destination.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.txt_Destination.ForeColor = System.Drawing.Color.White;
             this.txt_Destination.Location = new System.Drawing.Point(155, 159);
             this.txt_Destination.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.txt_Destination.Name = "txt_Destination";
@@ -116,9 +116,9 @@
             // 
             // txt_TaskName
             // 
-            this.txt_TaskName.BackColor = System.Drawing.Color.DimGray;
+            this.txt_TaskName.BackColor = InitGUI.Custom.Menu_RightBckgd.DisplayColor; ;
+            this.txt_TaskName.ForeColor = InitGUI.Custom.Menu_Text.DisplayColor;
             this.txt_TaskName.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.txt_TaskName.ForeColor = System.Drawing.Color.White;
             this.txt_TaskName.Location = new System.Drawing.Point(155, 39);
             this.txt_TaskName.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.txt_TaskName.Name = "txt_TaskName";
@@ -150,7 +150,6 @@
             this.groupBox1.Controls.Add(this.txt_Source);
             this.groupBox1.Controls.Add(this.label1);
             this.groupBox1.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.groupBox1.ForeColor = System.Drawing.Color.White;
             this.groupBox1.Location = new System.Drawing.Point(8, 155);
             this.groupBox1.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.groupBox1.Name = "groupBox1";
@@ -174,12 +173,13 @@
             // 
             // cbo_Month
             // 
-            this.cbo_Month.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(37)))), ((int)(((byte)(37)))), ((int)(((byte)(38)))));
+            this.cbo_Month.BackColor = InitGUI.Custom.Menu_RightBckgd.DisplayColor;
+            this.cbo_Month.ForeColor = InitGUI.Custom.Menu_Text.DisplayColor;
+            this.cbo_Month.BorderColor = InitGUI.Custom.Menu_Border.DisplayColor;
             this.cbo_Month.CheckOnClick = true;
             this.cbo_Month.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawVariable;
             this.cbo_Month.DropDownHeight = 1;
             this.cbo_Month.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.cbo_Month.ForeColor = System.Drawing.Color.White;
             this.cbo_Month.FormattingEnabled = true;
             this.cbo_Month.IntegralHeight = false;
             this.cbo_Month.Location = new System.Drawing.Point(209, 4);
@@ -190,8 +190,8 @@
             // 
             // label10
             // 
+            this.label10.ForeColor = InitGUI.Custom.Menu_Text.DisplayColor;
             this.label10.AutoSize = true;
-            this.label10.ForeColor = System.Drawing.Color.White;
             this.label10.Location = new System.Drawing.Point(19, 5);
             this.label10.Name = "label10";
             this.label10.Size = new System.Drawing.Size(33, 17);
@@ -200,8 +200,8 @@
             // 
             // label11
             // 
+            this.label11.ForeColor = InitGUI.Custom.Menu_Text.DisplayColor;
             this.label11.AutoSize = true;
-            this.label11.ForeColor = System.Drawing.Color.White;
             this.label11.Location = new System.Drawing.Point(148, 7);
             this.label11.Name = "label11";
             this.label11.Size = new System.Drawing.Size(54, 17);
@@ -244,12 +244,13 @@
             // 
             // cbo_Week
             // 
-            this.cbo_Week.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(37)))), ((int)(((byte)(37)))), ((int)(((byte)(38)))));
+            this.cbo_Week.BackColor = InitGUI.Custom.Menu_RightBckgd.DisplayColor;
+            this.cbo_Week.ForeColor = InitGUI.Custom.Menu_Text.DisplayColor;
+            this.cbo_Week.BorderColor = InitGUI.Custom.Menu_Border.DisplayColor;
             this.cbo_Week.CheckOnClick = false;
             this.cbo_Week.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
             this.cbo_Week.DropDownHeight = 1;
             this.cbo_Week.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.cbo_Week.ForeColor = System.Drawing.Color.White;
             this.cbo_Week.IntegralHeight = false;
             this.cbo_Week.Location = new System.Drawing.Point(63, 4);
             this.cbo_Week.Name = "cbo_Week";
@@ -259,8 +260,8 @@
             // 
             // label9
             // 
+            this.label9.ForeColor = InitGUI.Custom.Menu_Text.DisplayColor;
             this.label9.AutoSize = true;
-            this.label9.ForeColor = System.Drawing.Color.White;
             this.label9.Location = new System.Drawing.Point(10, 7);
             this.label9.Name = "label9";
             this.label9.Size = new System.Drawing.Size(44, 17);
@@ -269,8 +270,8 @@
             // 
             // label8
             // 
+            this.label8.ForeColor = InitGUI.Custom.Menu_Text.DisplayColor;
             this.label8.AutoSize = true;
-            this.label8.ForeColor = System.Drawing.Color.White;
             this.label8.Location = new System.Drawing.Point(104, 73);
             this.label8.Name = "label8";
             this.label8.Size = new System.Drawing.Size(40, 17);
@@ -279,10 +280,11 @@
             // 
             // cbo_TypeStart
             // 
-            this.cbo_TypeStart.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(37)))), ((int)(((byte)(37)))), ((int)(((byte)(38)))));
+            this.cbo_TypeStart.BackColor = InitGUI.Custom.Menu_RightBckgd.DisplayColor;
+            this.cbo_TypeStart.ForeColor = InitGUI.Custom.Menu_Text.DisplayColor;
+            this.cbo_TypeStart.BorderColor = InitGUI.Custom.Menu_Border.DisplayColor;
             this.cbo_TypeStart.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cbo_TypeStart.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.cbo_TypeStart.ForeColor = System.Drawing.Color.White;
             this.cbo_TypeStart.FormattingEnabled = true;
             this.cbo_TypeStart.Location = new System.Drawing.Point(155, 70);
             this.cbo_TypeStart.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
@@ -293,8 +295,8 @@
             // 
             // label7
             // 
+            this.label7.ForeColor = InitGUI.Custom.Menu_Text.DisplayColor;
             this.label7.AutoSize = true;
-            this.label7.ForeColor = System.Drawing.Color.White;
             this.label7.Location = new System.Drawing.Point(56, 253);
             this.label7.Name = "label7";
             this.label7.Size = new System.Drawing.Size(88, 17);
@@ -303,10 +305,10 @@
             // 
             // ckbl_Forms
             // 
-            this.ckbl_Forms.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(37)))), ((int)(((byte)(37)))), ((int)(((byte)(38)))));
+            this.ckbl_Forms.BackColor = InitGUI.Custom.Menu_RightBckgd.DisplayColor;
+            this.ckbl_Forms.ForeColor = InitGUI.Custom.Menu_Text.DisplayColor;
             this.ckbl_Forms.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.ckbl_Forms.CheckOnClick = true;
-            this.ckbl_Forms.ForeColor = System.Drawing.Color.White;
             this.ckbl_Forms.FormattingEnabled = true;
             this.ckbl_Forms.Location = new System.Drawing.Point(155, 214);
             this.ckbl_Forms.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
@@ -316,10 +318,11 @@
             // 
             // cbo_LstTemplate
             // 
-            this.cbo_LstTemplate.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(37)))), ((int)(((byte)(37)))), ((int)(((byte)(38)))));
+            this.cbo_LstTemplate.BackColor = InitGUI.Custom.Menu_RightBckgd.DisplayColor;
+            this.cbo_LstTemplate.ForeColor = InitGUI.Custom.Menu_Text.DisplayColor;
+            this.cbo_LstTemplate.BorderColor = InitGUI.Custom.Menu_Border.DisplayColor;
             this.cbo_LstTemplate.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cbo_LstTemplate.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.cbo_LstTemplate.ForeColor = System.Drawing.Color.White;
             this.cbo_LstTemplate.FormattingEnabled = true;
             this.cbo_LstTemplate.Location = new System.Drawing.Point(155, 186);
             this.cbo_LstTemplate.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
@@ -329,8 +332,8 @@
             // 
             // label6
             // 
+            this.label6.ForeColor = InitGUI.Custom.Menu_Text.DisplayColor;
             this.label6.AutoSize = true;
-            this.label6.ForeColor = System.Drawing.Color.White;
             this.label6.Location = new System.Drawing.Point(77, 189);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(67, 17);
@@ -339,40 +342,30 @@
             // 
             // btn_Add
             // 
-            this.btn_Add.FlatAppearance.BorderColor = System.Drawing.Color.Silver;
-            this.btn_Add.FlatAppearance.MouseDownBackColor = System.Drawing.Color.DimGray;
-            this.btn_Add.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Blue;
-            this.btn_Add.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btn_Add.ForeColor = System.Drawing.Color.White;
+            this.btn_Add.BackColor = InitGUI.Custom.Menu_RightBckgd.DisplayColor;
+            this.btn_Add.ForeColor = InitGUI.Custom.Menu_Text.DisplayColor;
             this.btn_Add.Location = new System.Drawing.Point(748, 111);
-            this.btn_Add.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.btn_Add.Name = "btn_Add";
             this.btn_Add.Size = new System.Drawing.Size(105, 42);
             this.btn_Add.TabIndex = 23;
             this.btn_Add.Text = "Add";
-            this.btn_Add.UseVisualStyleBackColor = true;
             this.btn_Add.Click += new System.EventHandler(this.btn_Add_Click);
             // 
             // btn_Save
             // 
-            this.btn_Save.FlatAppearance.BorderColor = System.Drawing.Color.Silver;
-            this.btn_Save.FlatAppearance.MouseDownBackColor = System.Drawing.Color.DimGray;
-            this.btn_Save.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Blue;
-            this.btn_Save.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btn_Save.ForeColor = System.Drawing.Color.White;
+            this.btn_Save.BackColor = InitGUI.Custom.Menu_RightBckgd.DisplayColor;
+            this.btn_Save.ForeColor = InitGUI.Custom.Menu_Text.DisplayColor;
             this.btn_Save.Location = new System.Drawing.Point(748, 159);
-            this.btn_Save.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.btn_Save.Name = "btn_Save";
             this.btn_Save.Size = new System.Drawing.Size(105, 42);
             this.btn_Save.TabIndex = 22;
             this.btn_Save.Text = "Save";
-            this.btn_Save.UseVisualStyleBackColor = true;
             this.btn_Save.Click += new System.EventHandler(this.btn_Save_Click);
             // 
             // label5
             // 
+            this.label5.ForeColor = InitGUI.Custom.Menu_Text.DisplayColor;
             this.label5.AutoSize = true;
-            this.label5.ForeColor = System.Drawing.Color.White;
             this.label5.Location = new System.Drawing.Point(67, 41);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(78, 17);
@@ -381,8 +374,8 @@
             // 
             // label4
             // 
+            this.label4.ForeColor = InitGUI.Custom.Menu_Text.DisplayColor;
             this.label4.AutoSize = true;
-            this.label4.ForeColor = System.Drawing.Color.White;
             this.label4.Location = new System.Drawing.Point(215, 105);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(101, 17);
@@ -391,11 +384,11 @@
             // 
             // txt_HH
             // 
+            this.txt_HH.BackColor = InitGUI.Custom.Menu_RightBckgd.DisplayColor;
+            this.txt_HH.ForeColor = InitGUI.Custom.Menu_Text.DisplayColor;
             this.txt_HH.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.Suggest;
             this.txt_HH.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.FileSystem;
-            this.txt_HH.BackColor = System.Drawing.Color.DimGray;
             this.txt_HH.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.txt_HH.ForeColor = System.Drawing.Color.White;
             this.txt_HH.Location = new System.Drawing.Point(155, 102);
             this.txt_HH.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.txt_HH.MaxLength = 8;
@@ -408,8 +401,8 @@
             // 
             // label3
             // 
+            this.label3.ForeColor = InitGUI.Custom.Menu_Text.DisplayColor;
             this.label3.AutoSize = true;
-            this.label3.ForeColor = System.Drawing.Color.White;
             this.label3.Location = new System.Drawing.Point(23, 162);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(121, 17);
@@ -418,8 +411,8 @@
             // 
             // label2
             // 
+            this.label2.ForeColor= InitGUI.Custom.Menu_Text.DisplayColor;
             this.label2.AutoSize = true;
-            this.label2.ForeColor = System.Drawing.Color.White;
             this.label2.Location = new System.Drawing.Point(48, 133);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(96, 17);
@@ -428,24 +421,18 @@
             // 
             // btn_Remove
             // 
-            this.btn_Remove.FlatAppearance.BorderColor = System.Drawing.Color.Silver;
-            this.btn_Remove.FlatAppearance.MouseDownBackColor = System.Drawing.Color.DimGray;
-            this.btn_Remove.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Blue;
-            this.btn_Remove.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btn_Remove.ForeColor = System.Drawing.Color.White;
+            this.btn_Remove.BackColor = InitGUI.Custom.Menu_RightBckgd.DisplayColor;
+            this.btn_Remove.ForeColor = InitGUI.Custom.Menu_Text.DisplayColor;
             this.btn_Remove.Location = new System.Drawing.Point(748, 207);
-            this.btn_Remove.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.btn_Remove.Name = "btn_Remove";
             this.btn_Remove.Size = new System.Drawing.Size(105, 42);
             this.btn_Remove.TabIndex = 15;
             this.btn_Remove.Text = "Remove";
-            this.btn_Remove.UseVisualStyleBackColor = true;
             this.btn_Remove.Click += new System.EventHandler(this.btn_Remove_Click);
             // 
             // groupBox3
             // 
             this.groupBox3.Controls.Add(this.dataGridView_lsPermissions);
-            this.groupBox3.ForeColor = System.Drawing.Color.White;
             this.groupBox3.Location = new System.Drawing.Point(8, 4);
             this.groupBox3.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.groupBox3.Name = "groupBox3";
@@ -457,11 +444,12 @@
             // 
             // dataGridView_lsPermissions
             // 
+            this.dataGridView_lsPermissions.BackgroundColor = InitGUI.Custom.Menu_RightBckgd.DisplayColor;
+            this.dataGridView_lsPermissions.ForeColor = InitGUI.Custom.Menu_Text.DisplayColor;
             this.dataGridView_lsPermissions.AllowUserToAddRows = false;
             this.dataGridView_lsPermissions.AllowUserToDeleteRows = false;
             this.dataGridView_lsPermissions.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.AllCells;
             this.dataGridView_lsPermissions.AutoSizeRowsMode = System.Windows.Forms.DataGridViewAutoSizeRowsMode.DisplayedCells;
-            this.dataGridView_lsPermissions.BackgroundColor = System.Drawing.Color.FromArgb(((int)(((byte)(37)))), ((int)(((byte)(37)))), ((int)(((byte)(38)))));
             this.dataGridView_lsPermissions.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.dataGridView_lsPermissions.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridView_lsPermissions.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
@@ -472,9 +460,8 @@
             this.Column1,
             this.dataGridViewCheckBoxColumn7});
             dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(37)))), ((int)(((byte)(37)))), ((int)(((byte)(38)))));
             dataGridViewCellStyle2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle2.ForeColor = System.Drawing.Color.White;
+
             dataGridViewCellStyle2.SelectionBackColor = System.Drawing.SystemColors.Highlight;
             dataGridViewCellStyle2.SelectionForeColor = System.Drawing.Color.Lime;
             dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
@@ -531,8 +518,8 @@
             // Column1
             // 
             dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(37)))), ((int)(((byte)(37)))), ((int)(((byte)(38)))));
-            dataGridViewCellStyle1.ForeColor = System.Drawing.Color.White;
+            dataGridViewCellStyle1.BackColor = InitGUI.Custom.Menu_RightBckgd.DisplayColor;
+            dataGridViewCellStyle1.ForeColor = InitGUI.Custom.Menu_Text.DisplayColor;
             dataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Highlight;
             dataGridViewCellStyle1.SelectionForeColor = System.Drawing.Color.White;
             this.Column1.DefaultCellStyle = dataGridViewCellStyle1;
@@ -556,7 +543,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(37)))), ((int)(((byte)(37)))), ((int)(((byte)(38)))));
+            this.BackColor = InitGUI.Custom.Menu_RightBckgd.DisplayColor;
             this.Controls.Add(this.groupBox3);
             this.Controls.Add(this.groupBox1);
             this.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
@@ -573,36 +560,189 @@
             this.groupBox3.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView_lsPermissions)).EndInit();
             this.ResumeLayout(false);
+            //
+            InitGUI.Custom.Menu_Button.OnColorHandler += InitializeComponent_Refresh;
+            InitGUI.Custom.Menu_Border.OnColorHandler += InitializeComponent_Refresh;
+            InitGUI.Custom.Menu_ButtonDown.OnColorHandler += InitializeComponent_Refresh;
+            InitGUI.Custom.Menu_ButtonHover.OnColorHandler += InitializeComponent_Refresh;
+            InitGUI.Custom.Menu_LeftBckgd.OnColorHandler += InitializeComponent_Refresh;
+            InitGUI.Custom.Menu_RightBckgd.OnColorHandler += InitializeComponent_Refresh;
+            InitGUI.Custom.Menu_Text.OnColorHandler += InitializeComponent_Refresh;
 
+            InitGUI.Custom.Frm_ForeColor.OnColorHandler += InitializeComponent_Refresh;
+            InitGUI.Custom.Frm_Background.OnColorHandler += InitializeComponent_Refresh;
+
+            InitGUI.Custom.Editor_Background.OnColorHandler += InitializeComponent_Refresh;
+            InitGUI.Custom.Editor_Border.OnColorHandler += InitializeComponent_Refresh;
+            InitGUI.Custom.Editor_ForeColor.OnColorHandler += InitializeComponent_Refresh;
         }
+        private void InitializeComponent_Refresh(object sender, System.Drawing.Color e)
+        {
 
+            // 
+            // label1
+            // 
+            this.label1.ForeColor = InitGUI.Custom.Menu_Text.DisplayColor;
+            // 
+            // txt_Source
+            // 
+            this.txt_Source.BackColor = InitGUI.Custom.Menu_RightBckgd.DisplayColor;
+            this.txt_Source.ForeColor = InitGUI.Custom.Menu_Text.DisplayColor;
+            // 
+            // txt_Destination
+            // 
+            this.txt_Destination.BackColor = InitGUI.Custom.Menu_RightBckgd.DisplayColor;
+            this.txt_Destination.ForeColor = InitGUI.Custom.Menu_Text.DisplayColor;
+            // 
+            // txt_TaskName
+            // 
+            this.txt_TaskName.BackColor = InitGUI.Custom.Menu_RightBckgd.DisplayColor;
+            this.txt_TaskName.ForeColor = InitGUI.Custom.Menu_Text.DisplayColor;
+            // 
+            // groupBox1
+            //            
+            this.groupBox1.ForeColor = InitGUI.Custom.Menu_Text.DisplayColor;            
+            // 
+            // cbo_Month
+            // 
+            this.cbo_Month.BackColor = InitGUI.Custom.Menu_RightBckgd.DisplayColor; ;
+            this.cbo_Month.BorderColor= InitGUI.Custom.Menu_Border.DisplayColor;
+            this.cbo_Month.ForeColor = InitGUI.Custom.Menu_Text.DisplayColor;
+            // 
+            // label10
+            // 
+            this.label10.ForeColor= InitGUI.Custom.Menu_Text.DisplayColor;
+            // 
+            // label11
+            // 
+            this.label11.ForeColor= InitGUI.Custom.Menu_Text.DisplayColor;
+           
+            // 
+            // cbo_Week
+            // 
+            this.cbo_Week.BackColor= InitGUI.Custom.Menu_RightBckgd.DisplayColor;
+            this.cbo_Week.BorderColor = InitGUI.Custom.Menu_Border.DisplayColor;
+            this.cbo_Week.ForeColor= InitGUI.Custom.Menu_Text.DisplayColor;
+            // 
+            // label9
+            // 
+            this.label9.ForeColor= InitGUI.Custom.Menu_Text.DisplayColor;
+            // 
+            // label8
+            // 
+            this.label8.ForeColor= InitGUI.Custom.Menu_Text.DisplayColor;
+            // 
+            // cbo_TypeStart
+            // 
+            this.cbo_TypeStart.BackColor= InitGUI.Custom.Menu_RightBckgd.DisplayColor;
+            this.cbo_TypeStart.BorderColor = InitGUI.Custom.Menu_Border.DisplayColor;
+            this.cbo_TypeStart.ForeColor= InitGUI.Custom.Menu_Text.DisplayColor;
+            // 
+            // label7
+            // 
+            this.label7.ForeColor= InitGUI.Custom.Menu_Text.DisplayColor;
+            // 
+            // ckbl_Forms
+            // 
+            this.ckbl_Forms.BackColor= InitGUI.Custom.Menu_RightBckgd.DisplayColor;
+            this.ckbl_Forms.ForeColor= InitGUI.Custom.Menu_Text.DisplayColor;           
+            // 
+            // cbo_LstTemplate
+            // 
+            this.cbo_LstTemplate.BackColor= InitGUI.Custom.Menu_RightBckgd.DisplayColor;
+            this.cbo_LstTemplate.ForeColor= InitGUI.Custom.Menu_Text.DisplayColor;
+            this.cbo_LstTemplate.BorderColor= InitGUI.Custom.Menu_Border.DisplayColor;
+            // 
+            // label6
+            // 
+            this.label6.ForeColor= InitGUI.Custom.Menu_Text.DisplayColor;
+            // 
+            // btn_Add
+            // 
+            btn_Add.BackColor = InitGUI.Custom.Menu_RightBckgd.DisplayColor;
+            btn_Add.ForeColor = InitGUI.Custom.Menu_Text.DisplayColor;
+            btn_Add.FlatAppearance.BorderColor = InitGUI.Custom.Menu_Border.DisplayColor;
+            btn_Add.FlatAppearance.MouseDownBackColor = InitGUI.Custom.Menu_ButtonDown.DisplayColor;
+            btn_Add.FlatAppearance.MouseOverBackColor = InitGUI.Custom.Menu_ButtonHover.DisplayColor;
+            // 
+            // btn_Save
+            // 
+            btn_Save.BackColor = InitGUI.Custom.Menu_RightBckgd.DisplayColor;
+            btn_Save.ForeColor = InitGUI.Custom.Menu_Text.DisplayColor;
+            btn_Save.FlatAppearance.BorderColor = InitGUI.Custom.Menu_Border.DisplayColor;
+            btn_Save.FlatAppearance.MouseDownBackColor = InitGUI.Custom.Menu_ButtonDown.DisplayColor;
+            btn_Save.FlatAppearance.MouseOverBackColor = InitGUI.Custom.Menu_ButtonHover.DisplayColor;
+            // 
+            // label5
+            // 
+            this.label5.ForeColor= InitGUI.Custom.Menu_Text.DisplayColor;
+            // 
+            // label4
+            // 
+            this.label4.ForeColor = InitGUI.Custom.Menu_Text.DisplayColor;
+            // 
+            // txt_HH
+            // 
+            this.txt_HH.BackColor = InitGUI.Custom.Menu_RightBckgd.DisplayColor;
+            this.txt_HH.ForeColor = InitGUI.Custom.Menu_Text.DisplayColor;           
+            // 
+            // label3
+            // 
+            this.label3.ForeColor = InitGUI.Custom.Menu_Text.DisplayColor;
+            // 
+            // label2
+            // 
+            this.label2.ForeColor = InitGUI.Custom.Menu_Text.DisplayColor;
+            // 
+            // btn_Remove
+            // 
+            btn_Remove.BackColor = InitGUI.Custom.Menu_RightBckgd.DisplayColor;
+            btn_Remove.ForeColor = InitGUI.Custom.Menu_Text.DisplayColor;
+            btn_Remove.FlatAppearance.BorderColor = InitGUI.Custom.Menu_Border.DisplayColor;
+            btn_Remove.FlatAppearance.MouseDownBackColor = InitGUI.Custom.Menu_ButtonDown.DisplayColor;
+            btn_Remove.FlatAppearance.MouseOverBackColor = InitGUI.Custom.Menu_ButtonHover.DisplayColor;
+            // 
+            // groupBox3
+            // 
+            this.groupBox3.ForeColor = InitGUI.Custom.Menu_Text.DisplayColor;
+            // 
+            // dataGridView_lsPermissions
+            // 
+            this.dataGridView_lsPermissions.BackgroundColor= InitGUI.Custom.Menu_RightBckgd.DisplayColor;
+            this.dataGridView_lsPermissions.ForeColor= InitGUI.Custom.Menu_Text.DisplayColor;          
+            // 
+            // UC_Menu_Startup
+            //           
+            this.BackColor = InitGUI.Custom.Menu_RightBckgd.DisplayColor;           
+            
+        }
         #endregion
-        private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.TextBox txt_Source;
-        private System.Windows.Forms.TextBox txt_Destination;
+        private Mode_Label label1;
+        private Mode_TextBox txt_Source;
+        private Mode_TextBox txt_Destination;
         private System.Windows.Forms.ToolTip toolTip1;
-        private System.Windows.Forms.GroupBox groupBox1;
-        private System.Windows.Forms.Label label3;
-        private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.Button btn_Remove;
-        private System.Windows.Forms.Label label4;
-        private System.Windows.Forms.TextBox txt_HH;
-        private System.Windows.Forms.Button btn_Add;
-        private System.Windows.Forms.Button btn_Save;
-        private System.Windows.Forms.Label label5;
-        private System.Windows.Forms.TextBox txt_TaskName;
-        private System.Windows.Forms.GroupBox groupBox3;
-        private System.Windows.Forms.Label label7;
-        private System.Windows.Forms.CheckedListBox ckbl_Forms;
-        private System.Windows.Forms.ComboBox cbo_LstTemplate;
-        private System.Windows.Forms.Label label6;
-        private System.Windows.Forms.DataGridView dataGridView_lsPermissions;
-        private System.Windows.Forms.ComboBox cbo_TypeStart;
-        private System.Windows.Forms.Label label11;
+        private Mode_GroupBox groupBox1;
+        private Mode_Label label3;
+        private Mode_Label label2;
+        private Mode_Button btn_Remove;
+        private Mode_Label label4;
+        private Mode_TextBox txt_HH;
+        private Mode_Button btn_Add;
+        private Mode_Button btn_Save;
+        private Mode_Label label5;
+        private Mode_TextBox txt_TaskName;
+        private Mode_GroupBox groupBox3;
+        private Mode_Label label7;
+        private Mode_CheckedListBox ckbl_Forms;
+        private Mode_ComboBox cbo_LstTemplate;
+        private Mode_Label label6;
+        private Mode_DataGridView dataGridView_lsPermissions;
+        private Mode_ComboBox cbo_TypeStart;
+        private Mode_Label label11;
         private System.Windows.Forms.NumericUpDown Nud_Day;
-        private System.Windows.Forms.Label label10;
-        private System.Windows.Forms.Label label9;
-        private System.Windows.Forms.Label label8;
+        private Mode_Label label10;
+        private Mode_Label label9;
+        private Mode_Label label8;
         private System.Windows.Forms.Panel pnl_Month;
         private System.Windows.Forms.Panel pnl_Week;
         private CheckedComboBox cbo_Month;
