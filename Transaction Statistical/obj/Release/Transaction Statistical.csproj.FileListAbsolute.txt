@@ -94,6 +94,5 @@ E:\Project\NPS\ToolTCB\ToolTCB\Transaction Statistical\obj\Release\Transaction S
 E:\Project\NPS\ToolTCB\ToolTCB\Transaction Statistical\obj\Release\Transaction Statistical.csproj.CopyComplete
 E:\Project\NPS\ToolTCB\ToolTCB\Transaction Statistical\obj\Release\Transaction Statistical.exe
 E:\Project\NPS\ToolTCB\ToolTCB\Transaction Statistical\obj\Release\Transaction Statistical.pdb
-E:\Project\NPS\ToolTCB\ToolTCB\Transaction Statistical\bin\Release\CheckComboBox.dll
 E:\Project\NPS\ToolTCB\ToolTCB\Transaction Statistical\obj\Release\Transaction_Statistical.UControl.UC_Menu_History.resources
 E:\Project\NPS\ToolTCB\ToolTCB\Transaction Statistical\obj\Release\Transaction_Statistical.UControl.UC_NewTemplate.resources

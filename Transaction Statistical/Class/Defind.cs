@@ -145,7 +145,7 @@ namespace Transaction_Statistical
                 {
                     WriteLogApplication("   ==> Auto end, result => Unsuccessfully", false, true); return false;
                 }
-                ReadTrans.Export(data[3], TemplateChoosen, null);
+                ReadTrans.Export(data[3], TemplateChoosen, null, false);
                 watch.Stop();
                 WriteLogApplication(string.Format("   => Export time:{0} s", watch.ElapsedMilliseconds / 1000), false, false);
                 WriteLogApplication(string.Format("   ==> File: {0}, size {1} kb", ReadTrans.FileExport, new FileInfo(ReadTrans.FileExport).Length / 1024), false, false);
@@ -375,7 +375,10 @@ namespace Transaction_Statistical
             {
                 if (!Directory.Exists(exportDestination))
                 {
-                    MessageBox.Show(exportDestination + " not exists !", "Error", MessageBoxButtons.OK, MessageBoxIcon.Stop);
+                    if (isUI)
+                    {
+                        MessageBox.Show(exportDestination + " not exists !", "Error", MessageBoxButtons.OK, MessageBoxIcon.Stop);
+                    }
                     return false;
                 }
                 FileExport = exportDestination;
@@ -502,7 +505,7 @@ namespace Transaction_Statistical
                 }
                 w.Stop();
 
-                MessageBox.Show(w.ElapsedMilliseconds.ToString());
+                //MessageBox.Show(w.ElapsedMilliseconds.ToString());
                 //CHANGE 6/12
                 var ListTransactionTemp = ListTransaction;
                 for (int c = 0; c < ListTransactionTemp.Count; c++)
