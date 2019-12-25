@@ -419,7 +419,7 @@ namespace Transaction_Statistical.Class
 
                 var allCells = worksheet.Cells[1, 1, worksheet.Dimension.End.Row, worksheet.Dimension.End.Column];
                 allCells.AutoFitColumns();
-             
+
                 allCells.Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
                 allCells.Style.VerticalAlignment = ExcelVerticalAlignment.Center;
                 allCells.Style.WrapText = true;
@@ -601,7 +601,7 @@ namespace Transaction_Statistical.Class
                     && x.Value.SettlementPeriodDateEnd >= itemTrans.DateBegin
                     && itemTrans.Terminal.Contains(x.Value.TerminalID)).OrderBy(x => x.Value.SettlementPeriodDateBegin).LastOrDefault().Value;
                     worksheet.Cells[indexData, index].Value = "";
-                    worksheet.Cells[indexData, index + 1].Value = itemTrans.Type;
+                    worksheet.Cells[indexData, index + 1].Value = string.IsNullOrEmpty(itemTrans.Type) ? "N/A" : itemTrans.Type;
                     worksheet.Cells[indexData, index + 2].Value = requestLast != null ? requestLast.Status.ToString() : "";
                     worksheet.Cells[indexData, index + 3].Value = itemTrans.Terminal;
                     worksheet.Cells[indexData, index + 4].Value = cycleOfTransction != null ? cycleOfTransction.SettlementPeriodDateBegin.ToString() : "";
@@ -611,9 +611,9 @@ namespace Transaction_Statistical.Class
                     worksheet.Cells[indexData, index + 8].Value = itemTrans.DateBegin;
                     worksheet.Cells[indexData, index + 8].Style.Numberformat.Format = "MM-dd-yyyy HH:mm:ss";
 
-                    worksheet.Cells[indexData, index + 9].Value = Math.Abs(itemTrans.Value_500K * 500000) + Math.Abs(itemTrans.Value_200K * 200000) +
-                    Math.Abs(itemTrans.Value_100K * 100000) + Math.Abs(itemTrans.Value_50K * 50000) + Math.Abs(itemTrans.Value_20K * 20000) +
-                    Math.Abs(itemTrans.Value_10K * 10000);
+                    worksheet.Cells[indexData, index + 9].Value = Math.Abs(itemTrans.Amount);
+                    worksheet.Cells[indexData, index + 9].Style.Numberformat.Format = "###,###,##0.0";
+
                     worksheet.Cells[indexData, index + 10].Value = Math.Abs(itemTrans.Value_500K);
                     worksheet.Cells[indexData, index + 11].Value = 0;
                     worksheet.Cells[indexData, index + 12].Value = Math.Abs(itemTrans.Value_200K);
@@ -628,6 +628,7 @@ namespace Transaction_Statistical.Class
                     worksheet.Cells[indexData, index + 21].Value = 0;
                     worksheet.Cells[indexData, index + 22].Value = Math.Abs(itemTrans.Rejects);
                     worksheet.Cells[indexData, index + 23].Value = 0;
+                    //worksheet.Cells[indexData, index + 24].Style.WrapText = true;
                     worksheet.Cells[indexData, index + 24].Style.HorizontalAlignment = ExcelHorizontalAlignment.Left;
                     worksheet.Cells[indexData, index + 24].Value = itemTrans.FullFollow;
                     //worksheet.Cells[indexData, index + 25].Value = "";
