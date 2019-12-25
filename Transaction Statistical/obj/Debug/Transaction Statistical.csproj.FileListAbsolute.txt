@@ -219,7 +219,6 @@ D:\Project\ToolTCB\ToolTCB\Transaction Statistical\obj\Debug\Transaction Statist
 D:\Project\ToolTCB\ToolTCB\Transaction Statistical\obj\Debug\Transaction Statistical.exe
 D:\Project\ToolTCB\ToolTCB\Transaction Statistical\obj\Debug\Transaction Statistical.pdb
 D:\ToolTCB_Git\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.UControl.UC_Menu_History.resources
-D:\ToolTCB_Git\ToolTCB\Transaction Statistical\bin\Debug\CheckComboBox.dll
 D:\ToolTCB_Git\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.UControl.UC_NewTemplate.resources
 E:\Project\NPS\ToolTCB\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.UControl.UC_Menu_History.resources
 E:\Project\NPS\ToolTCB\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.UControl.UC_NewTemplate.resources
@@ -266,3 +265,5 @@ D:\05-TEMP\Source\GitHub\ToolTCB\Transaction Statistical\obj\Debug\Transaction S
 D:\05-TEMP\Source\GitHub\ToolTCB\Transaction Statistical\obj\Debug\Transaction Statistical.pdb
 D:\05-TEMP\Source\GitHub\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.AddOn.ButtonSetColor.resources
 D:\05-TEMP\Source\GitHub\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.UControl.GUI_Custom.resources
+D:\ToolTCB_Git\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.AddOn.ButtonSetColor.resources
+D:\ToolTCB_Git\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.UControl.GUI_Custom.resources

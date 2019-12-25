@@ -145,7 +145,7 @@ namespace Transaction_Statistical
                 {
                     WriteLogApplication("   ==> Auto end, result => Unsuccessfully", false, true); return false;
                 }
-                ReadTrans.Export(data[3], TemplateChoosen, null, false);
+                ReadTrans.Export(data[3], TemplateChoosen, null);
                 watch.Stop();
                 WriteLogApplication(string.Format("   => Export time:{0} s", watch.ElapsedMilliseconds / 1000), false, false);
                 WriteLogApplication(string.Format("   ==> File: {0}, size {1} kb", ReadTrans.FileExport, new FileInfo(ReadTrans.FileExport).Length / 1024), false, false);
@@ -373,14 +373,14 @@ namespace Transaction_Statistical
 
             try
             {
-                if (!Directory.Exists(exportDestination))
-                {
-                    if (isUI)
-                    {
-                        MessageBox.Show(exportDestination + " not exists !", "Error", MessageBoxButtons.OK, MessageBoxIcon.Stop);
-                    }
-                    return false;
-                }
+                //if (!Directory.Exists(exportDestination))
+                //{
+                //    if (isUI)
+                //    {
+                //        MessageBox.Show(exportDestination + " not exists !", "Error", MessageBoxButtons.OK, MessageBoxIcon.Stop);
+                //    }
+                //    return false;
+                //}
                 FileExport = exportDestination;
                 if (Directory.Exists(exportDestination))
                     FileExport = exportDestination + string.Format("\\TransactionStatistical_{0:yyyyMMdd_HH-mm}.xlsx", DateTime.Now);

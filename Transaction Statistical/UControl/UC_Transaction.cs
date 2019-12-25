@@ -14,6 +14,7 @@ using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Threading;
 using Transaction_Statistical.AddOn;
+using FastColoredTextBoxNS;
 
 namespace Transaction_Statistical.UControl
 {
@@ -27,7 +28,7 @@ namespace Transaction_Statistical.UControl
         {
             sqlite = new SQLiteHelper();
             InitializeComponent2();
-            Add_GUI();           
+            Add_GUI();
         }
         #region design             
 
@@ -136,7 +137,7 @@ namespace Transaction_Statistical.UControl
                     InitParametar.ReadTrans.EndDate = DateTime.MaxValue;
                 }
 
-                if (await InitParametar.ReadTrans.Reads(lsFile_Journal,  prb_Process))
+                if (await InitParametar.ReadTrans.Reads(lsFile_Journal, prb_Process))
                 {
                     prb_Process.CustomText = "Show data";
                     btn_Export.Enabled = true;
@@ -363,9 +364,9 @@ namespace Transaction_Statistical.UControl
                         {
                             Name = req.TTime,
                             Type = typeof(string),
-                            Desc = req.ToString() + " -> " + req.Status,
+                            Desc = req.TContent,
                             Cate = "6. Follow",
-                            DefaultValue = req.ToString() + " -> " + req.Status
+                            DefaultValue = req.ToString() + " -> " + req.Status,
                         });
                         cCount++;
                     }
@@ -382,7 +383,9 @@ namespace Transaction_Statistical.UControl
                         });
                         cCount++;
                     }
+                    //propertyGrid1
                     propertyGrid1.SelectedObject = trans;
+                    propertyGrid1.SelectedGridItemChanged += selectedProper;
 
                 }
                 else if (e.Node != null && e.Node.Tag != null && e.Node.Tag is TransactionEvent)
@@ -428,6 +431,26 @@ namespace Transaction_Statistical.UControl
             {
                 InitParametar.Send_Error(ex.ToString(), MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name);
             }
+        }
+        private void selectedProper(object sender, SelectedGridItemChangedEventArgs e)
+        {
+            var item = e.NewSelection;
+            var trans = e.NewSelection.Value;
+            if (item.PropertyDescriptor.Category.Contains("6. Follow"))
+            {
+                if (fctxt_FullLog.Text.Contains(item.PropertyDescriptor.Description))
+                {
+                    var index = fctxt_FullLog.Text.IndexOf(item.PropertyDescriptor.Description, StringComparison.CurrentCultureIgnoreCase);
+                    var pointS = fctxt_FullLog.PositionToPlace(index);
+                    var pointE = fctxt_FullLog.PositionToPlace(index + item.PropertyDescriptor.Description.Length);
+                    fctxt_FullLog.AutoScrollPosition = fctxt_FullLog.PositionToPoint(index);
+                    var r = fctxt_FullLog.GetRange(index, index + item.PropertyDescriptor.Description.Length);
+                    fctxt_FullLog.Selection = r;
+                    fctxt_FullLog.HighlightingRangeType = FastColoredTextBoxNS.HighlightingRangeType.AllTextRange;
+                    fctxt_FullLog.BookmarkColor = Color.Orange;
+                }
+            }
+
         }
 
         private void tvListCycle_AfterSelect(object sender, TreeViewEventArgs e)
@@ -492,7 +515,7 @@ namespace Transaction_Statistical.UControl
                     denoCountS.Add(c);
                 });
                 dtsDeno.DataSource = denoCountS;
-               // dataGrid.RowTemplate.Resizable = DataGridViewTriState.True;
+                // dataGrid.RowTemplate.Resizable = DataGridViewTriState.True;
                 dataGrid.RowTemplate.Height = (panel5.Height - dataGrid.ColumnHeadersHeight) / denoCountS.Count;
 
                 dataGrid.DataSource = dtsDeno;
@@ -502,8 +525,8 @@ namespace Transaction_Statistical.UControl
                 {
                     column.SortMode = DataGridViewColumnSortMode.Automatic;
                 }
-               // dataGrid.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.DisplayedCells;
-                panel5.Controls.Add(dataGrid);               
+                // dataGrid.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.DisplayedCells;
+                panel5.Controls.Add(dataGrid);
             }
         }
         bool IsTheSameCellValue(int column, int row)
