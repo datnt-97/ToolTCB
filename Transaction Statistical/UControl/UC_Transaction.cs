@@ -441,11 +441,10 @@ namespace Transaction_Statistical.UControl
                 if (fctxt_FullLog.Text.Contains(item.PropertyDescriptor.Description))
                 {
                     var index = fctxt_FullLog.Text.IndexOf(item.PropertyDescriptor.Description, StringComparison.CurrentCultureIgnoreCase);
-                    var pointS = fctxt_FullLog.PositionToPlace(index);
-                    var pointE = fctxt_FullLog.PositionToPlace(index + item.PropertyDescriptor.Description.Length);
-                    fctxt_FullLog.AutoScrollPosition = fctxt_FullLog.PositionToPoint(index);
+                    var pointS = fctxt_FullLog.PositionToPoint(index + item.PropertyDescriptor.Description.Length);
                     var r = fctxt_FullLog.GetRange(index, index + item.PropertyDescriptor.Description.Length);
                     fctxt_FullLog.Selection = r;
+                    fctxt_FullLog.DoSelectionVisible();
                     fctxt_FullLog.HighlightingRangeType = FastColoredTextBoxNS.HighlightingRangeType.AllTextRange;
                     fctxt_FullLog.BookmarkColor = Color.Orange;
                 }
