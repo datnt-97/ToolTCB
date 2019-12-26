@@ -265,7 +265,8 @@ namespace Transaction_Statistical
         public string Desc { get; set; }
         public object DefaultValue { get; set; }
         Type type;
-
+        public string ValueDesc { get; set; }
+        public string FullDesc { get; set; }
         public Type Type
         {
             get

@@ -279,7 +279,7 @@ namespace Transaction_Statistical
             return new SecurityIdentifier((byte[])new DirectoryEntry(string.Format("WinNT://{0},Computer", Environment.MachineName)).Children.Cast<DirectoryEntry>().First().InvokeGet("objectSID"), 0).AccountDomainSid;
         }
     }
-   
+
     public class TransactionType
     {
         public string Name;
@@ -438,6 +438,8 @@ namespace Transaction_Statistical
                            group => group.Key,
                            group => group.First().Value).ToDictionary(d => d.Key, d => (Transaction)d.Value);
                     });
+                
+
                     var transactionUnsuccess = new Dictionary<DateTime, Transaction>();
                     transactionUnsuccess = transaction.Where(x => x.Value.ListRequest.Values.LastOrDefault() != null && x.Value.ListRequest.Values.LastOrDefault().Status == Status.Types.UnSucceeded).ToDictionary(x => x.Key, x => x.Value);
 
@@ -459,7 +461,7 @@ namespace Transaction_Statistical
                             switch (item.Key)
                             {
                                 case (int)TemplateHelper.TEMPLATE.CanQuyTheoCouterTrenMay:
-                                   
+
                                     template.CanQuyTheoCouterTrenMay(item.Value, OfficeOpenXml.Table.TableStyles.Custom, cycle);
                                     break;
                                 case (int)TemplateHelper.TEMPLATE.BaoCaoGiaoDichTaiChinh:
@@ -477,7 +479,7 @@ namespace Transaction_Statistical
                             }
                             if (progress != null)
                             {
-                               // float textPer = (100 * (i + 1)) / templateChoosen.Count;
+                                // float textPer = (100 * (i + 1)) / templateChoosen.Count;
                                 progress.PerformStep();
                             }
                             i++;
@@ -1342,7 +1344,7 @@ namespace Transaction_Statistical
 
     }
     public class Regexs
-    {        
+    {
         public static bool RunPatternRegular(string sString, string sReg, out Dictionary<int, RegesValue> listResult)
         {
             listResult = new Dictionary<int, RegesValue>();
