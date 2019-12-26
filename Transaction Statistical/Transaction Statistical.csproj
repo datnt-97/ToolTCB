@@ -179,6 +179,12 @@
     <Compile Include="UControl\UC_ExportCus.Designer.cs">
       <DependentUpon>UC_ExportCus.cs</DependentUpon>
     </Compile>
+    <Compile Include="UControl\UC_Menu_About.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UControl\UC_Menu_About.Designer.cs">
+      <DependentUpon>UC_Menu_About.cs</DependentUpon>
+    </Compile>
     <Compile Include="UControl\UC_Menu_History.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -272,6 +278,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="UControl\UC_ExportCus.resx">
       <DependentUpon>UC_ExportCus.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UControl\UC_Menu_About.resx">
+      <DependentUpon>UC_Menu_About.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UControl\UC_Menu_History.resx">
       <DependentUpon>UC_Menu_History.cs</DependentUpon>

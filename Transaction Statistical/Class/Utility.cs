@@ -258,7 +258,6 @@ namespace Transaction_Statistical
         }
     }
 
-
     public class CustomProperty
     {
         public string Name { get; set; }
@@ -281,4 +280,6 @@ namespace Transaction_Statistical
         }
 
     }
+
+   
 }

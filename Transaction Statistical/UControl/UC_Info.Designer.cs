@@ -97,10 +97,11 @@
             this.TextCustom.SelectionColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(255)))));
             this.TextCustom.ServiceColors = ((FastColoredTextBoxNS.ServiceColors)(resources.GetObject("TextCustom.ServiceColors")));
             this.TextCustom.ServiceLinesColor = System.Drawing.Color.DimGray;
-            this.TextCustom.Size = new System.Drawing.Size(1020, 485);
+            this.TextCustom.Size = new System.Drawing.Size(1018, 485);
             this.TextCustom.TabIndex = 9;
             this.TextCustom.WordWrap = true;
             this.TextCustom.Zoom = 100;
+            this.TextCustom.ShowLineNumbers = false;
             // 
             // UC_Info
             // 

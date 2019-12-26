@@ -63,7 +63,8 @@
     "*(?<range>:)\\s*(?<range>[^;]+);\r\n";
             this.fctxt_Pattern.AutoScrollMinSize = new System.Drawing.Size(0, 18);
             this.fctxt_Pattern.BackBrush = null;
-            this.fctxt_Pattern.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.fctxt_Pattern.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.fctxt_Pattern.BorderColor = InitGUI.Custom.Menu_Border.DisplayColor;
             this.fctxt_Pattern.BracketsHighlightStrategy = FastColoredTextBoxNS.BracketsHighlightStrategy.Strategy2;
             this.fctxt_Pattern.CharHeight = 18;
             this.fctxt_Pattern.CharWidth = 10;

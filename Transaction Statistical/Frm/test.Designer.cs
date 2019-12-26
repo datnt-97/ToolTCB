@@ -34,6 +34,7 @@
             this.checkedComboBox3 = new Transaction_Statistical.CheckedComboBox();
             this.mode_Button1 = new Transaction_Statistical.Mode_Button();
             this.mode_TreeView1 = new Transaction_Statistical.Mode_TreeView();
+            this.propertyGrid1 = new System.Windows.Forms.PropertyGrid();
             ((System.ComponentModel.ISupportInitialize)(this.mode_FastColoredTextBox1)).BeginInit();
             this.SuspendLayout();
             // 
@@ -57,6 +58,7 @@
             this.mode_FastColoredTextBox1.CharWidth = 10;
             this.mode_FastColoredTextBox1.Cursor = System.Windows.Forms.Cursors.IBeam;
             this.mode_FastColoredTextBox1.DisabledColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))));
+            this.mode_FastColoredTextBox1.Font = new System.Drawing.Font("Courier New", 9.75F);
             this.mode_FastColoredTextBox1.ForeColor = System.Drawing.Color.White;
             this.mode_FastColoredTextBox1.IndentBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(240)))), ((int)(((byte)(240)))), ((int)(((byte)(240)))));
             this.mode_FastColoredTextBox1.IsReplaceMode = false;
@@ -112,11 +114,19 @@
             this.mode_TreeView1.Size = new System.Drawing.Size(121, 97);
             this.mode_TreeView1.TabIndex = 5;
             // 
+            // propertyGrid1
+            // 
+            this.propertyGrid1.Location = new System.Drawing.Point(618, 195);
+            this.propertyGrid1.Name = "propertyGrid1";
+            this.propertyGrid1.Size = new System.Drawing.Size(130, 130);
+            this.propertyGrid1.TabIndex = 6;
+            // 
             // test
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
+            this.Controls.Add(this.propertyGrid1);
             this.Controls.Add(this.mode_TreeView1);
             this.Controls.Add(this.mode_Button1);
             this.Controls.Add(this.mode_FastColoredTextBox1);
@@ -134,5 +144,6 @@
         private Mode_FastColoredTextBox mode_FastColoredTextBox1;
         private Mode_Button mode_Button1;
         private Mode_TreeView mode_TreeView1;
+        private System.Windows.Forms.PropertyGrid propertyGrid1;
     }
 }

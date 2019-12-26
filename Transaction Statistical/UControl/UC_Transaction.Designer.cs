@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Drawing;
 using System.Windows.Forms;
+using Transaction_Statistical.IconHelper;
 
 namespace Transaction_Statistical.UControl
 {
@@ -32,7 +33,7 @@ namespace Transaction_Statistical.UControl
         /// Required method for Designer support - do not modify 
         /// the contents of this method with the code editor.
         /// </summary>
-       
+
         private void InitializeComponent2()
         {
             this.components = new System.ComponentModel.Container();
@@ -400,6 +401,13 @@ namespace Transaction_Statistical.UControl
             this.toolTip1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(37)))), ((int)(((byte)(37)))), ((int)(((byte)(38)))));
             this.toolTip1.ForeColor = System.Drawing.Color.White;
             // 
+            // imageListControl
+            // 
+            this.imageListControl.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("imageListControl.ImageStream")));
+            this.imageListControl.TransparentColor = System.Drawing.Color.Transparent;
+            this.imageListControl.Images.SetKeyName(0, "Excel");
+            this.imageListControl.Images.SetKeyName(1, "Excel_Select");
+            // 
             // btn_Export
             // 
             this.btn_Export.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
@@ -411,8 +419,9 @@ namespace Transaction_Statistical.UControl
             this.btn_Export.FlatAppearance.MouseDownBackColor = InitGUI.Custom.Frm_TopToolbar.DisplayColor;
             this.btn_Export.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btn_Export.ForeColor = System.Drawing.Color.White;
-            this.btn_Export.ImageKey = "Excel";
-            this.btn_Export.ImageList = this.imageListControl;
+            this.btn_Export.Image = ImageUltility.ChangeColor((Bitmap)this.imageListControl.Images["Excel"], InitGUI.Custom.Menu_Button.DisplayColor);
+           // this.btn_Export.ImageKey = "Excel";
+            //this.btn_Export.ImageList = this.imageListControl;
             this.btn_Export.Location = new System.Drawing.Point(1291, 14);
             this.btn_Export.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.btn_Export.MouseClickColor1 = System.Drawing.Color.Empty;
@@ -426,14 +435,7 @@ namespace Transaction_Statistical.UControl
             this.btn_Export.UseVisualStyleBackColor = true;
             this.btn_Export.Click += new System.EventHandler(this.btn_Export_Click);
             this.btn_Export.MouseLeave += new System.EventHandler(this.btn_Export_MouseLeave);
-            this.btn_Export.MouseHover += new System.EventHandler(this.btn_Export_MouseHover);
-            // 
-            // imageListControl
-            // 
-            this.imageListControl.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("imageListControl.ImageStream")));
-            this.imageListControl.TransparentColor = System.Drawing.Color.Transparent;
-            this.imageListControl.Images.SetKeyName(0, "Excel");
-            this.imageListControl.Images.SetKeyName(1, "Excel_Select");
+            this.btn_Export.MouseHover += new System.EventHandler(this.btn_Export_MouseHover);            
             // 
             // panel3
             // 

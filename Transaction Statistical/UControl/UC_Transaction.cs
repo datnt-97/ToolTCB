@@ -14,6 +14,7 @@ using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Threading;
 using Transaction_Statistical.AddOn;
+using Transaction_Statistical.IconHelper;
 
 namespace Transaction_Statistical.UControl
 {
@@ -38,13 +39,13 @@ namespace Transaction_Statistical.UControl
         private void btn_Export_MouseHover(object sender, EventArgs e)
         {
             btn_Export.FlatAppearance.BorderColor = Color.FromArgb(20, 120, 204);
-            btn_Export.ImageKey = "Excel_Select";
+             btn_Export.Image = ImageUltility.ChangeColor((Bitmap)this.imageListControl.Images["Excel_Select"], InitGUI.Custom.Menu_Button.DisplayColor);
         }
         private void btn_Export_MouseLeave(object sender, EventArgs e)
         {
             btn_Export.FlatAppearance.BorderColor = this.BackColor;
             btn_Export.FlatAppearance.BorderSize = 1;
-            btn_Export.ImageKey = "Excel";
+            btn_Export.Image = ImageUltility.ChangeColor((Bitmap)this.imageListControl.Images["Excel"], InitGUI.Custom.Menu_Button.DisplayColor);
         }
         #endregion
         private void Add_GUI()

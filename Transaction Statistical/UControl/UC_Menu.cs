@@ -91,6 +91,14 @@ namespace Transaction_Statistical.UControl
             ucHistory.TabIndex = btn_History.TabIndex;
             ucHistory.BackColor = InitGUI.Custom.Menu_RightBckgd.DisplayColor;
             this.Controls.Add(ucHistory);
+
+            UC_Menu_About ucAbout = new UC_Menu_About();
+            ucAbout.Width = this.Width - 1 - pnl_Menu.Width;
+            ucAbout.Height = this.Height - 2;
+            ucAbout.Location = new Point(pnl_Menu.Width, 1);
+            ucAbout.TabIndex = btn_About.TabIndex;
+            ucAbout.BackColor = InitGUI.Custom.Menu_RightBckgd.DisplayColor;
+            this.Controls.Add(ucAbout);
         }
 
         private void menu_MouseClick(object sender, MouseEventArgs e)
@@ -119,6 +127,20 @@ namespace Transaction_Statistical.UControl
         private void buttonZ1_MouseUp(object sender, MouseEventArgs e)
         {
             (sender as AddOn.ButtonZ).BZBackColor = Color.FromArgb(20, 120, 240);
+        }
+        private void mode_Label4_MouseHover(object sender, EventArgs e)
+        {
+            (sender as Mode_Label).ForeColor = Color.Blue;
+        }
+
+        private void mode_Label4_Leave(object sender, EventArgs e)
+        {
+            (sender as Mode_Label).ForeColor = InitGUI.Custom.Menu_Text.DisplayColor;
+        }
+
+        private void mode_Label8_MouseEnter(object sender, EventArgs e)
+        {
+            (sender as Mode_Label).ForeColor = Color.GreenYellow;
         }
     }
 }

@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -27,7 +28,7 @@ namespace Transaction_Statistical
             if (row["Field"].ToString().Equals(InitGUI_Mode.Light.ToString()))
             {
                 Mode = InitGUI_Mode.Light;
-                Custom.Frm_TopToolbar.DisplayColor = Color.FromArgb(240, 240, 240);
+                Custom.Frm_TopToolbar.DisplayColor = Color.FromArgb(20, 120, 240); //Color.FromArgb(240, 240, 240);
                 Custom.Frm_Background.DisplayColor = Color.White;
                 Custom.Frm_Border.DisplayColor = Color.Green;
                 Custom.Frm_TextTilte.DisplayColor = Color.DimGray;
@@ -340,29 +341,20 @@ namespace Transaction_Statistical
     }
     public class Mode_Panel : Panel
     {
-        private const int WM_PAINT = 0xF;
-        private int buttonWidth = SystemInformation.HorizontalScrollBarArrowWidth;
-        [Browsable(true)]
-        [Category("Appearance")]
-        [DefaultValue(typeof(Color), "DimGray")]
         public Color BorderColor { get; set; }
-        protected override void WndProc(ref Message m)
+        protected override void OnPaint(PaintEventArgs e)
         {
-            base.WndProc(ref m);
-            if (m.Msg == WM_PAINT)
+            //using (SolidBrush brush = new SolidBrush(BackColor))
+            //    e.Graphics.FillRectangle(brush, ClientRectangle);
+            if (BorderColor != null)
             {
-                using (var g = Graphics.FromHwnd(Handle))
-                {                   
-                    using (var p = new Pen(this.BorderColor, 1))
-                    {
-                        g.DrawRectangle(p, 0, 0, Width - 1, Height - 1);
-                    }
-                    
-                }
+                this.BorderStyle = BorderStyle.None;
+                e.Graphics.DrawRectangle(new Pen(BorderColor, 1), 0, 0, ClientSize.Width - 1, ClientSize.Height - 1);
             }
-        }
+        }    
         public Mode_Panel() : base()
         {
+            SetStyle(ControlStyles.UserPaint | ControlStyles.ResizeRedraw | ControlStyles.DoubleBuffer | ControlStyles.AllPaintingInWmPaint, true);
             base.BackColor = Color.Transparent;
             base.ForeColor = InitGUI.Custom.Frm_ForeColor.DisplayColor;
         }
@@ -426,6 +418,22 @@ namespace Transaction_Statistical
             base.BackColor = InitGUI.Custom.Frm_Background.DisplayColor;
             base.ForeColor = InitGUI.Custom.Frm_ForeColor.DisplayColor;
         }
+
+        [DllImport("user32")]
+        private static extern IntPtr GetWindowDC(IntPtr hwnd);
+        private const int WM_NCPAINT = 0x85;
+        protected override void WndProc(ref Message m)
+        {
+            base.WndProc(ref m);
+            if (m.Msg == WM_NCPAINT && this.Focused)
+            {
+                var dc = GetWindowDC(Handle);
+                using (Graphics g = Graphics.FromHdc(dc))
+                {
+                    g.DrawRectangle(new Pen(SystemColors.Highlight,1), 0, 0, Width - 1, Height - 1);
+                }
+            }
+        }
     }
     public class Mode_CheckBox : CheckBox
     {
@@ -442,7 +450,20 @@ namespace Transaction_Statistical
             base.BackColor = InitGUI.Custom.Editor_Background.DisplayColor;
             base.ForeColor = InitGUI.Custom.Editor_ForeColor.DisplayColor;
             base.IndentBackColor = Color.FromArgb(196, 196, 196);
+            this.Margin = new Padding(10);
+          //  if (BorderColor != null) SetStyle(ControlStyles.UserPaint | ControlStyles.ResizeRedraw | ControlStyles.DoubleBuffer | ControlStyles.AllPaintingInWmPaint, true);
         }
+        public Color BorderColor { get; set; }
+        
+        protected override void OnPaint(PaintEventArgs e)
+        {
+            base.OnPaint(e);
+            if (BorderColor != null)
+            {
+                e.Graphics.DrawRectangle(new Pen(BorderColor, 1), 0, 0, ClientSize.Width - 1, ClientSize.Height - 1);
+            }
+        }
+
     }
     public class Mode_CheckedListBox : CheckedListBox
     {

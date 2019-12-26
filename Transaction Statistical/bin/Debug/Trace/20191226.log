@@ -1,0 +1,22 @@
+----------------------------------------------
+02:00:04 137 Class: Auto Task
+   => Task name: sdasd
+   => Task data: 02:00;DAILY;;1|545|D:\Export|D:\temp|[0, Cân Quỹ Theo Counter Trên Máy];[1, GD Tài Chính];[2, GD Tài Chính Không Thành Công];[3, GD Tài Chính Bất Thường];[4, BC Hoạt Động Bất Thường]
+   => Template id: 545
+   => Load Template Info => Successfully
+   => Data source: D:\Export
+----------------------------------------------
+02:00:04 137 Class: Auto Task
+   => Task name: test1
+   => Task data: 02:00|545|||[0, Cân Quỹ Theo Counter Trên Máy];[1, GD Tài Chính];[2, GD Tài Chính Không Thành Công];[3, GD Tài Chính Bất Thường];[4, BC Hoạt Động Bất Thường]
+   => Template id: 545
+   => Load Template Info => Successfully
+   => Data source: 
+   => Found: 0 files
+   ==> Auto end, result => Unsuccessfully
+----------------------------------------------
+
+   => Found: 0 files
+   ==> Auto end, result => Unsuccessfully
+----------------------------------------------
+

@@ -41,7 +41,7 @@
             // 
             // BackTopPanel
             // 
-            this.BackTopPanel.BackColor = InitGUI.Custom.Frm_TopToolbar.DisplayColor;// System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(30)))), ((int)(((byte)(30)))));
+            this.BackTopPanel.BackColor = InitGUI.Custom.Tab_CtrlPanel_Backcolor.DisplayColor;// System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(30)))), ((int)(((byte)(30)))));
             this.BackTopPanel.Controls.Add(this.RibbonPanel);
             this.BackTopPanel.Controls.Add(this.toolStripZ1);
             this.BackTopPanel.Controls.Add(this.TabButtonPanel);
@@ -54,7 +54,7 @@
             // 
             // RibbonPanel
             // 
-            this.RibbonPanel.BackColor = InitGUI.Custom.Menu_Button.DisplayColor;//  System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(120)))), ((int)(((byte)(240)))));
+            this.RibbonPanel.BackColor = InitGUI.Custom.Tab_CtrlPanel_Backcolor.DisplayColor;//  System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(120)))), ((int)(((byte)(240)))));
             this.RibbonPanel.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.RibbonPanel.Location = new System.Drawing.Point(0, 47);
             this.RibbonPanel.Margin = new System.Windows.Forms.Padding(4);
@@ -98,7 +98,7 @@
             // 
             // TabPanel
             // 
-            this.TabPanel.BackColor = InitGUI.Custom.Frm_TopToolbar.DisplayColor;// System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(40)))), ((int)(((byte)(40)))));
+            this.TabPanel.BackColor = InitGUI.Custom.Tab_CtrlPanel_Backcolor.DisplayColor;// System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(40)))), ((int)(((byte)(40)))));
             this.TabPanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.TabPanel.Location = new System.Drawing.Point(0, 49);
             this.TabPanel.Margin = new System.Windows.Forms.Padding(4);

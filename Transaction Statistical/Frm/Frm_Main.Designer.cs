@@ -290,6 +290,7 @@ namespace Transaction_Statistical
             this.tabControlX1.RibbonColor = InitGUI.Custom.Tab_Ribbon_Color.DisplayColor;
             this.tabControlX1.CtrlPanelColor = InitGUI.Custom.Tab_CtrlPanel_Backcolor.DisplayColor;
             this.tabControlX1.TabPanelColor = InitGUI.Custom.Tab_CtrlButPanel_Backcolor.DisplayColor;
+           
             this.tabControlX1.Invalidate();
         }
         #endregion
