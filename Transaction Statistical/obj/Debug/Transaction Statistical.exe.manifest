@@ -127,14 +127,14 @@
     </dependentAssembly>
   </dependency>
   <dependency>
-    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="Transaction Statistical.exe" size="681944">
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="Transaction Statistical.exe" size="682456">
       <assemblyIdentity name="Transaction Statistical" version="1.0.0.0" language="neutral" processorArchitecture="msil" />
       <hash>
         <dsig:Transforms>
           <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
         </dsig:Transforms>
         <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
-        <dsig:DigestValue>eVWl+QrHdVaKk7FRo1zHrvhz7+fMOUOKLQi67kDiiJw=</dsig:DigestValue>
+        <dsig:DigestValue>8yMjlpHnmsI+qjbSe1veHaMHwSztydobfgkS9XV+lJ4=</dsig:DigestValue>
       </hash>
     </dependentAssembly>
   </dependency>
@@ -156,22 +156,22 @@
       <dsig:DigestValue>lkfZLauf7C6MU0kz8uehwgfcxlYGOiJIOh9V5NMZOPg=</dsig:DigestValue>
     </hash>
   </file>
-  <file name="Transaction Statistical.exe.config" size="1528">
+  <file name="Transaction Statistical.exe.config" size="1608">
     <hash>
       <dsig:Transforms>
         <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
       </dsig:Transforms>
       <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
-      <dsig:DigestValue>qLe54E68pVMo7V0MgYXWvC5mRLC01H0vPGen6+IE7Co=</dsig:DigestValue>
+      <dsig:DigestValue>o0uN6WayJLXxv6eYsOD3hRoVg3nK+XGvtlpeFwtkS6g=</dsig:DigestValue>
     </hash>
   </file>
-  <file name="Transaction Statistical.pdb" size="706048">
+  <file name="Transaction Statistical.pdb" size="704000">
     <hash>
       <dsig:Transforms>
         <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
       </dsig:Transforms>
       <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
-      <dsig:DigestValue>PYPfJW4lMhFqJG2E9yu5jq8C/02c8N9cUCOWIUi5YmE=</dsig:DigestValue>
+      <dsig:DigestValue>iEWjGmTEZrVmKw+DhxTt2UbDQfM2hk7tDFakyK1k4iQ=</dsig:DigestValue>
     </hash>
   </file>
   <compatibility xmlns="urn:schemas-microsoft-com:compatibility.v1">

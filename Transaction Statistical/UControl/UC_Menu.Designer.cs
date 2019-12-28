@@ -314,6 +314,7 @@
             this.lv_Version.MouseEnter += new System.EventHandler(this.mode_Label8_MouseEnter);
             this.lv_Version.MouseLeave += new System.EventHandler(this.mode_Label4_Leave);
             this.lv_Version.MouseHover += new System.EventHandler(this.mode_Label4_MouseHover);
+
             // 
             // btn_About
             // 
