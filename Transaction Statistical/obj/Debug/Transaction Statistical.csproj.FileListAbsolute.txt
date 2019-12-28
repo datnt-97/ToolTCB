@@ -310,3 +310,8 @@ E:\Project\NPS\TCB\ToolTCB\Transaction Statistical\obj\Debug\Transaction Statist
 E:\Project\NPS\TCB\ToolTCB\Transaction Statistical\obj\Debug\Transaction Statistical.csproj.CopyComplete
 E:\Project\NPS\TCB\ToolTCB\Transaction Statistical\obj\Debug\Transaction Statistical.exe
 E:\Project\NPS\TCB\ToolTCB\Transaction Statistical\obj\Debug\Transaction Statistical.pdb
+D:\05-TEMP\Source\GitHub\ToolTCB\Transaction Statistical\obj\Debug\Transaction Statistical.exe.manifest
+D:\05-TEMP\Source\GitHub\ToolTCB\Transaction Statistical\bin\Debug\Transaction Statistical.exe.manifest
+D:\05-TEMP\Source\GitHub\ToolTCB\Transaction Statistical\bin\Debug\Transaction Statistical.application
+D:\05-TEMP\Source\GitHub\ToolTCB\Transaction Statistical\obj\Debug\Transaction Statistical.application
+D:\05-TEMP\Source\GitHub\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.UControl.UC_RegisterLicense.resources

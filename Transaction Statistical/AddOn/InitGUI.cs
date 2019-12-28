@@ -333,11 +333,21 @@ namespace Transaction_Statistical
     }
     public class Mode_GroupBox : GroupBox
     {
+        FlowLayoutPanel pn;
         public Mode_GroupBox() : base()
         {
             base.BackColor = Color.Transparent;
             base.ForeColor = InitGUI.Custom.Frm_ForeColor.DisplayColor;
+            pn = new FlowLayoutPanel();
         }
+      //  public Control AddControl
+      //  {            
+      //      set { pn.Controls.Add(value); }
+      //  }
+      //public ControlCollection Controls
+      //  {
+      //      get { return pn.Controls; }
+      //  }
     }
     public class Mode_Panel : Panel
     {

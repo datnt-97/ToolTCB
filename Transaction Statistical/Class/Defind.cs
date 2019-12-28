@@ -57,7 +57,15 @@ namespace Transaction_Statistical
         public static bool WriteApplication = true;
         public static bool AutoRunMode;
         //License
+        private static string LicenseFile = PathDirectoryCurrentApp + "\\register.lic";
         private static string prKey = @"sw5yopheq0NsCiET0wy4Qk5YwTQS1m4H";
+        public static List<License> ListLicense;
+        public static License.Types TypeLicense = License.Types.Unknow;
+        public static License.StatusS StatusLicense = License.StatusS.Invalid;
+        public static DateTime DateMaximum = DateTime.MinValue;
+        public static DateTime DateCurrent = DateTime.Now;
+
+
         public static void Init()
         {
             try
@@ -160,8 +168,7 @@ namespace Transaction_Statistical
             }
             catch (Exception ex)
             {
-                InitParametar.Send_Error(ex.ToString(), MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name); ;
-                WriteLogApplication(ex.Message, false, true);
+                InitParametar.Send_Error(ex.ToString(), MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name);                WriteLogApplication(ex.Message, false, true);
             }
             WriteLogApplication("   ==> Auto end, result => Unsuccessfully", false, true);
             return true;
@@ -240,15 +247,90 @@ namespace Transaction_Statistical
                 MessageBox.Show(ex.Message + Environment.NewLine + FolderSystemTrace, "WriteLogApplication", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-   
-        public static bool License_Read()
+        
+        public static bool License_CheckModule(License.Modules module)
         {
             try
             {
-                var macAddr = (from nic in NetworkInterface.GetAllNetworkInterfaces() where nic.OperationalStatus == OperationalStatus.Up select nic.GetPhysicalAddress().ToString()).FirstOrDefault();
+                if (StatusLicense.Equals(License.StatusS.Activated))
+                {
+                    foreach (License lic in ListLicense)
+                        if (lic.Module.Equals(module) && DateTime.Compare(lic.DateEnd, DateCurrent) > 0) return true;
+                }
             }
             catch (Exception ex)
-            { }
+            {
+                InitParametar.Send_Error(ex.ToString(), MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name); ;
+            }
+            return false;
+        }
+        public static bool License_ReadInfo()
+        {
+            try
+            {
+                if(File.Exists(LicenseFile))
+                {
+                    FileInfo file = new FileInfo(LicenseFile);
+
+                    if(DateTime.Compare(DateCurrent, file.LastAccessTime)<0)
+                    {
+                        //user changed  time BIOS
+                        WriteLogApplication("System time invalid.\nCheck license fail.", true, true);
+                        StatusLicense = License.StatusS.Invalid;
+                        return false;
+                    }
+                    string content = Algorithm_TripleDES.Decrypt(File.ReadAllText(LicenseFile),prKey, false);
+                    string[] items = content.Split('');
+                    Enum.TryParse(items[0], out TypeLicense);
+                    if (TypeLicense.Equals(License.Types.Business) || TypeLicense.Equals(License.Types.Free) || TypeLicense.Equals(License.Types.Trial))
+                    {
+                        if (items[1].Equals(GetMacAddress() + GetComputerSid())) StatusLicense = License.StatusS.Activated;
+                        else StatusLicense = License.StatusS.Invalid;
+                    }
+                    foreach (string s in items[2].Split(''))
+                    {
+                        License lic = new License();
+                        DateTime.TryParseExact(s.Split('')[0], License.FormatDateAccess, CultureInfo.InvariantCulture, DateTimeStyles.None, out lic.DateBegin);
+                        DateTime.TryParseExact(s.Split('')[1], License.FormatDateAccess, CultureInfo.InvariantCulture, DateTimeStyles.None, out lic.DateEnd);
+                        lic.Module = s.Split('')[2];
+                        ListLicense.Add(lic);
+                        if (DateTime.Compare(lic.DateEnd, DateMaximum) > 0) DateMaximum = lic.DateEnd;
+                    }
+                    License_Update();
+                } 
+            }
+            catch (Exception ex)
+            {
+                InitParametar.Send_Error(ex.ToString(), MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name); ;
+            }
+            return false;
+        }
+        public static bool License_Update()
+        {
+            try
+            {
+                if (File.Exists(LicenseFile)) File.Delete(LicenseFile);
+                File.Create(LicenseFile);                
+                string content = TypeLicense.ToString() + '' + GetMacAddress() + GetComputerSid() + '';
+                ListLicense.ForEach(x=>
+                        {
+                            content += x.DateBegin.ToString(License.FormatDate) + '' + x.DateEnd.ToString(License.FormatDate) + '' + x.Module + '';
+                        });
+
+                content = content.TrimEnd('') + '' + DateTime.Now.ToString(License.FormatDateAccess);
+                FileInfo file = new FileInfo(LicenseFile);               
+                using (StreamWriter sw = new StreamWriter(LicenseFile, true))
+                {
+                    sw.WriteLine(Algorithm_TripleDES.Encrypt(content, prKey, false));                 
+                    sw.Flush();
+                    sw.Close();                  
+                }
+
+            }
+            catch (Exception ex)
+            {
+                InitParametar.Send_Error(ex.ToString(), MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name); ;
+            }
             return false;
         }
         /// <summary>
@@ -1713,5 +1795,44 @@ namespace Transaction_Statistical
             //return the Clear decrypted TEXT
             return UTF8Encoding.UTF8.GetString(resultArray);
         }
+    }
+    public class License
+    {
+    public static string FormatDate = "yyyyMMddHHmmssttt";
+    public static string FormatDateCreate = "yyyyMMddHHmmssttt";
+    public static string FormatDateAccess = "yyyyMMddHHmmssttt";
+    public static string FormatDateModify = "yyyyMMddHH";
+      public  Dictionary<Types, string> ListType = new Dictionary<Types, string>()
+        {
+            { Types.Business,"One licensed user can use application" },
+            { Types.Free,"One licensed user can use application" }, 
+            { Types.Premium,"Multiple licensed users can use application" }, 
+            { Types.Trial,"One licensed user can use application with 7 days" },
+        };
+       public enum Types
+        {
+            Business,
+            Free,
+            Premium,
+            Trial,
+            Unknow
+        }
+        public enum StatusS
+        {
+            Expired,
+            Activated,
+            Invalid,
+        }
+     public   enum Modules
+        {
+            Read,
+            ExcelExport,
+            AutoStart
+        }
+        public  bool Invalid = false;
+        public  string Module;
+        public  int DayRemaing;
+        public DateTime DateBegin;
+        public DateTime DateEnd;
     }
 }
