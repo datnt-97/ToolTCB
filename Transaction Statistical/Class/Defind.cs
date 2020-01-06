@@ -738,8 +738,8 @@ namespace Transaction_Statistical
                                     {
                                         bills.RequireAmount = string.IsNullOrEmpty(regx.value["RequireAmount"]) ? string.Empty : regx.value["RequireAmount"];
                                     }
-
-                                    if (!transaction.ListBills.ContainsKey(bills.Date))
+                                    long transNum = 0;
+                                    if (!transaction.ListBills.ContainsKey(bills.Date) && long.TryParse(bills.TranNo, out transNum))
                                     {
                                         transaction.ListBills[bills.Date] = bills;
                                     }
@@ -791,7 +791,7 @@ namespace Transaction_Statistical
                                     evt.Type = TransactionEvent.Events.CashRetracted;
                                     DateTime.TryParseExact(string.Format("{0:yyyyMMdd}", DateCurrent) + regx.value["TimeRetract"], "yyyyMMdd" + FormatTime, CultureInfo.InvariantCulture, DateTimeStyles.None, out evt.DateBegin);
                                     if (regx.value.ContainsKey("Step10k") && int.TryParse(regx.value["Step10k"], out node2)) transaction.Value_10K_Retracted += node2;
-                                    if (regx.value.ContainsKey("Step20k") && int.TryParse(regx.value["Step20k"], out node2)) transaction.Value_20K_Retracted+= node2;
+                                    if (regx.value.ContainsKey("Step20k") && int.TryParse(regx.value["Step20k"], out node2)) transaction.Value_20K_Retracted += node2;
                                     if (regx.value.ContainsKey("Step50k") && int.TryParse(regx.value["Step50k"], out node2)) transaction.Value_50K_Retracted += node2;
                                     if (int.TryParse(regx.value["Step100k"], out node2)) transaction.Value_100K_Retracted += node2;
                                     if (int.TryParse(regx.value["Step200k"], out node2)) transaction.Value_200K_Retracted += node2;
@@ -1028,8 +1028,8 @@ namespace Transaction_Statistical
                 trans.MachineSequenceNo = val.value["MachineNo"];
                 trans.TraceJournalFull = trans.TraceJournal_Remaining = val.stringfind;
 
-                trans.TraceJournal_Remaining = trans.TraceJournal_Remaining.Replace(val.value["SStart"], null);
-                trans.TraceJournal_Remaining = trans.TraceJournal_Remaining.Replace(val.value["SEnd"], null);
+                //trans.TraceJournal_Remaining = trans.TraceJournal_Remaining.Replace(val.value["SStart"], null);
+                //trans.TraceJournal_Remaining = trans.TraceJournal_Remaining.Replace(val.value["SEnd"], null);
 
                 trans = await Task.Run(() => FindEventBeginInput(trans));
                 trans = await Task.Run(() => FindEventRequest(trans.DateBegin, trans));
@@ -1370,8 +1370,11 @@ namespace Transaction_Statistical
         public string TraceApplicationTrcTxt;
 
         [CategoryAttribute("3. Transaction"), DescriptionAttribute("Transaction Number")]
-        public string TransactionNumber { get=>this.ListBills.OrderBy(x=>x.Key).LastOrDefault().Value!=null
-                ? this.ListBills.OrderBy(x => x.Key).LastOrDefault().Value.TranNo:"-"; }
+        public string TransactionNumber
+        {
+            get => this.ListBills.OrderBy(x => x.Key).LastOrDefault().Value != null
+? this.ListBills.OrderBy(x => x.Key).LastOrDefault().Value.TranNo : "-";
+        }
 
         [CategoryAttribute("3. Transaction"), DescriptionAttribute("Machine Sequence No")]
         public string MachineSequenceNo { get; set; }
@@ -1872,9 +1875,9 @@ namespace Transaction_Statistical
     }
     public class License
     {
-        public static string FormatDate = "yyyyMMddHHmmssttt";
-        public static string FormatDateCreate = "yyyyMMddHHmmssttt";
-        public static string FormatDateAccess = "yyyyMMddHHmmssttt";
+        public static string FormatDate = "yyyyMMddHHmmss";
+        public static string FormatDateCreate = "yyyyMMddHHmmss";
+        public static string FormatDateAccess = "yyyyMMddHHmmss";
         public static string FormatDateModify = "yyyyMMddHH";
         public static Dictionary<Types, string> ListType = new Dictionary<Types, string>()
         {
