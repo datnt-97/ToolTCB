@@ -78,7 +78,7 @@ namespace Transaction_Statistical.UControl
                         content = ctr.Text + '' + InitParametar.GetMacAddress() + InitParametar.GetComputerSid() + '';
                 foreach (Mode_CheckBox chk in gs_Module.ControlsGroup)
                     if (chk.Checked)
-                        content += DateTime.Now.ToString(License.FormatDate) + '' + DateTime.Now.AddDays(License.Duration.Where(v => v.Value.Equals(cbb_Date.Text)).FirstOrDefault().Key).ToString(License.FormatDate) + '' + chk.Text + '';
+                        content += DateTime.Now.ToString(License.FormatDate) + '' + DateTime.Now.AddMonths(License.Duration.Where(v => v.Value.Equals(cbb_Date.Text)).FirstOrDefault().Key).ToString(License.FormatDate) + '' + chk.Text + '';
                 content = content.TrimEnd('') + '' + DateTime.Now.ToString(License.FormatDateAccess);
 
                 using (StreamWriter sw = new StreamWriter(LicenseFile, true))

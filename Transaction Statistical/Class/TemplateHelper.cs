@@ -16,12 +16,17 @@ namespace Transaction_Statistical.Class
         public enum TEMPLATE
         {
             CanQuyTheoCouterTrenMay,
+            //BaoCaoGiaoDichEmptyCassett,
+            //BaoCaoGiaoDichEmptyCassettTheoChuKy,
             BaoCaoGiaoDichTaiChinh,
             BaoCaoGiaoDichTaiChinhKhongThanhCong,
             BaoCaoGiaoDichTaiChinhBatThuong,
             BaoCaoHoatDongBatThuong,
+            BaoCaoHoatDongBatThuongTheoChuKy,
         }
-
+        private Color Lightskyblue = Color.FromArgb(230, 230, 250);
+        private Color Backgroud = Color.FromArgb(248, 203, 173);
+        //private Color Lightskyblue = Color.FromArgb(135, 206, 250);
         ExcelPackage excelPackage { get; set; }
         private const string formatDate = "dd/mm/yyy h:mm";
         private const string formatNumber = "##0.0";
@@ -53,35 +58,20 @@ namespace Transaction_Statistical.Class
                 throw e;
             }
         }
-        private class TerminalInfo
-        {
-            string terID;
-            DateTime begin;
-            DateTime end;
-
-            public string TerID { get => terID; set => terID = value; }
-            public DateTime Begin { get => begin; set => begin = value; }
-            public DateTime End { get => end; set => end = value; }
-
-            public TerminalInfo(string terID, DateTime begin, DateTime end)
-            {
-                TerID = terID ?? throw new ArgumentNullException(nameof(terID));
-                Begin = begin;
-                End = end;
-            }
-        }
-        public void BaoCaoHoatDongBatThuong(string WorksheetsName, TableStyles tableStyles, Dictionary<string, Dictionary<DateTime, object>> ListTransaction)
+        public void BaoCaoHoatDongBatThuong(string WorksheetsName, TableStyles tableStyles, Dictionary<string, Dictionary<DateTime, object>> ListTransaction, Dictionary<string, string> Template_EventDevice, bool isCycle)
         {
             try
             {
+
+
                 this.excelPackage.Workbook.Worksheets.Add(WorksheetsName);
                 var lastWS = excelPackage.Workbook.Worksheets.Last();
                 int index = 2;
                 //DRAW CHUDE
-                using (ExcelRange rng = lastWS.Cells["A1:I1"])
+                using (ExcelRange rng = lastWS.Cells[string.Format("A1:{0}1", isCycle ? "I" : "H")])
                 {
                     rng.Style.Fill.PatternType = OfficeOpenXml.Style.ExcelFillStyle.Solid;
-                    rng.Style.Fill.BackgroundColor.SetColor(Color.FromArgb(252, 228, 214));
+                    rng.Style.Fill.BackgroundColor.SetColor(Backgroud);
                     rng.Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
                     rng.Style.VerticalAlignment = ExcelVerticalAlignment.Center;
 
@@ -98,9 +88,51 @@ namespace Transaction_Statistical.Class
                 }
                 foreach (var item in ListTransaction)
                 {
+
+                    var transaction = item.Value.Where(i => i.Value is Transaction).ToDictionary(d => d.Key, d => (Transaction)d.Value);
+
                     var cycles = item.Value.Where(x => x.Value is Cycle).ToDictionary(x => x.Key, x => (Cycle)x.Value);
                     var events = item.Value.Where(x => x.Value is TransactionEvent).ToDictionary(x => x.Key, x => (TransactionEvent)x.Value);
-                    lastWS = DrawHDBT(lastWS, events, cycles, item.Key, ref index);
+
+                    foreach (var trans in transaction.Select(x => x.Value.ListEvent))
+                    {
+                        var evs = trans.Where(ev => !events.ContainsKey(ev.Value.DateBegin)
+                          && Template_EventDevice.ContainsKey(ev.Value.Name)).ToDictionary(d => d.Key, d => d.Value);
+                        foreach (var ev in evs)
+                        {
+                            events.Add(ev.Key, ev.Value);
+                        }
+                    }
+
+                    if (isCycle)
+                    {
+                        lastWS.Cells["A1"].Value = "Nội dung";
+                        lastWS.Cells["B1"].Value = "ATMID";
+                        lastWS.Cells["C1"].Value = "Ngày tiếp quỹ";
+                        lastWS.Cells["D1"].Value = "Ngày kiểm quỹ";
+                        lastWS.Cells["E1"].Value = "Số lần";
+                        lastWS.Cells["F1"].Value = "Date time";
+                        lastWS.Cells["G1"].Value = "Hành động";
+                        lastWS.Cells["H1"].Value = "Trace ID";
+                        lastWS.Cells["I1"].Value = "Số tiền thu hồi của GD";
+                        foreach (var c in cycles)
+                        {
+                            lastWS = DrawHDBT(lastWS, events, c, item.Key, ref index, Template_EventDevice, isCycle);
+                        }
+
+                    }
+                    else
+                    {
+                        lastWS.Cells["A1"].Value = "Nội dung";
+                        lastWS.Cells["B1"].Value = "ATMID";
+                        lastWS.Cells["C1"].Value = "Số lần";
+                        lastWS.Cells["D1"].Value = "Date time";
+                        lastWS.Cells["E1"].Value = "Hành động";
+                        lastWS.Cells["F1"].Value = "Trace ID";
+                        lastWS.Cells["G1"].Value = "Số tiền thu hồi của GD";
+
+                        lastWS = DrawHDBT(lastWS, events, new KeyValuePair<DateTime, Cycle>(), item.Key, ref index, Template_EventDevice, false);
+                    }
                     index++;
                 }
                 this.excelPackage.Save();
@@ -112,14 +144,23 @@ namespace Transaction_Statistical.Class
 
         }
 
-        public void BaoCaoGiaoDichTaiChinh(string WorksheetsName, TableStyles tableStyles, Dictionary<DateTime, Transaction> ListTransaction, Dictionary<DateTime, Cycle> cycles)
+        public void BaoCaoGiaoDichTaiChinh(string WorksheetsName, TableStyles tableStyles, Dictionary<DateTime, Transaction> ListTransaction, Dictionary<DateTime, Cycle> cycles, Dictionary<string, string> Template_EventDevice)
         {
             this.excelPackage.Workbook.Worksheets.Add(WorksheetsName);
             var lastWS = excelPackage.Workbook.Worksheets.Last();
-            lastWS = DrawGDTC(lastWS, ListTransaction, cycles);
+            lastWS = DrawGDTC(lastWS, ListTransaction, cycles, Template_EventDevice);
             this.excelPackage.Save();
         }
 
+
+
+        public void BaoCaoGiaoDichEmptyCassett(string WorksheetsName, TableStyles tableStyles, Dictionary<string, Dictionary<DateTime, object>> ListTransaction, bool isCycle)
+        {
+            this.excelPackage.Workbook.Worksheets.Add(WorksheetsName);
+            var lastWS = excelPackage.Workbook.Worksheets.Last();
+            lastWS = DrawGDEmptyCassett(lastWS);
+            this.excelPackage.Save();
+        }
         private ExcelWorksheet DrawCounter(ExcelWorksheet worksheet, Dictionary<DateTime, Cycle> ListCycle)
         {
             try
@@ -129,7 +170,7 @@ namespace Transaction_Statistical.Class
                 using (ExcelRange rng = worksheet.Cells["A1:I1"])
                 {
                     rng.Style.Fill.PatternType = OfficeOpenXml.Style.ExcelFillStyle.Solid;
-                    rng.Style.Fill.BackgroundColor.SetColor(Color.FromArgb(248, 203, 173));
+                    rng.Style.Fill.BackgroundColor.SetColor(Backgroud);
                     rng.Merge = true;
                     rng.Value = "BẢNG THỐNG KÊ COUNTER TRÊN MỖI CHU KỲ";
                 }
@@ -193,7 +234,7 @@ namespace Transaction_Statistical.Class
                     using (ExcelRange rng = worksheet.Cells[string.Format("A{0}:I{1}", indexRow, indexRow)])
                     {
                         rng.Style.Fill.PatternType = OfficeOpenXml.Style.ExcelFillStyle.Solid;
-                        rng.Style.Fill.BackgroundColor.SetColor(Color.FromArgb(255, 255, 0));
+                        rng.Style.Fill.BackgroundColor.SetColor(Backgroud);
                     }
                     var cycleItem = cycles[cycle].Value;
                     var denoList = cycles[cycle].Value.DenominationCount;
@@ -293,115 +334,37 @@ namespace Transaction_Statistical.Class
             }
             return worksheet;
         }
-        private ExcelWorksheet DrawHDBT(ExcelWorksheet worksheet, Dictionary<DateTime, TransactionEvent> ListTransaction, Dictionary<DateTime, Cycle> Cycles, string atmID, ref int index)
+        private ExcelWorksheet DrawHDBT(ExcelWorksheet worksheet, Dictionary<DateTime, TransactionEvent> ListTransaction, KeyValuePair<DateTime, Cycle> Cycles, string atmID, ref int index, Dictionary<string, string> Template_EventDevice, bool isCycle)
         {
             try
             {
-
-                foreach (var itemC in Cycles)
+                int mgr = index;
+                int mgr1 = index;
+                if (isCycle)
                 {
-                    var eventDevice = ListTransaction;
-                    var openTheCashDrawer = eventDevice.Where(x => x.Value.TContent.Contains("Safe Door")
-                    && x.Value.DateBegin > itemC.Value.SettlementPeriodDateBegin
-                    && x.Value.DateBegin < itemC.Value.SettlementPeriodDateEnd)
-                        .ToDictionary(d => d.Key, d => d.Value);
-                    var openTechnicalChamber = eventDevice.Where(x => x.Value.TContent.Contains("Supervisor Mode")
-                     && x.Value.DateBegin > itemC.Value.SettlementPeriodDateBegin
-                    && x.Value.DateBegin < itemC.Value.SettlementPeriodDateEnd)
-                        .ToDictionary(d => d.Key, d => d.Value);
-                    var reboot = eventDevice.Where(x => x.Value.TContent.Contains("Restart process started by program")
-                     && x.Value.DateBegin > itemC.Value.SettlementPeriodDateBegin
-                    && x.Value.DateBegin < itemC.Value.SettlementPeriodDateEnd)
-                        .ToDictionary(d => d.Key, d => d.Value);
-                    var disconect = eventDevice.Where(x => x.Value.TContent.Contains("Communication off".ToUpper())
-                     && x.Value.DateBegin > itemC.Value.SettlementPeriodDateBegin
-                    && x.Value.DateBegin < itemC.Value.SettlementPeriodDateEnd)
-                        .ToDictionary(d => d.Key, d => d.Value);
-                    var moneyRetracted = eventDevice.Where(x => x.Value.TContent.Contains("Retract")
-                     && x.Value.DateBegin > itemC.Value.SettlementPeriodDateBegin
-                    && x.Value.DateBegin < itemC.Value.SettlementPeriodDateEnd)
-                        .ToDictionary(d => d.Key, d => d.Value);
-                    var withdrawalStuck = eventDevice.Where(x => x.Value.TContent.Contains("Withdrawal")
-                     && x.Value.DateBegin > itemC.Value.SettlementPeriodDateBegin
-                    && x.Value.DateBegin < itemC.Value.SettlementPeriodDateEnd)
-                        .ToDictionary(d => d.Key, d => d.Value);
-                    var depositStuck = eventDevice.Where(x => x.Value.TContent.Contains("Deposit")
-                     && x.Value.DateBegin > itemC.Value.SettlementPeriodDateBegin
-                    && x.Value.DateBegin < itemC.Value.SettlementPeriodDateEnd)
-                        .ToDictionary(d => d.Key, d => d.Value);
 
-                    int timesOpenTheCashDrawer = openTheCashDrawer.Count();
-                    int timesOpenTechnicalChamber = openTechnicalChamber.Count();
-                    int timesReboot = reboot.Count();
-                    int timesDisconect = disconect.Count();
-                    int timesMoneyTracted = moneyRetracted.Count();
-                    int timesWithdrawalStuck = withdrawalStuck.Count();
-                    int timesDepositStuck = depositStuck.Count();
-
-
-                    worksheet.Cells["A1"].Value = "Nội dung";
-                    worksheet.Cells["B1"].Value = "ATMID";
-                    worksheet.Cells["C1"].Value = "Ngày tiếp quỹ";
-                    worksheet.Cells["D1"].Value = "Ngày kiểm quỹ";
-                    worksheet.Cells["E1"].Value = "Số lần";
-                    worksheet.Cells["F1"].Value = "Date time";
-                    worksheet.Cells["G1"].Value = "Hành động";
-                    worksheet.Cells["H1"].Value = "Trace ID";
-                    worksheet.Cells["I1"].Value = "Số tiền thu hồi của GD";
-                    int mrg = (timesOpenTheCashDrawer > 1 ? timesOpenTheCashDrawer : 1)
-                        + (timesOpenTechnicalChamber > 1 ? timesOpenTechnicalChamber : 1) +
-                        (timesReboot > 1 ? timesReboot : 1) +
-                       (timesDisconect > 1 ? timesDisconect : 1) +
-                        (timesMoneyTracted > 1 ? timesMoneyTracted : 1) +
-                        (timesWithdrawalStuck > 1 ? timesWithdrawalStuck : 1) +
-                        (timesDepositStuck > 1 ? timesDepositStuck : 1);
-                    int mrgE = index + mrg - 1;
-                    using (ExcelRange rng = worksheet.Cells[string.Format("B{0}:B{1}", index, mrgE)])
+                    foreach (var dev in Template_EventDevice)
+                    {
+                        var itemEvent = ListTransaction.Where(x => x.Value.Name.Equals(dev.Key)
+                        && x.Value.DateBegin >= Cycles.Value.SettlementPeriodDateBegin && x.Value.DateBegin <= Cycles.Value.SettlementPeriodDateEnd)
+                            .ToDictionary(d => d.Key, d => d.Value);
+                        worksheet = DrawLoop(worksheet, ref index, itemEvent, dev.Key, true);
+                        mgr += itemEvent.Count() > 0 ? itemEvent.Count() : 1;
+                    }
+                    using (ExcelRange rng = worksheet.Cells[string.Format("C{0}:C{1}", mgr1, mgr - 1)])
                     {
                         rng.Merge = true;
-                        rng.Value = atmID;
+                        rng.Value = Cycles.Value.SettlementPeriodDateBegin;
+                        rng.Style.Numberformat.Format = formatDate;
+
                     }
-                    using (ExcelRange rng = worksheet.Cells[string.Format("C{0}:C{1}", index, mrgE)])
+                    using (ExcelRange rng = worksheet.Cells[string.Format("D{0}:D{1}", mgr1, mgr - 1)])
                     {
                         rng.Merge = true;
-                        rng.Value = itemC.Value.SettlementPeriodDateBegin.ToString();
+                        rng.Value = Cycles.Value.SettlementPeriodDateEnd;
+                        rng.Style.Numberformat.Format = formatDate;
                     }
-                    using (ExcelRange rng = worksheet.Cells[string.Format("D{0}:D{1}", index, mrgE)])
-                    {
-                        rng.Merge = true;
-                        rng.Value = itemC.Value.SettlementPeriodDateEnd.ToString();
-                    }
-                    //DRAW DATA
-                    //Bao nhiêu lần mở cửa khoang tiền?
-                    int temp = index;
-                    worksheet = DrawLoop(worksheet, ref temp, openTheCashDrawer, "Bao nhiêu lần mở cửa khoang tiền?", atmID
-                        , itemC.Value.SettlementPeriodDateBegin, itemC.Value.SettlementPeriodDateEnd);
-
-                    //Bao nhiêu lần mở cửa khoang kỹ thuật? 
-                    worksheet = DrawLoop(worksheet, ref temp, openTechnicalChamber, "Bao nhiêu lần mở cửa khoang kỹ thuật?", atmID
-                        , itemC.Value.SettlementPeriodDateBegin, itemC.Value.SettlementPeriodDateEnd);
-
-                    //Bao nhiêu lần máy khởi động lại ?
-                    worksheet = DrawLoop(worksheet, ref temp, reboot, "Bao nhiêu lần máy khởi động lại ?", atmID
-                        , itemC.Value.SettlementPeriodDateBegin, itemC.Value.SettlementPeriodDateEnd);
-
-                    //Bao nhiêu lần mất mạng
-                    worksheet = DrawLoop(worksheet, ref temp, disconect, "Bao nhiêu lần mất mạng?", atmID
-                        , itemC.Value.SettlementPeriodDateBegin, itemC.Value.SettlementPeriodDateEnd);
-
-                    //Bao nhiêu lần tiền bị thu hồi?
-                    worksheet = DrawLoop(worksheet, ref temp, moneyRetracted, "Bao nhiêu lần tiền bị thu hồi?", atmID
-                        , itemC.Value.SettlementPeriodDateBegin, itemC.Value.SettlementPeriodDateEnd);
-
-                    //Bao nhiêu lần rút tiền bị kẹt?
-                    worksheet = DrawLoop(worksheet, ref temp, depositStuck, "Bao nhiêu lần rút tiền bị kẹt?", atmID
-                        , itemC.Value.SettlementPeriodDateBegin, itemC.Value.SettlementPeriodDateEnd);
-
-                    //Bao nhiêu lần nộp tiền bị kẹt?
-                    worksheet = DrawLoop(worksheet, ref temp, withdrawalStuck, "Bao nhiêu lần nộp tiền bị kẹt?", atmID
-                        , itemC.Value.SettlementPeriodDateBegin, itemC.Value.SettlementPeriodDateEnd);
-
-                    using (ExcelRange rng = worksheet.Cells[string.Format("A{0}:I{1}", index, mrgE)])
+                    using (ExcelRange rng = worksheet.Cells[string.Format("A{0}:I{1}", mgr1, mgr - 1)])
                     {
                         rng.Style.Border.Top.Style = ExcelBorderStyle.Thin;
                         rng.Style.Border.Bottom.Style = ExcelBorderStyle.Thin;
@@ -413,9 +376,39 @@ namespace Transaction_Statistical.Class
                         rng.Style.Border.Left.Color.SetColor(Color.Black);
                         rng.Style.Border.Right.Color.SetColor(Color.Black);
                     }
-                    index = mrgE + 2;
+                }
+                else
+                {
+
+                    foreach (var dev in Template_EventDevice)
+                    {
+                        var itemEvent = ListTransaction.Where(x => x.Value.Name.Equals(dev.Key)).ToDictionary(d => d.Key, d => d.Value);
+
+                        worksheet = DrawLoop(worksheet, ref index, itemEvent, dev.Key, false);
+
+                        mgr += itemEvent.Count() > 0 ? itemEvent.Count() : 1;
+                    }
+                    using (ExcelRange rng = worksheet.Cells[string.Format("A{0}:H{1}", mgr1, mgr - 1)])
+                    {
+                        rng.Style.Border.Top.Style = ExcelBorderStyle.Thin;
+                        rng.Style.Border.Bottom.Style = ExcelBorderStyle.Thin;
+                        rng.Style.Border.Left.Style = ExcelBorderStyle.Thin;
+                        rng.Style.Border.Right.Style = ExcelBorderStyle.Thin;
+
+                        rng.Style.Border.Top.Color.SetColor(Color.Black);
+                        rng.Style.Border.Bottom.Color.SetColor(Color.Black);
+                        rng.Style.Border.Left.Color.SetColor(Color.Black);
+                        rng.Style.Border.Right.Color.SetColor(Color.Black);
+                    }
                 }
 
+
+
+                using (ExcelRange rng = worksheet.Cells[string.Format("B{0}:B{1}", mgr1, mgr - 1)])
+                {
+                    rng.Merge = true;
+                    rng.Value = atmID;
+                }
 
                 var allCells = worksheet.Cells[1, 1, worksheet.Dimension.End.Row, worksheet.Dimension.End.Column];
                 allCells.AutoFitColumns();
@@ -432,11 +425,11 @@ namespace Transaction_Statistical.Class
         }
 
         private ExcelWorksheet DrawLoop(ExcelWorksheet worksheet, ref int index,
-            Dictionary<DateTime, TransactionEvent> transactionEvent, string title, string atmID,
-            DateTime begin, DateTime end)
+            Dictionary<DateTime, TransactionEvent> transactionEvent, string title, bool isCycle)
         {
             try
             {
+                int indexOrigin = index;
                 int times = transactionEvent.Count();
                 int indexATMID = index + times;
                 using (ExcelRange rng = worksheet.Cells[string.Format("A{0}:A{1}", index, times <= 1 ? index : indexATMID - 1)])
@@ -444,20 +437,53 @@ namespace Transaction_Statistical.Class
                     rng.Merge = true;
                     rng.Value = title;
                 }
-                using (ExcelRange rng = worksheet.Cells[string.Format("E{0}:E{1}", index, times <= 1 ? index : indexATMID - 1)])
+                if (isCycle)
                 {
-                    rng.Merge = true;
-                    rng.Value = times;
+                    using (ExcelRange rng = worksheet.Cells[string.Format("E{0}:E{1}", index, times <= 1 ? index : indexATMID - 1)])
+                    {
+                        rng.Merge = true;
+                        rng.Value = times;
 
+                    }
                 }
+                else
+                {
+                    using (ExcelRange rng = worksheet.Cells[string.Format("C{0}:C{1}", index, times <= 1 ? index : indexATMID - 1)])
+                    {
+                        rng.Merge = true;
+                        rng.Value = times;
+
+                    }
+                }
+
 
                 for (int i = 0; i < transactionEvent.Count; i++)
                 {
-                    worksheet.Cells[index + i, 6].Style.Numberformat.Format = formatDate;
-                    worksheet.Cells[index + i, 6].Value = transactionEvent.ToArray()[i].Value.DateBegin;
-                    worksheet.Cells[index + i, 7].Value = transactionEvent.ToArray()[i].Value.TContent;
-                    worksheet.Cells[index + i, 8].Value = "";
-                    worksheet.Cells[index + i, 9].Value = "";
+
+                    var evt = transactionEvent.ToArray()[i].Value;
+                    if (isCycle)
+                    {
+
+                        worksheet.Cells[index + i, 6].Style.Numberformat.Format = formatDate;
+                        worksheet.Cells[index + i, 6].Value = evt.DateBegin;
+                        worksheet.Cells[index + i, 7].Value = evt.TContent;
+                        worksheet.Cells[index + i, 8].Value = string.IsNullOrEmpty(evt.TraceID) ? "-" : evt.TraceID;
+                        worksheet.Cells[index + i, 9].Value = evt.Amount;
+                        worksheet.Cells[index + i, 9].Style.Numberformat.Format = "###,###,##0.0";
+                    }
+                    else
+                    {
+
+                        worksheet.Cells[index + i, 4].Style.Numberformat.Format = formatDate;
+                        worksheet.Cells[index + i, 4].Value = transactionEvent.ToArray()[i].Value.DateBegin;
+                        worksheet.Cells[index + i, 5].Value = transactionEvent.ToArray()[i].Value.TContent;
+                        //worksheet.Cells[index + i, 5].Value = "";
+                        worksheet.Cells[index + i, 6].Value = string.IsNullOrEmpty(evt.TraceID) ? "-" : evt.TraceID;
+
+                        worksheet.Cells[index + i, 7].Value = evt.Amount;
+                        worksheet.Cells[index + i, 7].Style.Numberformat.Format = "###,###,##0.0";
+                    }
+
                 }
                 index = times <= 1 ? index + 1 : indexATMID;
 
@@ -470,7 +496,7 @@ namespace Transaction_Statistical.Class
             return worksheet;
         }
 
-        private ExcelWorksheet DrawGDTC(ExcelWorksheet worksheet, Dictionary<DateTime, Transaction> ListTransaction, Dictionary<DateTime, Cycle> cycles)
+        private ExcelWorksheet DrawGDTC(ExcelWorksheet worksheet, Dictionary<DateTime, Transaction> ListTransaction, Dictionary<DateTime, Cycle> cycles, Dictionary<string, string> Template_EventDevice)
         {
             try
             {
@@ -483,7 +509,7 @@ namespace Transaction_Statistical.Class
                 using (ExcelRange rng = worksheet.Cells["A1:Z2"])
                 {
                     rng.Style.Fill.PatternType = OfficeOpenXml.Style.ExcelFillStyle.Solid;
-                    rng.Style.Fill.BackgroundColor.SetColor(Color.FromArgb(252, 228, 214));
+                    rng.Style.Fill.BackgroundColor.SetColor(Backgroud);
                     rng.Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
                     rng.Style.VerticalAlignment = ExcelVerticalAlignment.Center;
                     rng.Style.Font.Bold = true;
@@ -600,7 +626,8 @@ namespace Transaction_Statistical.Class
                     var cycleOfTransction = cycles.Where(x => x.Value.SettlementPeriodDateBegin <= itemTrans.DateBegin
                     && x.Value.SettlementPeriodDateEnd >= itemTrans.DateBegin
                     && itemTrans.Terminal.Contains(x.Value.TerminalID)).OrderBy(x => x.Value.SettlementPeriodDateBegin).LastOrDefault().Value;
-                    worksheet.Cells[indexData, index].Value = "";
+                    var lastBill = itemTrans.ListBills.OrderBy(x => x.Key).LastOrDefault();
+                    worksheet.Cells[indexData, index].Value = lastBill.Value != null ? lastBill.Value.TranNo : "-";
                     worksheet.Cells[indexData, index + 1].Value = string.IsNullOrEmpty(itemTrans.Type) ? "N/A" : itemTrans.Type;
                     worksheet.Cells[indexData, index + 2].Value = requestLast != null ? requestLast.Status.ToString() : "";
                     worksheet.Cells[indexData, index + 3].Value = itemTrans.Terminal;
@@ -614,24 +641,58 @@ namespace Transaction_Statistical.Class
                     worksheet.Cells[indexData, index + 9].Value = Math.Abs(itemTrans.Amount);
                     worksheet.Cells[indexData, index + 9].Style.Numberformat.Format = "###,###,##0.0";
 
-                    worksheet.Cells[indexData, index + 10].Value = Math.Abs(itemTrans.Value_500K);
-                    worksheet.Cells[indexData, index + 11].Value = 0;
-                    worksheet.Cells[indexData, index + 12].Value = Math.Abs(itemTrans.Value_200K);
-                    worksheet.Cells[indexData, index + 13].Value = 0;
-                    worksheet.Cells[indexData, index + 14].Value = Math.Abs(itemTrans.Value_10K);
-                    worksheet.Cells[indexData, index + 15].Value = 0;
-                    worksheet.Cells[indexData, index + 16].Value = Math.Abs(itemTrans.Value_50K);
-                    worksheet.Cells[indexData, index + 17].Value = 0;
-                    worksheet.Cells[indexData, index + 18].Value = Math.Abs(itemTrans.Value_20K);
-                    worksheet.Cells[indexData, index + 19].Value = 0;
-                    worksheet.Cells[indexData, index + 20].Value = Math.Abs(itemTrans.Value_10K);
-                    worksheet.Cells[indexData, index + 21].Value = 0;
-                    worksheet.Cells[indexData, index + 22].Value = Math.Abs(itemTrans.Rejects);
-                    worksheet.Cells[indexData, index + 23].Value = 0;
+                    //if (itemTrans.ListEvent.Values.Where(x => x.Type == TransactionEvent.Events.CashRetracted).Count() > 0 || itemTrans.CardNumber.Contains("970407******6366"))
+                    //{
+                    //    int a = 0;
+                    //}
+                    if (itemTrans.ListEvent.Values.Where(e => Template_EventDevice.ContainsKey(e.Name)).Count() > 0)
+                    {
+                        using (ExcelRange rng = worksheet.Cells[string.Format("A{0}:Z{1}", indexData, indexData)])
+                        {
+                            rng.Style.Fill.PatternType = OfficeOpenXml.Style.ExcelFillStyle.Solid;
+                            rng.Style.Fill.BackgroundColor.SetColor(Lightskyblue);
+                        }
+                    }
+                    if (itemTrans.ListEvent.Values.Where(e => e.Type == TransactionEvent.Events.CashRetracted).Count() > 0)
+                    {
+
+                        worksheet.Cells[indexData, index + 10].Value = 0;
+                        worksheet.Cells[indexData, index + 11].Value = Math.Abs(itemTrans.Value_500K);
+                        worksheet.Cells[indexData, index + 12].Value = 0;
+                        worksheet.Cells[indexData, index + 13].Value = Math.Abs(itemTrans.Value_200K);
+                        worksheet.Cells[indexData, index + 14].Value = 0;
+                        worksheet.Cells[indexData, index + 15].Value = Math.Abs(itemTrans.Value_100K);
+                        worksheet.Cells[indexData, index + 16].Value = 0;
+                        worksheet.Cells[indexData, index + 17].Value = Math.Abs(itemTrans.Value_50K);
+                        worksheet.Cells[indexData, index + 18].Value = 0;
+                        worksheet.Cells[indexData, index + 19].Value = Math.Abs(itemTrans.Value_20K);
+                        worksheet.Cells[indexData, index + 20].Value = 0;
+                        worksheet.Cells[indexData, index + 21].Value = Math.Abs(itemTrans.Value_10K);
+                        worksheet.Cells[indexData, index + 22].Value = Math.Abs(itemTrans.Unknow);
+                    }
+                    else
+                    {
+                        worksheet.Cells[indexData, index + 10].Value = Math.Abs(itemTrans.Value_500K);
+                        worksheet.Cells[indexData, index + 11].Value = 0;
+
+                        worksheet.Cells[indexData, index + 12].Value = Math.Abs(itemTrans.Value_200K);
+                        worksheet.Cells[indexData, index + 13].Value = 0;
+                        worksheet.Cells[indexData, index + 14].Value = Math.Abs(itemTrans.Value_100K);
+                        worksheet.Cells[indexData, index + 15].Value = 0;
+                        worksheet.Cells[indexData, index + 16].Value = Math.Abs(itemTrans.Value_50K);
+                        worksheet.Cells[indexData, index + 17].Value = 0;
+                        worksheet.Cells[indexData, index + 18].Value = Math.Abs(itemTrans.Value_20K);
+                        worksheet.Cells[indexData, index + 19].Value = 0;
+                        worksheet.Cells[indexData, index + 20].Value = Math.Abs(itemTrans.Value_10K);
+                        worksheet.Cells[indexData, index + 21].Value = 0;
+                        worksheet.Cells[indexData, index + 22].Value = Math.Abs(itemTrans.Rejects);
+                    }
+                    worksheet.Cells[indexData, index + 23].Value = itemTrans.Error;
+
                     //worksheet.Cells[indexData, index + 24].Style.WrapText = true;
                     worksheet.Cells[indexData, index + 24].Style.HorizontalAlignment = ExcelHorizontalAlignment.Left;
                     worksheet.Cells[indexData, index + 24].Value = itemTrans.FullFollow;
-                    //worksheet.Cells[indexData, index + 25].Value = "";
+                    //worksheet.Cells[indexData, index + 25].Value = requestLast != null && requestLast.Status == Status.Types.UnSucceeded ? itemTrans.TraceJournalFull : string.Empty;
                     indexData++;
                 }
 
@@ -658,6 +719,57 @@ namespace Transaction_Statistical.Class
             return worksheet;
         }
 
+        private ExcelWorksheet DrawGDEmptyCassett(ExcelWorksheet worksheet)
+        {
+            int index = 1;
 
+            //DRAW CHUDE
+            using (ExcelRange rng = worksheet.Cells["A1:N1"])
+            {
+                rng.Style.Fill.PatternType = OfficeOpenXml.Style.ExcelFillStyle.Solid;
+                rng.Style.Fill.BackgroundColor.SetColor(Backgroud);
+                rng.Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+                rng.Style.VerticalAlignment = ExcelVerticalAlignment.Center;
+                rng.Style.Font.Bold = true;
+            }
+            worksheet.Cells[1, 1].Value = "TRANNUMBER";
+            worksheet.Cells[1, 2].Value = "ATMID";
+            worksheet.Cells[1, 3].Value = "SỐ THẺ/CMT/CCCD";
+            worksheet.Cells[1, 4].Value = "SỐ TÀI KHOẢN";
+            worksheet.Cells[1, 5].Value = "DATE TIME";
+            worksheet.Cells[1, 6].Value = "SỐ TIỀN";
+            using (ExcelRange rng = worksheet.Cells["G1:J1"])
+            {
+                rng.Merge = true;
+                rng.Value = "Số tờ  GD yêu cầu đánh lên";
+            }
+            using (ExcelRange rng = worksheet.Cells["K1:N1"])
+            {
+                rng.Merge = true;
+                rng.Value = "Số tờ còn lại trong khay ở thời điểm empty cassette";
+            }
+
+            using (ExcelRange rng = worksheet.Cells["A1:N1"])
+            {
+                rng.Style.Border.Top.Style = ExcelBorderStyle.Thin;
+                rng.Style.Border.Bottom.Style = ExcelBorderStyle.Thin;
+                rng.Style.Border.Left.Style = ExcelBorderStyle.Thin;
+                rng.Style.Border.Right.Style = ExcelBorderStyle.Thin;
+
+
+                rng.Style.Border.Top.Color.SetColor(Color.Black);
+                rng.Style.Border.Bottom.Color.SetColor(Color.Black);
+                rng.Style.Border.Left.Color.SetColor(Color.Black);
+                rng.Style.Border.Right.Color.SetColor(Color.Black);
+            }
+
+            var allCells = worksheet.Cells[1, 1, worksheet.Dimension.End.Row, worksheet.Dimension.End.Column];
+            allCells.AutoFitColumns();
+
+            allCells.Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+            allCells.Style.VerticalAlignment = ExcelVerticalAlignment.Center;
+            allCells.Style.WrapText = true;
+            return worksheet;
+        }
     }
 }

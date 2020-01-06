@@ -86,7 +86,7 @@
           <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
         </dsig:Transforms>
         <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
-        <dsig:DigestValue>16BeyPfIb0Ws1pPzieA0c3hKzZ/yvQVKALsl/qX/ltk=</dsig:DigestValue>
+        <dsig:DigestValue>2851CpHY2qFzBzimWDYlk3sOQaFynsIjCIZsQkKLBKY=</dsig:DigestValue>
       </hash>
     </dependentAssembly>
   </dependency>
@@ -127,14 +127,14 @@
     </dependentAssembly>
   </dependency>
   <dependency>
-    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="Transaction Statistical.exe" size="758232">
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="Transaction Statistical.exe" size="762840">
       <assemblyIdentity name="Transaction Statistical" version="1.0.0.0" language="neutral" processorArchitecture="msil" />
       <hash>
         <dsig:Transforms>
           <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
         </dsig:Transforms>
         <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
-        <dsig:DigestValue>IoICzbdEbELlVoM9UPt9jBnXgrt1MoihJZSquoY0/tU=</dsig:DigestValue>
+        <dsig:DigestValue>D+HdnN6z4nJU64MnENJxZo1+NgYlyHR6fr8yci4r79k=</dsig:DigestValue>
       </hash>
     </dependentAssembly>
   </dependency>
@@ -144,7 +144,7 @@
         <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
       </dsig:Transforms>
       <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
-      <dsig:DigestValue>rZFe+jTwG3qHJpCkqEZ3tGQzTaxPMq6JL7sXJJaakw8=</dsig:DigestValue>
+      <dsig:DigestValue>tQtOMagPNOPYP0G1jO+kdSQdr9K8VfJHdkL4MlOLTgI=</dsig:DigestValue>
     </hash>
   </file>
   <file name="logo_big.ico" size="16958">
@@ -165,13 +165,13 @@
       <dsig:DigestValue>qeyncE2sViS7A5Y8ViSMbyi+7Vdf2fjrJYEyK/WIjUk=</dsig:DigestValue>
     </hash>
   </file>
-  <file name="Transaction Statistical.pdb" size="759296">
+  <file name="Transaction Statistical.pdb" size="761344">
     <hash>
       <dsig:Transforms>
         <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
       </dsig:Transforms>
       <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
-      <dsig:DigestValue>1VtWFA32mcTWvL8PFZHe42/bfj7RQEynAZqfOSzbLzU=</dsig:DigestValue>
+      <dsig:DigestValue>a854+x4blNzNKLvn6RCIBKJwULH6XdvewimbvXDrX2g=</dsig:DigestValue>
     </hash>
   </file>
   <compatibility xmlns="urn:schemas-microsoft-com:compatibility.v1">

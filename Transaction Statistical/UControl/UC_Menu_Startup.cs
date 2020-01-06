@@ -23,7 +23,8 @@ namespace Transaction_Statistical
             {(int)TemplateHelper.TEMPLATE.BaoCaoGiaoDichTaiChinh,"GD Tài Chính" },
             {(int)TemplateHelper.TEMPLATE.BaoCaoGiaoDichTaiChinhKhongThanhCong,"GD Tài Chính Không Thành Công" },
             {(int)TemplateHelper.TEMPLATE.BaoCaoGiaoDichTaiChinhBatThuong,"GD Tài Chính Bất Thường" },
-            {(int)TemplateHelper.TEMPLATE.BaoCaoHoatDongBatThuong,"BC Hoạt Động Bất Thường" },
+            {(int)TemplateHelper.TEMPLATE.BaoCaoHoatDongBatThuong,"BC HD Bất Thường" },
+            {(int)TemplateHelper.TEMPLATE.BaoCaoHoatDongBatThuongTheoChuKy,"BC HD Bất Thường" },
         };
         string[] TypeStart = { "DAILY", "ONCE", "WEEKLY", "MONTHLY" };
         string[] Months = { "JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC", "*" };
@@ -85,7 +86,7 @@ namespace Transaction_Statistical
                 row.Cells[0].Value = n; n++;
                 row.Cells[1].Value = rowData["Field"];
                 row.Cells[2].Value = CheckTaskExist(rowData["Field"].ToString());
-                row.Cells[3].Value = description[0].Split(';')[0];                
+                row.Cells[3].Value = description[0].Split(';')[0];
                 row.Cells[5].Value = string.Format("Template: {0}, source: {1}, destination: {2}, forms: {3} ", description[1], description[2], description[3], description[4]);
                 row.Tag = rowData;
                 dataGridView_lsPermissions.Rows.Add(row);
@@ -204,7 +205,7 @@ namespace Transaction_Statistical
             if (CreateTask(txt_TaskName.Text))
             {
                 string data = string.Format("{0};{1};{2};{3}", txt_HH.Text, cbo_TypeStart.Text, cbo_TypeStart.SelectedItem.Equals(TypeStart[2]) ? cbo_Week.Text : cbo_Month.Text, Nud_Day.Value);
-                    data+="|" + (cbo_LstTemplate.SelectedItem as ComboBoxItem).Value + "|" + txt_Source.Text + "|" + txt_Destination.Text + "|" + forms;
+                data += "|" + (cbo_LstTemplate.SelectedItem as ComboBoxItem).Value + "|" + txt_Source.Text + "|" + txt_Destination.Text + "|" + forms;
                 //foreach (var item in ckbl_Forms.CheckedItems) data += item.ToString() + ";"; data = data.TrimEnd(';');
 
                 Dictionary<int, string> TemplateChoosen = new Dictionary<int, string>();
@@ -293,7 +294,7 @@ namespace Transaction_Statistical
                 else
                     RemoveTask(dataGridView_lsPermissions.Rows[e.RowIndex].Cells[1].Value.ToString());
             }
-            else            if (dataGridView_lsPermissions.Rows[e.RowIndex].Cells[e.ColumnIndex] is DataGridViewButtonCell)
+            else if (dataGridView_lsPermissions.Rows[e.RowIndex].Cells[e.ColumnIndex] is DataGridViewButtonCell)
             {
                 if ((bool)dataGridView_lsPermissions.Rows[e.RowIndex].Cells[2].EditedFormattedValue)
                 {
@@ -320,11 +321,11 @@ namespace Transaction_Statistical
         private void cbo_TypeStart_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (cbo_TypeStart.Text.Equals(TypeStart[0]) || cbo_TypeStart.Text.Equals(TypeStart[1]))
-                {
+            {
                 pnl_Week.Visible = false;
                 pnl_Month.Visible = false;
             }
-            else if(cbo_TypeStart.Text.Equals(TypeStart[2]))
+            else if (cbo_TypeStart.Text.Equals(TypeStart[2]))
             {
                 pnl_Week.Visible = true;
                 pnl_Month.Visible = false;

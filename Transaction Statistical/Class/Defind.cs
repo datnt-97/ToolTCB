@@ -284,8 +284,8 @@ namespace Transaction_Statistical
                         return false;
                     }
                     string content = ManagedAes.Decrypt(File.ReadAllText(LicenseFile), prKey);
-                    string[] items = content.Split('');if (items.Length <= 3) return false;
-                    Enum.TryParse(items[0], out TypeLicense); 
+                    string[] items = content.Split(''); if (items.Length <= 3) return false;
+                    Enum.TryParse(items[0], out TypeLicense);
                     if (TypeLicense.Equals(License.Types.Business) || TypeLicense.Equals(License.Types.Free) || TypeLicense.Equals(License.Types.Trial))
                     {
                         if (items[1].Equals(GetMacAddress() + GetComputerSid())) StatusLicense = License.StatusS.Activated;
@@ -298,7 +298,7 @@ namespace Transaction_Statistical
                         DateTime.TryParseExact(s.Split('')[1], License.FormatDateAccess, CultureInfo.InvariantCulture, DateTimeStyles.None, out lic.DateEnd);
                         Enum.TryParse(s.Split('')[2], out lic.Module);
                         ListLicense.Add(lic);
-                        if (DateTime.Compare(lic.DateEnd,  DateMaximum) > 0) DateMaximum = lic.DateEnd;
+                        if (DateTime.Compare(lic.DateEnd, DateMaximum) > 0) DateMaximum = lic.DateEnd;
                     }
                     License_Update();
                     return true;
@@ -306,7 +306,7 @@ namespace Transaction_Statistical
             }
             catch (Exception ex)
             {
-               // InitParametar.Send_Error(ex.ToString(), MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name); ;
+                // InitParametar.Send_Error(ex.ToString(), MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name); ;
             }
             return false;
         }
@@ -316,9 +316,9 @@ namespace Transaction_Statistical
             {
                 string content = TypeLicense.ToString() + '' + GetMacAddress() + GetComputerSid() + '';
                 ListLicense.ForEach(x =>
-                        {
-                            content += x.DateBegin.ToString(License.FormatDate) + '' + x.DateEnd.ToString(License.FormatDate) + '' + x.Module + '';
-                        });
+                {
+                    content += x.DateBegin.ToString(License.FormatDate) + '' + x.DateEnd.ToString(License.FormatDate) + '' + x.Module + '';
+                });
                 content = content.TrimEnd('') + '' + DateTime.Now.ToString(License.FormatDateAccess);
                 File.Delete(LicenseFile);
                 using (StreamWriter sw = new StreamWriter(LicenseFile, true))
@@ -362,7 +362,7 @@ namespace Transaction_Statistical
         {
             return new SecurityIdentifier((byte[])new DirectoryEntry(string.Format("WinNT://{0},Computer", Environment.MachineName)).Children.Cast<DirectoryEntry>().First().InvokeGet("objectSID"), 0).AccountDomainSid;
         }
-        
+
     }
 
     public class TransactionType
@@ -500,7 +500,7 @@ namespace Transaction_Statistical
 
             try
             {
-               if(!InitParametar.License_CheckModule(License.Modules.Read)) return false;
+
                 FileExport = exportDestination;
                 if (Directory.Exists(exportDestination))
                     FileExport = exportDestination + string.Format("\\TransactionStatistical_{0:yyyyMMdd_HH-mm}.xlsx", DateTime.Now);
@@ -516,6 +516,7 @@ namespace Transaction_Statistical
                            group => group.First().Value).ToDictionary(d => d.Key, d => (Cycle)d.Value);
                     });
                     var transaction = new Dictionary<DateTime, Transaction>();
+
                     ListTransaction.Select(x => x.Value).ToList().ForEach(x =>
                     {
                         transaction = transaction.Concat(x.Where(i => i.Value is Transaction).ToDictionary(d => d.Key, d => (Transaction)d.Value))
@@ -524,12 +525,14 @@ namespace Transaction_Statistical
                            group => group.First().Value).ToDictionary(d => d.Key, d => (Transaction)d.Value);
                     });
 
+                    //transaction = transaction.Where(x => !string.IsNullOrEmpty(x.Value.Type)).ToDictionary(d => d.Key, d => (Transaction)d.Value);
 
                     var transactionUnsuccess = new Dictionary<DateTime, Transaction>();
                     transactionUnsuccess = transaction.Where(x => x.Value.ListRequest.Values.LastOrDefault() != null && x.Value.ListRequest.Values.LastOrDefault().Status == Status.Types.UnSucceeded).ToDictionary(x => x.Key, x => x.Value);
-
                     var transactionUnnomal = new Dictionary<DateTime, Transaction>();
-                    transactionUnnomal = transaction.Where(x => x.Value.ListEvent.Values.Count == 0).ToDictionary(x => x.Key, x => x.Value);
+                    transactionUnnomal = transaction.Where(x => (x.Value.ListRequest.Values.LastOrDefault() != null && x.Value.ListRequest.Values.LastOrDefault().Status == Status.Types.UnSucceeded) ||
+                    x.Value.ListEvent.Values.Where(ev => Template_EventDevice.ContainsKey(ev.Name)).Count() > 0).ToDictionary(x => x.Key, x => x.Value);
+
 
                     //var transactionEvent = ListTransaction.ToDictionary(d => d.Key, d => d.Value.Where(x => x.Value is TransactionEvent).ToDictionary(k => k.Key, k => (TransactionEvent)k.Value));
 
@@ -550,17 +553,26 @@ namespace Transaction_Statistical
                                     template.CanQuyTheoCouterTrenMay(item.Value, OfficeOpenXml.Table.TableStyles.Custom, cycle);
                                     break;
                                 case (int)TemplateHelper.TEMPLATE.BaoCaoGiaoDichTaiChinh:
-                                    template.BaoCaoGiaoDichTaiChinh(item.Value, OfficeOpenXml.Table.TableStyles.Custom, transaction, cycle);
+                                    template.BaoCaoGiaoDichTaiChinh(item.Value, OfficeOpenXml.Table.TableStyles.Custom, transaction.Where(x => !string.IsNullOrEmpty(x.Value.Type)).ToDictionary(x => x.Key, x => x.Value), cycle, Template_EventDevice);
                                     break;
                                 case (int)TemplateHelper.TEMPLATE.BaoCaoGiaoDichTaiChinhKhongThanhCong:
-                                    template.BaoCaoGiaoDichTaiChinh(item.Value, OfficeOpenXml.Table.TableStyles.Custom, transactionUnsuccess, cycle);
+                                    template.BaoCaoGiaoDichTaiChinh(item.Value, OfficeOpenXml.Table.TableStyles.Custom, transactionUnsuccess.Where(x => !string.IsNullOrEmpty(x.Value.Type)).ToDictionary(x => x.Key, x => x.Value), cycle, Template_EventDevice);
                                     break;
                                 case (int)TemplateHelper.TEMPLATE.BaoCaoGiaoDichTaiChinhBatThuong:
-                                    template.BaoCaoGiaoDichTaiChinh(item.Value, OfficeOpenXml.Table.TableStyles.Custom, transactionUnnomal, cycle);
+                                    template.BaoCaoGiaoDichTaiChinh(item.Value, OfficeOpenXml.Table.TableStyles.Custom, transactionUnnomal, cycle, Template_EventDevice);
                                     break;
                                 case (int)TemplateHelper.TEMPLATE.BaoCaoHoatDongBatThuong:
-                                    template.BaoCaoHoatDongBatThuong(item.Value, OfficeOpenXml.Table.TableStyles.Custom, ListTransaction);
+                                    template.BaoCaoHoatDongBatThuong(item.Value, OfficeOpenXml.Table.TableStyles.Custom, ListTransaction, Template_EventDevice, false);
                                     break;
+                                case (int)TemplateHelper.TEMPLATE.BaoCaoHoatDongBatThuongTheoChuKy:
+                                    template.BaoCaoHoatDongBatThuong(item.Value, OfficeOpenXml.Table.TableStyles.Custom, ListTransaction, Template_EventDevice, true);
+                                    break;
+                                    //case (int)TemplateHelper.TEMPLATE.BaoCaoGiaoDichEmptyCassett:
+                                    //    template.BaoCaoGiaoDichEmptyCassett(item.Value, OfficeOpenXml.Table.TableStyles.Custom, ListTransaction, false);
+                                    //    break;
+                                    //case (int)TemplateHelper.TEMPLATE.BaoCaoGiaoDichEmptyCassettTheoChuKy:
+                                    //    template.BaoCaoGiaoDichEmptyCassett(item.Value, OfficeOpenXml.Table.TableStyles.Custom, ListTransaction, true);
+                                    //    break;
                             }
                             if (progress != null)
                             {
@@ -579,7 +591,6 @@ namespace Transaction_Statistical
             catch (Exception ex)
             {
                 throw ex;
-
             }
             return false;
         }
@@ -613,7 +624,7 @@ namespace Transaction_Statistical
                     string Terminal = Path.GetFileName(file).Substring(0, 8);
                     string contenFile = File.ReadAllText(file);
                     DateTime.TryParseExact(day, "yyyyMMdd", CultureInfo.InvariantCulture, DateTimeStyles.None, out currentDate);
-                    if (int.Parse(currentDate.ToString("yyyyMMdd")) >= int.Parse(StartDate.ToString("yyyyMMdd")) && int.Parse(currentDate.ToString("yyyyMMdd")) <= int.Parse( EndDate.ToString("yyyyMMdd")))
+                    if (int.Parse(currentDate.ToString("yyyyMMdd")) >= int.Parse(StartDate.ToString("yyyyMMdd")) && int.Parse(currentDate.ToString("yyyyMMdd")) <= int.Parse(EndDate.ToString("yyyyMMdd")))
                     {
                         contenFile = await SplitTransactionEJ(Terminal, contenFile);
                         contenFile = await FindEventDevice2Async(currentDate, Terminal, contenFile);
@@ -1247,10 +1258,13 @@ namespace Transaction_Statistical
         public int Value_200K;
         public int Value_500K;
         public int Rejects;
+        public int Unknow;
+
         public int Amount { get { return (Value_10K * 10000 + Value_20K * 20000 + Value_50K * 50000 + Value_100K * 100000 + Value_200K * 200000 + Value_500K * 500000); } }
 
         public string TraceJournalFull;
         public Dictionary<DateTime, TransactionEvent> ListEvent = new Dictionary<DateTime, TransactionEvent>();
+        public Dictionary<DateTime, Bills> ListBills = new Dictionary<DateTime, Bills>();
 
         public int Result;
 
@@ -1292,7 +1306,7 @@ namespace Transaction_Statistical
             get { return _name; }
             set { _name = value; }
         }
-
+        public string Error { get; set; }
         public string TraceJournal_Remaining;
         public string TraceDeviceTxt;
         public string TraceTransMsgTxt;
@@ -1361,7 +1375,8 @@ namespace Transaction_Statistical
             Transaction,
             Device,
             CashIn,
-            CashOut
+            CashOut,
+            CashRetracted,
         }
         public Events Type;
 
@@ -1379,6 +1394,8 @@ namespace Transaction_Statistical
 
         [CategoryAttribute("Event"), DescriptionAttribute("Content of the Event")]
         public string TContent { get; set; }
+        public string TraceID { get; set; }
+        public int Amount { get; set; }
         public override string ToString()
         {
             return String.Format("{0:HH:mm:ss }", DateBegin) + Name + ": " + Status;
@@ -1694,30 +1711,23 @@ namespace Transaction_Statistical
 
         }
     }
-    public class EventData
+    public class Bills
     {
-        private string sString;
-        private Dictionary<DateTime, TransactionEvent> eventList;
-        private Transaction transaction;
-
-        public string SString { get => sString; set => sString = value; }
-        public Dictionary<DateTime, TransactionEvent> EventList { get => eventList; set => eventList = value; }
-        public Transaction Transaction { get => transaction; set => transaction = value; }
-
-        public EventData(string sString, Dictionary<DateTime, TransactionEvent> eventList, Transaction transaction)
+        public enum Types
         {
-            this.sString = sString;
-            this.eventList = eventList;
-            this.transaction = transaction;
+            Bill_Deposit_Unsuccess,
+            Bill_Withdrawal_Unsuccess,
+            Bill_Deposit,
+            Bill_Withdrawal
         }
-        public EventData(string sString, Dictionary<DateTime, TransactionEvent> eventList)
-        {
-            this.sString = sString;
-            this.eventList = eventList;
-        }
-        public EventData()
-        {
-        }
+        public string TranNo { get; set; }
+        public string CardNo { get; set; }
+        public string Terminal { get; set; }
+        public string RequireAmount { get; set; }
+        public string Code { get; set; }
+        public string Text { get; set; }
+        public DateTime Date { get; set; }
+        public Types Type { get; set; }
     }
 
     public class Algorithm_TripleDES
