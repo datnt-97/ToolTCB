@@ -13,17 +13,14 @@ namespace Transaction_Statistical
 {
     public partial class Frm_TemplateDefault : Form
     {
-        public Frm_TemplateDefault(Control ctrAdd)
+        public Frm_TemplateDefault(Control ctrAdd, string tilte)
         {
-            InitializeComponent2();
+            InitializeComponent(tilte);
             this.Width = ctrAdd.Width + 4;
             this.Height = ctrAdd.Height + 34;
             pnl_Main.Controls.Add(ctrAdd);
-
-            InitGUI.Custom.Frm_TopToolbar.OnColorHandler += InitializeComponent_Refresh;
-            InitGUI.Custom.Frm_Border.OnColorHandler += InitializeComponent_Refresh;
-            InitGUI.Custom.Frm_TextTilte.OnColorHandler += InitializeComponent_Refresh;
-            InitGUI.Custom.Frm_Background.OnColorHandler += InitializeComponent_Refresh;
+            this.titleCustom.Size = new System.Drawing.Size(System.Windows.Forms.TextRenderer.MeasureText(titleCustom.Text, titleCustom.Font).Width, 17);
+            this.titleCustom.Location = new System.Drawing.Point((TopPanel.Width - titleCustom.Width) / 2, 5);
         }
         #region Design GUI
         bool isTopPanelDragged = false;

@@ -82,6 +82,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data.SQLite, Version=1.0.112.0, Culture=neutral, PublicKeyToken=db937bc2d44ff139, processorArchitecture=MSIL">
       <HintPath>..\packages\System.Data.SQLite.Core.1.0.112.0\lib\net45\System.Data.SQLite.dll</HintPath>
@@ -94,6 +95,8 @@
     </Reference>
     <Reference Include="System.Design" />
     <Reference Include="System.DirectoryServices" />
+    <Reference Include="System.Management" />
+    <Reference Include="System.Web.Extensions" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -154,8 +157,10 @@
     </Compile>
     <Compile Include="Class\Defind.cs" />
     <Compile Include="Class\IconHelper.cs" />
+    <Compile Include="Class\MailUtility.cs" />
     <Compile Include="Class\SQLiteHelper.cs" />
     <Compile Include="Class\TemplateHelper.cs" />
+    <Compile Include="Class\Aes.cs" />
     <Compile Include="Class\Utility.cs" />
     <Compile Include="Frm\Frm_TemplateDefault.cs">
       <SubType>Form</SubType>
@@ -183,6 +188,12 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="UControl\UC_Access.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UControl\UC_Access.Designer.cs">
+      <DependentUpon>UC_Access.cs</DependentUpon>
+    </Compile>
     <Compile Include="UControl\UC_CfgTemplate.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -206,6 +217,12 @@
     </Compile>
     <Compile Include="UControl\UC_ExportCus.Designer.cs">
       <DependentUpon>UC_ExportCus.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UControl\UC_Licensing.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UControl\UC_Licensing.Designer.cs">
+      <DependentUpon>UC_Licensing.cs</DependentUpon>
     </Compile>
     <Compile Include="UControl\UC_Menu_About.cs">
       <SubType>UserControl</SubType>
@@ -267,6 +284,12 @@
     <Compile Include="UControl\UC_Transaction.Designer.cs">
       <DependentUpon>UC_Transaction.cs</DependentUpon>
     </Compile>
+    <Compile Include="UControl\UC_USBKey.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UControl\UC_USBKey.Designer.cs">
+      <DependentUpon>UC_USBKey.cs</DependentUpon>
+    </Compile>
     <EmbeddedResource Include="AddOn\buttonMenu.resx">
       <DependentUpon>buttonMenu.cs</DependentUpon>
     </EmbeddedResource>
@@ -301,6 +324,9 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
+    <EmbeddedResource Include="UControl\UC_Access.resx">
+      <DependentUpon>UC_Access.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="UControl\UC_CfgTemplate.resx">
       <DependentUpon>UC_CfgTemplate.cs</DependentUpon>
     </EmbeddedResource>
@@ -312,6 +338,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="UControl\UC_ExportCus.resx">
       <DependentUpon>UC_ExportCus.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UControl\UC_Licensing.resx">
+      <DependentUpon>UC_Licensing.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UControl\UC_Menu_About.resx">
       <DependentUpon>UC_Menu_About.cs</DependentUpon>
@@ -342,6 +371,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="UControl\UC_Transaction.resx">
       <DependentUpon>UC_Transaction.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UControl\UC_USBKey.resx">
+      <DependentUpon>UC_USBKey.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="app.manifest" />
     <None Include="packages.config" />
@@ -376,6 +408,8 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="logo_big.ico" />
+    <None Include="Resources\key.png" />
+    <None Include="Resources\keys.png" />
     <None Include="Resources\NewFile.ico" />
     <None Include="Resources\Shorcut.ico" />
     <None Include="Resources\Folder_Close.ico" />

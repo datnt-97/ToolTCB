@@ -28,7 +28,8 @@ namespace Transaction_Statistical
 {
     public class InitParametar
     {
-        public static string SAuthor = @"Copyright © 2019, Công ty TNHH Giải pháp và Dịch vụ Nam Phương.";
+        public static string sCompany = "Nam Phuong services and solutions company limited";
+        public static string SAuthor = @"Copyright © 2019, Nam Phuong services and solutions company limited.";
         public static string STitle = @"Transaction Statistical";
         public static string SComment = @"Hotline: 1900 633 412 \nEmail: np.support @npss.vn\nWeb: http://npss.vn";
 
@@ -40,7 +41,7 @@ namespace Transaction_Statistical
 
         public static string FolderSystemTrace;
         public static string DatabaseFile;
-        
+
         //form enu
         public static bool ActiveFormMain;
         public static bool ExitApp = false;
@@ -49,20 +50,23 @@ namespace Transaction_Statistical
         public static string IpSupport;
         public static string PathUpdateSupport;
         public static string PathUpdateSupportError;
-        
+
         /// Transaction Template
         public static ReadTransaction ReadTrans;
-        
+
         //log application
         public static bool WriteApplication = true;
         public static bool AutoRunMode;
         //License
-        private static string LicenseFile = PathDirectoryCurrentApp + "\\register.lic";
-        private static string prKey = @"sw5yopheq0NsCiET0wy4Qk5YwTQS1m4H";
+        public static bool Admin_Key = false;
+        public static bool Admin_USB = false;
+        public static string Version = Assembly.GetExecutingAssembly().GetName().Version.ToString();
+        private static string LicenseFile;
+        public static string prKey = @"sw5yopheq0NsCiET0wy4Qk5YwTQS1m4H";
         public static List<License> ListLicense;
         public static License.Types TypeLicense = License.Types.Unknow;
         public static License.StatusS StatusLicense = License.StatusS.Invalid;
-        public static DateTime DateMaximum = DateTime.MinValue;
+        public static DateTime DateMaximum = DateTime.Now;
         public static DateTime DateCurrent = DateTime.Now;
 
 
@@ -70,7 +74,6 @@ namespace Transaction_Statistical
         {
             try
             {
-
                 // ftp Support
                 UsrSupport = "UsrUpdate";
                 PwdSupport = "@UsrUpdate@";
@@ -89,8 +92,9 @@ namespace Transaction_Statistical
                 DatabaseFile = PathDirectoryCurrentAppConfigData + "\\DB.s3db";
                 sqlite = new SQLiteHelper();
                 //   listTransaction = new Dictionary<string, Dictionary<DateTime, Transaction>>();
+                LicenseFile = PathDirectoryCurrentApp + "\\TransactionStatistical.lic";
+                License_ReadInfo();
                 ReadTrans = new ReadTransaction();
-
             }
             catch (Exception ex)
             {
@@ -101,6 +105,7 @@ namespace Transaction_Statistical
         {
             try
             {
+                if (!InitParametar.License_CheckModule(License.Modules.Read)) return false;
                 AutoRunMode = true;
                 WriteLogApplication(string.Format("{0:HH:mm:ss fff} Class: Auto Task", DateTime.Now), true, false);
                 WriteLogApplication("   => Task name: " + taskName, false, false);
@@ -168,13 +173,13 @@ namespace Transaction_Statistical
             }
             catch (Exception ex)
             {
-                InitParametar.Send_Error(ex.ToString(), MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name);                WriteLogApplication(ex.Message, false, true);
+                InitParametar.Send_Error(ex.ToString(), MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name); WriteLogApplication(ex.Message, false, true);
             }
             WriteLogApplication("   ==> Auto end, result => Unsuccessfully", false, true);
             return true;
 
         }
-        
+
         public static void Send_Error(string MsgError, string ClassName, string MethodName)
         {
             try
@@ -195,8 +200,7 @@ namespace Transaction_Statistical
                 msg.TextCustom.Font = new System.Drawing.Font("Times New Roman", 13, FontStyle.Bold);
                 msg.TextCustom.SelectionColor = Color.Green;
 
-                Frm_TemplateDefault frm = new Frm_TemplateDefault(msg);
-                frm.titleCustom.Text = "Error Message";
+                Frm_TemplateDefault frm = new Frm_TemplateDefault(msg, "Error Message");
                 frm.Height = 300;
                 frm.Show();
 
@@ -247,7 +251,7 @@ namespace Transaction_Statistical
                 MessageBox.Show(ex.Message + Environment.NewLine + FolderSystemTrace, "WriteLogApplication", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-        
+
         public static bool License_CheckModule(License.Modules module)
         {
             try
@@ -268,20 +272,20 @@ namespace Transaction_Statistical
         {
             try
             {
-                if(File.Exists(LicenseFile))
+                if (File.Exists(LicenseFile))
                 {
                     FileInfo file = new FileInfo(LicenseFile);
-
-                    if(DateTime.Compare(DateCurrent, file.LastAccessTime)<0)
+                    if (ListLicense == null) ListLicense = new List<License>();
+                    if (DateTime.Compare(DateCurrent, file.LastAccessTime) < 0)
                     {
                         //user changed  time BIOS
                         WriteLogApplication("System time invalid.\nCheck license fail.", true, true);
                         StatusLicense = License.StatusS.Invalid;
                         return false;
                     }
-                    string content = Algorithm_TripleDES.Decrypt(File.ReadAllText(LicenseFile),prKey, false);
-                    string[] items = content.Split('');
-                    Enum.TryParse(items[0], out TypeLicense);
+                    string content = ManagedAes.Decrypt(File.ReadAllText(LicenseFile), prKey);
+                    string[] items = content.Split('');if (items.Length <= 3) return false;
+                    Enum.TryParse(items[0], out TypeLicense); 
                     if (TypeLicense.Equals(License.Types.Business) || TypeLicense.Equals(License.Types.Free) || TypeLicense.Equals(License.Types.Trial))
                     {
                         if (items[1].Equals(GetMacAddress() + GetComputerSid())) StatusLicense = License.StatusS.Activated;
@@ -292,16 +296,17 @@ namespace Transaction_Statistical
                         License lic = new License();
                         DateTime.TryParseExact(s.Split('')[0], License.FormatDateAccess, CultureInfo.InvariantCulture, DateTimeStyles.None, out lic.DateBegin);
                         DateTime.TryParseExact(s.Split('')[1], License.FormatDateAccess, CultureInfo.InvariantCulture, DateTimeStyles.None, out lic.DateEnd);
-                        lic.Module = s.Split('')[2];
+                        Enum.TryParse(s.Split('')[2], out lic.Module);
                         ListLicense.Add(lic);
-                        if (DateTime.Compare(lic.DateEnd, DateMaximum) > 0) DateMaximum = lic.DateEnd;
+                        if (DateTime.Compare(lic.DateEnd,  DateMaximum) > 0) DateMaximum = lic.DateEnd;
                     }
                     License_Update();
-                } 
+                    return true;
+                }
             }
             catch (Exception ex)
             {
-                InitParametar.Send_Error(ex.ToString(), MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name); ;
+               // InitParametar.Send_Error(ex.ToString(), MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name); ;
             }
             return false;
         }
@@ -309,21 +314,18 @@ namespace Transaction_Statistical
         {
             try
             {
-                if (File.Exists(LicenseFile)) File.Delete(LicenseFile);
-                File.Create(LicenseFile);                
                 string content = TypeLicense.ToString() + '' + GetMacAddress() + GetComputerSid() + '';
-                ListLicense.ForEach(x=>
+                ListLicense.ForEach(x =>
                         {
                             content += x.DateBegin.ToString(License.FormatDate) + '' + x.DateEnd.ToString(License.FormatDate) + '' + x.Module + '';
                         });
-
                 content = content.TrimEnd('') + '' + DateTime.Now.ToString(License.FormatDateAccess);
-                FileInfo file = new FileInfo(LicenseFile);               
+                File.Delete(LicenseFile);
                 using (StreamWriter sw = new StreamWriter(LicenseFile, true))
                 {
-                    sw.WriteLine(Algorithm_TripleDES.Encrypt(content, prKey, false));                 
+                    sw.WriteLine(ManagedAes.Encrypt(content, prKey));
                     sw.Flush();
-                    sw.Close();                  
+                    sw.Close();
                 }
 
             }
@@ -337,18 +339,18 @@ namespace Transaction_Statistical
         /// Gets the MAC address of the current PC.
         /// </summary>
         /// <returns></returns>
-        private static string GetMacAddress()
+        public static string GetMacAddress()
         {
             String firstMacAddress = string.Empty;
             try
             {
-                 firstMacAddress = NetworkInterface
-                                            .GetAllNetworkInterfaces()
-                                            .Where(nic => nic.OperationalStatus == OperationalStatus.Up && nic.NetworkInterfaceType != NetworkInterfaceType.Loopback)
-                                            .Select(nic => nic.GetPhysicalAddress().ToString())
-                                            .FirstOrDefault();
+                firstMacAddress = NetworkInterface
+                                           .GetAllNetworkInterfaces()
+                                           .Where(nic => nic.OperationalStatus == OperationalStatus.Up && nic.NetworkInterfaceType != NetworkInterfaceType.Loopback)
+                                           .Select(nic => nic.GetPhysicalAddress().ToString())
+                                           .FirstOrDefault();
             }
-            catch(Exception ex)
+            catch (Exception ex)
             { }
             return firstMacAddress;
         }
@@ -356,10 +358,11 @@ namespace Transaction_Statistical
         /// Gets the SID of the current PC.
         /// </summary>
         /// <returns></returns>       
-        private static SecurityIdentifier GetComputerSid()
+        public static SecurityIdentifier GetComputerSid()
         {
             return new SecurityIdentifier((byte[])new DirectoryEntry(string.Format("WinNT://{0},Computer", Environment.MachineName)).Children.Cast<DirectoryEntry>().First().InvokeGet("objectSID"), 0).AccountDomainSid;
         }
+        
     }
 
     public class TransactionType
@@ -385,7 +388,7 @@ namespace Transaction_Statistical
 
         public Dictionary<string, Dictionary<DateTime, object>> ListTransaction;
         public DateTime StartDate = DateTime.MinValue;
-        public DateTime EndDate = DateTime.MaxValue;
+        public DateTime EndDate = InitParametar.DateMaximum;
         public Dictionary<string, string> Template_EventTransaction;
         public Dictionary<string, string> Template_EventBeginInput;
         public Dictionary<string, string> Template_EventDevice;
@@ -497,7 +500,7 @@ namespace Transaction_Statistical
 
             try
             {
-            
+               if(!InitParametar.License_CheckModule(License.Modules.Read)) return false;
                 FileExport = exportDestination;
                 if (Directory.Exists(exportDestination))
                     FileExport = exportDestination + string.Format("\\TransactionStatistical_{0:yyyyMMdd_HH-mm}.xlsx", DateTime.Now);
@@ -520,7 +523,7 @@ namespace Transaction_Statistical
                            group => group.Key,
                            group => group.First().Value).ToDictionary(d => d.Key, d => (Transaction)d.Value);
                     });
-                
+
 
                     var transactionUnsuccess = new Dictionary<DateTime, Transaction>();
                     transactionUnsuccess = transaction.Where(x => x.Value.ListRequest.Values.LastOrDefault() != null && x.Value.ListRequest.Values.LastOrDefault().Status == Status.Types.UnSucceeded).ToDictionary(x => x.Key, x => x.Value);
@@ -587,6 +590,7 @@ namespace Transaction_Statistical
 
             try
             {
+                if (!InitParametar.License_CheckModule(License.Modules.Read)) return false;
                 DateTime currentDate = DateTime.MinValue;
 
                 ListTransaction = new Dictionary<string, Dictionary<DateTime, object>>();
@@ -609,8 +613,7 @@ namespace Transaction_Statistical
                     string Terminal = Path.GetFileName(file).Substring(0, 8);
                     string contenFile = File.ReadAllText(file);
                     DateTime.TryParseExact(day, "yyyyMMdd", CultureInfo.InvariantCulture, DateTimeStyles.None, out currentDate);
-
-                    if (currentDate.Year >= StartDate.Year && currentDate.Month >= StartDate.Month && currentDate.Day >= StartDate.Day && currentDate.Year <= EndDate.Year && currentDate.Month <= EndDate.Month && currentDate.Day <= EndDate.Day)
+                    if (int.Parse(currentDate.ToString("yyyyMMdd")) >= int.Parse(StartDate.ToString("yyyyMMdd")) && int.Parse(currentDate.ToString("yyyyMMdd")) <= int.Parse( EndDate.ToString("yyyyMMdd")))
                     {
                         contenFile = await SplitTransactionEJ(Terminal, contenFile);
                         contenFile = await FindEventDevice2Async(currentDate, Terminal, contenFile);
@@ -1335,7 +1338,7 @@ namespace Transaction_Statistical
             return String.Format("{0:HH:mm:ss }", DateBegin) + (CardType == Transaction.CardTypes.CardLess ? "Cardless: " + (DataInput.Count == 0 ? string.Empty : DataInput[0]) : "Card: " + CardNumber);
         }
     }
-    
+
     public class TransactionEvent
     {
         public enum Events
@@ -1381,7 +1384,7 @@ namespace Transaction_Statistical
             return String.Format("{0:HH:mm:ss }", DateBegin) + Name + ": " + Status;
         }
     }
-  
+
     public class TransactionRequest
     {
         public string Request;
@@ -1406,7 +1409,7 @@ namespace Transaction_Statistical
             // return String.Format("{0:HH:mm:ss }", DateBegin) + Request;
         }
     }
-    
+
     public class RegesValue
     {
         public int index;
@@ -1539,7 +1542,7 @@ namespace Transaction_Statistical
             return Text;
         }
     }
-  
+
     public class Denomination
     {
 
@@ -1798,18 +1801,28 @@ namespace Transaction_Statistical
     }
     public class License
     {
-    public static string FormatDate = "yyyyMMddHHmmssttt";
-    public static string FormatDateCreate = "yyyyMMddHHmmssttt";
-    public static string FormatDateAccess = "yyyyMMddHHmmssttt";
-    public static string FormatDateModify = "yyyyMMddHH";
-      public  Dictionary<Types, string> ListType = new Dictionary<Types, string>()
+        public static string FormatDate = "yyyyMMddHHmmssttt";
+        public static string FormatDateCreate = "yyyyMMddHHmmssttt";
+        public static string FormatDateAccess = "yyyyMMddHHmmssttt";
+        public static string FormatDateModify = "yyyyMMddHH";
+        public static Dictionary<Types, string> ListType = new Dictionary<Types, string>()
         {
             { Types.Business,"One licensed user can use application" },
-            { Types.Free,"One licensed user can use application" }, 
-            { Types.Premium,"Multiple licensed users can use application" }, 
+            { Types.Free,"One licensed user can use application" },
+            { Types.Premium,"Multiple licensed users can use application" },
             { Types.Trial,"One licensed user can use application with 7 days" },
         };
-       public enum Types
+        public static Dictionary<int, string> Duration = new Dictionary<int, string>()
+        {
+            { 3, "Three months" },
+            { 6,"Six months" },
+            { 12,"One years" },
+            { 24,"Two years" },
+            { 36,"Three years" },
+            {48,"Four years" },
+            {60,"Five years" }
+        };
+        public enum Types
         {
             Business,
             Free,
@@ -1823,15 +1836,16 @@ namespace Transaction_Statistical
             Activated,
             Invalid,
         }
-     public   enum Modules
+        public enum Modules
         {
             Read,
             ExcelExport,
             AutoStart
         }
-        public  bool Invalid = false;
-        public  string Module;
-        public  int DayRemaing;
+
+        public bool Invalid = false;
+        public Modules Module;
+        public int DayRemaing;
         public DateTime DateBegin;
         public DateTime DateEnd;
     }

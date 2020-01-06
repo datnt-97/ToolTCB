@@ -51,6 +51,7 @@ namespace Transaction_Statistical.UControl
         #endregion
         private void Add_GUI()
         {
+            dateTimePicker_Start.Value = DateTime.Now.AddDays(-7);
             cb_FullTime.Checked = true;
             prb_Process.Location = btn_Read.Location;
             prb_Process.ProgressColor = btn_Read.BZBackColor;
@@ -66,8 +67,8 @@ namespace Transaction_Statistical.UControl
             }
             InitParametar.ReadTrans.Template_EventDevice_Select.Clear();
             InitParametar.ReadTrans.Template_EventDevice.Keys.ToList().ForEach(x => cbo_Event.Items.Add(x, false));
-            // foreach (string s in Enum.GetNames(typeof(TransactionEvent.StatusS)))
-            //   cbo_Event_Status.Items.Add(s, false);
+            if (!File.Exists(txt_Path.Text)) txt_Path.Text = string.Empty;
+
         }
 
 
@@ -92,13 +93,13 @@ namespace Transaction_Statistical.UControl
                 prb_Process.Size = btn_Read.Size;
                 prb_Process.Value = 10;
                 prb_Process.Update();
+                prb_Process.ProgressColor = btn_Read.BZBackColor;
                 tre_LstTrans.Nodes.Clear(); tvListCycle.Nodes.Clear(); panel5.Controls.Clear(); fctxt_FullLog.Text = string.Empty; this.Update();
                 DirectoryFileUtilities df = new DirectoryFileUtilities();
                 if (File.Exists(txt_Path.Text))
                     await JournalAnalyze(new List<string> { txt_Path.Text });
                 else if (Directory.Exists(txt_Path.Text))
                 {
-
                     FileInfo[] files = df.GetAllFilePath(txt_Path.Text, InitParametar.ReadTrans.ExtensionFile);
                     await JournalAnalyze(files.Select(f => f.FullName).ToList());
                 }
@@ -135,7 +136,7 @@ namespace Transaction_Statistical.UControl
                 else
                 {
                     InitParametar.ReadTrans.StartDate = DateTime.MinValue;
-                    InitParametar.ReadTrans.EndDate = DateTime.MaxValue;
+                    InitParametar.ReadTrans.EndDate = InitParametar.DateMaximum;
                 }
 
                 if (await InitParametar.ReadTrans.Reads(lsFile_Journal, prb_Process))
@@ -568,8 +569,7 @@ namespace Transaction_Statistical.UControl
             {
                 UC_ExportCus uc_MenuStartup = new UC_ExportCus();
                 uc_MenuStartup.Dock = DockStyle.Fill;
-                Frm_TemplateDefault frm = new Frm_TemplateDefault(uc_MenuStartup);
-                frm.titleCustom.Text = "File Export";
+                Frm_TemplateDefault frm = new Frm_TemplateDefault(uc_MenuStartup, "File Export");
                 frm.ShowDialog();
             }
             catch (Exception ex)

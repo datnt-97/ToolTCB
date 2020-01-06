@@ -52,8 +52,7 @@ namespace Transaction_Statistical
 
                 UC_Info uc = new UC_Info("CfgData", cfg_data.Rows[0]["ID"].ToString(), "Data");
                 uc.Dock = DockStyle.Fill;
-                Frm_TemplateDefault frm = new Frm_TemplateDefault(uc);
-                frm.titleCustom.Text = "Regular Expression trong C#";
+                Frm_TemplateDefault frm = new Frm_TemplateDefault(uc, "Regular Expression trong C#");
                 frm.Show();
             }
             catch
@@ -250,8 +249,7 @@ namespace Transaction_Statistical
             {
                 UC_Info uc = new UC_Info();
                 uc.Dock = DockStyle.Fill;
-                Frm_TemplateDefault frm = new Frm_TemplateDefault(uc);
-                frm.titleCustom.Text = "Test map";
+                Frm_TemplateDefault frm = new Frm_TemplateDefault(uc, "Test map");
                 DateTime timeStart = DateTime.Now;
                 if (fctxt_Pattern.Text.Trim() == string.Empty || fctxt_Test.Text.Trim() == string.Empty)
                 {
@@ -411,8 +409,7 @@ namespace Transaction_Statistical
             {
                 UC_Info uc = new UC_Info();
                 uc.Dock = DockStyle.Fill;
-                Frm_TemplateDefault frm = new Frm_TemplateDefault(uc);
-                frm.titleCustom.Text = "Test map";
+                Frm_TemplateDefault frm = new Frm_TemplateDefault(uc, "Test map");
                 DateTime timeStart = DateTime.Now;
                 if (fctxt_Pattern.Text.Trim() == string.Empty || fctxt_Test.Text.Trim() == string.Empty)
                 {

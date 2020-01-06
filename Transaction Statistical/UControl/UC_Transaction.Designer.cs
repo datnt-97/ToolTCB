@@ -276,13 +276,14 @@ namespace Transaction_Statistical.UControl
             // 
             // dateTimePicker_End
             // 
-            this.dateTimePicker_End.CustomFormat = "HH:mm dd/mm/yy";
+            this.dateTimePicker_End.CustomFormat = "HH:mm dd/MM/yy";
             this.dateTimePicker_End.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
             this.dateTimePicker_End.Location = new System.Drawing.Point(356, 25);
             this.dateTimePicker_End.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.dateTimePicker_End.Name = "dateTimePicker_End";
             this.dateTimePicker_End.Size = new System.Drawing.Size(195, 22);
             this.dateTimePicker_End.TabIndex = 5;
+            this.dateTimePicker_End.MaxDate = InitParametar.DateMaximum;
             // 
             // label1
             // 
@@ -295,7 +296,7 @@ namespace Transaction_Statistical.UControl
             // 
             // dateTimePicker_Start
             // 
-            this.dateTimePicker_Start.CustomFormat = "HH:mm dd/mm/yy";
+            this.dateTimePicker_Start.CustomFormat = "HH:mm dd/MM/yy";
             this.dateTimePicker_Start.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
             this.dateTimePicker_Start.Location = new System.Drawing.Point(113, 25);
             this.dateTimePicker_Start.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
@@ -717,7 +718,7 @@ namespace Transaction_Statistical.UControl
             // tvListCycle
             // 
             tvListCycle.BackColor = InitGUI.Custom.Cycle_Background.DisplayColor;
-            tvListCycle.ForeColor = InitGUI.Custom.Cycle_Tilte.DisplayColor;
+            tvListCycle.ForeColor = InitGUI.Custom.Cycle_Tilte.DisplayColor;       
             // 
             // UC_Transaction
             // 

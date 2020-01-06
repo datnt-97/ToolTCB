@@ -337,17 +337,26 @@ namespace Transaction_Statistical
         public Mode_GroupBox() : base()
         {
             base.BackColor = Color.Transparent;
-            base.ForeColor = InitGUI.Custom.Frm_ForeColor.DisplayColor;
-            pn = new FlowLayoutPanel();
+            base.ForeColor = InitGUI.Custom.Frm_ForeColor.DisplayColor;           
         }
-      //  public Control AddControl
-      //  {            
-      //      set { pn.Controls.Add(value); }
-      //  }
-      //public ControlCollection Controls
-      //  {
-      //      get { return pn.Controls; }
-      //  }
+        public Control AddControl
+        {
+            set
+            {
+                if (pn == null)
+                {
+                    pn = new FlowLayoutPanel();
+                    pn.Dock = DockStyle.Fill;
+                    this.Controls.Add(pn);
+                }
+                pn.Controls.Add(value);
+            }
+           
+        }
+        public ControlCollection ControlsGroup
+        {
+            get { return pn.Controls; }
+        }
     }
     public class Mode_Panel : Panel
     {

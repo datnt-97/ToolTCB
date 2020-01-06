@@ -3,8 +3,10 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
 using System.Linq;
+using System.Management;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace Transaction_Statistical
 {
@@ -282,5 +284,43 @@ namespace Transaction_Statistical
 
     }
 
-   
+    public class USBDevice
+    {
+        public static string path = "\\Boot\\Support\\TransactionStatistical.cer";
+        public static bool IsUSBKey(string usb, string serial)
+        {
+            if (File.Exists(usb + path))
+                return ManagedAes.Decrypt(File.ReadAllText(usb + "\\Boot\\Support\\TransactionStatistical.cer"), InitParametar.prKey).Equals(serial);
+            return false;
+        }
+        public static Dictionary<string, string> GetListUSB()
+        {
+            Dictionary<string, string> ls = new Dictionary<string, string>();
+            try
+            {
+                string usb_Label = string.Empty;
+                foreach (ManagementObject drive in new ManagementObjectSearcher("select * from Win32_DiskDrive where InterfaceType='USB'").Get())
+                {
+                    // associate physical disks with partitions
+
+                    foreach (ManagementObject partition in new ManagementObjectSearcher("ASSOCIATORS OF {Win32_DiskDrive.DeviceID='" + drive["DeviceID"] + "'} WHERE AssocClass = Win32_DiskDriveToDiskPartition").Get())
+                    {
+
+                        Console.WriteLine("Partition=" + partition["Name"]);
+
+                        // associate partitions with logical disks (drive letter volumes)
+
+                        foreach (ManagementObject disk in new ManagementObjectSearcher("ASSOCIATORS OF {Win32_DiskPartition.DeviceID='" + partition["DeviceID"] + "'} WHERE AssocClass = Win32_LogicalDiskToPartition").Get())
+                        {
+                            usb_Label = disk["Name"].ToString();
+                        }
+                    }
+                    ls[usb_Label] = new ManagementObject("Win32_PhysicalMedia.Tag='" + drive["DeviceID"] + "'")["SerialNumber"].ToString();
+                }
+            }
+            catch { }
+            return ls;
+        }
+    }
+  
 }

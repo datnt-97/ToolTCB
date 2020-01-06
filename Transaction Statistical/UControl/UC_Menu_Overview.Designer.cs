@@ -34,9 +34,15 @@
             this.btn_Apply = new Mode_Button();
             this.btn_New = new Mode_Button();
             this.bt_Delete = new Mode_Button();
+            this.btn_CreateLicensing = new Mode_Button();
+            this.btn_CreateUSBKey = new Mode_Button();
+            this.btn_LogAdmin = new AddOn.MinMaxButton();
             this.gr_Style = new Mode_GroupBox();
+            this.gr_Admin = new Mode_GroupBox();
             this.flp_Style = new System.Windows.Forms.FlowLayoutPanel();
+            this.flp_Admin = new System.Windows.Forms.FlowLayoutPanel();
             this.gr_Style.SuspendLayout();
+            this.gr_Admin.SuspendLayout();
             this.SuspendLayout();
             // 
             // label1
@@ -152,15 +158,85 @@
             this.flp_Style.Size = new System.Drawing.Size(865, 31);
             this.flp_Style.TabIndex = 0;
             // 
+            // gr_Admin
+            // 
+            this.gr_Admin.BackColor = System.Drawing.Color.Transparent;
+            this.gr_Admin.Controls.Add(this.flp_Admin);           
+            this.gr_Admin.Location = new System.Drawing.Point(22, 139);
+            this.gr_Admin.Name = "gr_Admin";
+            this.gr_Admin.Size = new System.Drawing.Size(887, 71);
+            this.gr_Admin.TabIndex = 21;
+            this.gr_Admin.TabStop = false;
+            this.gr_Admin.Text = "Admin Tool";
+            this.gr_Admin.Visible = (InitParametar.Admin_Key || InitParametar.Admin_USB);
+            // 
+            // flp_Admin
+            // 
+            this.flp_Admin.Location = new System.Drawing.Point(16, 21);
+            this.flp_Admin.Name = "flp_Admin";
+            this.flp_Admin.Size = new System.Drawing.Size(865, 40);
+            this.flp_Admin.TabIndex = 0;
+            this.flp_Admin.Controls.Add(btn_CreateLicensing);
+            this.flp_Admin.Controls.Add(btn_CreateUSBKey);
+            // 
+            // btn_CreateLicensing
+            // 
+            this.btn_CreateLicensing.AutoSize = false;
+            this.btn_CreateLicensing.BackColor = InitGUI.Custom.Menu_RightBckgd.DisplayColor;            
+            this.btn_CreateLicensing.Name = "btn_CreateLicensing";
+            this.btn_CreateLicensing.Size = new System.Drawing.Size(105, 31);
+            this.btn_CreateLicensing.TabIndex = 17;
+            this.btn_CreateLicensing.Text = "Licensing";
+            this.btn_CreateLicensing.Click += new System.EventHandler(this.btn_CreateLicensing_Click);
+            //
+            //btn_CreateUSBKey
+            //
+            this.btn_CreateUSBKey.AutoSize = false;
+            this.btn_CreateUSBKey.BackColor = InitGUI.Custom.Menu_RightBckgd.DisplayColor;
+            this.btn_CreateUSBKey.Name = "btn_CreateUSBKey";
+            this.btn_CreateUSBKey.Size = new System.Drawing.Size(105, 31);
+            this.btn_CreateUSBKey.TabIndex = 17;
+            this.btn_CreateUSBKey.Text = "USB Key";
+            this.btn_CreateUSBKey.Click += new System.EventHandler(this.btn_CreateUSBKey_Click);
+            // 
+            // btn_LogAdmin
+            // 
+            this.btn_LogAdmin.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.btn_LogAdmin.BZBackColor = System.Drawing.Color.Transparent;
+            this.btn_LogAdmin.CFormState = Transaction_Statistical.AddOn.MinMaxButton.CustomFormState.Normal;
+            this.btn_LogAdmin.DisplayText = "";
+            this.btn_LogAdmin.Enabled = true;
+            this.btn_LogAdmin.FlatAppearance.BorderColor = InitGUI.Custom.Menu_RightBckgd.DisplayColor;
+            this.btn_LogAdmin.FlatAppearance.MouseDownBackColor = InitGUI.Custom.Frm_TopToolbar.DisplayColor;
+            this.btn_LogAdmin.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btn_LogAdmin.ForeColor = System.Drawing.Color.White;
+            this.btn_LogAdmin.Image= IconHelper.ImageUltility.ChangeColor(global::Transaction_Statistical.Properties.Resources.key, InitGUI.Custom.Menu_Button.DisplayColor);
+            this.btn_LogAdmin.Location = new System.Drawing.Point(870, 515);
+            this.btn_LogAdmin.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.btn_LogAdmin.MouseClickColor1 = System.Drawing.Color.Empty;
+            this.btn_LogAdmin.MouseHoverColor = System.Drawing.Color.Empty;
+            this.btn_LogAdmin.Name = "btn_LogAdmin";
+            this.btn_LogAdmin.Size = new System.Drawing.Size(60, 46);
+            this.btn_LogAdmin.TabIndex = 16;
+            this.btn_LogAdmin.TextLocation_X = -20;
+            this.btn_LogAdmin.TextLocation_Y = -20;
+            this.btn_LogAdmin.UseVisualStyleBackColor = true;
+            this.btn_LogAdmin.Click += new System.EventHandler(this.btn_LogAdmin_Click);
+            this.btn_LogAdmin.Visible= !(InitParametar.Admin_Key || InitParametar.Admin_USB);
+            // this.btn_LogAdmin.MouseLeave += new System.EventHandler(this.btn_Export_MouseLeave);
+            //  this.btn_LogAdmin.MouseHover += new System.EventHandler(this.btn_Export_MouseHover);
+            // 
             // UC_Menu_Overview
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = InitGUI.Custom.Menu_RightBckgd.DisplayColor;
             this.Controls.Add(this.gr_Style);
+            this.Controls.Add(this.gr_Admin);
             this.Controls.Add(this.bt_Delete);
             this.Controls.Add(this.btn_New);
             this.Controls.Add(this.btn_Apply);
+            this.Controls.Add(this.btn_LogAdmin);
             this.Controls.Add(this.cbo_LstTemplate);
             this.Controls.Add(this.btn_Edit);
             this.Controls.Add(this.label1);
@@ -244,6 +320,27 @@
             bt_Custom.FlatAppearance.BorderColor = System.Drawing.Color.Silver;
             bt_Custom.FlatAppearance.MouseDownBackColor = InitGUI.Custom.Menu_ButtonDown.DisplayColor;
             bt_Custom.FlatAppearance.MouseOverBackColor = InitGUI.Custom.Menu_ButtonHover.DisplayColor;
+            //
+            //btn_CreateUSBKey
+            //
+            btn_CreateUSBKey.BackColor = InitGUI.Custom.Menu_RightBckgd.DisplayColor;
+            btn_CreateUSBKey.ForeColor = InitGUI.Custom.Frm_ForeColor.DisplayColor;
+            btn_CreateUSBKey.FlatAppearance.BorderColor = System.Drawing.Color.Silver;
+            btn_CreateUSBKey.FlatAppearance.MouseDownBackColor = InitGUI.Custom.Menu_ButtonDown.DisplayColor;
+            btn_CreateUSBKey.FlatAppearance.MouseOverBackColor = InitGUI.Custom.Menu_ButtonHover.DisplayColor;
+            //
+            //btn_CreateLicensing
+            //
+            btn_CreateLicensing.BackColor = InitGUI.Custom.Menu_RightBckgd.DisplayColor;
+            btn_CreateLicensing.ForeColor = InitGUI.Custom.Frm_ForeColor.DisplayColor;
+            btn_CreateLicensing.FlatAppearance.BorderColor = System.Drawing.Color.Silver;
+            btn_CreateLicensing.FlatAppearance.MouseDownBackColor = InitGUI.Custom.Menu_ButtonDown.DisplayColor;
+            btn_CreateLicensing.FlatAppearance.MouseOverBackColor = InitGUI.Custom.Menu_ButtonHover.DisplayColor;
+
+            this.btn_LogAdmin.FlatAppearance.BorderColor = InitGUI.Custom.Menu_RightBckgd.DisplayColor;
+            this.btn_LogAdmin.FlatAppearance.MouseDownBackColor = InitGUI.Custom.Frm_TopToolbar.DisplayColor;
+            this.btn_LogAdmin.Image = IconHelper.ImageUltility.ChangeColor(global::Transaction_Statistical.Properties.Resources.key, InitGUI.Custom.Menu_Button.DisplayColor);
+
             // 
             // gr_Style
             // 
@@ -264,7 +361,12 @@
         private Mode_Button btn_Apply;
         private Mode_Button btn_New;
         private Mode_Button bt_Delete;
+        private Mode_Button btn_CreateLicensing;
+        private Mode_Button btn_CreateUSBKey;
+        private AddOn.MinMaxButton btn_LogAdmin;
         private Mode_GroupBox gr_Style;
+        private Mode_GroupBox gr_Admin;
         private System.Windows.Forms.FlowLayoutPanel flp_Style;
+        private System.Windows.Forms.FlowLayoutPanel flp_Admin;
     }
 }

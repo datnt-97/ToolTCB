@@ -123,9 +123,9 @@ namespace Transaction_Statistical.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap Menu1 {
+        internal static System.Drawing.Bitmap key {
             get {
-                object obj = ResourceManager.GetObject("Menu1", resourceCulture);
+                object obj = ResourceManager.GetObject("key", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -133,9 +133,9 @@ namespace Transaction_Statistical.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap Menu2 {
+        internal static System.Drawing.Bitmap keys {
             get {
-                object obj = ResourceManager.GetObject("Menu2", resourceCulture);
+                object obj = ResourceManager.GetObject("keys", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

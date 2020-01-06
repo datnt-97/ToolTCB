@@ -323,3 +323,6 @@ D:\ToolTCB_Git\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical
 D:\ToolTCB_Git\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.UControl.UC_RegisterLicense.resources
 D:\ToolTCB_Git\ToolTCB\Transaction Statistical\obj\Debug\Transaction Statistical.exe.manifest
 D:\ToolTCB_Git\ToolTCB\Transaction Statistical\obj\Debug\Transaction Statistical.application
+D:\05-TEMP\Source\GitHub\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.UC_Access.resources
+D:\05-TEMP\Source\GitHub\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.UControl.UC_Licensing.resources
+D:\05-TEMP\Source\GitHub\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.UControl.UC_USBKey.resources

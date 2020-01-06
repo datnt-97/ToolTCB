@@ -18,8 +18,11 @@ namespace Transaction_Statistical.UControl
         {
             InitializeComponent2();
             lv_Version.Text =String.Format("Version: {0}, build: {1:yyyy MMM dd}",  Assembly.GetExecutingAssembly().GetName().Version.ToString(), new DateTime(2019, 12, 25));
+            if (InitParametar.TypeLicense.Equals(License.Types.Unknow)) mode_Label9.Text = "License: " + InitParametar.TypeLicense.ToString();
+            else
+                mode_Label9.Text = "License: " + InitParametar.TypeLicense.ToString() + "\n Remaining: " + (InitParametar.DateMaximum - DateTime.Now).TotalDays + " days";
             #region Read Me File
-            mode_FastColoredTextBox1.WordWrap = true;
+            mode_FastColoredTextBox1.WordWrap = true;           
             var pathReadme = AppDomain.CurrentDomain.BaseDirectory + @"\readme.txt";
             if (System.IO.File.Exists(pathReadme))
             {
@@ -27,7 +30,6 @@ namespace Transaction_Statistical.UControl
                 {
                     string ln = file.ReadToEnd();
                     mode_FastColoredTextBox1.Text += ln;
-
                 }
             }
             #endregion
@@ -50,24 +52,28 @@ namespace Transaction_Statistical.UControl
                 WebBrowser web = new WebBrowser();
                 web.Dock = DockStyle.Fill;
                 web.DocumentText = document;
-                Frm_TemplateDefault frm = new Frm_TemplateDefault(web);
-                frm.titleCustom.Text = "Help";
+                Frm_TemplateDefault frm = new Frm_TemplateDefault(web, "Help");
                 frm.Size = new Size(1000, 700);
                 frm.ShowDialog();
             }
         }
-
-        private void mode_Label4_MouseHover(object sender, EventArgs e)
+        private void mode_Label6_Click(object sender, EventArgs e)
+        {
+            UC_RegisterLicense uc = new UC_RegisterLicense();
+            Frm_TemplateDefault frm = new Frm_TemplateDefault(uc, mode_Label6.Text);           
+            frm.ShowDialog();
+        }
+        private void mode_Label_MouseHover(object sender, EventArgs e)
         {
             (sender as Mode_Label).ForeColor = Color.Blue;
         }
 
-        private void mode_Label4_Leave(object sender, EventArgs e)
+        private void mode_Label_Leave(object sender, EventArgs e)
         {
             (sender as Mode_Label).ForeColor = InitGUI.Custom.Menu_Text.DisplayColor;
         }
 
-        private void mode_Label8_MouseEnter(object sender, EventArgs e)
+        private void mode_Label_MouseEnter(object sender, EventArgs e)
         {
             (sender as Mode_Label).ForeColor = Color.GreenYellow;
         }

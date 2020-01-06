@@ -57,9 +57,9 @@
             this.mode_Label4.Size = new System.Drawing.Size(68, 17);
             this.mode_Label4.TabIndex = 3;
             this.mode_Label4.Text = "View help";
-            this.mode_Label4.MouseEnter += new System.EventHandler(this.mode_Label8_MouseEnter);
-            this.mode_Label4.MouseLeave += new System.EventHandler(this.mode_Label4_Leave);
-            this.mode_Label4.MouseHover += new System.EventHandler(this.mode_Label4_MouseHover);
+            this.mode_Label4.MouseEnter += new System.EventHandler(this.mode_Label_MouseEnter);
+            this.mode_Label4.MouseLeave += new System.EventHandler(this.mode_Label_Leave);
+            this.mode_Label4.MouseHover += new System.EventHandler(this.mode_Label_MouseHover);
             this.mode_Label4.Click += new System.EventHandler(this.mode_Label4_Click);
 
             // 
@@ -74,9 +74,9 @@
             this.mode_Label5.Size = new System.Drawing.Size(106, 17);
             this.mode_Label5.TabIndex = 4;
             this.mode_Label5.Text = "Send Feekback";
-            this.mode_Label5.MouseEnter += new System.EventHandler(this.mode_Label8_MouseEnter);
-            this.mode_Label5.MouseLeave += new System.EventHandler(this.mode_Label4_Leave);
-            this.mode_Label5.MouseHover += new System.EventHandler(this.mode_Label4_MouseHover);
+            this.mode_Label5.MouseEnter += new System.EventHandler(this.mode_Label_MouseEnter);
+            this.mode_Label5.MouseLeave += new System.EventHandler(this.mode_Label_Leave);
+            this.mode_Label5.MouseHover += new System.EventHandler(this.mode_Label_MouseHover);
             // 
             // mode_Label6
             // 
@@ -89,9 +89,10 @@
             this.mode_Label6.Size = new System.Drawing.Size(122, 17);
             this.mode_Label6.TabIndex = 5;
             this.mode_Label6.Text = "Register Product";
-            this.mode_Label6.MouseEnter += new System.EventHandler(this.mode_Label8_MouseEnter);
-            this.mode_Label6.MouseLeave += new System.EventHandler(this.mode_Label4_Leave);
-            this.mode_Label6.MouseHover += new System.EventHandler(this.mode_Label4_MouseHover);
+            this.mode_Label6.MouseEnter += new System.EventHandler(this.mode_Label_MouseEnter);
+            this.mode_Label6.MouseLeave += new System.EventHandler(this.mode_Label_Leave);
+            this.mode_Label6.MouseHover += new System.EventHandler(this.mode_Label_MouseHover);
+            this.mode_Label6.Click += new System.EventHandler(mode_Label6_Click);
             // 
             // mode_Label7
             // 
@@ -104,10 +105,10 @@
             this.mode_Label7.Size = new System.Drawing.Size(123, 17);
             this.mode_Label7.TabIndex = 6;
             this.mode_Label7.Text = "Technical Support";
-            this.mode_Label7.Leave += new System.EventHandler(this.mode_Label4_Leave);
-            this.mode_Label7.MouseEnter += new System.EventHandler(this.mode_Label8_MouseEnter);
-            this.mode_Label7.MouseLeave += new System.EventHandler(this.mode_Label4_Leave);
-            this.mode_Label7.MouseHover += new System.EventHandler(this.mode_Label4_MouseHover);
+            this.mode_Label7.Leave += new System.EventHandler(this.mode_Label_Leave);
+            this.mode_Label7.MouseEnter += new System.EventHandler(this.mode_Label_MouseEnter);
+            this.mode_Label7.MouseLeave += new System.EventHandler(this.mode_Label_Leave);
+            this.mode_Label7.MouseHover += new System.EventHandler(this.mode_Label_MouseHover);
             // 
             // mode_Label8
             // 
@@ -120,9 +121,9 @@
             this.mode_Label8.Size = new System.Drawing.Size(116, 17);
             this.mode_Label8.TabIndex = 7;
             this.mode_Label8.Text = "Check for update";
-            this.mode_Label8.MouseEnter += new System.EventHandler(this.mode_Label8_MouseEnter);
-            this.mode_Label8.MouseLeave += new System.EventHandler(this.mode_Label4_Leave);
-            this.mode_Label8.MouseHover += new System.EventHandler(this.mode_Label4_MouseHover);
+            this.mode_Label8.MouseEnter += new System.EventHandler(this.mode_Label_MouseEnter);
+            this.mode_Label8.MouseLeave += new System.EventHandler(this.mode_Label_Leave);
+            this.mode_Label8.MouseHover += new System.EventHandler(this.mode_Label_MouseHover);
             // 
             // mode_Label3
             // 
@@ -206,7 +207,7 @@
             this.mode_Label2.Name = "mode_Label2";
             this.mode_Label2.Size = new System.Drawing.Size(438, 17);
             this.mode_Label2.TabIndex = 1;
-            this.mode_Label2.Text = "Copyright © 2019, Công ty TNHH Giải pháp và Dịch vụ Nam Phương";
+            this.mode_Label2.Text = InitParametar.SAuthor;
             this.mode_Label2.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
             // mode_Label1
@@ -226,15 +227,15 @@
             this.mode_Label9.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.mode_Label9.BackColor = System.Drawing.Color.Transparent;
             this.mode_Label9.ForeColor = InitGUI.Custom.Menu_Text.DisplayColor;
-            this.mode_Label9.Location = new System.Drawing.Point(625, 0);
+            this.mode_Label9.Location = new System.Drawing.Point(500, 5);
             this.mode_Label9.Name = "mode_Label9";
-            this.mode_Label9.Size = new System.Drawing.Size(62, 17);
+            this.mode_Label9.AutoSize = true;
             this.mode_Label9.TabIndex = 4;
-            this.mode_Label9.Text = "Trial";
+            this.mode_Label9.Text = "License: Trial";
             this.mode_Label9.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.mode_Label9.MouseEnter += new System.EventHandler(this.mode_Label8_MouseEnter);
-            this.mode_Label9.MouseLeave += new System.EventHandler(this.mode_Label4_Leave);
-            this.mode_Label9.MouseHover += new System.EventHandler(this.mode_Label4_MouseHover);
+            this.mode_Label9.MouseEnter += new System.EventHandler(this.mode_Label_MouseEnter);
+            this.mode_Label9.MouseLeave += new System.EventHandler(this.mode_Label_Leave);
+            this.mode_Label9.MouseHover += new System.EventHandler(this.mode_Label_MouseHover);
             // 
             // UC_Menu_About
             // 
