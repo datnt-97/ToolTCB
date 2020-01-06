@@ -20,7 +20,17 @@ namespace Transaction_Statistical.UControl
             lv_Version.Text =String.Format("Version: {0}, build: {1:yyyy MMM dd}",  Assembly.GetExecutingAssembly().GetName().Version.ToString(), new DateTime(2019, 12, 25));
             if (InitParametar.TypeLicense.Equals(License.Types.Unknow)) mode_Label9.Text = "License: " + InitParametar.TypeLicense.ToString();
             else
-                mode_Label9.Text = "License: " + InitParametar.TypeLicense.ToString() + "\n Remaining: " + (InitParametar.DateMaximum - DateTime.Now).TotalDays + " days";
+            {
+
+                string remaining = string.Empty;
+                if ((InitParametar.DateMaximum - DateTime.Now).TotalDays / 365 >= 1)
+                    remaining = (int)(InitParametar.DateMaximum - DateTime.Now).TotalDays / 365 + " years";
+                else if ((InitParametar.DateMaximum - DateTime.Now).TotalDays >= 1)
+                    remaining = (int)(InitParametar.DateMaximum - DateTime.Now).TotalDays + " days";
+                else
+                    remaining = (int)(InitParametar.DateMaximum - DateTime.Now).TotalHours + " hours";
+                mode_Label9.Text = "License: " + InitParametar.TypeLicense.ToString() + "\n Remaining: " + remaining;
+            }
             #region Read Me File
             mode_FastColoredTextBox1.WordWrap = true;           
             var pathReadme = AppDomain.CurrentDomain.BaseDirectory + @"\readme.txt";

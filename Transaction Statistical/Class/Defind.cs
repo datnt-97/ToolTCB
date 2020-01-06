@@ -500,7 +500,7 @@ namespace Transaction_Statistical
 
             try
             {
-
+                if (!InitParametar.License_CheckModule(License.Modules.ExcelExport)) return false;
                 FileExport = exportDestination;
                 if (Directory.Exists(exportDestination))
                     FileExport = exportDestination + string.Format("\\TransactionStatistical_{0:yyyyMMdd_HH-mm}.xlsx", DateTime.Now);
@@ -713,6 +713,38 @@ namespace Transaction_Statistical
                                 }
                                 else
                                     evt.DateBegin = DateCurrent.AddMilliseconds(10);
+
+                                if (regx.value.ContainsKey("Bill") && !string.IsNullOrEmpty(regx.value["Bill"]))
+                                {
+                                    Bills bills = new Bills();
+                                    DateTime dateBill = new DateTime();
+                                    DateTime.TryParseExact(String.Format("{0:yyyyMMdd}", DateCurrent) + regx.value["Time"], "yyyyMMdd" + FormatTime, CultureInfo.InvariantCulture, DateTimeStyles.None, out dateBill);
+                                    bills.Date = dateBill;
+                                    var values = Enum.GetValues(typeof(Bills.Types)).Cast<Bills.Types>();
+                                    foreach (var type in values)
+                                    {
+                                        if (tmp.Key.Contains(type.ToString()))
+                                        {
+                                            bills.Type = type;
+
+                                        }
+                                    }
+                                    bills.Terminal = string.IsNullOrEmpty(regx.value["Terminal"]) ? string.Empty : regx.value["Terminal"];
+                                    bills.CardNo = string.IsNullOrEmpty(regx.value["CardNo"]) ? string.Empty : regx.value["CardNo"];
+                                    bills.TranNo = string.IsNullOrEmpty(regx.value["TranNo"]) ? string.Empty : regx.value["TranNo"];
+                                    bills.Code = string.IsNullOrEmpty(regx.value["Code"]) ? string.Empty : regx.value["Code"];
+                                    bills.Text = string.IsNullOrEmpty(regx.value["Text"]) ? string.Empty : regx.value["Text"];
+                                    if (regx.value.ContainsKey("RequireAmount"))
+                                    {
+                                        bills.RequireAmount = string.IsNullOrEmpty(regx.value["RequireAmount"]) ? string.Empty : regx.value["RequireAmount"];
+                                    }
+
+                                    if (!transaction.ListBills.ContainsKey(bills.Date))
+                                    {
+                                        transaction.ListBills[bills.Date] = bills;
+                                    }
+
+                                }
                                 if (transaction.ListEvent.ContainsKey(evt.DateBegin)) transaction.ListEvent[evt.DateBegin.AddMilliseconds(1)] = evt;
                                 else transaction.ListEvent[evt.DateBegin] = evt;
                                 transaction.TraceJournal_Remaining = transaction.TraceJournal_Remaining.Replace(regx.stringfind, string.Empty);
@@ -752,6 +784,23 @@ namespace Transaction_Statistical
                                 }
                                 else
                                     evt.DateBegin = DateCurrent;
+
+                                int node2 = 0;
+                                if (regx.value.ContainsKey("TimeRetract"))
+                                {
+                                    evt.Type = TransactionEvent.Events.CashRetracted;
+                                    DateTime.TryParseExact(string.Format("{0:yyyyMMdd}", DateCurrent) + regx.value["TimeRetract"], "yyyyMMdd" + FormatTime, CultureInfo.InvariantCulture, DateTimeStyles.None, out evt.DateBegin);
+                                    if (regx.value.ContainsKey("Step10k") && int.TryParse(regx.value["Step10k"], out node2)) transaction.Value_10K_Retracted += node2;
+                                    if (regx.value.ContainsKey("Step20k") && int.TryParse(regx.value["Step20k"], out node2)) transaction.Value_20K_Retracted+= node2;
+                                    if (regx.value.ContainsKey("Step50k") && int.TryParse(regx.value["Step50k"], out node2)) transaction.Value_50K_Retracted += node2;
+                                    if (int.TryParse(regx.value["Step100k"], out node2)) transaction.Value_100K_Retracted += node2;
+                                    if (int.TryParse(regx.value["Step200k"], out node2)) transaction.Value_200K_Retracted += node2;
+                                    if (int.TryParse(regx.value["Step500k"], out node2)) transaction.Value_500K_Retracted += node2;
+                                    if (int.TryParse(regx.value["StepUnk"], out node2)) transaction.Unknow += node2;
+
+                                    evt.Amount += transaction.Value_500K_Retracted * 500000 + transaction.Value_200K_Retracted * 200000 + transaction.Value_100K_Retracted * 100000 +
+                                     transaction.Value_50K_Retracted * 50000 + transaction.Value_20K_Retracted * 20000 + transaction.Value_10K * 10000;
+                                }
                                 if (transaction.ListEvent.ContainsKey(evt.DateBegin)) transaction.ListEvent[evt.DateBegin.AddMilliseconds(1)] = evt;
                                 else transaction.ListEvent[evt.DateBegin] = evt;
                                 transaction.TraceJournal_Remaining = transaction.TraceJournal_Remaining.Replace(regx.stringfind, string.Empty);
@@ -1257,16 +1306,24 @@ namespace Transaction_Statistical
         public int Value_100K;
         public int Value_200K;
         public int Value_500K;
+        public int Value_10K_Retracted;
+        public int Value_20K_Retracted;
+        public int Value_50K_Retracted;
+        public int Value_100K_Retracted;
+        public int Value_200K_Retracted;
+        public int Value_500K_Retracted;
         public int Rejects;
         public int Unknow;
-
         public int Amount { get { return (Value_10K * 10000 + Value_20K * 20000 + Value_50K * 50000 + Value_100K * 100000 + Value_200K * 200000 + Value_500K * 500000); } }
 
         public string TraceJournalFull;
         public Dictionary<DateTime, TransactionEvent> ListEvent = new Dictionary<DateTime, TransactionEvent>();
         public Dictionary<DateTime, Bills> ListBills = new Dictionary<DateTime, Bills>();
 
+
         public int Result;
+
+        public string Error { get; set; }
 
 
         [CategoryAttribute("1.Terminal"), DescriptionAttribute("Terminal ID")]
@@ -1306,11 +1363,15 @@ namespace Transaction_Statistical
             get { return _name; }
             set { _name = value; }
         }
-        public string Error { get; set; }
+
         public string TraceJournal_Remaining;
         public string TraceDeviceTxt;
         public string TraceTransMsgTxt;
         public string TraceApplicationTrcTxt;
+
+        [CategoryAttribute("3. Transaction"), DescriptionAttribute("Transaction Number")]
+        public string TransactionNumber { get=>this.ListBills.OrderBy(x=>x.Key).LastOrDefault().Value!=null
+                ? this.ListBills.OrderBy(x => x.Key).LastOrDefault().Value.TranNo:"-"; }
 
         [CategoryAttribute("3. Transaction"), DescriptionAttribute("Machine Sequence No")]
         public string MachineSequenceNo { get; set; }

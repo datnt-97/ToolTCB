@@ -127,14 +127,14 @@
     </dependentAssembly>
   </dependency>
   <dependency>
-    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="Transaction Statistical.exe" size="762840">
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="Transaction Statistical.exe" size="765400">
       <assemblyIdentity name="Transaction Statistical" version="1.0.0.0" language="neutral" processorArchitecture="msil" />
       <hash>
         <dsig:Transforms>
           <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
         </dsig:Transforms>
         <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
-        <dsig:DigestValue>D+HdnN6z4nJU64MnENJxZo1+NgYlyHR6fr8yci4r79k=</dsig:DigestValue>
+        <dsig:DigestValue>dtQwEVpSAuYZDhFQNPgCPKS3mklqKgAKrTMXP+nqmUQ=</dsig:DigestValue>
       </hash>
     </dependentAssembly>
   </dependency>
@@ -165,13 +165,13 @@
       <dsig:DigestValue>qeyncE2sViS7A5Y8ViSMbyi+7Vdf2fjrJYEyK/WIjUk=</dsig:DigestValue>
     </hash>
   </file>
-  <file name="Transaction Statistical.pdb" size="761344">
+  <file name="Transaction Statistical.pdb" size="767488">
     <hash>
       <dsig:Transforms>
         <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
       </dsig:Transforms>
       <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
-      <dsig:DigestValue>a854+x4blNzNKLvn6RCIBKJwULH6XdvewimbvXDrX2g=</dsig:DigestValue>
+      <dsig:DigestValue>diDGPxqlTl2X420L0J+eyvzi4rmWn6PWzDProrxDZ+8=</dsig:DigestValue>
     </hash>
   </file>
   <compatibility xmlns="urn:schemas-microsoft-com:compatibility.v1">

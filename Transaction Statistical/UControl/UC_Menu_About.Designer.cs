@@ -227,7 +227,7 @@
             this.mode_Label9.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.mode_Label9.BackColor = System.Drawing.Color.Transparent;
             this.mode_Label9.ForeColor = InitGUI.Custom.Menu_Text.DisplayColor;
-            this.mode_Label9.Location = new System.Drawing.Point(500, 5);
+            this.mode_Label9.Location = new System.Drawing.Point(580, 5);
             this.mode_Label9.Name = "mode_Label9";
             this.mode_Label9.AutoSize = true;
             this.mode_Label9.TabIndex = 4;

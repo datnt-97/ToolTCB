@@ -64,7 +64,7 @@
             this.btn_LoadFile.FlatAppearance.MouseDownBackColor = InitGUI.Custom.Menu_ButtonDown.DisplayColor;
             this.btn_LoadFile.FlatAppearance.MouseOverBackColor = InitGUI.Custom.Menu_ButtonHover.DisplayColor;
             this.btn_LoadFile.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btn_LoadFile.ForeColor = System.Drawing.Color.White;
+            this.btn_LoadFile.ForeColor = InitGUI.Custom.Menu_Text.DisplayColor;
             this.btn_LoadFile.Location = new System.Drawing.Point(656, 24);
             this.btn_LoadFile.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.btn_LoadFile.Name = "btn_LoadFile";

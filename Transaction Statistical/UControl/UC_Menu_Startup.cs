@@ -24,7 +24,7 @@ namespace Transaction_Statistical
             {(int)TemplateHelper.TEMPLATE.BaoCaoGiaoDichTaiChinhKhongThanhCong,"GD Tài Chính Không Thành Công" },
             {(int)TemplateHelper.TEMPLATE.BaoCaoGiaoDichTaiChinhBatThuong,"GD Tài Chính Bất Thường" },
             {(int)TemplateHelper.TEMPLATE.BaoCaoHoatDongBatThuong,"BC HD Bất Thường" },
-            {(int)TemplateHelper.TEMPLATE.BaoCaoHoatDongBatThuongTheoChuKy,"BC HD Bất Thường" },
+            {(int)TemplateHelper.TEMPLATE.BaoCaoHoatDongBatThuongTheoChuKy,"BC HD Bất Thường Theo Chu Kỳ" },
         };
         string[] TypeStart = { "DAILY", "ONCE", "WEEKLY", "MONTHLY" };
         string[] Months = { "JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC", "*" };

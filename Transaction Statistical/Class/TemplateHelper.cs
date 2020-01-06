@@ -653,40 +653,25 @@ namespace Transaction_Statistical.Class
                             rng.Style.Fill.BackgroundColor.SetColor(Lightskyblue);
                         }
                     }
-                    if (itemTrans.ListEvent.Values.Where(e => e.Type == TransactionEvent.Events.CashRetracted).Count() > 0)
-                    {
-
-                        worksheet.Cells[indexData, index + 10].Value = 0;
-                        worksheet.Cells[indexData, index + 11].Value = Math.Abs(itemTrans.Value_500K);
-                        worksheet.Cells[indexData, index + 12].Value = 0;
-                        worksheet.Cells[indexData, index + 13].Value = Math.Abs(itemTrans.Value_200K);
-                        worksheet.Cells[indexData, index + 14].Value = 0;
-                        worksheet.Cells[indexData, index + 15].Value = Math.Abs(itemTrans.Value_100K);
-                        worksheet.Cells[indexData, index + 16].Value = 0;
-                        worksheet.Cells[indexData, index + 17].Value = Math.Abs(itemTrans.Value_50K);
-                        worksheet.Cells[indexData, index + 18].Value = 0;
-                        worksheet.Cells[indexData, index + 19].Value = Math.Abs(itemTrans.Value_20K);
-                        worksheet.Cells[indexData, index + 20].Value = 0;
-                        worksheet.Cells[indexData, index + 21].Value = Math.Abs(itemTrans.Value_10K);
-                        worksheet.Cells[indexData, index + 22].Value = Math.Abs(itemTrans.Unknow);
-                    }
-                    else
-                    {
+            
                         worksheet.Cells[indexData, index + 10].Value = Math.Abs(itemTrans.Value_500K);
-                        worksheet.Cells[indexData, index + 11].Value = 0;
+                        worksheet.Cells[indexData, index + 11].Value = Math.Abs(itemTrans.Value_500K_Retracted);
 
                         worksheet.Cells[indexData, index + 12].Value = Math.Abs(itemTrans.Value_200K);
-                        worksheet.Cells[indexData, index + 13].Value = 0;
+                        worksheet.Cells[indexData, index + 13].Value = Math.Abs(itemTrans.Value_200K_Retracted);
+
                         worksheet.Cells[indexData, index + 14].Value = Math.Abs(itemTrans.Value_100K);
-                        worksheet.Cells[indexData, index + 15].Value = 0;
+                        worksheet.Cells[indexData, index + 15].Value = Math.Abs(itemTrans.Value_100K_Retracted);
+
                         worksheet.Cells[indexData, index + 16].Value = Math.Abs(itemTrans.Value_50K);
-                        worksheet.Cells[indexData, index + 17].Value = 0;
+                        worksheet.Cells[indexData, index + 17].Value = Math.Abs(itemTrans.Value_50K_Retracted);
+
                         worksheet.Cells[indexData, index + 18].Value = Math.Abs(itemTrans.Value_20K);
-                        worksheet.Cells[indexData, index + 19].Value = 0;
+                        worksheet.Cells[indexData, index + 19].Value = Math.Abs(itemTrans.Value_20K_Retracted);
+
                         worksheet.Cells[indexData, index + 20].Value = Math.Abs(itemTrans.Value_10K);
-                        worksheet.Cells[indexData, index + 21].Value = 0;
-                        worksheet.Cells[indexData, index + 22].Value = Math.Abs(itemTrans.Rejects);
-                    }
+                        worksheet.Cells[indexData, index + 21].Value = Math.Abs(itemTrans.Value_10K_Retracted);
+                        worksheet.Cells[indexData, index + 22].Value = Math.Abs(itemTrans.Unknow);
                     worksheet.Cells[indexData, index + 23].Value = itemTrans.Error;
 
                     //worksheet.Cells[indexData, index + 24].Style.WrapText = true;
