@@ -67,9 +67,9 @@ namespace Transaction_Statistical.UControl
             this.imageListControl = new System.Windows.Forms.ImageList(this.components);
             this.panel3 = new System.Windows.Forms.Panel();
             this.label3 = new Mode_Label();
+            this.label3.Size = new System.Drawing.Size(268,45);
             this.fctxt_FullLog = new Mode_FastColoredTextBox();
             this.fctxt_FullLog.Height = 100;
-            this.fctxt_FullLog.Margin = new Padding(0, 0, 0, 20);
             this.panel4 = new System.Windows.Forms.Panel();
             this.tvListCycle = new Mode_TreeView();
             this.panel5 = new System.Windows.Forms.Panel();

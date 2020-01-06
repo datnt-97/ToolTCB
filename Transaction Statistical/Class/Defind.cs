@@ -726,7 +726,6 @@ namespace Transaction_Statistical
                                         if (tmp.Key.Contains(type.ToString()))
                                         {
                                             bills.Type = type;
-
                                         }
                                     }
                                     bills.Terminal = string.IsNullOrEmpty(regx.value["Terminal"]) ? string.Empty : regx.value["Terminal"];
@@ -1401,7 +1400,7 @@ namespace Transaction_Statistical
         [CategoryAttribute("6. Follow"), DescriptionAttribute("Follow of the transaction")]
         public string FullFollow
         {
-            get { return string.Join("=>", ListEvent.Values); }
+            get { return string.Join("=>", ListEvent.Values.OrderBy(x => x.DateBegin).OrderBy(x => this.TraceJournalFull.IndexOf(x.TContent))); }
         }
 
 
