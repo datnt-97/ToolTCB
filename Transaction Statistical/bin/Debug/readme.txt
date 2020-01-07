@@ -14,6 +14,3 @@
 	You can customize color for program theme in tab OVERVIEW.
 
 <------------------------------------------------>	
-Company : Nam Phuong services and solutions company limited.
-Version : 1.0.0.0
-Built 	: 25/12/2019

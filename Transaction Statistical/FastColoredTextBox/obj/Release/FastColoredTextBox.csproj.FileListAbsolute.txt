@@ -56,3 +56,14 @@ E:\Project\NPS\ToolTCB\ToolTCB\Transaction Statistical\FastColoredTextBox\obj\Re
 E:\Project\NPS\ToolTCB\ToolTCB\Transaction Statistical\FastColoredTextBox\obj\Release\FastColoredTextBox.csproj.GenerateResource.cache
 E:\Project\NPS\ToolTCB\ToolTCB\Transaction Statistical\FastColoredTextBox\obj\Release\FastColoredTextBox.dll
 E:\Project\NPS\ToolTCB\ToolTCB\Transaction Statistical\FastColoredTextBox\obj\Release\FastColoredTextBox.pdb
+E:\Project\NPS\TCB\ToolTCB\Transaction Statistical\FastColoredTextBox\bin\Release\FastColoredTextBox.dll
+E:\Project\NPS\TCB\ToolTCB\Transaction Statistical\FastColoredTextBox\bin\Release\FastColoredTextBox.pdb
+E:\Project\NPS\TCB\ToolTCB\Transaction Statistical\FastColoredTextBox\obj\Release\FastColoredTextBox.csprojAssemblyReference.cache
+E:\Project\NPS\TCB\ToolTCB\Transaction Statistical\FastColoredTextBox\obj\Release\FastColoredTextBoxNS.FastColoredTextBox.resources
+E:\Project\NPS\TCB\ToolTCB\Transaction Statistical\FastColoredTextBox\obj\Release\FastColoredTextBoxNS.FindForm.resources
+E:\Project\NPS\TCB\ToolTCB\Transaction Statistical\FastColoredTextBox\obj\Release\FastColoredTextBoxNS.GoToForm.resources
+E:\Project\NPS\TCB\ToolTCB\Transaction Statistical\FastColoredTextBox\obj\Release\FastColoredTextBoxNS.HotkeysEditorForm.resources
+E:\Project\NPS\TCB\ToolTCB\Transaction Statistical\FastColoredTextBox\obj\Release\FastColoredTextBoxNS.ReplaceForm.resources
+E:\Project\NPS\TCB\ToolTCB\Transaction Statistical\FastColoredTextBox\obj\Release\FastColoredTextBox.csproj.GenerateResource.cache
+E:\Project\NPS\TCB\ToolTCB\Transaction Statistical\FastColoredTextBox\obj\Release\FastColoredTextBox.dll
+E:\Project\NPS\TCB\ToolTCB\Transaction Statistical\FastColoredTextBox\obj\Release\FastColoredTextBox.pdb

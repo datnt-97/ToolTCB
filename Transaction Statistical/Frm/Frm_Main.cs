@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Drawing;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 using Transaction_Statistical.AddOn;
 
@@ -7,16 +8,18 @@ namespace Transaction_Statistical
 {
     public partial class Frm_Main : Form
     {
+        Frm_LoadingApp frm_LoadingApp = new Frm_LoadingApp();
+
         public Frm_Main()
         {
             InitializeComponent2();
-
+            Task.Factory.StartNew(() => frm_LoadingApp.ShowDialog()).ContinueWith(t => { frm_LoadingApp.Close(); }, TaskScheduler.Default);
             TabPanelControl tpc = new TabPanelControl();
             tpc.Dock = DockStyle.Fill;
             UControl.UC_Transaction uc_Transaction = new UControl.UC_Transaction();
             uc_Transaction.Dock = DockStyle.Fill;
             tpc.Controls.Add(uc_Transaction);
-            tabControlX1.AddTab("Transaction Statistical", tpc, false);          
+            tabControlX1.AddTab("Transaction Statistical", tpc, false);
         }
         #region Design GUI
         bool isTopPanelDragged = false;
@@ -30,7 +33,7 @@ namespace Transaction_Statistical
         Point _normalWindowLocation = Point.Empty;
         //**********************************************************************
         //top border panel
-       
+
         private void TopBorderPanel_MouseDown(object sender, MouseEventArgs e)
         {
             if (e.Button == MouseButtons.Left)
@@ -291,5 +294,11 @@ namespace Transaction_Statistical
         {
 
         }
+        protected override void OnShown(EventArgs e)
+        {
+            base.OnShown(e);
+            frm_LoadingApp.Close();
+        }
+
     }
 }
