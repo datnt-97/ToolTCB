@@ -1040,6 +1040,18 @@ namespace Transaction_Statistical
                 trans.TraceJournal_Remaining = trans.TraceJournal_Remaining.Replace(val.value["SStart"], null);
                 trans.TraceJournal_Remaining = trans.TraceJournal_Remaining.Replace(val.value["SEnd"], null);
 
+                TransactionEvent ev = new TransactionEvent();
+                ev.DateBegin = trans.DateBegin;
+                ev.Name = "Transaction Start";
+                ev.TContent = val.value["SStart"];
+                trans.ListEvent[ev.DateBegin] = ev;
+
+                ev = new TransactionEvent();
+                ev.DateBegin = trans.DateEnd;
+                ev.Name = "Transaction End";
+                ev.TContent = val.value["SEnd"];
+                trans.ListEvent[ev.DateBegin] = ev;
+
                 trans = await Task.Run(() => FindEventBeginInput(trans));
                 trans = await Task.Run(() => FindEventRequest(trans.DateBegin, trans));
                 trans = await Task.Run(() => FindEventTransaction(trans, trans.DateBegin));
@@ -1047,16 +1059,17 @@ namespace Transaction_Statistical
                 trans = await Task.Run(() => FindEventDevice(trans, trans.DateBegin));
                 trans = await Task.Run(() => FindEventCashOutIn(trans.DateBegin, trans));
                 trans = await Task.Run(() => SplitRequest(trans));
-                //SplitRequest(ref trans);
-                if (ListTransaction.ContainsKey(trans.Terminal))
+                if (trans.ListRequest.Count != 0)
                 {
-                    if (ListTransaction[trans.Terminal].ContainsKey(trans.DateBegin))
-                        trans.DateBegin.AddMilliseconds(1);
-                    ListTransaction[trans.Terminal][trans.DateBegin] = trans;
+                    if (ListTransaction.ContainsKey(trans.Terminal))
+                    {
+                        if (ListTransaction[trans.Terminal].ContainsKey(trans.DateBegin))
+                            trans.DateBegin.AddMilliseconds(1);
+                        ListTransaction[trans.Terminal][trans.DateBegin] = trans;
+                    }
+                    else
+                        ListTransaction[trans.Terminal] = new Dictionary<DateTime, object>() { { trans.DateBegin, trans } };
                 }
-                else
-                    ListTransaction[trans.Terminal] = new Dictionary<DateTime, object>() { { trans.DateBegin, trans } };
-
             }
             catch (Exception ex)
             {
@@ -1237,14 +1250,15 @@ namespace Transaction_Statistical
                 {
                     await Task.Run(() =>
                     {
-                        if (evt.Type.Equals(TransactionEvent.Events.TransactionReqSend))
+                        if (CheckRequestName(evt.Name, ref req.Request))
                         {
-                            req = new TransactionRequest();
-                            req.DateBegin = evt.DateBegin;
-                            req.Status = Status.Types.UnSucceeded;
-                            if (CheckRequestName(evt.Data, ref req.Request)) transaction.ListRequest[req.DateBegin] = req;
+                            TransactionRequest req_New = new TransactionRequest();
+                            req_New.DateBegin = evt.DateBegin;
+                            req_New.Status = Status.Types.UnSucceeded;
+                            req_New.Request = req.Request;
+                            transaction.ListRequest[req_New.DateBegin] = req_New;
                         }
-                        else if (transaction.ListRequest.Count != 0 && (evt.Type.Equals(TransactionEvent.Events.Transaction) || evt.Type.Equals(TransactionEvent.Events.CashIn) || evt.Type.Equals(TransactionEvent.Events.CashOut)))
+                        if (transaction.ListRequest.Count != 0 && (evt.Type.Equals(TransactionEvent.Events.Transaction) || evt.Type.Equals(TransactionEvent.Events.CashIn) || evt.Type.Equals(TransactionEvent.Events.CashOut)))
                         {
                             string name = transaction.ListRequest.LastOrDefault().Value.Request;
                             if (Template_TransType_Select.ContainsKey(name))
@@ -1272,10 +1286,10 @@ namespace Transaction_Statistical
             }
             return transaction;
         }
-        private bool CheckRequestName(string operationCode, ref string transactionType)
+        private bool CheckRequestName(string name, ref string transactionType)
         {
             foreach (TransactionType type in Template_TransType_Select.Values)
-                if (type.Identification.Split('|').Contains(operationCode)) { transactionType = type.Name; return true; }
+                if (type.Identification.Split(',').Contains(name)) { transactionType = type.Name; return true; }
             // transactionType = @"N/A: [" + operationCode + "]";
             return false;
         }
@@ -1404,11 +1418,11 @@ namespace Transaction_Statistical
         public Dictionary<DateTime, TransactionRequest> ListRequest = new Dictionary<DateTime, TransactionRequest>();
 
 
-        [CategoryAttribute("6. Follow"), DescriptionAttribute("Follow of the transaction")]
-        public string FullFollow
-        {
-            get { return string.Join("=>", ListEvent.Values); }
-        }
+        //[CategoryAttribute("6. Follow"), DescriptionAttribute("Follow of the transaction")]
+        //public string FullFollow
+        //{
+        //    get { return string.Join("=>", ListEvent.Values); }
+        //}
 
 
 
@@ -1479,6 +1493,7 @@ namespace Transaction_Statistical
         public DateTime DateEnd;
         public Status.Types Status { get; set; }
         public List<Denomination> LstDenomination = new List<Denomination>();
+        public bool EndRequest;
         public int AmountDeposit
         {
             get

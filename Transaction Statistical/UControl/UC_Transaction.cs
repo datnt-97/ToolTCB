@@ -66,11 +66,27 @@ namespace Transaction_Statistical.UControl
                 cbo_Event_Status.Items.Add(s, false);
             }
             InitParametar.ReadTrans.Template_EventDevice_Select.Clear();
-            InitParametar.ReadTrans.Template_EventDevice.Keys.ToList().ForEach(x => cbo_Event.Items.Add(x, false));
-            if (!File.Exists(txt_Path.Text)) txt_Path.Text = string.Empty;
-
+            InitParametar.ReadTrans.Template_EventDevice.Keys.ToList().ForEach(x => cbo_Event.Items.Add(x, false));           
+            LoadPathTemp(true);
         }
-
+        private void LoadPathTemp(bool isLoad)
+        {
+            try
+            {
+                UtilityIniFile fini = new UtilityIniFile(InitParametar.PathDirectoryCurrentApp + "\\AppConfig.dat");
+                if (isLoad)
+                {
+                    txt_Path.Text = fini.GetEntryValue("Directory", "FolderTemp");
+                    if (Directory.Exists(txt_Path.Text) || File.Exists(txt_Path.Text)) return;
+                    txt_Path.Text = "D:\\";
+                }
+                else
+                {
+                    fini.Write("FolderTemp", txt_Path.Text, "Directory");
+                }
+            }
+            catch { }
+        }
 
         private void cb_FullTime_CheckedChanged(object sender, EventArgs e)
         {
@@ -115,6 +131,7 @@ namespace Transaction_Statistical.UControl
                 InitParametar.Send_Error(ex.ToString(), MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name);
             }
             prb_Process.Size = new Size(0, 0);
+            LoadPathTemp(false);
         }
         private async Task<bool> JournalAnalyze(List<string> lsFile_Journal)
         {
