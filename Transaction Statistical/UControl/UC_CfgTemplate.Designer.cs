@@ -53,14 +53,15 @@
             this.btn_Keyword_Import = new Mode_Button();
             this.btn_Keyword_Run = new Mode_Button();
             this.grp_Transaction = new Mode_GroupBox();
+            this.label5 = new Mode_Label();
             this.label4 = new Mode_Label();
             this.label3 = new Mode_Label();
             this.btn_Transaction_Refresh = new Mode_Button();
             this.cbo_Transactions = new Mode_ComboBox();
             this.btn_Transaction_Add = new Mode_Button();
-            this.fctxt_Identification = new Mode_FastColoredTextBox();
             this.btn_Transaction_Save = new Mode_Button();
             this.btn_Transaction_Remove = new Mode_Button();
+            this.cbo_Transaction_Identification = new CheckedComboBox();
             this.cbo_Transaction_UnSuccess = new Transaction_Statistical.CheckedComboBox();
             this.cbo_Transaction_Success = new Transaction_Statistical.CheckedComboBox();
             ((System.ComponentModel.ISupportInitialize)(this.spc_Main)).BeginInit();
@@ -87,7 +88,6 @@
             this.spc_Keyword_Test.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.fctxt_Test)).BeginInit();
             this.grp_Transaction.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.fctxt_Identification)).BeginInit();
             this.SuspendLayout();
             // 
             // spc_Main
@@ -458,14 +458,15 @@
             // 
             // grp_Transaction
             // 
+            this.grp_Transaction.Controls.Add(this.cbo_Transaction_Identification);
             this.grp_Transaction.Controls.Add(this.cbo_Transaction_UnSuccess);
             this.grp_Transaction.Controls.Add(this.label4);
             this.grp_Transaction.Controls.Add(this.label3);
+            this.grp_Transaction.Controls.Add(this.label5);
             this.grp_Transaction.Controls.Add(this.cbo_Transaction_Success);
             this.grp_Transaction.Controls.Add(this.btn_Transaction_Refresh);
             this.grp_Transaction.Controls.Add(this.cbo_Transactions);
             this.grp_Transaction.Controls.Add(this.btn_Transaction_Add);
-            this.grp_Transaction.Controls.Add(this.fctxt_Identification);
             this.grp_Transaction.Controls.Add(this.btn_Transaction_Save);
             this.grp_Transaction.Controls.Add(this.btn_Transaction_Remove);
             this.grp_Transaction.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -479,11 +480,21 @@
             this.grp_Transaction.Text = "Transaction defind";
             this.grp_Transaction.ForeColor = InitGUI.Custom.Frm_ForeColor.DisplayColor;
             // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label5.Location = new System.Drawing.Point(21, 80);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(141, 17);
+            this.label5.TabIndex = 42;
+            this.label5.Text = "Identification events";
+            // 
             // label4
             // 
             this.label4.AutoSize = true;
             this.label4.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label4.Location = new System.Drawing.Point(21, 250);
+            this.label4.Location = new System.Drawing.Point(21, 160);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(141, 17);
             this.label4.TabIndex = 42;
@@ -493,7 +504,7 @@
             // 
             this.label3.AutoSize = true;
             this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label3.Location = new System.Drawing.Point(41, 215);
+            this.label3.Location = new System.Drawing.Point(41, 125);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(121, 17);
             this.label3.TabIndex = 41;
@@ -526,61 +537,16 @@
             // 
             // btn_Transaction_Add
             // 
-            this.btn_Transaction_Add.Location = new System.Drawing.Point(180, 298);
+            this.btn_Transaction_Add.Location = new System.Drawing.Point(180, 208);
             this.btn_Transaction_Add.Name = "btn_Transaction_Add";
             this.btn_Transaction_Add.Size = new System.Drawing.Size(105, 42);
             this.btn_Transaction_Add.TabIndex = 19;
             this.btn_Transaction_Add.Text = "Add";
-            this.btn_Transaction_Add.Click += new System.EventHandler(this.btn_Transaction_Add_Click);
-            // 
-            // fctxt_Identification
-            // 
-            this.fctxt_Identification.BackColor = InitGUI.Custom.Editor_Background.DisplayColor;
-            this.fctxt_Identification.ForeColor = InitGUI.Custom.Editor_ForeColor.DisplayColor;
-            this.fctxt_Identification.AllowSeveralTextStyleDrawing = true;
-            this.fctxt_Identification.AutoCompleteBracketsList = new char[] {
-        '(',
-        ')',
-        '{',
-        '}',
-        '[',
-        ']',
-        '\"',
-        '\"',
-        '\'',
-        '\''};
-            this.fctxt_Identification.AutoIndentCharsPatterns = "\r\n^\\s*[\\w\\.]+(\\s\\w+)?\\s*(?<range>=)\\s*(?<range>[^;]+);\r\n^\\s*(case|default)\\s*[^:]" +
-    "*(?<range>:)\\s*(?<range>[^;]+);\r\n";
-            this.fctxt_Identification.AutoScrollMinSize = new System.Drawing.Size(0, 18);
-            this.fctxt_Identification.BackBrush = null;
-            this.fctxt_Identification.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.fctxt_Identification.BracketsHighlightStrategy = FastColoredTextBoxNS.BracketsHighlightStrategy.Strategy2;
-            this.fctxt_Identification.CharHeight = 18;
-            this.fctxt_Identification.CharWidth = 10;
-            this.fctxt_Identification.Cursor = System.Windows.Forms.Cursors.IBeam;
-            this.fctxt_Identification.DisabledColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))));
-          
-            this.fctxt_Identification.IsReplaceMode = false;
-            this.fctxt_Identification.Language = FastColoredTextBoxNS.Language.CSharp;
-            this.fctxt_Identification.LeftBracket = '(';
-            this.fctxt_Identification.LeftBracket2 = '{';
-            this.fctxt_Identification.Location = new System.Drawing.Point(24, 69);
-            this.fctxt_Identification.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.fctxt_Identification.Name = "fctxt_Identification";
-            this.fctxt_Identification.Paddings = new System.Windows.Forms.Padding(0);
-            this.fctxt_Identification.RightBracket = ')';
-            this.fctxt_Identification.RightBracket2 = '}';
-            this.fctxt_Identification.SelectionColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(255)))));
-            this.fctxt_Identification.ServiceColors = ((FastColoredTextBoxNS.ServiceColors)(resources.GetObject("fctxt_Identification.ServiceColors")));
-            this.fctxt_Identification.ServiceLinesColor = System.Drawing.Color.DimGray;
-            this.fctxt_Identification.Size = new System.Drawing.Size(569, 128);
-            this.fctxt_Identification.TabIndex = 22;
-            this.fctxt_Identification.WordWrap = true;
-            this.fctxt_Identification.Zoom = 100;
+            this.btn_Transaction_Add.Click += new System.EventHandler(this.btn_Transaction_Add_Click);           
             // 
             // btn_Transaction_Save
             // 
-            this.btn_Transaction_Save.Location = new System.Drawing.Point(290, 298);
+            this.btn_Transaction_Save.Location = new System.Drawing.Point(290, 208);
             this.btn_Transaction_Save.Name = "btn_Transaction_Save";
             this.btn_Transaction_Save.Size = new System.Drawing.Size(105, 42);
             this.btn_Transaction_Save.TabIndex = 20;
@@ -589,12 +555,28 @@
             // 
             // btn_Transaction_Remove
             // 
-            this.btn_Transaction_Remove.Location = new System.Drawing.Point(401, 298);
+            this.btn_Transaction_Remove.Location = new System.Drawing.Point(401, 208);
             this.btn_Transaction_Remove.Name = "btn_Transaction_Remove";
             this.btn_Transaction_Remove.Size = new System.Drawing.Size(105, 42);
             this.btn_Transaction_Remove.TabIndex = 21;
             this.btn_Transaction_Remove.Text = "Remove";
             this.btn_Transaction_Remove.Click += new System.EventHandler(this.btn_Transaction_Remove_Click);
+            // 
+            // cbo_Transaction_Identification
+            // 
+            this.cbo_Transaction_Identification.BackColor = InitGUI.Custom.Frm_Background.DisplayColor;
+            this.cbo_Transaction_Identification.CheckOnClick = true;
+            this.cbo_Transaction_Identification.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawVariable;
+            this.cbo_Transaction_Identification.DropDownHeight = 1;
+            this.cbo_Transaction_Identification.FormattingEnabled = true;
+            this.cbo_Transaction_Identification.IntegralHeight = false;
+            this.cbo_Transaction_Identification.Location = new System.Drawing.Point(179, 79);
+            this.cbo_Transaction_Identification.Name = "cbo_Transaction_UnSuccess";
+            this.cbo_Transaction_Identification.Size = new System.Drawing.Size(414, 23);
+            this.cbo_Transaction_Identification.TabIndex = 43;
+            this.cbo_Transaction_Identification.ValueSeparator = ",";
+            this.cbo_Transaction_Identification.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.cbo_Transaction_Identification.ForeColor = InitGUI.Custom.Frm_ForeColor.DisplayColor;
             // 
             // cbo_Transaction_UnSuccess
             // 
@@ -604,7 +586,7 @@
             this.cbo_Transaction_UnSuccess.DropDownHeight = 1;
             this.cbo_Transaction_UnSuccess.FormattingEnabled = true;
             this.cbo_Transaction_UnSuccess.IntegralHeight = false;
-            this.cbo_Transaction_UnSuccess.Location = new System.Drawing.Point(179, 250);
+            this.cbo_Transaction_UnSuccess.Location = new System.Drawing.Point(179, 160);
             this.cbo_Transaction_UnSuccess.Name = "cbo_Transaction_UnSuccess";
             this.cbo_Transaction_UnSuccess.Size = new System.Drawing.Size(414, 23);
             this.cbo_Transaction_UnSuccess.TabIndex = 43;
@@ -620,7 +602,7 @@
             this.cbo_Transaction_Success.DropDownHeight = 1;
             this.cbo_Transaction_Success.FormattingEnabled = true;
             this.cbo_Transaction_Success.IntegralHeight = false;
-            this.cbo_Transaction_Success.Location = new System.Drawing.Point(179, 212);
+            this.cbo_Transaction_Success.Location = new System.Drawing.Point(179, 122);
             this.cbo_Transaction_Success.Name = "cbo_Transaction_Success";
             this.cbo_Transaction_Success.Size = new System.Drawing.Size(414, 23);
             this.cbo_Transaction_Success.TabIndex = 40;
@@ -666,7 +648,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.fctxt_Test)).EndInit();
             this.grp_Transaction.ResumeLayout(false);
             this.grp_Transaction.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.fctxt_Identification)).EndInit();
             this.ResumeLayout(false);
         }
 
@@ -674,7 +655,6 @@
 
         private System.Windows.Forms.SplitContainer spc_Main;
         private System.Windows.Forms.SplitContainer spc_Keyword_Main;
-        private Mode_FastColoredTextBox fctxt_Identification;
         private Mode_Button btn_Transaction_Remove;
         private Mode_Button btn_Transaction_Save;
         private Mode_Button btn_Transaction_Add;
@@ -702,8 +682,10 @@
         private Mode_ComboBox cbo_Keyword_Typelog;
         private Mode_Button btn_RunTest2;
         private CheckedComboBox cbo_Transaction_UnSuccess;
+        private CheckedComboBox cbo_Transaction_Identification;
         private Mode_Label label4;
         private Mode_Label label3;
+        private Mode_Label label5;
         private CheckedComboBox cbo_Transaction_Success;
     }
 }
