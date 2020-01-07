@@ -75,7 +75,7 @@ namespace Transaction_Statistical.UControl
                 string content = string.Empty;
                 foreach (Mode_RadioButton ctr in gs_Type.ControlsGroup)
                     if (ctr.Checked)
-                        content = ctr.Text + '' + InitParametar.GetMacAddress() + InitParametar.GetComputerSid() + '';
+                        content = ctr.Text + '' + txt_MAC.Text+ txt_SID.Text + '';
                 foreach (Mode_CheckBox chk in gs_Module.ControlsGroup)
                     if (chk.Checked)
                         content += DateTime.Now.ToString(License.FormatDate) + '' + DateTime.Now.AddMonths(License.Duration.Where(v => v.Value.Equals(cbb_Date.Text)).FirstOrDefault().Key).ToString(License.FormatDate) + '' + chk.Text + '';

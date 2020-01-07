@@ -19,9 +19,6 @@ D:\05-TEMP\Source\Transaction Statistical\Transaction Statistical\Transaction St
 D:\05-TEMP\Source\GitHub\ToolTCB\Transaction Statistical\bin\Release\Transaction Statistical.exe.config
 D:\05-TEMP\Source\GitHub\ToolTCB\Transaction Statistical\bin\Release\Transaction Statistical.exe
 D:\05-TEMP\Source\GitHub\ToolTCB\Transaction Statistical\bin\Release\Transaction Statistical.pdb
-D:\05-TEMP\Source\GitHub\ToolTCB\Transaction Statistical\bin\Release\MetroFramework.Design.dll
-D:\05-TEMP\Source\GitHub\ToolTCB\Transaction Statistical\bin\Release\MetroFramework.dll
-D:\05-TEMP\Source\GitHub\ToolTCB\Transaction Statistical\bin\Release\MetroFramework.Fonts.dll
 D:\05-TEMP\Source\GitHub\ToolTCB\Transaction Statistical\obj\Release\Transaction Statistical.csprojAssemblyReference.cache
 D:\05-TEMP\Source\GitHub\ToolTCB\Transaction Statistical\obj\Release\Transaction_Statistical.AddOn.TabControlX.resources
 D:\05-TEMP\Source\GitHub\ToolTCB\Transaction Statistical\obj\Release\Transaction_Statistical.AddOn.TabPanelControl.resources
@@ -190,3 +187,13 @@ E:\Project\NPS\ToolTCB_Back_up\Back_up_15\ToolTCB\ToolTCB\Transaction Statistica
 E:\Project\NPS\ToolTCB_Back_up\Back_up_15\ToolTCB\ToolTCB\Transaction Statistical\obj\Release\Transaction Statistical.csproj.CopyComplete
 E:\Project\NPS\ToolTCB_Back_up\Back_up_15\ToolTCB\ToolTCB\Transaction Statistical\obj\Release\Transaction Statistical.exe
 E:\Project\NPS\ToolTCB_Back_up\Back_up_15\ToolTCB\ToolTCB\Transaction Statistical\obj\Release\Transaction Statistical.pdb
+D:\05-TEMP\Source\GitHub\ToolTCB\Transaction Statistical\obj\Release\Transaction_Statistical.AddOn.ButtonSetColor.resources
+D:\05-TEMP\Source\GitHub\ToolTCB\Transaction Statistical\obj\Release\Transaction_Statistical.UC_Access.resources
+D:\05-TEMP\Source\GitHub\ToolTCB\Transaction Statistical\obj\Release\Transaction_Statistical.UControl.GUI_Custom.resources
+D:\05-TEMP\Source\GitHub\ToolTCB\Transaction Statistical\obj\Release\Transaction_Statistical.UControl.UC_ExportCus.resources
+D:\05-TEMP\Source\GitHub\ToolTCB\Transaction Statistical\obj\Release\Transaction_Statistical.UControl.UC_Licensing.resources
+D:\05-TEMP\Source\GitHub\ToolTCB\Transaction Statistical\obj\Release\Transaction_Statistical.UControl.UC_Menu_About.resources
+D:\05-TEMP\Source\GitHub\ToolTCB\Transaction Statistical\obj\Release\Transaction_Statistical.UControl.UC_Menu_History.resources
+D:\05-TEMP\Source\GitHub\ToolTCB\Transaction Statistical\obj\Release\Transaction_Statistical.UControl.UC_NewTemplate.resources
+D:\05-TEMP\Source\GitHub\ToolTCB\Transaction Statistical\obj\Release\Transaction_Statistical.UControl.UC_RegisterLicense.resources
+D:\05-TEMP\Source\GitHub\ToolTCB\Transaction Statistical\obj\Release\Transaction_Statistical.UControl.UC_USBKey.resources

@@ -13,7 +13,7 @@ namespace Transaction_Statistical
         public Frm_Main()
         {
             InitializeComponent2();
-            Task.Factory.StartNew(() => frm_LoadingApp.ShowDialog()).ContinueWith(t => { frm_LoadingApp.Close(); }, TaskScheduler.Default);
+            Task.Factory.StartNew(() => frm_LoadingApp.ShowDialog()).ContinueWith(t => { UIHelper.UIThread(this, delegate { frm_LoadingApp.Close(); }); }, TaskScheduler.Default);
             TabPanelControl tpc = new TabPanelControl();
             tpc.Dock = DockStyle.Fill;
             UControl.UC_Transaction uc_Transaction = new UControl.UC_Transaction();
@@ -297,7 +297,7 @@ namespace Transaction_Statistical
         protected override void OnShown(EventArgs e)
         {
             base.OnShown(e);
-            frm_LoadingApp.Close();
+            UIHelper.UIThread(this, delegate { frm_LoadingApp.Close(); });
         }
 
     }

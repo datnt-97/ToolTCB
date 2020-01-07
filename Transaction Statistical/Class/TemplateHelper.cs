@@ -626,8 +626,8 @@ namespace Transaction_Statistical.Class
                     var cycleOfTransction = cycles.Where(x => x.Value.SettlementPeriodDateBegin <= itemTrans.DateBegin
                     && x.Value.SettlementPeriodDateEnd >= itemTrans.DateBegin
                     && itemTrans.Terminal.Contains(x.Value.TerminalID)).OrderBy(x => x.Value.SettlementPeriodDateBegin).LastOrDefault().Value;
-                    var lastBill = itemTrans.ListBills.OrderBy(x => x.Key).LastOrDefault();
-                    worksheet.Cells[indexData, index].Value = lastBill.Value != null ? lastBill.Value.TranNo : "-";
+                    // var lastBill = itemTrans.ListBills.OrderBy(x => x.Key).LastOrDefault();
+                    worksheet.Cells[indexData, index].Value = string.IsNullOrEmpty(itemTrans.TransactionNumber) ? "-" : itemTrans.TransactionNumber;
                     worksheet.Cells[indexData, index + 1].Value = string.IsNullOrEmpty(itemTrans.Type) ? "N/A" : itemTrans.Type;
                     worksheet.Cells[indexData, index + 2].Value = requestLast != null ? requestLast.Status.ToString() : "";
                     worksheet.Cells[indexData, index + 3].Value = itemTrans.Terminal;

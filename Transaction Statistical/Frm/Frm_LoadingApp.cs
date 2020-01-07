@@ -33,7 +33,7 @@ namespace Transaction_Statistical
         void timer_Tick(object sender, EventArgs e)
         {
             count += 2;
-            label1.Text = "Processing... (" + count + "%)";
+            UIHelper.UIThread(this, delegate { label1.Text = "Processing... (" + count + "%)"; });
             if(count==100)
             {
                 timer.Stop();

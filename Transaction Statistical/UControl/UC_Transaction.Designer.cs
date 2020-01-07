@@ -133,7 +133,7 @@ namespace Transaction_Statistical.UControl
             this.cbo_Event_Status.Name = "cbo_Event_Status";
             this.cbo_Event_Status.Size = new System.Drawing.Size(191, 23);
             this.cbo_Event_Status.TabIndex = 46;
-            this.cbo_Event_Status.Text = "N/A";
+            this.cbo_Event_Status.Text = "All";
             this.cbo_Event_Status.ValueSeparator = ", ";
             this.cbo_Event_Status.SelectedValueChanged += new System.EventHandler(this.cbo_CheckAll_SelectedValueChanged);
             this.cbo_Event_Status.TextChanged += new System.EventHandler(this.cbo_CheckAll_SelectedValueChanged);
@@ -159,7 +159,7 @@ namespace Transaction_Statistical.UControl
             this.cbo_Event.Name = "cbo_Event";
             this.cbo_Event.Size = new System.Drawing.Size(262, 23);
             this.cbo_Event.TabIndex = 44;
-            this.cbo_Event.Text = "N/A";
+            this.cbo_Event.Text = "All";
             this.cbo_Event.ValueSeparator = ", ";
             this.cbo_Event.TextChanged += new System.EventHandler(this.cbo_Event_TextChanged);
             // 

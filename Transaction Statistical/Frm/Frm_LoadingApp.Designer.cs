@@ -1,4 +1,5 @@
-﻿namespace Transaction_Statistical
+﻿
+namespace Transaction_Statistical
 {
     partial class Frm_LoadingApp
     {
@@ -28,6 +29,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Frm_LoadingApp));
             this.mainPanel = new System.Windows.Forms.Panel();
             this.label2 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
@@ -148,6 +150,7 @@
             this.Name = "Frm_LoadingApp";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Loading..";
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Activated += new System.EventHandler(this.Frm_LoadingApp_Activated);
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.Frm_LoadingApp_FormClosed);
             this.mainPanel.ResumeLayout(false);

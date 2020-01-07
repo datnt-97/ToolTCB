@@ -59,14 +59,16 @@ namespace Transaction_Statistical.UControl
             uc_Explorer = new UC_Explorer();
             uc_Menu = new UC_Menu(this);
 
-            InitParametar.ReadTrans.Template_TransType.Values.ToList().ForEach(x => cbo_Trans.Items.Add(x.Name, true));
+            InitParametar.ReadTrans.Template_TransType.Values.ToList().ForEach(x => cbo_Trans.Items.Add(x.Name, true)); 
+            //InitParametar.ReadTrans.Template_EventDevice_Select.Clear();
+            InitParametar.ReadTrans.Template_EventDevice.Keys.ToList().ForEach(x => cbo_Event.Items.Add(x, true));  
+            
             foreach (string s in Enum.GetNames(typeof(Status.Types)))
             {
                 cbo_Trans_Status.Items.Add(s, true);
-                cbo_Event_Status.Items.Add(s, false);
+                cbo_Event_Status.Items.Add(s, true);
             }
-            InitParametar.ReadTrans.Template_EventDevice_Select.Clear();
-            InitParametar.ReadTrans.Template_EventDevice.Keys.ToList().ForEach(x => cbo_Event.Items.Add(x, false));           
+                    
             LoadPathTemp(true);
         }
         private void LoadPathTemp(bool isLoad)
@@ -376,16 +378,97 @@ namespace Transaction_Statistical.UControl
                         });
                         cCount += 1;
                     }
+
+                    #region Retracted
+                     cCount = 1;
+                    if (trans.Value_10K_Retracted != 0)
+                    {
+                        trans.Properties.Add(new CustomProperty
+                        {
+                            Name = cCount + ". 10,000 VND",
+                            Type = typeof(int),
+                            Desc = "Cash retracted",
+                            Cate = "7.Cash Retracted",
+                            DefaultValue = trans.Value_10K_Retracted
+                        }); cCount += 1;
+                    }
+                    if (trans.Value_20K_Retracted != 0)
+                    {
+                        trans.Properties.Add(new CustomProperty
+                        {
+                            Name = cCount + ". 20,000 VND",
+                            Type = typeof(int),
+                            Desc = "Cash retracted",
+                            Cate = "7.Cash Retracted",
+                            DefaultValue = trans.Value_20K_Retracted
+                        }); cCount += 1;
+                    }
+                    if (trans.Value_50K_Retracted != 0)
+                    {
+                        trans.Properties.Add(new CustomProperty
+                        {
+                            Name = cCount + ". 50,000 VND",
+                            Type = typeof(int),
+                            Desc = "Cash retracted",
+                            Cate = "7.Cash Retracted",
+                            DefaultValue = trans.Value_50K_Retracted
+                        }); cCount += 1;
+                    }
+                    if (trans.Value_100K_Retracted != 0)
+                    {
+                        trans.Properties.Add(new CustomProperty
+                        {
+                            Name = cCount + ". 100,000 VND",
+                            Type = typeof(int),
+                            Desc = "Cash retracted",
+                            Cate = "7.Cash Retracted",
+                            DefaultValue = trans.Value_100K_Retracted
+                        }); cCount += 1;
+                    }
+                    if (trans.Value_200K_Retracted != 0)
+                    {
+                        trans.Properties.Add(new CustomProperty
+                        {
+                            Name = cCount + ". 200,000 VND",
+                            Type = typeof(int),
+                            Desc = "Cash retracted",
+                            Cate = "7.Cash Retracted",
+                            DefaultValue = trans.Value_200K_Retracted
+                        }); cCount += 1;
+                    }
+                    if (trans.Value_500K_Retracted != 0)
+                    {
+                        trans.Properties.Add(new CustomProperty
+                        {
+                            Name = cCount + ". 500,000 VND",
+                            Type = typeof(int),
+                            Desc = "Cash retracted",
+                            Cate = "7.Cash Retracted",
+                            DefaultValue = trans.Value_500K_Retracted
+                        }); cCount += 1;
+                    }
+                    if (trans.Unknow != 0)
+                    {
+                        trans.Properties.Add(new CustomProperty
+                        {
+                            Name = cCount + ". Unknown",
+                            Type = typeof(int),
+                            Desc = "Cash retracted",
+                            Cate = "7.Cash Retracted",
+                            DefaultValue = trans.Unknow
+                        }); cCount += 1;
+                    }
+                    #endregion
                     cCount = 1;
                     foreach (var req in (e.Node.Tag as Transaction).ListEvent.Values)
                     {
                         trans.Properties.Add(new CustomProperty
                         {
-                            Name = req.TTime,
+                            Name = req.TTime+"  "+req.DateBegin.Millisecond,
                             Type = typeof(string),
                             Desc = req.TContent,
                             Cate = "6. Follow",
-                            DefaultValue = req.ToString() + " -> " + req.Status,
+                            DefaultValue = req.Name + " -> " + req.Status,
                         });
                         cCount++;
                     }

@@ -297,7 +297,8 @@ namespace Transaction_Statistical
                     Enum.TryParse(items[0], out TypeLicense);
                     if (TypeLicense.Equals(License.Types.Business) || TypeLicense.Equals(License.Types.Free) || TypeLicense.Equals(License.Types.Trial))
                     {
-                        if (items[1].Equals(GetMacAddress() + GetComputerSid())) StatusLicense = License.StatusS.Activated;
+                        if (items[1].Equals(GetMacAddress() + GetComputerSid())) 
+                            StatusLicense = License.StatusS.Activated;
                         else StatusLicense = License.StatusS.Invalid;
                     }
                     foreach (string s in items[2].Split(''))
@@ -307,9 +308,10 @@ namespace Transaction_Statistical
                         DateTime.TryParseExact(s.Split('')[1], License.FormatDateAccess, CultureInfo.InvariantCulture, DateTimeStyles.None, out lic.DateEnd);
                         Enum.TryParse(s.Split('')[2], out lic.Module);
                         ListLicense.Add(lic);
-                        if (DateTime.Compare(lic.DateEnd, DateMaximum) > 0) DateMaximum = lic.DateEnd;
+                        if (DateTime.Compare(lic.DateEnd, DateMaximum) >= 0 && StatusLicense == License.StatusS.Activated) DateMaximum = lic.DateEnd;
+                        else StatusLicense = License.StatusS.Invalid;
                     }
-                    License_Update();
+                    if (StatusLicense == License.StatusS.Activated) License_Update();
                     return true;
                 }
             }
@@ -747,12 +749,29 @@ namespace Transaction_Statistical
                                     {
                                         bills.RequireAmount = string.IsNullOrEmpty(regx.value["RequireAmount"]) ? string.Empty : regx.value["RequireAmount"];
                                     }
-
-                                    if (!transaction.ListBills.ContainsKey(bills.Date))
+                                    long tmps = 0;
+                                    if (!transaction.ListBills.ContainsKey(bills.Date)&&long.TryParse(bills.TranNo,out tmps))
                                     {
                                         transaction.ListBills[bills.Date] = bills;
                                     }
 
+                                }
+
+                                int node2 = 0;
+                                if (regx.value.ContainsKey("TimeRetract"))
+                                {
+                                    evt.Type = TransactionEvent.Events.CashRetracted;
+                                    DateTime.TryParseExact(string.Format("{0:yyyyMMdd}", DateCurrent) + regx.value["TimeRetract"], "yyyyMMdd" + FormatTime, CultureInfo.InvariantCulture, DateTimeStyles.None, out evt.DateBegin);
+                                    if (regx.value.ContainsKey("Step10k") && int.TryParse(regx.value["Step10k"], out node2)) transaction.Value_10K_Retracted += node2;
+                                    if (regx.value.ContainsKey("Step20k") && int.TryParse(regx.value["Step20k"], out node2)) transaction.Value_20K_Retracted += node2;
+                                    if (regx.value.ContainsKey("Step50k") && int.TryParse(regx.value["Step50k"], out node2)) transaction.Value_50K_Retracted += node2;
+                                    if (int.TryParse(regx.value["Step100k"], out node2)) transaction.Value_100K_Retracted += node2;
+                                    if (int.TryParse(regx.value["Step200k"], out node2)) transaction.Value_200K_Retracted += node2;
+                                    if (int.TryParse(regx.value["Step500k"], out node2)) transaction.Value_500K_Retracted += node2;
+                                    if (int.TryParse(regx.value["StepUnk"], out node2)) transaction.Unknow += node2;
+
+                                    evt.Amount += transaction.Value_500K_Retracted * 500000 + transaction.Value_200K_Retracted * 200000 + transaction.Value_100K_Retracted * 100000 +
+                                     transaction.Value_50K_Retracted * 50000 + transaction.Value_20K_Retracted * 20000 + transaction.Value_10K * 10000;
                                 }
                                 if (transaction.ListEvent.ContainsKey(evt.DateBegin)) transaction.ListEvent[evt.DateBegin.AddMilliseconds(1)] = evt;
                                 else transaction.ListEvent[evt.DateBegin] = evt;
@@ -794,22 +813,7 @@ namespace Transaction_Statistical
                                 else
                                     evt.DateBegin = DateCurrent;
 
-                                int node2 = 0;
-                                if (regx.value.ContainsKey("TimeRetract"))
-                                {
-                                    evt.Type = TransactionEvent.Events.CashRetracted;
-                                    DateTime.TryParseExact(string.Format("{0:yyyyMMdd}", DateCurrent) + regx.value["TimeRetract"], "yyyyMMdd" + FormatTime, CultureInfo.InvariantCulture, DateTimeStyles.None, out evt.DateBegin);
-                                    if (regx.value.ContainsKey("Step10k") && int.TryParse(regx.value["Step10k"], out node2)) transaction.Value_10K_Retracted += node2;
-                                    if (regx.value.ContainsKey("Step20k") && int.TryParse(regx.value["Step20k"], out node2)) transaction.Value_20K_Retracted+= node2;
-                                    if (regx.value.ContainsKey("Step50k") && int.TryParse(regx.value["Step50k"], out node2)) transaction.Value_50K_Retracted += node2;
-                                    if (int.TryParse(regx.value["Step100k"], out node2)) transaction.Value_100K_Retracted += node2;
-                                    if (int.TryParse(regx.value["Step200k"], out node2)) transaction.Value_200K_Retracted += node2;
-                                    if (int.TryParse(regx.value["Step500k"], out node2)) transaction.Value_500K_Retracted += node2;
-                                    if (int.TryParse(regx.value["StepUnk"], out node2)) transaction.Unknow += node2;
-
-                                    evt.Amount += transaction.Value_500K_Retracted * 500000 + transaction.Value_200K_Retracted * 200000 + transaction.Value_100K_Retracted * 100000 +
-                                     transaction.Value_50K_Retracted * 50000 + transaction.Value_20K_Retracted * 20000 + transaction.Value_10K * 10000;
-                                }
+                               
                                 if (transaction.ListEvent.ContainsKey(evt.DateBegin)) transaction.ListEvent[evt.DateBegin.AddMilliseconds(1)] = evt;
                                 else transaction.ListEvent[evt.DateBegin] = evt;
                                 transaction.TraceJournal_Remaining = transaction.TraceJournal_Remaining.Replace(regx.stringfind, string.Empty);
@@ -1042,14 +1046,9 @@ namespace Transaction_Statistical
 
                 TransactionEvent ev = new TransactionEvent();
                 ev.DateBegin = trans.DateBegin;
+                
                 ev.Name = "Transaction Start";
                 ev.TContent = val.value["SStart"];
-                trans.ListEvent[ev.DateBegin] = ev;
-
-                ev = new TransactionEvent();
-                ev.DateBegin = trans.DateEnd;
-                ev.Name = "Transaction End";
-                ev.TContent = val.value["SEnd"];
                 trans.ListEvent[ev.DateBegin] = ev;
 
                 trans = await Task.Run(() => FindEventBeginInput(trans));
@@ -1059,6 +1058,13 @@ namespace Transaction_Statistical
                 trans = await Task.Run(() => FindEventDevice(trans, trans.DateBegin));
                 trans = await Task.Run(() => FindEventCashOutIn(trans.DateBegin, trans));
                 trans = await Task.Run(() => SplitRequest(trans));
+
+                ev = new TransactionEvent();
+                ev.DateBegin = trans.DateEnd.AddMilliseconds(1);
+                ev.Name = "Transaction End";
+                ev.TContent = val.value["SEnd"];
+                trans.ListEvent[ev.DateBegin] = ev;
+
                 if (trans.ListRequest.Count != 0)
                 {
                     if (ListTransaction.ContainsKey(trans.Terminal))
