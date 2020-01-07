@@ -1,0 +1,87 @@
+----------------------------------------------
+13:51:00 226 Class: Auto Task
+   => Task name: tesst
+   => Task data: 13:51;DAILY;;1|65|D:\99147001_EJF|D:\99147001_EJF|[0, Cân Quỹ Theo Counter Trên Máy];[1, GD Tài Chính];[2, GD Tài Chính Không Thành Công];[3, GD Tài Chính Bất Thường];[4, BC Hoạt Động Bất Thường]
+   => Template id: 65
+   => Load Template Info => Successfully
+   => Data source: D:\99147001_EJF
+   => Found: 8 files
+   => Read begin: 13:51:00 266 
+   => Read time: 3 s
+   =>Transactions: 1364
+   =>Files: 8
+   => Export begin: 13:51:04 114 
+   => Export destination: D:\99147001_EJF
+   => Export forms: System.Collections.Generic.Dictionary`2+ValueCollection[System.Int32,System.String]
+   => Export time:6 s
+   ==> File: D:\99147001_EJF\TransactionStatistical_20191217_13-51.xlsx, size 404 kb
+   ==> Auto end, result => Successfully
+----------------------------------------------
+
+----------------------------------------------
+16:48:37 563 Class: ReadTransaction     Method: SplitRequest
+System.Collections.Generic.KeyNotFoundException: The given key was not present in the dictionary.
+   at System.Collections.Generic.Dictionary`2.get_Item(TKey key)
+   at Transaction_Statistical.ReadTransaction.SplitRequest(Transaction& transaction)
+----------------------------------------------
+
+----------------------------------------------
+16:54:46 528 Class: <SplitRequest>d__42     Method: MoveNext
+System.Collections.Generic.KeyNotFoundException: The given key was not present in the dictionary.
+   at System.Collections.Generic.Dictionary`2.get_Item(TKey key)
+   at Transaction_Statistical.ReadTransaction.<SplitRequest>d__42.MoveNext() in D:\05-TEMP\Source\GitHub\ToolTCB\Transaction Statistical\Class\Defind.cs:line 1072
+----------------------------------------------
+
+----------------------------------------------
+16:55:41 397 Class: <SplitRequest>d__42     Method: MoveNext
+System.Collections.Generic.KeyNotFoundException: The given key was not present in the dictionary.
+   at System.Collections.Generic.Dictionary`2.get_Item(TKey key)
+   at Transaction_Statistical.ReadTransaction.<SplitRequest>d__42.MoveNext() in D:\05-TEMP\Source\GitHub\ToolTCB\Transaction Statistical\Class\Defind.cs:line 1072
+----------------------------------------------
+
+----------------------------------------------
+16:55:41 520 Class: <SplitRequest>d__42     Method: MoveNext
+System.Collections.Generic.KeyNotFoundException: The given key was not present in the dictionary.
+   at System.Collections.Generic.Dictionary`2.get_Item(TKey key)
+   at Transaction_Statistical.ReadTransaction.<SplitRequest>d__42.MoveNext() in D:\05-TEMP\Source\GitHub\ToolTCB\Transaction Statistical\Class\Defind.cs:line 1072
+----------------------------------------------
+
+----------------------------------------------
+16:55:41 613 Class: <SplitRequest>d__42     Method: MoveNext
+System.Collections.Generic.KeyNotFoundException: The given key was not present in the dictionary.
+   at System.Collections.Generic.Dictionary`2.get_Item(TKey key)
+   at Transaction_Statistical.ReadTransaction.<SplitRequest>d__42.MoveNext() in D:\05-TEMP\Source\GitHub\ToolTCB\Transaction Statistical\Class\Defind.cs:line 1072
+----------------------------------------------
+
+----------------------------------------------
+16:59:59 416 Class: <SplitRequest>d__42     Method: MoveNext
+System.Collections.Generic.KeyNotFoundException: The given key was not present in the dictionary.
+   at System.Collections.Generic.Dictionary`2.get_Item(TKey key)
+   at Transaction_Statistical.ReadTransaction.<SplitRequest>d__42.MoveNext() in D:\05-TEMP\Source\GitHub\ToolTCB\Transaction Statistical\Class\Defind.cs:line 1072
+----------------------------------------------
+
+----------------------------------------------
+17:01:21 453 Class: <SplitRequest>d__42     Method: MoveNext
+System.Collections.Generic.KeyNotFoundException: The given key was not present in the dictionary.
+   at System.Collections.Generic.Dictionary`2.get_Item(TKey key)
+   at Transaction_Statistical.ReadTransaction.<SplitRequest>d__42.MoveNext() in D:\05-TEMP\Source\GitHub\ToolTCB\Transaction Statistical\Class\Defind.cs:line 1072
+----------------------------------------------
+
+----------------------------------------------
+23:17:49 920 Class: Auto Task
+   => Task name: Test
+----------------------------------------------
+23:17:50 223 Class: <AutoStart>d__24     Method: MoveNext
+System.IndexOutOfRangeException: There is no row at position 0.
+   at System.Data.RBTree`1.GetNodeByIndex(Int32 userIndex)
+   at System.Data.DataRowCollection.get_Item(Int32 index)
+   at Transaction_Statistical.SQLiteHelper.GetRowDataWith2ColumnName(String TableName, String ColumnName1, String Equals1, String ColumnName2, String Equals2) in D:\05-TEMP\Source\GitHub\ToolTCB\Transaction Statistical\Class\SQLiteHelper.cs:line 1213
+   at Transaction_Statistical.InitParametar.<AutoStart>d__24.MoveNext() in D:\05-TEMP\Source\GitHub\ToolTCB\Transaction Statistical\Class\Defind.cs:line 96
+----------------------------------------------
+
+There is no row at position 0.
+----------------------------------------------
+
+   ==> Auto end, result => Unsuccessfully
+----------------------------------------------
+

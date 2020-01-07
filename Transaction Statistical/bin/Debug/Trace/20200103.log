@@ -1,0 +1,40 @@
+----------------------------------------------
+02:00:03 409 Class: InitParametar
+Method: License_Update
+System.IO.IOException: The process cannot access the file 'D:\05-TEMP\Source\GitHub\ToolTCB\Transaction Statistical\bin\Debug\TransactionStatistical.lic' because it is being used by another process.
+   at System.IO.__Error.WinIOError(Int32 errorCode, String maybeFullPath)
+   at System.IO.File.InternalDelete(String path, Boolean checkHost)
+   at System.IO.File.Delete(String path)
+   at Transaction_Statistical.InitParametar.License_Update() in D:\05-TEMP\Source\GitHub\ToolTCB\Transaction Statistical\Class\Defind.cs:line 323
+----------------------------------------------
+
+----------------------------------------------
+02:00:03 554 Class: Auto Task
+   => Task name: sdasd
+   => Task data: 02:00;DAILY;;1|545|D:\Export|D:\temp|[0, Cân Quỹ Theo Counter Trên Máy];[1, GD Tài Chính];[2, GD Tài Chính Không Thành Công];[3, GD Tài Chính Bất Thường];[4, BC Hoạt Động Bất Thường]
+   => Template id: 545
+   => Load Template Info => Successfully
+   => Data source: D:\Export
+----------------------------------------------
+02:00:03 684 Class: Auto Task
+   => Task name: test1
+----------------------------------------------
+02:00:03 700 Class: <AutoStart>d__31
+Method: MoveNext
+System.IndexOutOfRangeException: There is no row at position 0.
+   at System.Data.RBTree`1.GetNodeByIndex(Int32 userIndex)
+   at System.Data.DataRowCollection.get_Item(Int32 index)
+   at Transaction_Statistical.SQLiteHelper.GetRowDataWith2ColumnName(String TableName, String ColumnName1, String Equals1, String ColumnName2, String Equals2) in D:\05-TEMP\Source\GitHub\ToolTCB\Transaction Statistical\Class\SQLiteHelper.cs:line 1213
+   at Transaction_Statistical.InitParametar.<AutoStart>d__31.MoveNext() in D:\05-TEMP\Source\GitHub\ToolTCB\Transaction Statistical\Class\Defind.cs:line 113
+----------------------------------------------
+
+There is no row at position 0.
+----------------------------------------------
+
+   ==> Auto end, result => Unsuccessfully
+----------------------------------------------
+
+   => Found: 0 files
+   ==> Auto end, result => Unsuccessfully
+----------------------------------------------
+
