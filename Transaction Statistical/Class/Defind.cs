@@ -26,10 +26,19 @@ using Transaction_Statistical.Class;
 
 namespace Transaction_Statistical
 {
+    public class InfoAssembly
+    {
+        public static AssemblyCompanyAttribute attributes = Assembly.GetEntryAssembly().GetCustomAttributes(typeof(AssemblyCompanyAttribute), false)[0] as AssemblyCompanyAttribute;
+        public static AssemblyCopyrightAttribute copyright = Assembly.GetExecutingAssembly().GetCustomAttributes(typeof(AssemblyCopyrightAttribute), false)[0] as AssemblyCopyrightAttribute;
+        public static FileInfo fileVersion = new FileInfo(Assembly.GetExecutingAssembly().Location);
+        public static Version version = Assembly.GetExecutingAssembly().GetName().Version;
+        public static AssemblyDescriptionAttribute descriptionAttribute = Assembly.GetExecutingAssembly().GetCustomAttributes(typeof(AssemblyDescriptionAttribute), false)[0] as AssemblyDescriptionAttribute;
+
+    }
     public class InitParametar
     {
-        public static string sCompany = "Nam Phuong services and solutions company limited";
-        public static string SAuthor = @"Copyright © 2019, Nam Phuong services and solutions company limited.";
+        public static string sCompany = InfoAssembly.attributes.Company;
+        public static string SAuthor = string.Format("{0}, {1}", InfoAssembly.copyright.Copyright, sCompany);
         public static string STitle = @"Transaction Statistical";
         public static string SComment = @"Hotline: 1900 633 412 \nEmail: np.support @npss.vn\nWeb: http://npss.vn";
 
@@ -1887,10 +1896,11 @@ namespace Transaction_Statistical
     }
     public class License
     {
-        public static string FormatDate = "yyyyMMddHHmmssttt";
-        public static string FormatDateCreate = "yyyyMMddHHmmssttt";
-        public static string FormatDateAccess = "yyyyMMddHHmmssttt";
-      //  public static string FormatDateModify = "yyyyMMddHH";
+        public static string FormatDate = "yyyyMMddHHmmss";
+        public static string FormatDateCreate = "yyyyMMddHHmmss";
+        public static string FormatDateAccess = "yyyyMMddHHmmss";
+        public static string FormatDateModify = "yyyyMMddHH";
+        //  public static string FormatDateModify = "yyyyMMddHH";
         public static Dictionary<Types, string> ListType = new Dictionary<Types, string>()
         {
             { Types.Business,"One licensed user can use application" },
