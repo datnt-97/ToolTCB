@@ -89,8 +89,8 @@ namespace Transaction_Statistical.UControl
             this.txt_Path.Name = "txt_Path";
             this.txt_Path.Size = new System.Drawing.Size(651, 22);
             this.txt_Path.TabIndex = 1;
-            this.txt_Path.Text = "";
-            this.txt_Path.MouseClick += new System.Windows.Forms.MouseEventHandler(this.txt_Path_MouseEnter);           
+            this.txt_Path.Text = @"C:\Users\Administrator\Downloads\99147001_EJF\99147001_EJF\99147001-20190327.txt";
+            this.txt_Path.MouseClick += new System.Windows.Forms.MouseEventHandler(this.txt_Path_MouseEnter);
             // 
             // gpBox_Actions
             //             
@@ -448,7 +448,7 @@ namespace Transaction_Statistical.UControl
             this.panel3.Location = new System.Drawing.Point(1083, 580);
             this.panel3.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.panel3.Name = "panel3";
-            this.panel3.Size = new System.Drawing.Size(268, 45);
+            this.panel3.Size = new System.Drawing.Size(268, 46);
             this.panel3.TabIndex = 6;
             // 
             // fctxt_FullLog
@@ -493,6 +493,7 @@ namespace Transaction_Statistical.UControl
             this.fctxt_FullLog.SelectionColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(255)))));
             this.fctxt_FullLog.ServiceColors = ((FastColoredTextBoxNS.ServiceColors)(resources.GetObject("fctxt_FullLog.ServiceColors")));
             this.fctxt_FullLog.ServiceLinesColor = System.Drawing.Color.DimGray;
+            this.fctxt_FullLog.Size = new System.Drawing.Size(268, 46);
             this.fctxt_FullLog.TabIndex = 2;
             this.fctxt_FullLog.WordWrap = true;
             this.fctxt_FullLog.Zoom = 100;
