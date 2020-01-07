@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FastColoredTextBox", "Trans
 EndProject
 Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "Transaction Statistical 1.0.2", "Transaction Statistical 1.0.2\Transaction Statistical 1.0.2.vdproj", "{BC57B014-2A81-4197-8586-E5555A08CF32}"
 EndProject
+Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "Transaction Statistical 1.0.3", "Transaction Statistical 1.0.3\Transaction Statistical 1.0.3.vdproj", "{DBE69AA6-5449-4DC8-AB84-D0E8F38F9150}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -25,6 +27,8 @@ Global
 		{6DD14A85-CCFC-4774-BD26-0F5772512319}.Release|Any CPU.Build.0 = Release|Any CPU
 		{BC57B014-2A81-4197-8586-E5555A08CF32}.Debug|Any CPU.ActiveCfg = Debug
 		{BC57B014-2A81-4197-8586-E5555A08CF32}.Release|Any CPU.ActiveCfg = Release
+		{DBE69AA6-5449-4DC8-AB84-D0E8F38F9150}.Debug|Any CPU.ActiveCfg = Debug
+		{DBE69AA6-5449-4DC8-AB84-D0E8F38F9150}.Release|Any CPU.ActiveCfg = Release
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
