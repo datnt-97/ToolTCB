@@ -19,12 +19,12 @@ namespace Transaction_Statistical
             //args = new string[] { "Task" };
             if (args.Length == 0)
             {
-                //  InitGUI.Init();
+              //  InitGUI.Init();
                 Application.EnableVisualStyles();
-                //   Application.SetCompatibleTextRenderingDefault(false);
+             //   Application.SetCompatibleTextRenderingDefault(false);
                 InitGUI.Mode = InitGUI_Mode.Light;
                 InitGUI.Init();
-                //Application.Run(new Frm_LoadingApp());
+                                               //  Application.Run(new Frm_LoadingApp());
                 Application.Run(new Frm_Main());
             }
             else
@@ -37,6 +37,5 @@ namespace Transaction_Statistical
         {
             await InitParametar.AutoStart(args[0]);
         }
-       
     }
 }

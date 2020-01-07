@@ -17,11 +17,11 @@ namespace Transaction_Statistical.UControl
         public UC_Menu_About()
         {
             InitializeComponent2();
-            lv_Version.Text = String.Format("Version: {0}, build: {1:yyyy MMM dd}", Assembly.GetExecutingAssembly().GetName().Version.ToString(),
-               InfoAssembly.fileVersion.CreationTime);
+            lv_Version.Text =String.Format("Version: {0}, build: {1:yyyy MMM dd}",  Assembly.GetExecutingAssembly().GetName().Version.ToString(), new DateTime(2019, 12, 25));
             if (InitParametar.TypeLicense.Equals(License.Types.Unknow)) mode_Label9.Text = "License: " + InitParametar.TypeLicense.ToString();
             else
             {
+
                 string remaining = string.Empty;
                 if ((InitParametar.DateMaximum - DateTime.Now).TotalDays / 365 >= 1)
                     remaining = (int)(InitParametar.DateMaximum - DateTime.Now).TotalDays / 365 + " years";
@@ -32,19 +32,13 @@ namespace Transaction_Statistical.UControl
                 mode_Label9.Text = "License: " + InitParametar.TypeLicense.ToString() + "\n Remaining: " + remaining;
             }
             #region Read Me File
-            mode_FastColoredTextBox1.WordWrap = true;
+            mode_FastColoredTextBox1.WordWrap = true;           
             var pathReadme = AppDomain.CurrentDomain.BaseDirectory + @"\readme.txt";
             if (System.IO.File.Exists(pathReadme))
             {
                 using (StreamReader file = new StreamReader(pathReadme))
                 {
                     string ln = file.ReadToEnd();
-                    ln += Environment.NewLine;
-                    ln += string.Format("Company :{0}", InfoAssembly.attributes.Company);
-                    ln += Environment.NewLine;
-                    ln += string.Format("Version :{0}", InfoAssembly.version.ToString());
-                    ln += Environment.NewLine;
-                    ln += string.Format("Built :{0}", InfoAssembly.fileVersion.CreationTime);
                     mode_FastColoredTextBox1.Text += ln;
                 }
             }
@@ -63,6 +57,7 @@ namespace Transaction_Statistical.UControl
                 using (StreamReader file = new StreamReader(pathHelp))
                 {
                     document = file.ReadToEnd();
+
                 }
                 WebBrowser web = new WebBrowser();
                 web.Dock = DockStyle.Fill;
@@ -75,7 +70,7 @@ namespace Transaction_Statistical.UControl
         private void mode_Label6_Click(object sender, EventArgs e)
         {
             UC_RegisterLicense uc = new UC_RegisterLicense();
-            Frm_TemplateDefault frm = new Frm_TemplateDefault(uc, mode_Label6.Text);
+            Frm_TemplateDefault frm = new Frm_TemplateDefault(uc, mode_Label6.Text);           
             frm.ShowDialog();
         }
         private void mode_Label_MouseHover(object sender, EventArgs e)

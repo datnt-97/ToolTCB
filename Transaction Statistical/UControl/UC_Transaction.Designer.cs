@@ -67,9 +67,7 @@ namespace Transaction_Statistical.UControl
             this.imageListControl = new System.Windows.Forms.ImageList(this.components);
             this.panel3 = new System.Windows.Forms.Panel();
             this.label3 = new Mode_Label();
-            this.label3.Size = new System.Drawing.Size(268,45);
             this.fctxt_FullLog = new Mode_FastColoredTextBox();
-            this.fctxt_FullLog.Height = 100;
             this.panel4 = new System.Windows.Forms.Panel();
             this.tvListCycle = new Mode_TreeView();
             this.panel5 = new System.Windows.Forms.Panel();
@@ -423,7 +421,7 @@ namespace Transaction_Statistical.UControl
             this.btn_Export.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btn_Export.ForeColor = System.Drawing.Color.White;
             this.btn_Export.Image = ImageUltility.ChangeColor((Bitmap)this.imageListControl.Images["Excel"], InitGUI.Custom.Menu_Button.DisplayColor);
-            // this.btn_Export.ImageKey = "Excel";
+           // this.btn_Export.ImageKey = "Excel";
             //this.btn_Export.ImageList = this.imageListControl;
             this.btn_Export.Location = new System.Drawing.Point(1291, 14);
             this.btn_Export.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
@@ -438,7 +436,7 @@ namespace Transaction_Statistical.UControl
             this.btn_Export.UseVisualStyleBackColor = true;
             this.btn_Export.Click += new System.EventHandler(this.btn_Export_Click);
             this.btn_Export.MouseLeave += new System.EventHandler(this.btn_Export_MouseLeave);
-            this.btn_Export.MouseHover += new System.EventHandler(this.btn_Export_MouseHover);
+            this.btn_Export.MouseHover += new System.EventHandler(this.btn_Export_MouseHover);            
             // 
             // panel3
             // 
@@ -457,7 +455,7 @@ namespace Transaction_Statistical.UControl
             // 
             this.fctxt_FullLog.BackColor = InitGUI.Custom.Editor_Background.DisplayColor;
             this.fctxt_FullLog.ForeColor = InitGUI.Custom.Editor_ForeColor.DisplayColor;
-
+          
             this.fctxt_FullLog.AllowSeveralTextStyleDrawing = true;
             this.fctxt_FullLog.AutoCompleteBracketsList = new char[] {
         '(',
@@ -617,7 +615,7 @@ namespace Transaction_Statistical.UControl
             // 
             // cbo_Event_Status
             // 
-            this.cbo_Event_Status.BackColor = InitGUI.Custom.Frm_Background.DisplayColor;
+            this.cbo_Event_Status.BackColor= InitGUI.Custom.Frm_Background.DisplayColor;
             this.cbo_Event_Status.ForeColor = InitGUI.Custom.Frm_ForeColor.DisplayColor;
             this.cbo_Event_Status.BorderColor = InitGUI.Custom.Menu_Border.DisplayColor;
             this.cbo_Event_Status.Invalidate();
@@ -659,7 +657,7 @@ namespace Transaction_Statistical.UControl
             this.propertyGrid1.BackColor = InitGUI.Custom.TranInfo_Background.DisplayColor;
             this.propertyGrid1.CategoryForeColor = InitGUI.Custom.TranInfo_Tilte.DisplayColor;
             this.propertyGrid1.ViewForeColor = InitGUI.Custom.TranInfo_Text.DisplayColor;
-
+           
             // 
             // tre_LstTrans
             // 
@@ -692,13 +690,13 @@ namespace Transaction_Statistical.UControl
             // 
             // prb_Process
             //            
-            this.prb_Process.ProgressColor = InitGUI.Custom.Menu_Button.DisplayColor;
+            this.prb_Process.ProgressColor = InitGUI.Custom.Menu_Button.DisplayColor;         
             // 
             // btn_Menu
             // 
             this.btn_Menu.Color4point = InitGUI.Custom.Menu_Button.DisplayColor;
             this.btn_Menu.Color4pointDown = InitGUI.Custom.Menu_ButtonDown.DisplayColor;
-            this.btn_Menu.Color4pointHover = InitGUI.Custom.Menu_ButtonHover.DisplayColor;
+            this.btn_Menu.Color4pointHover = InitGUI.Custom.Menu_ButtonHover.DisplayColor;           
             // 
             // btn_Read
             //           
@@ -709,7 +707,7 @@ namespace Transaction_Statistical.UControl
             // btn_Export
             // 
             this.btn_Export.FlatAppearance.BorderColor = InitGUI.Custom.Frm_Background.DisplayColor;
-            this.btn_Export.FlatAppearance.MouseDownBackColor = InitGUI.Custom.Frm_TopToolbar.DisplayColor;
+            this.btn_Export.FlatAppearance.MouseDownBackColor = InitGUI.Custom.Frm_TopToolbar.DisplayColor; 
             // 
             // fctxt_FullLog
             // 
@@ -720,18 +718,18 @@ namespace Transaction_Statistical.UControl
             // tvListCycle
             // 
             tvListCycle.BackColor = InitGUI.Custom.Cycle_Background.DisplayColor;
-            tvListCycle.ForeColor = InitGUI.Custom.Cycle_Tilte.DisplayColor;
+            tvListCycle.ForeColor = InitGUI.Custom.Cycle_Tilte.DisplayColor;       
             // 
             // UC_Transaction
             // 
             this.prb_Process.ProgressColor = InitGUI.Custom.Menu_Text.DisplayColor;
             this.BackColor = InitGUI.Custom.Frm_Background.DisplayColor;
             this.panel5.BackColor = InitGUI.Custom.Cycle_Background.DisplayColor;
-            if (dataGrid != null)
+            if(dataGrid!=null)
             {
                 dataGrid.BackgroundColor = InitGUI.Custom.Cycle_Background.DisplayColor;
-                dataGrid.ForeColor = InitGUI.Custom.Cycle_Text.DisplayColor;
-                dataGrid.DefaultCellStyle.BackColor = InitGUI.Custom.Cycle_Background.DisplayColor;
+                dataGrid.ForeColor = InitGUI.Custom.Cycle_Text.DisplayColor;          
+                dataGrid.DefaultCellStyle.BackColor= InitGUI.Custom.Cycle_Background.DisplayColor;
             }
         }
         #endregion

@@ -202,7 +202,7 @@
             // gs_Module
             // 
             this.gs_Module.BackColor = System.Drawing.Color.Transparent;
-            this.gs_Module.ForeColor = System.Drawing.Color.White;
+            this.gs_Module.ForeColor = System.Drawing.Color.Black;
             this.gs_Module.Location = new System.Drawing.Point(23, 98);
             this.gs_Module.Name = "gs_Module";
             this.gs_Module.Size = new System.Drawing.Size(620, 72);

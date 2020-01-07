@@ -273,8 +273,6 @@ namespace Transaction_Statistical.UControl
                 {
 
                     fctxt_FullLog.Text = (e.Node.Tag as Transaction).TraceJournalFull;
-                    fctxt_FullLog.Height = panel3.Height;
-                    fctxt_FullLog.Margin = new Padding(0, 10, 0, 10);
                     var trans = (Transaction)e.Node.Tag;
                     trans.Properties = new List<CustomProperty>();
 
@@ -461,8 +459,7 @@ namespace Transaction_Statistical.UControl
 
             if (e.Node != null && e.Node.Tag != null && e.Node.Tag is Cycle)
             {
-                Cycle tag = (Cycle)e.Node.Tag;
-                showCycle(tag);
+                showCycle((Cycle)e.Node.Tag);
             }
         }
         private void resetView()

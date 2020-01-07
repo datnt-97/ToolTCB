@@ -26,19 +26,10 @@ using Transaction_Statistical.Class;
 
 namespace Transaction_Statistical
 {
-    public class InfoAssembly
-    {
-        public static AssemblyCompanyAttribute attributes = Assembly.GetEntryAssembly().GetCustomAttributes(typeof(AssemblyCompanyAttribute), false)[0] as AssemblyCompanyAttribute;
-        public static AssemblyCopyrightAttribute copyright = Assembly.GetExecutingAssembly().GetCustomAttributes(typeof(AssemblyCopyrightAttribute), false)[0] as AssemblyCopyrightAttribute;
-        public static FileInfo fileVersion = new FileInfo(Assembly.GetExecutingAssembly().Location);
-        public static Version version = Assembly.GetExecutingAssembly().GetName().Version;
-        public static AssemblyDescriptionAttribute descriptionAttribute = Assembly.GetExecutingAssembly().GetCustomAttributes(typeof(AssemblyDescriptionAttribute), false)[0] as AssemblyDescriptionAttribute;
-
-    }
     public class InitParametar
     {
-        public static string sCompany = InfoAssembly.attributes.Company;
-        public static string SAuthor = string.Format("{0}, {1}", InfoAssembly.copyright.Copyright, sCompany);
+        public static string sCompany = "Nam Phuong services and solutions company limited";
+        public static string SAuthor = @"Copyright © 2019, Nam Phuong services and solutions company limited.";
         public static string STitle = @"Transaction Statistical";
         public static string SComment = @"Hotline: 1900 633 412 \nEmail: np.support @npss.vn\nWeb: http://npss.vn";
 
@@ -735,6 +726,7 @@ namespace Transaction_Statistical
                                         if (tmp.Key.Contains(type.ToString()))
                                         {
                                             bills.Type = type;
+
                                         }
                                     }
                                     bills.Terminal = string.IsNullOrEmpty(regx.value["Terminal"]) ? string.Empty : regx.value["Terminal"];
@@ -746,8 +738,8 @@ namespace Transaction_Statistical
                                     {
                                         bills.RequireAmount = string.IsNullOrEmpty(regx.value["RequireAmount"]) ? string.Empty : regx.value["RequireAmount"];
                                     }
-                                    long transNum = 0;
-                                    if (!transaction.ListBills.ContainsKey(bills.Date) && long.TryParse(bills.TranNo, out transNum))
+
+                                    if (!transaction.ListBills.ContainsKey(bills.Date))
                                     {
                                         transaction.ListBills[bills.Date] = bills;
                                     }
@@ -799,7 +791,7 @@ namespace Transaction_Statistical
                                     evt.Type = TransactionEvent.Events.CashRetracted;
                                     DateTime.TryParseExact(string.Format("{0:yyyyMMdd}", DateCurrent) + regx.value["TimeRetract"], "yyyyMMdd" + FormatTime, CultureInfo.InvariantCulture, DateTimeStyles.None, out evt.DateBegin);
                                     if (regx.value.ContainsKey("Step10k") && int.TryParse(regx.value["Step10k"], out node2)) transaction.Value_10K_Retracted += node2;
-                                    if (regx.value.ContainsKey("Step20k") && int.TryParse(regx.value["Step20k"], out node2)) transaction.Value_20K_Retracted += node2;
+                                    if (regx.value.ContainsKey("Step20k") && int.TryParse(regx.value["Step20k"], out node2)) transaction.Value_20K_Retracted+= node2;
                                     if (regx.value.ContainsKey("Step50k") && int.TryParse(regx.value["Step50k"], out node2)) transaction.Value_50K_Retracted += node2;
                                     if (int.TryParse(regx.value["Step100k"], out node2)) transaction.Value_100K_Retracted += node2;
                                     if (int.TryParse(regx.value["Step200k"], out node2)) transaction.Value_200K_Retracted += node2;
@@ -1036,8 +1028,8 @@ namespace Transaction_Statistical
                 trans.MachineSequenceNo = val.value["MachineNo"];
                 trans.TraceJournalFull = trans.TraceJournal_Remaining = val.stringfind;
 
-                //trans.TraceJournal_Remaining = trans.TraceJournal_Remaining.Replace(val.value["SStart"], null);
-                //trans.TraceJournal_Remaining = trans.TraceJournal_Remaining.Replace(val.value["SEnd"], null);
+                trans.TraceJournal_Remaining = trans.TraceJournal_Remaining.Replace(val.value["SStart"], null);
+                trans.TraceJournal_Remaining = trans.TraceJournal_Remaining.Replace(val.value["SEnd"], null);
 
                 trans = await Task.Run(() => FindEventBeginInput(trans));
                 trans = await Task.Run(() => FindEventRequest(trans.DateBegin, trans));
@@ -1378,11 +1370,8 @@ namespace Transaction_Statistical
         public string TraceApplicationTrcTxt;
 
         [CategoryAttribute("3. Transaction"), DescriptionAttribute("Transaction Number")]
-        public string TransactionNumber
-        {
-            get => this.ListBills.OrderBy(x => x.Key).LastOrDefault().Value != null
-? this.ListBills.OrderBy(x => x.Key).LastOrDefault().Value.TranNo : "-";
-        }
+        public string TransactionNumber { get=>this.ListBills.OrderBy(x=>x.Key).LastOrDefault().Value!=null
+                ? this.ListBills.OrderBy(x => x.Key).LastOrDefault().Value.TranNo:"-"; }
 
         [CategoryAttribute("3. Transaction"), DescriptionAttribute("Machine Sequence No")]
         public string MachineSequenceNo { get; set; }
@@ -1409,7 +1398,7 @@ namespace Transaction_Statistical
         [CategoryAttribute("6. Follow"), DescriptionAttribute("Follow of the transaction")]
         public string FullFollow
         {
-            get { return string.Join("=>", ListEvent.Values.OrderBy(x => x.DateBegin).OrderBy(x => this.TraceJournalFull.IndexOf(x.TContent))); }
+            get { return string.Join("=>", ListEvent.Values); }
         }
 
 
@@ -1883,9 +1872,9 @@ namespace Transaction_Statistical
     }
     public class License
     {
-        public static string FormatDate = "yyyyMMddHHmmss";
-        public static string FormatDateCreate = "yyyyMMddHHmmss";
-        public static string FormatDateAccess = "yyyyMMddHHmmss";
+        public static string FormatDate = "yyyyMMddHHmmssttt";
+        public static string FormatDateCreate = "yyyyMMddHHmmssttt";
+        public static string FormatDateAccess = "yyyyMMddHHmmssttt";
         public static string FormatDateModify = "yyyyMMddHH";
         public static Dictionary<Types, string> ListType = new Dictionary<Types, string>()
         {

@@ -59,7 +59,7 @@ namespace Transaction_Statistical.UControl
 
         private void addUserCfg()
         {
-            lv_Version.Text = "Version " + InitParametar.Version + string.Format("\n{0}, {1}", InfoAssembly.copyright.Copyright, InfoAssembly.descriptionAttribute.Description);
+            lv_Version.Text = "Version " + InitParametar.Version + "\nCopyright © 2019, NPSS";
             ucOVerview = new UC_Menu_Overview();
             ucOVerview.Width = this.Width - 1 - pnl_Menu.Width;
             ucOVerview.Height = this.Height - 2;

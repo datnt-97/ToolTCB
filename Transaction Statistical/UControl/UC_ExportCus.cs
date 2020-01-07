@@ -161,16 +161,16 @@ namespace Transaction_Statistical.UControl
             {
                 InitParametar.Send_Error(ex.ToString(), MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name);
             }
-
+           
         }
-
+      
         private void btn_Export_Click(object sender, EventArgs e)
         {
             //prgExport.Show();
             //lblPercent.Show();
             try
             {
-                prb_Process.Size = btn_Read.Size;
+                prb_Process.Size = btn_Read.Size;               
 
                 Dictionary<int, string> TemplateChoosen = new Dictionary<int, string>();
                 foreach (var item in ckbl_Forms.CheckedItems)
