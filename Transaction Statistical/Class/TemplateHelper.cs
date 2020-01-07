@@ -676,7 +676,7 @@ namespace Transaction_Statistical.Class
 
                     //worksheet.Cells[indexData, index + 24].Style.WrapText = true;
                     worksheet.Cells[indexData, index + 24].Style.HorizontalAlignment = ExcelHorizontalAlignment.Left;
-                    worksheet.Cells[indexData, index + 24].Value = string.Join("=>", itemTrans.ListEvent.Values);
+                    worksheet.Cells[indexData, index + 24].Value = itemTrans.FullFollow;
                     //worksheet.Cells[indexData, index + 25].Value = requestLast != null && requestLast.Status == Status.Types.UnSucceeded ? itemTrans.TraceJournalFull : string.Empty;
                     indexData++;
                 }
