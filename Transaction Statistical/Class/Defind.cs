@@ -45,7 +45,7 @@ namespace Transaction_Statistical
         public static string sTest = string.Empty;
         public static SQLiteHelper sqlite;
         public static string PathDirectoryCurrentApp;//=Path.GetDirectoryName(Application.ExecutablePath);
-        public static string PathDirectoryCurrentAppConfigData;//=Path.GetDirectoryName(Application.ExecutablePath);
+        public static string PathDirectoryCurrentUserConfigData;//=Path.GetDirectoryName(Application.ExecutablePath);
         public static string PathDirectoryUtilities;// = PathDirectoryCurrentApp + "Utilities";
         public static string FolderSystemTrace;
         public static string DatabaseFile;
@@ -81,26 +81,17 @@ namespace Transaction_Statistical
         public static void Init()
         {
             try
-            {
-                // ftp Support
-                UsrSupport = "UsrUpdate";
-                PwdSupport = "@UsrUpdate@";
-                IpSupport = "ftp://bsi.vn";
-                PathUpdateSupport = "/UsrUpdate/Analyze";
-                PathUpdateSupportError = "/UsrUpdate/Analyze/Error";
-                //version
-
-                //VersionAnalyze.Date = DateTime.ParseExact("2013-04-07 16:40:52", "yyyy-MM-dd HH:mm:ss",System.Globalization.CultureInfo.InvariantCulture);
-
+            {                
                 //Init directory and file config
-                PathDirectoryCurrentApp = Path.GetDirectoryName(Application.ExecutablePath);
+                PathDirectoryCurrentApp = Path.GetDirectoryName(Application.ExecutablePath);               
+                PathDirectoryCurrentUserConfigData = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + @"\Transaction Statistical";
+                
                 PathDirectoryUtilities = (PathDirectoryCurrentApp + "\\Utilities").Replace(@"\\", @"\");
-                FolderSystemTrace = (PathDirectoryCurrentApp + "\\Trace").Replace(@"\\", @"\");
-                PathDirectoryCurrentAppConfigData = PathDirectoryCurrentApp + @"\Config";
-                DatabaseFile = PathDirectoryCurrentAppConfigData + "\\DB.s3db";
+                FolderSystemTrace = (PathDirectoryCurrentUserConfigData + "\\Trace").Replace(@"\\", @"\");
+                DatabaseFile = PathDirectoryCurrentUserConfigData + "\\DB.s3db";
+                
                 sqlite = new SQLiteHelper();
-                //   listTransaction = new Dictionary<string, Dictionary<DateTime, Transaction>>();
-                LicenseFile = PathDirectoryCurrentApp + "\\TransactionStatistical.lic";
+                LicenseFile = PathDirectoryCurrentUserConfigData + "\\TransactionStatistical.lic";
                 License_ReadInfo();
                 ReadTrans = new ReadTransaction();
             }
