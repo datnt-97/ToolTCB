@@ -149,7 +149,7 @@ namespace Transaction_Statistical.Class
         {
             this.excelPackage.Workbook.Worksheets.Add(WorksheetsName);
             var lastWS = excelPackage.Workbook.Worksheets.Last();
-            lastWS = DrawGDTC(lastWS, ListTransaction, cycles, Template_EventDevice);
+            lastWS = DrawGDTC(lastWS, ListTransaction.OrderBy(x => x.Key).ToDictionary(d => d.Key, d => d.Value), cycles, Template_EventDevice);
             this.excelPackage.Save();
         }
 
@@ -627,7 +627,7 @@ namespace Transaction_Statistical.Class
                     rng.Value = "LOG JNT (chỉ lấy log với các GD không thành công)";
                 }
                 //DRAW DATA
-                var trans = ListTransaction.ToArray();
+                var trans = ListTransaction.OrderByDescending(x => x.Key).ToArray();
                 int indexData = index + 2;
                 for (int j = 0; j < trans.Count(); j++)
                 {
@@ -687,7 +687,12 @@ namespace Transaction_Statistical.Class
                     //worksheet.Cells[indexData, index + 24].Style.WrapText = true;
                     worksheet.Cells[indexData, index + 24].Style.HorizontalAlignment = ExcelHorizontalAlignment.Left;
                     worksheet.Cells[indexData, index + 24].Value = string.Join("=>", itemTrans.ListEvent.Values);
-                    //worksheet.Cells[indexData, index + 25].Value = requestLast != null && requestLast.Status == Status.Types.UnSucceeded ? itemTrans.TraceJournalFull : string.Empty;
+                    if (itemTrans.ListRequest.Values.LastOrDefault() != null &&
+                        itemTrans.ListRequest.Values.LastOrDefault().Status == Status.Types.UnSucceeded)
+                    {
+                        worksheet.Cells[indexData, index + 25].Value = itemTrans.TraceJournalFull;
+                        //worksheet.Cells[indexData, index + 25].Style.WrapText = true;
+                    }
                     indexData++;
                 }
 
@@ -705,7 +710,7 @@ namespace Transaction_Statistical.Class
                 allCells.Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
                 allCells.Style.VerticalAlignment = ExcelVerticalAlignment.Center;
 
-                allCells.Style.WrapText = true;
+                //allCells.Style.WrapText = true;
             }
             catch (Exception e)
             {
