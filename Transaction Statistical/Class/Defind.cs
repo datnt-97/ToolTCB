@@ -901,6 +901,7 @@ namespace Transaction_Statistical
                                 evt.Name = tmp.Key;
                                 evt.Status = (Status.Types.Succeeded);
                                 evt.TContent = regx.stringfind;
+                                evt.IndexContent = regx.index;
                                 if (regx.value.ContainsKey("Warning") && !string.IsNullOrEmpty(regx.value["Warning"]))
                                 {
                                     evt.isWarning = true;
@@ -911,7 +912,7 @@ namespace Transaction_Statistical
                                     DateCurrent = evt.DateBegin;
                                 }
                                 else
-                                    evt.DateBegin = DateCurrent.AddMilliseconds(10);
+                                    evt.DateBegin = DateCurrent.AddYears(88);
                                 if (tran.ListEvent.ContainsKey(evt.DateBegin)) tran.ListEvent[evt.DateBegin.AddMilliseconds(1)] = evt;
                                 else tran.ListEvent[evt.DateBegin] = evt;
                                 tran.TraceJournal_Remaining = tran.TraceJournal_Remaining.Replace(regx.stringfind, string.Empty);
@@ -944,6 +945,7 @@ namespace Transaction_Statistical
                                 evt.Name = tmp.Key;
                                 evt.Status = (Status.Types.Succeeded);
                                 evt.TContent = regx.stringfind;
+                                evt.IndexContent = regx.index;
                                 if (regx.value.ContainsKey("Time") && !string.IsNullOrEmpty(regx.value["Time"]))
                                 {
                                     DateTime.TryParseExact(string.Format("{0:yyyyMMdd}", DateCurrent) + regx.value["Time"], "yyyyMMdd" + FormatTime, CultureInfo.InvariantCulture, DateTimeStyles.None, out evt.DateBegin);
@@ -997,7 +999,7 @@ namespace Transaction_Statistical
             }
             return tran;
         }
-        private async Task<Transaction> FixNoTime(Transaction tran)
+        private async Task<Transaction> FixNoTimeEvent(Transaction tran)
         {
             try
             {
@@ -1040,6 +1042,7 @@ namespace Transaction_Statistical
                                 evt.Status = (Status.Types.Unknow);
                                 evt.TContent = regx.stringfind;
                                 evt.Type = TransactionEvent.Events.TransactionReqSend;
+                                evt.IndexContent = regx.index;
                                 if (regx.value.ContainsKey("Warning") && !string.IsNullOrEmpty(regx.value["Warning"]))
                                 {
                                     evt.isWarning = true;
@@ -1051,7 +1054,7 @@ namespace Transaction_Statistical
                                     DateCurrent = evt.DateBegin;
                                 }
                                 else
-                                    evt.DateBegin = DateCurrent.AddMinutes(10);
+                                    evt.DateBegin = DateCurrent.AddYears(88);
                                 if (tran.ListEvent.ContainsKey(evt.DateBegin)) tran.ListEvent[evt.DateBegin.AddMilliseconds(1)] = evt;
                                 else tran.ListEvent[evt.DateBegin] = evt;
                                 tran.TraceJournal_Remaining = tran.TraceJournal_Remaining.Replace(regx.stringfind, string.Empty);
@@ -1073,6 +1076,7 @@ namespace Transaction_Statistical
 
             try
             {
+                trans.IndexContent = val.index;
                 DateTime.TryParseExact(val.value["DateBegin"], "MM-dd-yyyy HH:mm:ss", CultureInfo.InvariantCulture, DateTimeStyles.None, out trans.DateBegin);
                 if (DateTime.Compare(trans.DateBegin, StartDate) < 0 || DateTime.Compare(trans.DateBegin, EndDate) > 0) return;
                 DateTime.TryParseExact(string.Format("{0:MM-dd-yyyy}", trans.DateBegin) + val.value["TimeEnd"], "MM-dd-yyyy" + FormatTime, CultureInfo.InvariantCulture, DateTimeStyles.None, out trans.DateEnd);
@@ -1092,6 +1096,7 @@ namespace Transaction_Statistical
 
                 ev.Name = "Transaction Start";
                 ev.TContent = val.value["SStart"];
+                ev.IndexContent = 0;
                 trans.ListEvent[ev.DateBegin] = ev;
 
                 trans = await Task.Run(() => FindEventBeginInput(trans));
@@ -1100,7 +1105,7 @@ namespace Transaction_Statistical
                 trans = await Task.Run(() => FindEventReceive(trans.DateBegin, trans));
                 trans = await Task.Run(() => FindEventDevice(trans, trans.DateBegin));
                 trans = await Task.Run(() => FindEventCashOutIn(trans.DateBegin, trans));
-                trans = await Task.Run(() => FixNoTime(trans));
+                trans = await Task.Run(() => FixNoTimeEvent(trans));
                 trans = await Task.Run(() => SplitRequest(trans));
 
                 ev = new TransactionEvent();
@@ -1390,7 +1395,7 @@ namespace Transaction_Statistical
         public int Value_500K_Retracted;
         public int Rejects;
         public int Unknow;
-
+        public int IndexContent;
         public int AmountTotal()
         {
             return Value_10K * 10000 + Value_20K * 20000 + Value_50K * 50000 + Value_100K * 100000 + Value_200K * 200000 + Value_500K * 500000;
