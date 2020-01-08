@@ -75,7 +75,7 @@ namespace Transaction_Statistical.UControl
         {
             try
             {
-                UtilityIniFile fini = new UtilityIniFile(InitParametar.PathDirectoryCurrentApp + "\\AppConfig.dat");
+                UtilityIniFile fini = new UtilityIniFile(InitParametar.PathDirectoryCurrentUserConfigData + "\\AppConfig.dat");
                 if (isLoad)
                 {
                     txt_Path.Text = fini.GetEntryValue("Directory", "FolderTemp");

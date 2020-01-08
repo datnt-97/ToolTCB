@@ -25,28 +25,32 @@ namespace Transaction_Statistical.UControl
 
         private void btn_Refresh_Click(object sender, EventArgs e)
         {
-            string reg = @"[-]+
+            try
+            {
+                string reg = @"[-]+
 (?<Trace>(?<Time>(\d+:\d+:\d+))\s+\d+\s+Class:\s+(?<Class>.*)
 [\s\S]*?)
 [-]+";
-            cbo_Keyword_LstKeyword.Items.Clear();
-            int n = 0;
+                cbo_Keyword_LstKeyword.Items.Clear();
+                int n = 0;
 
-            foreach (string file in Directory.GetFiles(InitParametar.FolderSystemTrace))
-            {
-                Dictionary<int, RegesValue> vls = new Dictionary<int, RegesValue>();
-                if (Regexs.RunPatternRegular(File.ReadAllText(file), reg, out vls))
+                foreach (string file in Directory.GetFiles(InitParametar.FolderSystemTrace))
                 {
-                    foreach (RegesValue vl in vls.Values)
+                    Dictionary<int, RegesValue> vls = new Dictionary<int, RegesValue>();
+                    if (Regexs.RunPatternRegular(File.ReadAllText(file), reg, out vls))
                     {
-                        n++;
-                        listView1.Items.Add(new ListViewItem(new string[] { n.ToString(), vl.value["Time"], vl.value["Class"], vl.value["Trace"] }));
-                        if (!cbo_Keyword_LstKeyword.Items.Contains(vl.value["Class"])) cbo_Keyword_LstKeyword.Items.Add(vl.value["Class"]);
+                        foreach (RegesValue vl in vls.Values)
+                        {
+                            n++;
+                            listView1.Items.Add(new ListViewItem(new string[] { n.ToString(), vl.value["Time"], vl.value["Class"], vl.value["Trace"] }));
+                            if (!cbo_Keyword_LstKeyword.Items.Contains(vl.value["Class"])) cbo_Keyword_LstKeyword.Items.Add(vl.value["Class"]);
+                        }
+
                     }
-                    
                 }
+                if (listView1.Items.Count != 0) listView1.EnsureVisible(listView1.Items.Count - 1);
             }
-            if (listView1.Items.Count != 0) listView1.EnsureVisible(listView1.Items.Count - 1);
+            catch { }
         }
 
         private void listView1_ItemSelectionChanged(object sender, ListViewItemSelectionChangedEventArgs e)

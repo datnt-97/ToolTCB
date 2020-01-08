@@ -44,9 +44,9 @@ namespace Transaction_Statistical
 
         public static string sTest = string.Empty;
         public static SQLiteHelper sqlite;
-        public static string PathDirectoryCurrentApp;//=Path.GetDirectoryName(Application.ExecutablePath);
-        public static string PathDirectoryCurrentUserConfigData;//=Path.GetDirectoryName(Application.ExecutablePath);
-        public static string PathDirectoryUtilities;// = PathDirectoryCurrentApp + "Utilities";
+        public static string PathDirectoryCurrentApp;
+        public static string PathDirectoryCurrentUserConfigData;
+        public static string PathDirectoryUtilities;
         public static string FolderSystemTrace;
         public static string DatabaseFile;
 
@@ -81,15 +81,15 @@ namespace Transaction_Statistical
         public static void Init()
         {
             try
-            {                
+            {
                 //Init directory and file config
-                PathDirectoryCurrentApp = Path.GetDirectoryName(Application.ExecutablePath);               
-                PathDirectoryCurrentUserConfigData = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + @"\Transaction Statistical";
-                
-                PathDirectoryUtilities = (PathDirectoryCurrentApp + "\\Utilities").Replace(@"\\", @"\");
-                FolderSystemTrace = (PathDirectoryCurrentUserConfigData + "\\Trace").Replace(@"\\", @"\");
+                PathDirectoryCurrentApp = Path.GetDirectoryName(Application.ExecutablePath);
+                PathDirectoryCurrentUserConfigData = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + @"\Transaction Statistical"; if (!Directory.Exists(PathDirectoryCurrentUserConfigData)) Directory.CreateDirectory(PathDirectoryCurrentUserConfigData);
+
+                PathDirectoryUtilities = (PathDirectoryCurrentUserConfigData + "\\Utilities").Replace(@"\\", @"\"); if (!Directory.Exists(PathDirectoryUtilities)) Directory.CreateDirectory(PathDirectoryUtilities);
+                FolderSystemTrace = (PathDirectoryCurrentUserConfigData + "\\Trace").Replace(@"\\", @"\"); if (!Directory.Exists(FolderSystemTrace)) Directory.CreateDirectory(FolderSystemTrace);
                 DatabaseFile = PathDirectoryCurrentUserConfigData + "\\DB.s3db";
-                
+                if (!File.Exists(DatabaseFile) && File.Exists(PathDirectoryCurrentApp + "\\DB.s3db")) File.Copy(PathDirectoryCurrentApp + "\\DB.s3db", DatabaseFile, true);
                 sqlite = new SQLiteHelper();
                 LicenseFile = PathDirectoryCurrentUserConfigData + "\\TransactionStatistical.lic";
                 License_ReadInfo();
@@ -851,6 +851,7 @@ namespace Transaction_Statistical
                                 evt.Name = tmp.Key;
                                 evt.Status = (Status.Types.Succeeded);
                                 evt.TContent = regx.stringfind;
+                                evt.IndexContent = regx.index;
                                 if (regx.value.ContainsKey("Warning") && !string.IsNullOrEmpty(regx.value["Warning"]))
                                 {
                                     evt.isWarning = true;
@@ -1153,7 +1154,7 @@ namespace Transaction_Statistical
                             evt = new CycleEvent();
                             evt.Name = reg.Value;
                             evt.Log = key.Value.stringfind;
-
+                            evt.IndexContent = key.Value.index;
                             if (key.Value.value.ContainsKey("StartDateTime"))
                             {
                                 cycleItem = new Cycle();
@@ -1746,7 +1747,7 @@ namespace Transaction_Statistical
 
         public string Name;
         public string Log;
-
+        public int IndexContent;
         [CategoryAttribute("Cycle"), DescriptionAttribute("Date of the cycle")]
         public string TDate;
 
