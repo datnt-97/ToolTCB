@@ -204,10 +204,6 @@ E:\Project\NPS\TCB\ToolTCB\Transaction Statistical\bin\Release\Mono.Cecil.dll
 E:\Project\NPS\TCB\ToolTCB\Transaction Statistical\bin\Release\Mono.Cecil.Mdb.dll
 E:\Project\NPS\TCB\ToolTCB\Transaction Statistical\bin\Release\Mono.Cecil.Pdb.dll
 E:\Project\NPS\TCB\ToolTCB\Transaction Statistical\bin\Release\Mono.Cecil.Rocks.dll
-E:\Project\NPS\TCB\ToolTCB\Transaction Statistical\bin\Release\NuGet.Squirrel.dll
 E:\Project\NPS\TCB\ToolTCB\Transaction Statistical\bin\Release\SharpCompress.dll
 E:\Project\NPS\TCB\ToolTCB\Transaction Statistical\bin\Release\Splat.dll
-E:\Project\NPS\TCB\ToolTCB\Transaction Statistical\bin\Release\Squirrel.dll
-E:\Project\NPS\TCB\ToolTCB\Transaction Statistical\bin\Release\NuGet.Squirrel.pdb
 E:\Project\NPS\TCB\ToolTCB\Transaction Statistical\bin\Release\Splat.pdb
-E:\Project\NPS\TCB\ToolTCB\Transaction Statistical\bin\Release\Squirrel.pdb
