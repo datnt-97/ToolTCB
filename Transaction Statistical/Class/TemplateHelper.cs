@@ -94,12 +94,13 @@ namespace Transaction_Statistical.Class
                     var cycles = item.Value.Where(x => x.Value is Cycle).ToDictionary(x => x.Key, x => (Cycle)x.Value);
                     var events = item.Value.Where(x => x.Value is TransactionEvent).ToDictionary(x => x.Key, x => (TransactionEvent)x.Value);
 
-                    foreach (var trans in transaction.Select(x => x.Value.ListEvent))
+                    foreach (var trans in transaction)
                     {
-                        var evs = trans.Where(ev => !events.ContainsKey(ev.Value.DateBegin)
-                          && Template_EventDevice.ContainsKey(ev.Value.Name)).ToDictionary(d => d.Key, d => d.Value);
+                        var evs = trans.Value.ListEvent.Where(ev => (!events.ContainsKey(ev.Value.DateBegin))
+                          && (Template_EventDevice.ContainsKey(ev.Value.Name) || ev.Value.isWarning == true)).ToDictionary(d => d.Key, d => d.Value);
                         foreach (var ev in evs)
                         {
+                            ev.Value.TraceID = trans.Value.TransactionNumber;
                             events.Add(ev.Key, ev.Value);
                         }
                     }
@@ -338,6 +339,12 @@ namespace Transaction_Statistical.Class
         {
             try
             {
+                var eventGroup = ListTransaction.GroupBy(x => x.Value.Name);
+                var keyNotin = eventGroup.Where(x => !Template_EventDevice.ContainsKey(x.Key));
+                if (keyNotin.Count() > 0)
+                {
+                    Template_EventDevice.Add(keyNotin.First().Key, string.Empty);
+                }
                 int mgr = index;
                 int mgr1 = index;
                 if (isCycle)
@@ -461,13 +468,16 @@ namespace Transaction_Statistical.Class
                 {
 
                     var evt = transactionEvent.ToArray()[i].Value;
+                    if (!string.IsNullOrEmpty(evt.TraceID))
+                    {
+                        int a = 0;
+                    }
                     if (isCycle)
                     {
-
                         worksheet.Cells[index + i, 6].Style.Numberformat.Format = formatDate;
                         worksheet.Cells[index + i, 6].Value = evt.DateBegin;
                         worksheet.Cells[index + i, 7].Value = evt.TContent;
-                        worksheet.Cells[index + i, 8].Value = string.IsNullOrEmpty(evt.TraceID) ? "-" : evt.TraceID;
+                        worksheet.Cells[index + i, 8].Value = evt.TraceID;
                         worksheet.Cells[index + i, 9].Value = evt.Amount;
                         worksheet.Cells[index + i, 9].Style.Numberformat.Format = "###,###,##0.0";
                     }
@@ -478,7 +488,7 @@ namespace Transaction_Statistical.Class
                         worksheet.Cells[index + i, 4].Value = transactionEvent.ToArray()[i].Value.DateBegin;
                         worksheet.Cells[index + i, 5].Value = transactionEvent.ToArray()[i].Value.TContent;
                         //worksheet.Cells[index + i, 5].Value = "";
-                        worksheet.Cells[index + i, 6].Value = string.IsNullOrEmpty(evt.TraceID) ? "-" : evt.TraceID;
+                        worksheet.Cells[index + i, 6].Value = evt.TraceID;
 
                         worksheet.Cells[index + i, 7].Value = evt.Amount;
                         worksheet.Cells[index + i, 7].Style.Numberformat.Format = "###,###,##0.0";
@@ -638,14 +648,14 @@ namespace Transaction_Statistical.Class
                     worksheet.Cells[indexData, index + 8].Value = itemTrans.DateBegin;
                     worksheet.Cells[indexData, index + 8].Style.Numberformat.Format = "MM-dd-yyyy HH:mm:ss";
 
-                    worksheet.Cells[indexData, index + 9].Value = Math.Abs(itemTrans.Amount);
+                    worksheet.Cells[indexData, index + 9].Value = Math.Abs(itemTrans.AmountTotal());
                     worksheet.Cells[indexData, index + 9].Style.Numberformat.Format = "###,###,##0.0";
 
                     //if (itemTrans.ListEvent.Values.Where(x => x.Type == TransactionEvent.Events.CashRetracted).Count() > 0 || itemTrans.CardNumber.Contains("970407******6366"))
                     //{
                     //    int a = 0;
                     //}
-                    if (itemTrans.ListEvent.Values.Where(e => Template_EventDevice.ContainsKey(e.Name)).Count() > 0)
+                    if (itemTrans.ListEvent.Values.Where(e => e.isWarning).Count() > 0)
                     {
                         using (ExcelRange rng = worksheet.Cells[string.Format("A{0}:Z{1}", indexData, indexData)])
                         {
@@ -653,25 +663,25 @@ namespace Transaction_Statistical.Class
                             rng.Style.Fill.BackgroundColor.SetColor(Lightskyblue);
                         }
                     }
-            
-                        worksheet.Cells[indexData, index + 10].Value = Math.Abs(itemTrans.Value_500K);
-                        worksheet.Cells[indexData, index + 11].Value = Math.Abs(itemTrans.Value_500K_Retracted);
 
-                        worksheet.Cells[indexData, index + 12].Value = Math.Abs(itemTrans.Value_200K);
-                        worksheet.Cells[indexData, index + 13].Value = Math.Abs(itemTrans.Value_200K_Retracted);
+                    worksheet.Cells[indexData, index + 10].Value = Math.Abs(itemTrans.Value_500K);
+                    worksheet.Cells[indexData, index + 11].Value = Math.Abs(itemTrans.Value_500K_Retracted);
 
-                        worksheet.Cells[indexData, index + 14].Value = Math.Abs(itemTrans.Value_100K);
-                        worksheet.Cells[indexData, index + 15].Value = Math.Abs(itemTrans.Value_100K_Retracted);
+                    worksheet.Cells[indexData, index + 12].Value = Math.Abs(itemTrans.Value_200K);
+                    worksheet.Cells[indexData, index + 13].Value = Math.Abs(itemTrans.Value_200K_Retracted);
 
-                        worksheet.Cells[indexData, index + 16].Value = Math.Abs(itemTrans.Value_50K);
-                        worksheet.Cells[indexData, index + 17].Value = Math.Abs(itemTrans.Value_50K_Retracted);
+                    worksheet.Cells[indexData, index + 14].Value = Math.Abs(itemTrans.Value_100K);
+                    worksheet.Cells[indexData, index + 15].Value = Math.Abs(itemTrans.Value_100K_Retracted);
 
-                        worksheet.Cells[indexData, index + 18].Value = Math.Abs(itemTrans.Value_20K);
-                        worksheet.Cells[indexData, index + 19].Value = Math.Abs(itemTrans.Value_20K_Retracted);
+                    worksheet.Cells[indexData, index + 16].Value = Math.Abs(itemTrans.Value_50K);
+                    worksheet.Cells[indexData, index + 17].Value = Math.Abs(itemTrans.Value_50K_Retracted);
 
-                        worksheet.Cells[indexData, index + 20].Value = Math.Abs(itemTrans.Value_10K);
-                        worksheet.Cells[indexData, index + 21].Value = Math.Abs(itemTrans.Value_10K_Retracted);
-                        worksheet.Cells[indexData, index + 22].Value = Math.Abs(itemTrans.Unknow);
+                    worksheet.Cells[indexData, index + 18].Value = Math.Abs(itemTrans.Value_20K);
+                    worksheet.Cells[indexData, index + 19].Value = Math.Abs(itemTrans.Value_20K_Retracted);
+
+                    worksheet.Cells[indexData, index + 20].Value = Math.Abs(itemTrans.Value_10K);
+                    worksheet.Cells[indexData, index + 21].Value = Math.Abs(itemTrans.Value_10K_Retracted);
+                    worksheet.Cells[indexData, index + 22].Value = Math.Abs(itemTrans.Unknow);
                     worksheet.Cells[indexData, index + 23].Value = itemTrans.Error;
 
                     //worksheet.Cells[indexData, index + 24].Style.WrapText = true;

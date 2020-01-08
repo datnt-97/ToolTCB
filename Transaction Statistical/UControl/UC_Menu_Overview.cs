@@ -45,20 +45,32 @@ namespace Transaction_Statistical.UControl
                 rd_Mode_Ligh.CheckedChanged += new System.EventHandler(Style_Select);
                 rd_Mode_Custom.CheckedChanged += new System.EventHandler(Style_Select);
 
+                LoadInfo_Template(false);
+            }
+            catch (Exception ex)
+            {
+                InitParametar.Send_Error(ex.ToString(), MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name);
+            }
+        }
+        private void LoadInfo_Template(bool reNewInit)
+        {
+            try
+            {
                 cbo_LstTemplate.Items.Clear();
                 DataTable cfg_vendor = InitParametar.sqlite.GetTableDataWith2ColumnName("CfgData", "Type_ID", "60", "Parent_ID", "54");
                 foreach (DataRow R in cfg_vendor.Rows)
                 {
                     ComboBoxItem cb = new ComboBoxItem();
                     cb.Text = R["Field"].ToString();
-                    cb.Value = R["ID"].ToString();                    
+                    cb.Value = R["ID"].ToString();
                     cbo_LstTemplate.Items.Add(cb);
                     // if (cb.Value.Equals(InitParametar.TemplateTransactionID.ToString())) cbo_LstTemplate.SelectedItem = cb;
                     if (cb.Text.EndsWith(@"(default)"))
                     {
-                        cbo_LstTemplate.SelectedItem = cb;                      
+                        cbo_LstTemplate.SelectedItem = cb;
                     }
                 }
+                if (reNewInit) InitParametar.ReadTrans = new ReadTransaction();
             }
             catch (Exception ex)
             {
@@ -210,9 +222,9 @@ namespace Transaction_Statistical.UControl
                         if (R["Field"].ToString().EndsWith(@"(default)"))
                             InitParametar.sqlite.Update1Entry("CfgData", "Field", R["Field"].ToString().Replace(@"(default)", string.Empty), "ID", R["ID"].ToString());
                     }
-                    InitParametar.sqlite.Update1Entry("CfgData", "Field", cb_tmp.Text + @"(default)", "ID", cb_tmp.Value.ToString());
-                    LoadInfo();
+                    InitParametar.sqlite.Update1Entry("CfgData", "Field", cb_tmp.Text + @"(default)", "ID", cb_tmp.Value.ToString());                    
                 }
+                LoadInfo_Template(true);
                 MessageBox.Show("Apply completed.", "Apply template config");
             }
             catch (Exception ex)

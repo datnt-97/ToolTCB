@@ -18,7 +18,7 @@ namespace Transaction_Statistical
         private Point dragFormPoint;
         public Frm_LoadingApp()
         {
-            InitializeComponent();
+            InitializeComponent2();
             SetAndStartTimer();
         }
 
@@ -34,7 +34,7 @@ namespace Transaction_Statistical
         {
             count += 2;
             UIHelper.UIThread(this, delegate { label1.Text = "Processing... (" + count + "%)"; });
-            if(count==100)
+            if (count == 100)
             {
                 timer.Stop();
                 this.Close();
@@ -60,14 +60,14 @@ namespace Transaction_Statistical
         {
             if (e.Button == MouseButtons.Left)
             {
-                dragging = true; 
+                dragging = true;
                 dragCursorPoint = Cursor.Position;
-            dragFormPoint = this.Location;
+                dragFormPoint = this.Location;
             }
             else
                 dragging = false;
 
-           
+
         }
 
         private void mainPanel_MouseMove(object sender, MouseEventArgs e)
@@ -86,7 +86,7 @@ namespace Transaction_Statistical
 
         private void Frm_LoadingApp_Activated(object sender, EventArgs e)
         {
-            if(Program.isMinimize)
+            if (Program.isMinimize)
             {
                 Program.isMinimize = false;
             }

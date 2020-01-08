@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Drawing;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Transaction_Statistical.AddOn;
@@ -8,18 +9,25 @@ namespace Transaction_Statistical
 {
     public partial class Frm_Main : Form
     {
-        Frm_LoadingApp frm_LoadingApp = new Frm_LoadingApp();
-
+        Thread th_loadForm;
         public Frm_Main()
         {
+            th_loadForm = new Thread(() => LoadingApp());
+            th_loadForm.Start();
             InitializeComponent2();
-            Task.Factory.StartNew(() => frm_LoadingApp.ShowDialog()).ContinueWith(t => { UIHelper.UIThread(this, delegate { frm_LoadingApp.Close(); }); }, TaskScheduler.Default);
+
             TabPanelControl tpc = new TabPanelControl();
             tpc.Dock = DockStyle.Fill;
             UControl.UC_Transaction uc_Transaction = new UControl.UC_Transaction();
             uc_Transaction.Dock = DockStyle.Fill;
             tpc.Controls.Add(uc_Transaction);
             tabControlX1.AddTab("Transaction Statistical", tpc, false);
+            //  th_loadForm.Abort();
+        }
+        private void LoadingApp()
+        {
+            Frm_LoadingApp frm_LoadingApp = new Frm_LoadingApp();
+            frm_LoadingApp.ShowDialog();
         }
         #region Design GUI
         bool isTopPanelDragged = false;
@@ -297,7 +305,7 @@ namespace Transaction_Statistical
         protected override void OnShown(EventArgs e)
         {
             base.OnShown(e);
-            UIHelper.UIThread(this, delegate { frm_LoadingApp.Close(); });
+            th_loadForm.Abort();
         }
 
     }

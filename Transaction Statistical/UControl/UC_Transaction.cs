@@ -302,7 +302,7 @@ namespace Transaction_Statistical.UControl
                         Type = typeof(string),
                         Desc = "Total amount",
                         Cate = "3. Transaction",
-                        DefaultValue = String.Format("{0:#,###} VND", trans.Amount)
+                        DefaultValue = String.Format("{0:#,###} VND", trans.AmountTotal())
                     });
 
                     int cCount = 1;
