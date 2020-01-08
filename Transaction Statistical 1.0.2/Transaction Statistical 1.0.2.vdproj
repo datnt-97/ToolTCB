@@ -274,7 +274,7 @@
         "Entry"
         {
         "MsmKey" = "8:_FE44E30D5EEF4DC7377F045F01956568"
-        "OwnerKey" = "8:_D45629CABC674AFDB8D09B175E331A3C"
+        "OwnerKey" = "8:_68CCA7F7D8F147C0972AB410FE01BD24"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -286,7 +286,7 @@
         "Entry"
         {
         "MsmKey" = "8:_FE44E30D5EEF4DC7377F045F01956568"
-        "OwnerKey" = "8:_68CCA7F7D8F147C0972AB410FE01BD24"
+        "OwnerKey" = "8:_D45629CABC674AFDB8D09B175E331A3C"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -310,6 +310,12 @@
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
+        "OwnerKey" = "8:_FFF2B5B5855C45A3A7ABF6F7A79C0B7A"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_UNDEFINED"
         "OwnerKey" = "8:_E9FADB0F346648688AAF5FA0BC00B300"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -328,19 +334,7 @@
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_68CCA7F7D8F147C0972AB410FE01BD24"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_UNDEFINED"
         "OwnerKey" = "8:_D45629CABC674AFDB8D09B175E331A3C"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_FE44E30D5EEF4DC7377F045F01956568"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -358,12 +352,6 @@
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_FFF2B5B5855C45A3A7ABF6F7A79C0B7A"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_UNDEFINED"
         "OwnerKey" = "8:_730ECA4FEBD841FAA6D889D31E27D54F"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -371,6 +359,18 @@
         {
         "MsmKey" = "8:_UNDEFINED"
         "OwnerKey" = "8:_14F2754B489687317F64F75D5CAE7AF2"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_UNDEFINED"
+        "OwnerKey" = "8:_68CCA7F7D8F147C0972AB410FE01BD24"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_UNDEFINED"
+        "OwnerKey" = "8:_FE44E30D5EEF4DC7377F045F01956568"
         "MsmSig" = "8:_UNDEFINED"
         }
     }
@@ -398,6 +398,14 @@
             "PrerequisitesLocation" = "2:1"
             "Url" = "8:"
             "ComponentsUrl" = "8:"
+                "Items"
+                {
+                    "{EDC2488A-8267-493A-A98E-7D9C3B36CDF3}:.NETFramework,Version=v4.6.1"
+                    {
+                    "Name" = "8:Microsoft .NET Framework 4.6.1 (x86 and x64)"
+                    "ProductCode" = "8:.NETFramework,Version=v4.6.1"
+                    }
+                }
             }
         }
         "Release"
@@ -422,6 +430,14 @@
             "PrerequisitesLocation" = "2:1"
             "Url" = "8:"
             "ComponentsUrl" = "8:"
+                "Items"
+                {
+                    "{EDC2488A-8267-493A-A98E-7D9C3B36CDF3}:.NETFramework,Version=v4.6.1"
+                    {
+                    "Name" = "8:Microsoft .NET Framework 4.6.1 (x86 and x64)"
+                    "ProductCode" = "8:.NETFramework,Version=v4.6.1"
+                    }
+                }
             }
         }
     }
