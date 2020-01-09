@@ -425,3 +425,4 @@ E:\Project\NPS\ToolTCB_Back_up\Back_up_16\ToolTCB\Transaction Statistical\obj\De
 E:\Project\NPS\ToolTCB_Back_up\Back_up_16\ToolTCB\Transaction Statistical\obj\Debug\Transaction Statistical.csproj.CopyComplete
 E:\Project\NPS\ToolTCB_Back_up\Back_up_16\ToolTCB\Transaction Statistical\obj\Debug\Transaction Statistical.exe
 E:\Project\NPS\ToolTCB_Back_up\Back_up_16\ToolTCB\Transaction Statistical\obj\Debug\Transaction Statistical.pdb
+D:\05-TEMP\Source\GitHub\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.UControl.UC_Search.resources

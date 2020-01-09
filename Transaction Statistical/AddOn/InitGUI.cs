@@ -28,7 +28,7 @@ namespace Transaction_Statistical
             if (row["Field"].ToString().Equals(InitGUI_Mode.Light.ToString()))
             {
                 Mode = InitGUI_Mode.Light;
-                Custom.Frm_TopToolbar.DisplayColor = Color.FromArgb(20, 120, 240); //Color.FromArgb(240, 240, 240);
+                Custom.Frm_TopToolbar.DisplayColor = Color.FromArgb(37, 37, 38);
                 Custom.Frm_Background.DisplayColor = Color.White;
                 Custom.Frm_Border.DisplayColor = Color.Green;
                 Custom.Frm_TextTilte.DisplayColor = Color.DimGray;
