@@ -707,6 +707,7 @@ namespace Transaction_Statistical
                                 evt.TContent = regx.stringfind;
                                 evt.Type = TransactionEvent.Events.Transaction;
                                 evt.IndexContent = regx.index;
+
                                 if (regx.value.ContainsKey("Warning") && !string.IsNullOrEmpty(regx.value["Warning"]))
                                 {
                                     evt.isWarning = true;
@@ -724,7 +725,7 @@ namespace Transaction_Statistical
                                 {
                                     Bills bills = new Bills();
                                     DateTime dateBill = new DateTime();
-                                    DateTime.TryParseExact(String.Format("{0:yyyyMMdd}", DateCurrent) + regx.value["TimeBill"], "yyyyMMdd" + FormatTime, CultureInfo.InvariantCulture, DateTimeStyles.None, out dateBill);
+                                    DateTime.TryParseExact(String.Format("{0:yyyyMMdd}", DateCurrent) + regx.value["Time"], "yyyyMMdd" + FormatTime, CultureInfo.InvariantCulture, DateTimeStyles.None, out dateBill);
                                     bills.Date = dateBill;
                                     var values = Enum.GetValues(typeof(Bills.Types)).Cast<Bills.Types>();
                                     foreach (var type in values)
@@ -754,14 +755,43 @@ namespace Transaction_Statistical
                                 if (regx.value.ContainsKey("CountRetract"))
                                 {
                                     evt.Type = TransactionEvent.Events.CashRetracted;
+                                    evt.hasCouter = true;
                                     //  DateTime.TryParseExact(string.Format("{0:yyyyMMdd}", DateCurrent) + regx.value["TimeRetract"], "yyyyMMdd" + FormatTime, CultureInfo.InvariantCulture, DateTimeStyles.None, out evt.DateBegin);
-                                    if (regx.value.ContainsKey("Step10k") && int.TryParse(regx.value["Step10k"], out node2)) transaction.Value_10K_Retracted += node2;
-                                    if (regx.value.ContainsKey("Step20k") && int.TryParse(regx.value["Step20k"], out node2)) transaction.Value_20K_Retracted += node2;
-                                    if (regx.value.ContainsKey("Step50k") && int.TryParse(regx.value["Step50k"], out node2)) transaction.Value_50K_Retracted += node2;
-                                    if (int.TryParse(regx.value["Step100k"], out node2)) transaction.Value_100K_Retracted += node2;
-                                    if (int.TryParse(regx.value["Step200k"], out node2)) transaction.Value_200K_Retracted += node2;
-                                    if (int.TryParse(regx.value["Step500k"], out node2)) transaction.Value_500K_Retracted += node2;
-                                    if (int.TryParse(regx.value["StepUnk"], out node2)) transaction.Unknow += node2;
+                                    if (regx.value.ContainsKey("Step10k") && int.TryParse(regx.value["Step10k"], out node2))
+                                    {
+                                        transaction.Value_10K_Retracted += node2;
+                                        evt.Value_10K_Retracted += node2;
+                                    }
+                                    if (regx.value.ContainsKey("Step20k") && int.TryParse(regx.value["Step20k"], out node2))
+                                    {
+                                        transaction.Value_20K_Retracted += node2;
+                                        evt.Value_20K_Retracted += node2;
+                                    }
+                                    if (regx.value.ContainsKey("Step50k") && int.TryParse(regx.value["Step50k"], out node2))
+                                    {
+                                        transaction.Value_50K_Retracted += node2;
+                                        evt.Value_50K_Retracted += node2;
+                                    }
+                                    if (int.TryParse(regx.value["Step100k"], out node2))
+                                    {
+                                        transaction.Value_100K_Retracted += node2;
+                                        evt.Value_100K_Retracted += node2;
+                                    }
+                                    if (int.TryParse(regx.value["Step200k"], out node2))
+                                    {
+                                        transaction.Value_200K_Retracted += node2;
+                                        evt.Value_200K_Retracted += node2;
+                                    }
+                                    if (int.TryParse(regx.value["Step500k"], out node2))
+                                    {
+                                        transaction.Value_500K_Retracted += node2;
+                                        evt.Value_500K_Retracted += node2;
+                                    }
+                                    if (int.TryParse(regx.value["StepUnk"], out node2))
+                                    {
+                                        transaction.Unknow += node2;
+                                        evt.Unknow += node2;
+                                    }
 
                                     evt.Amount = transaction.Value_10K_Retracted * 10000 + transaction.Value_20K_Retracted * 20000 + transaction.Value_50K_Retracted * 50000 +
                 transaction.Value_100K_Retracted * 100000 + transaction.Value_200K_Retracted * 200000 + transaction.Value_500K_Retracted * 500000;
@@ -964,24 +994,78 @@ namespace Transaction_Statistical
 
                                     DateTime.TryParseExact(string.Format("{0:yyyyMMdd}", DateCurrent) + regx.value["TimeSeparation"], "yyyyMMdd" + FormatTime, CultureInfo.InvariantCulture, DateTimeStyles.None, out evt.DateBegin);
                                     evt.Type = TransactionEvent.Events.CashOut;
-                                    if (regx.value.ContainsKey("Sep10k") && int.TryParse(regx.value["Sep10k"], out node)) tran.Value_10K -= node;
-                                    if (regx.value.ContainsKey("Sep20k") && int.TryParse(regx.value["Sep20k"], out node)) tran.Value_20K -= node;
-                                    if (regx.value.ContainsKey("Sep50k") && int.TryParse(regx.value["Sep50k"], out node)) tran.Value_50K -= node;
-                                    if (regx.value.ContainsKey("Sep100k") && int.TryParse(regx.value["Sep100k"], out node)) tran.Value_100K -= node;
-                                    if (int.TryParse(regx.value["Sep200k"], out node)) tran.Value_200K -= node;
-                                    if (int.TryParse(regx.value["Sep500k"], out node)) tran.Value_500K -= node;
-                                    if (int.TryParse(regx.value["Reject"], out node)) tran.Rejects += node;
+                                    evt.hasCouter = true;
+                                    if (regx.value.ContainsKey("Sep10k") && int.TryParse(regx.value["Sep10k"], out node))
+                                    {
+                                        tran.Value_10K -= node;
+                                        evt.Value_10K = node;
+                                    }
+                                    if (regx.value.ContainsKey("Sep20k") && int.TryParse(regx.value["Sep20k"], out node))
+                                    {
+                                        tran.Value_20K -= node;
+                                        evt.Value_20K = node;
+                                    }
+                                    if (regx.value.ContainsKey("Sep50k") && int.TryParse(regx.value["Sep50k"], out node))
+                                    {
+                                        tran.Value_50K -= node;
+                                        evt.Value_50K = node;
+                                    }
+                                    if (regx.value.ContainsKey("Sep100k") && int.TryParse(regx.value["Sep100k"], out node))
+                                    {
+                                        tran.Value_100K -= node;
+                                        evt.Value_100K = node;
+                                    }
+                                    if (int.TryParse(regx.value["Sep200k"], out node))
+                                    {
+                                        tran.Value_200K -= node;
+                                        evt.Value_200K = node;
+                                    }
+                                    if (int.TryParse(regx.value["Sep500k"], out node))
+                                    {
+                                        tran.Value_500K -= node;
+                                        evt.Value_500K = node;
+                                    }
+                                    if (int.TryParse(regx.value["Reject"], out node))
+                                    {
+                                        tran.Rejects -= node;
+                                        evt.Rejects = node;
+                                    }
                                 }
                                 if (regx.value.ContainsKey("TimeStored"))
                                 {
                                     evt.Type = TransactionEvent.Events.CashIn;
+                                    evt.hasCouter = true;
                                     DateTime.TryParseExact(string.Format("{0:yyyyMMdd}", DateCurrent) + regx.value["TimeStored"], "yyyyMMdd" + FormatTime, CultureInfo.InvariantCulture, DateTimeStyles.None, out evt.DateBegin);
-                                    if (regx.value.ContainsKey("Sto10k") && int.TryParse(regx.value["Sto10k"], out node)) tran.Value_10K += node;
-                                    if (regx.value.ContainsKey("Sto20k") && int.TryParse(regx.value["Sto20k"], out node)) tran.Value_20K += node;
-                                    if (regx.value.ContainsKey("Sto50k") && int.TryParse(regx.value["Sto50k"], out node)) tran.Value_50K += node;
-                                    if (int.TryParse(regx.value["Sto100k"], out node)) tran.Value_100K += node;
-                                    if (int.TryParse(regx.value["Sto200k"], out node)) tran.Value_200K += node;
-                                    if (int.TryParse(regx.value["Sto500k"], out node)) tran.Value_500K += node;
+                                    if (regx.value.ContainsKey("Sto10k") && int.TryParse(regx.value["Sto10k"], out node))
+                                    {
+                                        tran.Value_10K += node;
+                                        evt.Value_10K = node;
+                                    }
+                                    if (regx.value.ContainsKey("Sto20k") && int.TryParse(regx.value["Sto20k"], out node))
+                                    {
+                                        tran.Value_20K += node;
+                                        evt.Value_20K = node;
+                                    }
+                                    if (regx.value.ContainsKey("Sto50k") && int.TryParse(regx.value["Sto50k"], out node))
+                                    {
+                                        tran.Value_50K += node;
+                                        evt.Value_50K = node;
+                                    }
+                                    if (int.TryParse(regx.value["Sto100k"], out node))
+                                    {
+                                        tran.Value_100K += node;
+                                        evt.Value_100K = node;
+                                    }
+                                    if (int.TryParse(regx.value["Sto200k"], out node))
+                                    {
+                                        tran.Value_200K += node;
+                                        evt.Value_200K = node;
+                                    }
+                                    if (int.TryParse(regx.value["Sto500k"], out node))
+                                    {
+                                        tran.Value_500K += node;
+                                        evt.Value_500K = node;
+                                    }
                                     //if (int.TryParse(regx.value["StoReject"], out node)) tran.Node_Rejects += node;
                                 }
                                 if (tran.ListEvent.ContainsKey(evt.DateBegin)) tran.ListEvent[evt.DateBegin.AddMilliseconds(1)] = evt;
@@ -1303,6 +1387,11 @@ namespace Transaction_Statistical
                 req.DateBegin = transaction.DateBegin;
                 req.Status = Status.Types.UnSucceeded;
                 transaction.Status = Status.Types.Warning.ToString();
+                DateTime endDate = new DateTime();
+                if (transaction.ListRequest.Values.FirstOrDefault() != null)
+                {
+                    endDate = transaction.ListRequest.Values.FirstOrDefault().DateBegin;
+                }
                 foreach (TransactionEvent evt in transaction.ListEvent.Values)
                 {
                     await Task.Run(() =>
@@ -1311,20 +1400,42 @@ namespace Transaction_Statistical
                         {
                             TransactionRequest req_New = new TransactionRequest();
                             req_New.DateBegin = evt.DateBegin;
+                            req_New.DateEnd = evt.DateBegin;
                             req_New.Status = Status.Types.UnSucceeded;
                             req_New.Request = req.Request;
                             transaction.ListRequest[req_New.DateBegin] = req_New;
                         }
+                        endDate = evt.DateBegin;
                         if (transaction.ListRequest.Count != 0 && (evt.Type.Equals(TransactionEvent.Events.Transaction) || evt.Type.Equals(TransactionEvent.Events.CashIn) || evt.Type.Equals(TransactionEvent.Events.CashOut)))
                         {
+                            //Add time end request
+                            if (endDate != new DateTime() && transaction.ListRequest.LastOrDefault().Value.DateBegin <= endDate)
+                            {
+                                transaction.ListRequest.LastOrDefault().Value.DateEnd = endDate;
+                            }
+
+                            string transNo = string.Empty;
+                            var billCheckPin = transaction.ListBills.Where(x => x.Value.Type == Bills.Types.Bill_CheckPin).FirstOrDefault().Value;
+                            var bills = transaction.ListBills.Where(x => x.Value.Type != Bills.Types.Bill_CheckPin).ToDictionary(x => x.Key, x => x.Value);
+                            if (billCheckPin != null)
+                            {
+                                transaction.ListRequest.LastOrDefault().Value.TranNo = billCheckPin.TranNo;
+                            }
                             string name = transaction.ListRequest.LastOrDefault().Value.Request;
                             if (Template_TransType_Select.ContainsKey(name))
                             {
+                                var billReq = bills.OrderBy(x => x.Key).Where(x => (x.Value.Date >= evt.DateBegin)
+                                    && (x.Value.Type.ToString().ToUpper().Contains(name))).ToDictionary(x => x.Key, x => x.Value).FirstOrDefault().Value;
+                                if (billReq != null)
+                                {
+                                    transaction.ListRequest.LastOrDefault().Value.TranNo = billReq.TranNo;
+                                }
                                 if (Template_TransType_Select[name].Successful.Split(',').Contains(evt.Name))
                                 {
                                     transaction.ListRequest.LastOrDefault().Value.Status = Status.Types.Succeeded;
                                     transaction.Status = Status.Types.Succeeded.ToString();
                                     transaction.ListRequest.LastOrDefault().Value.EndRequest = true;
+
                                 }
                                 else if (Template_TransType_Select[name].UnSuccessful.Split(',').Contains(evt.Name))
                                 {
@@ -1537,6 +1648,29 @@ namespace Transaction_Statistical
         public string TContent;
         public string TraceID { get; set; }
         public int Amount;
+        public int AmountCounter
+        {
+            get
+            {
+                return Value_10K * 10000 + Value_20K * 20000 + Value_50K * 50000 + Value_100K * 100000 + Value_200K * 200000 + Value_500K * 500000;
+            }
+        }
+
+        public int Value_10K;
+        public int Value_20K;
+        public int Value_50K;
+        public int Value_100K;
+        public int Value_200K;
+        public int Value_500K;
+        public int Value_10K_Retracted;
+        public int Value_20K_Retracted;
+        public int Value_50K_Retracted;
+        public int Value_100K_Retracted;
+        public int Value_200K_Retracted;
+        public int Value_500K_Retracted;
+        public int Rejects;
+        public int Unknow;
+        public bool hasCouter;
         public Events Type;
         public string Data;
         public DateTime DateBegin;
@@ -1565,6 +1699,7 @@ namespace Transaction_Statistical
         public string Request;
         public DateTime DateBegin;
         public DateTime DateEnd;
+        public string TranNo;
         public Status.Types Status { get; set; }
         public List<Denomination> LstDenomination = new List<Denomination>();
         public bool EndRequest;
@@ -1803,6 +1938,7 @@ namespace Transaction_Statistical
     }
     public class Deno
     {
+        private int value;
         private string name = string.Empty;
         private string dispensed = "0";
         private string deposited = "0";
@@ -1820,11 +1956,8 @@ namespace Transaction_Statistical
         public string Initial { get => initial; set => initial = value; }
         public string Currency { get => currency; set => currency = value; }
         public string Log { get => log; set => log = value; }
-        public override string ToString()
-        {
-            return string.Format("Dispensed: {0}, Dispensed: {1}, Deposited: {2}, Remaining: {3}, Retracted: {4}, Initial: {5}",
-                Dispensed, Dispensed, Deposited, Remaining, Retracted, Initial);
-        }
+        public int Value { get => value; set => this.value = value; }
+
     }
     public class CapturedCard
     {
@@ -1877,7 +2010,8 @@ namespace Transaction_Statistical
             Bill_Deposit_Unsuccess,
             Bill_Withdrawal_Unsuccess,
             Bill_Deposit,
-            Bill_Withdrawal
+            Bill_Withdrawal,
+            Bill_CheckPin
         }
         public string TranNo { get; set; }
         public string CardNo { get; set; }

@@ -24,7 +24,7 @@ namespace Transaction_Statistical.Class
             BaoCaoHoatDongBatThuong,
             BaoCaoHoatDongBatThuongTheoChuKy,
         }
-        private Color Lightskyblue = Color.FromArgb(230, 230, 250);
+        private Color Lightskyblue = Color.FromArgb(255, 250, 205);
         private Color Backgroud = Color.FromArgb(248, 203, 173);
         //private Color Lightskyblue = Color.FromArgb(135, 206, 250);
         ExcelPackage excelPackage { get; set; }
@@ -505,7 +505,6 @@ namespace Transaction_Statistical.Class
             try
             {
 
-
                 cycles = cycles.OrderBy(x => x.Value.DateBegin).ToDictionary(d => d.Key, d => d.Value);
                 int index = 1;
 
@@ -626,73 +625,97 @@ namespace Transaction_Statistical.Class
                 foreach (var trans in ListTransaction)
                 {
                     var itemTrans = trans.Value;
-                    var requestLast = itemTrans.ListRequest.Values.LastOrDefault();
-                    var cycleOfTransction = cycles.Where(x => x.Value.SettlementPeriodDateBegin <= itemTrans.DateBegin
-                    && x.Value.SettlementPeriodDateEnd >= itemTrans.DateBegin
-                    && itemTrans.Terminal.Contains(x.Value.TerminalID)).OrderBy(x => x.Value.SettlementPeriodDateBegin).LastOrDefault().Value;
-                    // var lastBill = itemTrans.ListBills.OrderBy(x => x.Key).LastOrDefault();
-                    worksheet.Cells[indexData, index].Value = string.IsNullOrEmpty(itemTrans.TransactionNumber) ? "-" : itemTrans.TransactionNumber;
-                    worksheet.Cells[indexData, index + 1].Value = string.IsNullOrEmpty(itemTrans.Type) ? "N/A" : itemTrans.Type;
-                    worksheet.Cells[indexData, index + 2].Value = requestLast != null ? requestLast.Status.ToString() : "";
-                    worksheet.Cells[indexData, index + 3].Value = itemTrans.Terminal;
-                    worksheet.Cells[indexData, index + 4].Value = cycleOfTransction != null ? cycleOfTransction.SettlementPeriodDateBegin.ToString() : "";
-                    worksheet.Cells[indexData, index + 5].Value = cycleOfTransction != null ? cycleOfTransction.SettlementPeriodDateEnd.ToString() : "";
-                    worksheet.Cells[indexData, index + 6].Value = itemTrans.CardType == Transaction.CardTypes.CardLess ? "CardLess" : itemTrans.CardNumber;
-                    worksheet.Cells[indexData, index + 7].Value = itemTrans.DataInput;
-                    worksheet.Cells[indexData, index + 8].Value = itemTrans.DateBegin;
-                    worksheet.Cells[indexData, index + 8].Style.Numberformat.Format = "MM-dd-yyyy HH:mm:ss";
 
-                    worksheet.Cells[indexData, index + 9].Value = Math.Abs(itemTrans.AmountTotal());
-                    worksheet.Cells[indexData, index + 9].Style.Numberformat.Format = "###,###,##0.0";
-
-                    //if (itemTrans.ListEvent.Values.Where(x => x.Type == TransactionEvent.Events.CashRetracted).Count() > 0 || itemTrans.CardNumber.Contains("970407******6366"))
-                    //{
-                    //    int a = 0;
-                    //}
-                    if (itemTrans.ListEvent.Values.Where(e => e.isWarning).Count() > 0)
+                    foreach (var requestLast in trans.Value.ListRequest.Values)
                     {
-                        using (ExcelRange rng = worksheet.Cells[string.Format("A{0}:Z{1}", indexData, indexData)])
+                        var evts = itemTrans.ListEvent.Where(x => x.Value.DateBegin >= requestLast.DateBegin
+                            && x.Value.DateBegin <= requestLast.DateEnd).ToDictionary(x => x.Key, x => x.Value);
+
+                        var cycleOfTransction = cycles.Where(x => x.Value.SettlementPeriodDateBegin <= itemTrans.DateBegin
+                        && x.Value.SettlementPeriodDateEnd >= itemTrans.DateBegin
+                        && itemTrans.Terminal.Contains(x.Value.TerminalID)).OrderBy(x => x.Value.SettlementPeriodDateBegin).LastOrDefault().Value;
+                        // var lastBill = itemTrans.ListBills.OrderBy(x => x.Key).LastOrDefault();
+                        worksheet.Cells[indexData, index].Value = string.IsNullOrEmpty(requestLast.TranNo) ? "-" : requestLast.TranNo;
+                        worksheet.Cells[indexData, index + 1].Value = string.IsNullOrEmpty(requestLast.Request) ? "N/A" : requestLast.Request;
+                        if (requestLast.Status == Status.Types.UnSucceeded)
                         {
-                            rng.Style.Fill.PatternType = OfficeOpenXml.Style.ExcelFillStyle.Solid;
-                            rng.Style.Fill.BackgroundColor.SetColor(Lightskyblue);
+
+                            if (evts.Count > 0 && evts.Values.Where(x => x.isWarning).Count() > 0)
+                            {
+                                worksheet.Cells[indexData, index + 2].Value = string.Join("=>", evts.Values.Where(x => x.isWarning).Select(x => x.Name));
+                            }
+                            else
+                            {
+                                worksheet.Cells[indexData, index + 2].Value = requestLast.Status;
+                            }
                         }
+                        else
+                        {
+                            worksheet.Cells[indexData, index + 2].Value = requestLast.Status;
+                        }
+                        worksheet.Cells[indexData, index + 3].Value = itemTrans.Terminal;
+                        worksheet.Cells[indexData, index + 4].Value = cycleOfTransction != null ? cycleOfTransction.SettlementPeriodDateBegin.ToString() : "";
+                        worksheet.Cells[indexData, index + 5].Value = cycleOfTransction != null ? cycleOfTransction.SettlementPeriodDateEnd.ToString() : "";
+                        worksheet.Cells[indexData, index + 6].Value = itemTrans.CardType == Transaction.CardTypes.CardLess ? "CardLess" : itemTrans.CardNumber;
+                        worksheet.Cells[indexData, index + 7].Value = itemTrans.DataInput;
+                        worksheet.Cells[indexData, index + 8].Value = itemTrans.DateBegin;
+                        worksheet.Cells[indexData, index + 8].Style.Numberformat.Format = "MM-dd-yyyy HH:mm:ss";
+
+                        var evtCounter = evts.OrderBy(x => x.Key).Where(x => x.Value.hasCouter).ToList();
+                        worksheet.Cells[indexData, index + 9].Value = Math.Abs(evtCounter.Sum(x => x.Value.AmountCounter));
+                        worksheet.Cells[indexData, index + 9].Style.Numberformat.Format = "###,###,##0.0";
+
+                        //if (itemTrans.ListEvent.Values.Where(x => x.Type == TransactionEvent.Events.CashRetracted).Count() > 0 || itemTrans.CardNumber.Contains("970407******6366"))
+                        //{
+                        //    int a = 0;
+                        //}
+                        if (itemTrans.ListEvent.Values.Where(e => e.isWarning).Count() > 0)
+                        {
+                            using (ExcelRange rng = worksheet.Cells[string.Format("A{0}:Z{1}", indexData, indexData)])
+                            {
+                                rng.Style.Fill.PatternType = OfficeOpenXml.Style.ExcelFillStyle.Solid;
+                                rng.Style.Fill.BackgroundColor.SetColor(Lightskyblue);
+                            }
+                        }
+
+                        worksheet.Cells[indexData, index + 10].Value = Math.Abs(evtCounter.Sum(x => x.Value.Value_500K));
+                        worksheet.Cells[indexData, index + 11].Value = Math.Abs(evtCounter.Sum(x => x.Value.Value_500K_Retracted));
+
+                        worksheet.Cells[indexData, index + 12].Value = Math.Abs(evtCounter.Sum(x => x.Value.Value_200K));
+                        worksheet.Cells[indexData, index + 13].Value = Math.Abs(evtCounter.Sum(x => x.Value.Value_200K_Retracted));
+
+                        worksheet.Cells[indexData, index + 14].Value = Math.Abs(evtCounter.Sum(x => x.Value.Value_100K));
+                        worksheet.Cells[indexData, index + 15].Value = Math.Abs(evtCounter.Sum(x => x.Value.Value_100K_Retracted));
+
+                        worksheet.Cells[indexData, index + 16].Value = Math.Abs(evtCounter.Sum(x => x.Value.Value_50K));
+                        worksheet.Cells[indexData, index + 17].Value = Math.Abs(evtCounter.Sum(x => x.Value.Value_50K_Retracted));
+
+                        worksheet.Cells[indexData, index + 18].Value = Math.Abs(evtCounter.Sum(x => x.Value.Value_20K));
+                        worksheet.Cells[indexData, index + 19].Value = Math.Abs(evtCounter.Sum(x => x.Value.Value_20K_Retracted));
+
+                        worksheet.Cells[indexData, index + 20].Value = Math.Abs(evtCounter.Sum(x => x.Value.Value_10K));
+                        worksheet.Cells[indexData, index + 21].Value = Math.Abs(evtCounter.Sum(x => x.Value.Value_10K_Retracted));
+                        worksheet.Cells[indexData, index + 22].Value = Math.Abs(evtCounter.Sum(x => x.Value.Unknow));
+                        worksheet.Cells[indexData, index + 23].Value = string.Join("=>", evts.Where(
+                            x => x.Value.Type == TransactionEvent.Events.ErrorEvent)
+                            .Select(x => x.Value.Data).ToList());
+
+                        //worksheet.Cells[indexData, index + 24].Style.WrapText = true;
+                        worksheet.Cells[indexData, index + 24].Style.HorizontalAlignment = ExcelHorizontalAlignment.Left;
+                        //worksheet.Cells[indexData, index + 24].Style.
+                        worksheet.Cells[indexData, index + 24].Value = string.Join("=>", itemTrans.ListEvent.Values);
+                        if (requestLast.Status == Status.Types.UnSucceeded)
+                        {
+                            worksheet.Cells[indexData, index + 25].Value = itemTrans.TraceJournalFull;
+                            //worksheet.Cells[indexData, index + 25].Style.WrapText = true;
+                        }
+                        indexData++;
                     }
-
-                    worksheet.Cells[indexData, index + 10].Value = Math.Abs(itemTrans.Value_500K);
-                    worksheet.Cells[indexData, index + 11].Value = Math.Abs(itemTrans.Value_500K_Retracted);
-
-                    worksheet.Cells[indexData, index + 12].Value = Math.Abs(itemTrans.Value_200K);
-                    worksheet.Cells[indexData, index + 13].Value = Math.Abs(itemTrans.Value_200K_Retracted);
-
-                    worksheet.Cells[indexData, index + 14].Value = Math.Abs(itemTrans.Value_100K);
-                    worksheet.Cells[indexData, index + 15].Value = Math.Abs(itemTrans.Value_100K_Retracted);
-
-                    worksheet.Cells[indexData, index + 16].Value = Math.Abs(itemTrans.Value_50K);
-                    worksheet.Cells[indexData, index + 17].Value = Math.Abs(itemTrans.Value_50K_Retracted);
-
-                    worksheet.Cells[indexData, index + 18].Value = Math.Abs(itemTrans.Value_20K);
-                    worksheet.Cells[indexData, index + 19].Value = Math.Abs(itemTrans.Value_20K_Retracted);
-
-                    worksheet.Cells[indexData, index + 20].Value = Math.Abs(itemTrans.Value_10K);
-                    worksheet.Cells[indexData, index + 21].Value = Math.Abs(itemTrans.Value_10K_Retracted);
-                    worksheet.Cells[indexData, index + 22].Value = Math.Abs(itemTrans.Unknow);
-                    worksheet.Cells[indexData, index + 23].Value = itemTrans.Error;
-
-                    //worksheet.Cells[indexData, index + 24].Style.WrapText = true;
-                    worksheet.Cells[indexData, index + 24].Style.HorizontalAlignment = ExcelHorizontalAlignment.Left;
-                    worksheet.Cells[indexData, index + 24].Value = string.Join("=>", itemTrans.ListEvent.Values);
-                    if (itemTrans.ListRequest.Values.LastOrDefault() != null &&
-                        itemTrans.ListRequest.Values.LastOrDefault().Status == Status.Types.UnSucceeded)
-                    {
-                        worksheet.Cells[indexData, index + 25].Value = itemTrans.TraceJournalFull;
-                        //worksheet.Cells[indexData, index + 25].Style.WrapText = true;
-                    }
-                    indexData++;
                 }
 
 
                 var allCells = worksheet.Cells[1, 1, worksheet.Dimension.End.Row, worksheet.Dimension.End.Column];
-                allCells.AutoFitColumns();
+                //allCells.AutoFitColumns();
                 allCells.Style.Border.Top.Style = ExcelBorderStyle.Thin;
                 allCells.Style.Border.Bottom.Style = ExcelBorderStyle.Thin;
                 allCells.Style.Border.Left.Style = ExcelBorderStyle.Thin;
@@ -702,7 +725,7 @@ namespace Transaction_Statistical.Class
                 allCells.Style.Border.Bottom.Color.SetColor(Color.Black);
                 allCells.Style.Border.Left.Color.SetColor(Color.Black);
                 allCells.Style.Border.Right.Color.SetColor(Color.Black);
-                allCells.Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+                allCells.Style.HorizontalAlignment = ExcelHorizontalAlignment.Left;
                 allCells.Style.VerticalAlignment = ExcelVerticalAlignment.Center;
 
                 //allCells.Style.WrapText = true;

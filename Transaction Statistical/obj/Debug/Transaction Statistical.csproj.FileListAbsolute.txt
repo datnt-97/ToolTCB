@@ -424,3 +424,13 @@ E:\Project\NPS\TCB\ToolTCB\Transaction Statistical\obj\Debug\Transaction Statist
 E:\Project\NPS\TCB\ToolTCB\Transaction Statistical\obj\Debug\Transaction Statistical.csproj.CopyComplete
 E:\Project\NPS\TCB\ToolTCB\Transaction Statistical\obj\Debug\Transaction Statistical.exe
 E:\Project\NPS\TCB\ToolTCB\Transaction Statistical\obj\Debug\Transaction Statistical.pdb
+E:\Project\NPS\TCB\ToolTCB\Transaction Statistical\bin\Debug\DeltaCompressionDotNet.dll
+E:\Project\NPS\TCB\ToolTCB\Transaction Statistical\bin\Debug\DeltaCompressionDotNet.MsDelta.dll
+E:\Project\NPS\TCB\ToolTCB\Transaction Statistical\bin\Debug\DeltaCompressionDotNet.PatchApi.dll
+E:\Project\NPS\TCB\ToolTCB\Transaction Statistical\bin\Debug\Mono.Cecil.dll
+E:\Project\NPS\TCB\ToolTCB\Transaction Statistical\bin\Debug\Mono.Cecil.Mdb.dll
+E:\Project\NPS\TCB\ToolTCB\Transaction Statistical\bin\Debug\Mono.Cecil.Pdb.dll
+E:\Project\NPS\TCB\ToolTCB\Transaction Statistical\bin\Debug\Mono.Cecil.Rocks.dll
+E:\Project\NPS\TCB\ToolTCB\Transaction Statistical\bin\Debug\SharpCompress.dll
+E:\Project\NPS\TCB\ToolTCB\Transaction Statistical\bin\Debug\Splat.dll
+E:\Project\NPS\TCB\ToolTCB\Transaction Statistical\bin\Debug\Splat.pdb
