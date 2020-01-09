@@ -1469,7 +1469,7 @@ namespace Transaction_Statistical
             try
             {
                 string Pathlog = InitParametar.FolderSystemTrace + @"\" + string.Format("{0:yyyyMMdd}", DateTime.Now);
-                string FileLog = Pathlog + @"\SQL.log";
+                string FileLog = Pathlog + @".log";
                 if (!Directory.Exists(Pathlog))
                 {
                     Directory.CreateDirectory(Pathlog);

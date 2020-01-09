@@ -70,7 +70,7 @@ namespace Transaction_Statistical.UControl
             this.fctxt_FullLog = new Mode_FastColoredTextBox();
             this.panel4 = new System.Windows.Forms.Panel();
             this.tvListCycle = new Mode_TreeView();
-            this.panel5 = new System.Windows.Forms.Panel();
+            this.panel5 = new System.Windows.Forms.Panel();            
             this.gpBox_Actions.SuspendLayout();
             this.panel1.SuspendLayout();
             this.panel2.SuspendLayout();
@@ -229,6 +229,8 @@ namespace Transaction_Statistical.UControl
             this.tre_LstTrans.TabIndex = 8;
             this.tre_LstTrans.NodeMouseHover += new System.Windows.Forms.TreeNodeMouseHoverEventHandler(this.tre_LstTrans_NodeMouseHover);
             this.tre_LstTrans.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.tre_LstTrans_AfterSelect);
+            this.uc_Search = new UC_Search(tre_LstTrans);
+            this.tre_LstTrans.Controls.Add(uc_Search);
             // 
             // imageListTre
             // 
@@ -360,7 +362,7 @@ namespace Transaction_Statistical.UControl
             this.btn_Read.DisplayText = "Read";
             this.btn_Read.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btn_Read.Font = new System.Drawing.Font("Microsoft YaHei UI", 14F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btn_Read.ForeColor = System.Drawing.Color.White;
+            this.btn_Read.ForeColor = InitGUI.Custom.Menu_Text.DisplayColor;
             this.btn_Read.Location = new System.Drawing.Point(13, 220);
             this.btn_Read.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.btn_Read.Name = "btn_Read";
@@ -533,7 +535,7 @@ namespace Transaction_Statistical.UControl
             this.panel5.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.panel5.Name = "panel5";
             this.panel5.Size = new System.Drawing.Size(266, 312);
-            this.panel5.TabIndex = 8;
+            this.panel5.TabIndex = 8;            
             // 
             // UC_Transaction
             // 
@@ -763,5 +765,6 @@ namespace Transaction_Statistical.UControl
         private CheckedComboBox cbo_Trans_Status;
         private Mode_Label label3;
         private CheckedComboBox cbo_Trans;
+        private UC_Search uc_Search;
     }
 }

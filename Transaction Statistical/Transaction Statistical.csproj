@@ -309,6 +309,12 @@
     <Compile Include="UControl\UC_RegisterLicense.Designer.cs">
       <DependentUpon>UC_RegisterLicense.cs</DependentUpon>
     </Compile>
+    <Compile Include="UControl\UC_Search.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UControl\UC_Search.Designer.cs">
+      <DependentUpon>UC_Search.cs</DependentUpon>
+    </Compile>
     <Compile Include="UControl\UC_Transaction.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -400,6 +406,9 @@
     <EmbeddedResource Include="UControl\UC_RegisterLicense.resx">
       <DependentUpon>UC_RegisterLicense.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="UControl\UC_Search.resx">
+      <DependentUpon>UC_Search.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="UControl\UC_Transaction.resx">
       <DependentUpon>UC_Transaction.cs</DependentUpon>
     </EmbeddedResource>
@@ -439,6 +448,8 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="logo_big.ico" />
+    <None Include="Resources\Next_Select.png" />
+    <None Include="Resources\next.png" />
     <None Include="Resources\key.png" />
     <None Include="Resources\keys.png" />
     <None Include="Resources\NewFile.ico" />

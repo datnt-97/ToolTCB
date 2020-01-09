@@ -248,9 +248,11 @@ namespace Transaction_Statistical
             this.Name = "Frm_Main";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Transaction Statistical";
+          //  this.TopMost = true;
             this.TopPanel.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.ResumeLayout(false);
+
             //
             InitGUI.Custom.Frm_TopToolbar.OnColorHandler += InitializeComponent_Refresh;
             InitGUI.Custom.Frm_Border.OnColorHandler += InitializeComponent_Refresh;

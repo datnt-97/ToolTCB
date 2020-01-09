@@ -112,6 +112,7 @@ namespace Transaction_Statistical.UControl
                 prb_Process.Value = 10;
                 prb_Process.Update();
                 prb_Process.ProgressColor = btn_Read.BZBackColor;
+                prb_Process.ForeColor = btn_Read.ForeColor;
                 tre_LstTrans.Nodes.Clear(); tvListCycle.Nodes.Clear(); panel5.Controls.Clear(); fctxt_FullLog.Text = string.Empty; this.Update();
                 DirectoryFileUtilities df = new DirectoryFileUtilities();
                 if (File.Exists(txt_Path.Text))

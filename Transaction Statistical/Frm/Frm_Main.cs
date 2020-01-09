@@ -27,7 +27,7 @@ namespace Transaction_Statistical
         private void LoadingApp()
         {
             Frm_LoadingApp frm_LoadingApp = new Frm_LoadingApp();
-            frm_LoadingApp.ShowDialog();
+            frm_LoadingApp.ShowDialog();           
         }
         #region Design GUI
         bool isTopPanelDragged = false;
@@ -304,8 +304,8 @@ namespace Transaction_Statistical
         }
         protected override void OnShown(EventArgs e)
         {
-            base.OnShown(e);
-            th_loadForm.Abort();
+            base.OnShown(e);      
+            th_loadForm.Abort();               
         }
 
     }
