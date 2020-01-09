@@ -149,7 +149,7 @@ namespace Transaction_Statistical.Class
         {
             this.excelPackage.Workbook.Worksheets.Add(WorksheetsName);
             var lastWS = excelPackage.Workbook.Worksheets.Last();
-            lastWS = DrawGDTC(lastWS, ListTransaction.OrderBy(x => x.Key).ToDictionary(d => d.Key, d => d.Value), cycles, Template_EventDevice);
+            lastWS = DrawGDTC(lastWS, ListTransaction.OrderByDescending(x => x.Key).ToDictionary(d => d.Key, d => d.Value), cycles, Template_EventDevice);
             this.excelPackage.Save();
         }
 
@@ -462,16 +462,9 @@ namespace Transaction_Statistical.Class
 
                     }
                 }
-
-
-                for (int i = 0; i < transactionEvent.Count; i++)
+                int i = 0;
+                foreach (var evt in transactionEvent.Values)
                 {
-
-                    var evt = transactionEvent.ToArray()[i].Value;
-                    if (!string.IsNullOrEmpty(evt.TraceID))
-                    {
-                        int a = 0;
-                    }
                     if (isCycle)
                     {
                         worksheet.Cells[index + i, 6].Style.Numberformat.Format = formatDate;
@@ -493,8 +486,9 @@ namespace Transaction_Statistical.Class
                         worksheet.Cells[index + i, 7].Value = evt.Amount;
                         worksheet.Cells[index + i, 7].Style.Numberformat.Format = "###,###,##0.0";
                     }
-
+                    i++;
                 }
+
                 index = times <= 1 ? index + 1 : indexATMID;
 
             }
@@ -627,11 +621,11 @@ namespace Transaction_Statistical.Class
                     rng.Value = "LOG JNT (chỉ lấy log với các GD không thành công)";
                 }
                 //DRAW DATA
-                var trans = ListTransaction.OrderByDescending(x => x.Key).ToArray();
                 int indexData = index + 2;
-                for (int j = 0; j < trans.Count(); j++)
+
+                foreach (var trans in ListTransaction)
                 {
-                    var itemTrans = trans[j].Value;
+                    var itemTrans = trans.Value;
                     var requestLast = itemTrans.ListRequest.Values.LastOrDefault();
                     var cycleOfTransction = cycles.Where(x => x.Value.SettlementPeriodDateBegin <= itemTrans.DateBegin
                     && x.Value.SettlementPeriodDateEnd >= itemTrans.DateBegin
@@ -695,6 +689,7 @@ namespace Transaction_Statistical.Class
                     }
                     indexData++;
                 }
+
 
                 var allCells = worksheet.Cells[1, 1, worksheet.Dimension.End.Row, worksheet.Dimension.End.Column];
                 allCells.AutoFitColumns();
