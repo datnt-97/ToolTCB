@@ -197,3 +197,13 @@ D:\05-TEMP\Source\GitHub\ToolTCB\Transaction Statistical\obj\Release\Transaction
 D:\05-TEMP\Source\GitHub\ToolTCB\Transaction Statistical\obj\Release\Transaction_Statistical.UControl.UC_NewTemplate.resources
 D:\05-TEMP\Source\GitHub\ToolTCB\Transaction Statistical\obj\Release\Transaction_Statistical.UControl.UC_RegisterLicense.resources
 D:\05-TEMP\Source\GitHub\ToolTCB\Transaction Statistical\obj\Release\Transaction_Statistical.UControl.UC_USBKey.resources
+E:\Project\NPS\TCB\ToolTCB\Transaction Statistical\bin\Release\DeltaCompressionDotNet.dll
+E:\Project\NPS\TCB\ToolTCB\Transaction Statistical\bin\Release\DeltaCompressionDotNet.MsDelta.dll
+E:\Project\NPS\TCB\ToolTCB\Transaction Statistical\bin\Release\DeltaCompressionDotNet.PatchApi.dll
+E:\Project\NPS\TCB\ToolTCB\Transaction Statistical\bin\Release\Mono.Cecil.dll
+E:\Project\NPS\TCB\ToolTCB\Transaction Statistical\bin\Release\Mono.Cecil.Mdb.dll
+E:\Project\NPS\TCB\ToolTCB\Transaction Statistical\bin\Release\Mono.Cecil.Pdb.dll
+E:\Project\NPS\TCB\ToolTCB\Transaction Statistical\bin\Release\Mono.Cecil.Rocks.dll
+E:\Project\NPS\TCB\ToolTCB\Transaction Statistical\bin\Release\SharpCompress.dll
+E:\Project\NPS\TCB\ToolTCB\Transaction Statistical\bin\Release\Splat.dll
+E:\Project\NPS\TCB\ToolTCB\Transaction Statistical\bin\Release\Splat.pdb

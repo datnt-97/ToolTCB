@@ -504,7 +504,7 @@ namespace Transaction_Statistical
                 FileExport = exportDestination;
                 if (Directory.Exists(exportDestination))
                     FileExport = exportDestination + string.Format("\\TransactionStatistical_{0:yyyyMMdd_HH-mm}.xlsx", DateTime.Now);
-                if (ListTransaction != null)
+                if (ListTransaction != null && Directory.Exists(exportDestination))
                 {
 
                     var cycle = new Dictionary<DateTime, Cycle>();
