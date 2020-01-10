@@ -436,3 +436,4 @@ E:\Project\NPS\TCB\ToolTCB\Transaction Statistical\obj\Debug\Transaction Statist
 E:\Project\NPS\TCB\ToolTCB\Transaction Statistical\obj\Debug\Transaction Statistical.csproj.CopyComplete
 E:\Project\NPS\TCB\ToolTCB\Transaction Statistical\obj\Debug\Transaction Statistical.exe
 E:\Project\NPS\TCB\ToolTCB\Transaction Statistical\obj\Debug\Transaction Statistical.pdb
+E:\Project\NPS\TCB\ToolTCB\Transaction Statistical\bin\Debug\FastColoredTextBox.xml

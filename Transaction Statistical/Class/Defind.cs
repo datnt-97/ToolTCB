@@ -527,11 +527,11 @@ namespace Transaction_Statistical
 
                     //transaction = transaction.Where(x => !string.IsNullOrEmpty(x.Value.Type)).ToDictionary(d => d.Key, d => (Transaction)d.Value);
 
-                    var transactionUnsuccess = new Dictionary<DateTime, Transaction>();
-                    transactionUnsuccess = transaction.Where(x => x.Value.ListRequest.Values.LastOrDefault() != null && x.Value.ListRequest.Values.LastOrDefault().Status == Status.Types.UnSucceeded).ToDictionary(x => x.Key, x => x.Value);
-                    var transactionUnnomal = new Dictionary<DateTime, Transaction>();
-                    transactionUnnomal = transaction.Where(x => (x.Value.ListRequest.Values.LastOrDefault() != null && x.Value.ListRequest.Values.LastOrDefault().Status == Status.Types.UnSucceeded) ||
-                    x.Value.ListEvent.Values.Where(ev => Template_EventDevice.ContainsKey(ev.Name)).Count() > 0 || x.Value.ListEvent.Where(ev => ev.Value.isWarning == true).Count() > 0).ToDictionary(x => x.Key, x => x.Value);
+                    //var transactionUnsuccess = new Dictionary<DateTime, Transaction>();
+                    //transactionUnsuccess = transaction.Where(x => x.Value.ListRequest.Values.Where(req => req.Status == Status.Types.UnSucceeded).Count() > 0).ToDictionary(x => x.Key, x => x.Value);
+                    //var transactionUnnomal = new Dictionary<DateTime, Transaction>();
+                    //transactionUnnomal = transaction.Where(x => (x.Value.ListRequest.Values.LastOrDefault() != null && x.Value.ListRequest.Values.LastOrDefault().Status == Status.Types.UnSucceeded) ||
+                    //x.Value.ListEvent.Values.Where(ev => Template_EventDevice.ContainsKey(ev.Name)).Count() > 0 || x.Value.ListEvent.Where(ev => ev.Value.isWarning == true).Count() > 0).ToDictionary(x => x.Key, x => x.Value);
 
 
                     //var transactionEvent = ListTransaction.ToDictionary(d => d.Key, d => d.Value.Where(x => x.Value is TransactionEvent).ToDictionary(k => k.Key, k => (TransactionEvent)k.Value));
@@ -553,13 +553,16 @@ namespace Transaction_Statistical
                                     template.CanQuyTheoCouterTrenMay(item.Value, OfficeOpenXml.Table.TableStyles.Custom, cycle);
                                     break;
                                 case (int)TemplateHelper.TEMPLATE.BaoCaoGiaoDichTaiChinh:
-                                    template.BaoCaoGiaoDichTaiChinh(item.Value, OfficeOpenXml.Table.TableStyles.Custom, transaction.Where(x => !string.IsNullOrEmpty(x.Value.Type)).ToDictionary(x => x.Key, x => x.Value), cycle, Template_EventDevice);
+                                    template.BaoCaoGiaoDichTaiChinh(item.Value, OfficeOpenXml.Table.TableStyles.Custom, transaction.Where(x => !string.IsNullOrEmpty(x.Value.Type)).ToDictionary(x => x.Key, x => x.Value), cycle,
+                                        Template_EventDevice, TemplateHelper.TEMPLATE.BaoCaoGiaoDichTaiChinh);
                                     break;
                                 case (int)TemplateHelper.TEMPLATE.BaoCaoGiaoDichTaiChinhKhongThanhCong:
-                                    template.BaoCaoGiaoDichTaiChinh(item.Value, OfficeOpenXml.Table.TableStyles.Custom, transactionUnsuccess.Where(x => !string.IsNullOrEmpty(x.Value.Type)).ToDictionary(x => x.Key, x => x.Value), cycle, Template_EventDevice);
+                                    template.BaoCaoGiaoDichTaiChinh(item.Value, OfficeOpenXml.Table.TableStyles.Custom, transaction.Where(x => !string.IsNullOrEmpty(x.Value.Type)).ToDictionary(x => x.Key, x => x.Value), cycle,
+                                        Template_EventDevice, TemplateHelper.TEMPLATE.BaoCaoGiaoDichTaiChinhKhongThanhCong);
                                     break;
                                 case (int)TemplateHelper.TEMPLATE.BaoCaoGiaoDichTaiChinhBatThuong:
-                                    template.BaoCaoGiaoDichTaiChinh(item.Value, OfficeOpenXml.Table.TableStyles.Custom, transactionUnnomal, cycle, Template_EventDevice);
+                                    template.BaoCaoGiaoDichTaiChinh(item.Value, OfficeOpenXml.Table.TableStyles.Custom, transaction, cycle, Template_EventDevice,
+                                        TemplateHelper.TEMPLATE.BaoCaoGiaoDichTaiChinhBatThuong);
                                     break;
                                 case (int)TemplateHelper.TEMPLATE.BaoCaoHoatDongBatThuong:
                                     template.BaoCaoHoatDongBatThuong(item.Value, OfficeOpenXml.Table.TableStyles.Custom, ListTransaction, Template_EventDevice, false);
@@ -750,51 +753,7 @@ namespace Transaction_Statistical
                                     }
                                 }
 
-                                int node2 = 0;
-                                if (regx.value.ContainsKey("CountRetract"))
-                                {
-                                    evt.Type = TransactionEvent.Events.CashRetracted;
-                                    evt.hasCouter = true;
-                                    //  DateTime.TryParseExact(string.Format("{0:yyyyMMdd}", DateCurrent) + regx.value["TimeRetract"], "yyyyMMdd" + FormatTime, CultureInfo.InvariantCulture, DateTimeStyles.None, out evt.DateBegin);
-                                    if (regx.value.ContainsKey("Step10k") && int.TryParse(regx.value["Step10k"], out node2))
-                                    {
-                                        transaction.Value_10K_Retracted += node2;
-                                        evt.Value_10K_Retracted += node2;
-                                    }
-                                    if (regx.value.ContainsKey("Step20k") && int.TryParse(regx.value["Step20k"], out node2))
-                                    {
-                                        transaction.Value_20K_Retracted += node2;
-                                        evt.Value_20K_Retracted += node2;
-                                    }
-                                    if (regx.value.ContainsKey("Step50k") && int.TryParse(regx.value["Step50k"], out node2))
-                                    {
-                                        transaction.Value_50K_Retracted += node2;
-                                        evt.Value_50K_Retracted += node2;
-                                    }
-                                    if (int.TryParse(regx.value["Step100k"], out node2))
-                                    {
-                                        transaction.Value_100K_Retracted += node2;
-                                        evt.Value_100K_Retracted += node2;
-                                    }
-                                    if (int.TryParse(regx.value["Step200k"], out node2))
-                                    {
-                                        transaction.Value_200K_Retracted += node2;
-                                        evt.Value_200K_Retracted += node2;
-                                    }
-                                    if (int.TryParse(regx.value["Step500k"], out node2))
-                                    {
-                                        transaction.Value_500K_Retracted += node2;
-                                        evt.Value_500K_Retracted += node2;
-                                    }
-                                    if (int.TryParse(regx.value["StepUnk"], out node2))
-                                    {
-                                        transaction.Unknow += node2;
-                                        evt.Unknow += node2;
-                                    }
 
-                                    evt.Amount = transaction.Value_10K_Retracted * 10000 + transaction.Value_20K_Retracted * 20000 + transaction.Value_50K_Retracted * 50000 +
-                transaction.Value_100K_Retracted * 100000 + transaction.Value_200K_Retracted * 200000 + transaction.Value_500K_Retracted * 500000;
-                                }
 
                                 if (transaction.ListEvent.ContainsKey(evt.DateBegin)) transaction.ListEvent[evt.DateBegin.AddMilliseconds(1)] = evt;
                                 else transaction.ListEvent[evt.DateBegin] = evt;
@@ -846,6 +805,50 @@ namespace Transaction_Statistical
                                 else
                                     evt.DateBegin = DateCurrent;
 
+                                int node2 = 0;
+                                if (regx.value.ContainsKey("CountRetract"))
+                                {
+                                    evt.Type = TransactionEvent.Events.CashRetracted;
+                                    evt.hasCouter = true;
+                                    //  DateTime.TryParseExact(string.Format("{0:yyyyMMdd}", DateCurrent) + regx.value["TimeRetract"], "yyyyMMdd" + FormatTime, CultureInfo.InvariantCulture, DateTimeStyles.None, out evt.DateBegin);
+                                    if (regx.value.ContainsKey("Step10k") && int.TryParse(regx.value["Step10k"], out node2))
+                                    {
+                                        transaction.Value_10K_Retracted += node2;
+                                        evt.Value_10K_Retracted += node2;
+                                    }
+                                    if (regx.value.ContainsKey("Step20k") && int.TryParse(regx.value["Step20k"], out node2))
+                                    {
+                                        transaction.Value_20K_Retracted += node2;
+                                        evt.Value_20K_Retracted += node2;
+                                    }
+                                    if (regx.value.ContainsKey("Step50k") && int.TryParse(regx.value["Step50k"], out node2))
+                                    {
+                                        transaction.Value_50K_Retracted += node2;
+                                        evt.Value_50K_Retracted += node2;
+                                    }
+                                    if (int.TryParse(regx.value["Step100k"], out node2))
+                                    {
+                                        transaction.Value_100K_Retracted += node2;
+                                        evt.Value_100K_Retracted += node2;
+                                    }
+                                    if (int.TryParse(regx.value["Step200k"], out node2))
+                                    {
+                                        transaction.Value_200K_Retracted += node2;
+                                        evt.Value_200K_Retracted += node2;
+                                    }
+                                    if (int.TryParse(regx.value["Step500k"], out node2))
+                                    {
+                                        transaction.Value_500K_Retracted += node2;
+                                        evt.Value_500K_Retracted += node2;
+                                    }
+                                    if (int.TryParse(regx.value["StepUnk"], out node2))
+                                    {
+                                        transaction.Unknow += node2;
+                                        evt.Unknow += node2;
+                                    }
+                                    evt.Amount = evt.Value_10K_Retracted * 10000 + evt.Value_20K_Retracted * 20000 + evt.Value_50K_Retracted * 50000 +
+                evt.Value_100K_Retracted * 100000 + evt.Value_200K_Retracted * 200000 + evt.Value_500K_Retracted * 500000;
+                                }
                                 if (transaction.ListEvent.ContainsKey(evt.DateBegin)) transaction.ListEvent[evt.DateBegin.AddMilliseconds(1)] = evt;
                                 else transaction.ListEvent[evt.DateBegin] = evt;
                                 transaction.TraceJournal_Remaining = transaction.TraceJournal_Remaining.Replace(regx.stringfind, string.Empty);

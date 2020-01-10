@@ -145,15 +145,15 @@ namespace Transaction_Statistical.Class
 
         }
 
-        public void BaoCaoGiaoDichTaiChinh(string WorksheetsName, TableStyles tableStyles, Dictionary<DateTime, Transaction> ListTransaction, Dictionary<DateTime, Cycle> cycles, Dictionary<string, string> Template_EventDevice)
+        public void BaoCaoGiaoDichTaiChinh(string WorksheetsName, TableStyles tableStyles, Dictionary<DateTime, Transaction> ListTransaction,
+            Dictionary<DateTime, Cycle> cycles,
+            Dictionary<string, string> Template_EventDevice, TemplateHelper.TEMPLATE tEMPLATE)
         {
             this.excelPackage.Workbook.Worksheets.Add(WorksheetsName);
             var lastWS = excelPackage.Workbook.Worksheets.Last();
-            lastWS = DrawGDTC(lastWS, ListTransaction.OrderBy(x => x.Key).ToDictionary(d => d.Key, d => d.Value), cycles, Template_EventDevice);
+            lastWS = DrawGDTC(lastWS, ListTransaction.OrderBy(x => x.Key).ToDictionary(d => d.Key, d => d.Value), cycles, Template_EventDevice, tEMPLATE);
             this.excelPackage.Save();
         }
-
-
 
         public void BaoCaoGiaoDichEmptyCassett(string WorksheetsName, TableStyles tableStyles, Dictionary<string, Dictionary<DateTime, object>> ListTransaction, bool isCycle)
         {
@@ -500,7 +500,9 @@ namespace Transaction_Statistical.Class
             return worksheet;
         }
 
-        private ExcelWorksheet DrawGDTC(ExcelWorksheet worksheet, Dictionary<DateTime, Transaction> ListTransaction, Dictionary<DateTime, Cycle> cycles, Dictionary<string, string> Template_EventDevice)
+        private ExcelWorksheet DrawGDTC(ExcelWorksheet worksheet,
+            Dictionary<DateTime, Transaction> ListTransaction, Dictionary<DateTime, Cycle> cycles,
+            Dictionary<string, string> Template_EventDevice, TemplateHelper.TEMPLATE tEMPLATE)
         {
             try
             {
@@ -626,11 +628,19 @@ namespace Transaction_Statistical.Class
                 {
                     var itemTrans = trans.Value;
 
-                    foreach (var requestLast in trans.Value.ListRequest.Values)
+                    Dictionary<DateTime, TransactionRequest> TransactionRequest = trans.Value.ListRequest;
+                    if (tEMPLATE == TEMPLATE.BaoCaoGiaoDichTaiChinhKhongThanhCong)
+                    {
+                        TransactionRequest = TransactionRequest.Where(x => x.Value.Status == Status.Types.UnSucceeded).ToDictionary(x => x.Key, x => x.Value);
+                    }
+                    if (tEMPLATE == TEMPLATE.BaoCaoGiaoDichTaiChinhBatThuong)
+                    {
+                        TransactionRequest = TransactionRequest.Where(x => x.Value.Status != Status.Types.Succeeded).ToDictionary(x => x.Key, x => x.Value);
+                    }
+                    foreach (var requestLast in TransactionRequest.Values)
                     {
                         var evts = itemTrans.ListEvent.Where(x => x.Value.DateBegin >= requestLast.DateBegin
                             && x.Value.DateBegin <= requestLast.DateEnd).ToDictionary(x => x.Key, x => x.Value);
-
                         var cycleOfTransction = cycles.Where(x => x.Value.SettlementPeriodDateBegin <= itemTrans.DateBegin
                         && x.Value.SettlementPeriodDateEnd >= itemTrans.DateBegin
                         && itemTrans.Terminal.Contains(x.Value.TerminalID)).OrderBy(x => x.Value.SettlementPeriodDateBegin).LastOrDefault().Value;
