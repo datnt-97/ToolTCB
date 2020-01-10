@@ -787,6 +787,7 @@ namespace Transaction_Statistical
                                 evt.Status = Status.Types.Succeeded;
                                 evt.TContent = regx.stringfind;
                                 evt.Type = TransactionEvent.Events.Device;
+                                evt.IndexContent = regx.index;
                                 if (regx.value.ContainsKey("Warning") && !string.IsNullOrEmpty(regx.value["Warning"]))
                                 {
                                     evt.isWarning = true;
@@ -803,7 +804,10 @@ namespace Transaction_Statistical
                                     DateCurrent = evt.DateBegin;
                                 }
                                 else
+                                {
                                     evt.DateBegin = DateCurrent;
+                                    evt.hasTime = false;
+                                }
 
                                 int node2 = 0;
                                 if (regx.value.ContainsKey("CountRetract"))
@@ -848,6 +852,10 @@ namespace Transaction_Statistical
                                     }
                                     evt.Amount = evt.Value_10K_Retracted * 10000 + evt.Value_20K_Retracted * 20000 + evt.Value_50K_Retracted * 50000 +
                 evt.Value_100K_Retracted * 100000 + evt.Value_200K_Retracted * 200000 + evt.Value_500K_Retracted * 500000;
+                                }
+                                if (regx.stringfind.Contains("The cassette does not have the number o"))
+                                {
+                                    int a = 0;
                                 }
                                 if (transaction.ListEvent.ContainsKey(evt.DateBegin)) transaction.ListEvent[evt.DateBegin.AddMilliseconds(1)] = evt;
                                 else transaction.ListEvent[evt.DateBegin] = evt;
@@ -1093,10 +1101,13 @@ namespace Transaction_Statistical
                 Dictionary<DateTime, TransactionEvent> lsNew = new Dictionary<DateTime, TransactionEvent>();
                 foreach (TransactionEvent evt in tran.ListEvent.Values)
                 {
-                    if (evt.DateBegin.Year > DateTime.Now.Year)
+                    if (!evt.hasTime || (evt.DateBegin.Year > DateTime.Now.Year))
                     {
-                        DateTime newTime = tran.ListEvent.Values.Where(x => x.IndexContent < evt.IndexContent).ToList().OrderBy(x => x.IndexContent).LastOrDefault().DateBegin;
-                        evt.DateBegin = newTime.AddMilliseconds(1);
+                        var newTime = tran.ListEvent.Where(x => x.Value.IndexContent < evt.IndexContent).OrderBy(x => x.Value.IndexContent).ToList();
+                        if (newTime.Count() > 0)
+                        {
+                            evt.DateBegin = newTime.LastOrDefault().Value.DateBegin.AddMilliseconds(1);
+                        }
 
                     }
                     lsNew[evt.DateBegin] = evt;
@@ -1703,6 +1714,7 @@ namespace Transaction_Statistical
         public DateTime DateBegin;
         public int IndexContent;
         public bool isWarning = false;
+        public bool hasTime = true;
         [CategoryAttribute("Event"), DescriptionAttribute("Status of the Event")]
         public Status.Types Status { get; set; }
         [CategoryAttribute("Event"), DescriptionAttribute("Name of the Event")]
