@@ -795,20 +795,21 @@ namespace Transaction_Statistical
                                 if (regx.value.ContainsKey("Time") && !string.IsNullOrEmpty(regx.value["Time"]))
                                 {
 
-                                    if (regx.value.ContainsKey("ErrorCode"))
-                                    {
-                                        evt.Type = TransactionEvent.Events.ErrorEvent;
-                                        if (regx.value.ContainsKey("Data")) evt.Data = regx.value["Data"];
-                                    }
+
                                     DateTime.TryParseExact(string.Format("{0:yyyyMMdd}", DateCurrent) + regx.value["Time"], "yyyyMMdd" + FormatTime, CultureInfo.InvariantCulture, DateTimeStyles.None, out evt.DateBegin);
                                     DateCurrent = evt.DateBegin;
                                 }
                                 else
                                 {
-                                    evt.DateBegin = DateCurrent;
+                                    evt.DateBegin = DateCurrent.AddTicks(1);
                                     evt.hasTime = false;
                                 }
+                                if (regx.value.ContainsKey("ErrorCode"))
+                                {
 
+                                    evt.Type = TransactionEvent.Events.ErrorEvent;
+                                    if (regx.value.ContainsKey("Data")) evt.Data = regx.value["Data"];
+                                }
                                 int node2 = 0;
                                 if (regx.value.ContainsKey("CountRetract"))
                                 {
@@ -853,12 +854,20 @@ namespace Transaction_Statistical
                                     evt.Amount = evt.Value_10K_Retracted * 10000 + evt.Value_20K_Retracted * 20000 + evt.Value_50K_Retracted * 50000 +
                 evt.Value_100K_Retracted * 100000 + evt.Value_200K_Retracted * 200000 + evt.Value_500K_Retracted * 500000;
                                 }
-                                if (regx.stringfind.Contains("The cassette does not have the number o"))
+
+
+                                if (transaction.ListEvent.ContainsKey(evt.DateBegin))
                                 {
-                                    int a = 0;
+                                    int milis = 0;
+                                    while (transaction.ListEvent.ContainsKey(evt.DateBegin.AddMilliseconds(milis)))
+                                    {
+                                        milis++;
+                                    }
+                                    transaction.ListEvent[evt.DateBegin.AddMilliseconds(milis)] = evt;
+
                                 }
-                                if (transaction.ListEvent.ContainsKey(evt.DateBegin)) transaction.ListEvent[evt.DateBegin.AddMilliseconds(1)] = evt;
                                 else transaction.ListEvent[evt.DateBegin] = evt;
+
                                 transaction.TraceJournal_Remaining = transaction.TraceJournal_Remaining.Replace(regx.stringfind, string.Empty);
                             });
                         }
@@ -1099,18 +1108,26 @@ namespace Transaction_Statistical
             try
             {
                 Dictionary<DateTime, TransactionEvent> lsNew = new Dictionary<DateTime, TransactionEvent>();
-                foreach (TransactionEvent evt in tran.ListEvent.Values)
+
+                foreach (var evt in tran.ListEvent)
                 {
-                    if (!evt.hasTime || (evt.DateBegin.Year > DateTime.Now.Year))
+
+                    var evtNew = evt;
+                    if (!evtNew.Value.hasTime || (evtNew.Value.DateBegin.Year > DateTime.Now.Year))
                     {
-                        var newTime = tran.ListEvent.Where(x => x.Value.IndexContent < evt.IndexContent).OrderBy(x => x.Value.IndexContent).ToList();
+                        var newTime = tran.ListEvent.Where(x => x.Value.IndexContent < evtNew.Value.IndexContent).OrderBy(x => x.Value.IndexContent).ToList();
                         if (newTime.Count() > 0)
                         {
-                            evt.DateBegin = newTime.LastOrDefault().Value.DateBegin.AddMilliseconds(1);
+                            evtNew.Value.DateBegin = newTime.LastOrDefault().Value.DateBegin.AddMilliseconds(1);
                         }
 
                     }
-                    lsNew[evt.DateBegin] = evt;
+                    if (lsNew.ContainsKey(evt.Value.DateBegin))
+                    {
+                        lsNew[evt.Value.DateBegin.AddMilliseconds(1)] = evtNew.Value;
+                    }
+                    else
+                        lsNew[evt.Value.DateBegin] = evtNew.Value;
                 }
                 tran.ListEvent = lsNew.OrderBy(x => x.Key).ToDictionary(k => k.Key, v => v.Value);
             }
@@ -1400,6 +1417,7 @@ namespace Transaction_Statistical
                 transaction.TraceJournal_Remaining = sString;
                 Dictionary<DateTime, TransactionEvent> t = new Dictionary<DateTime, TransactionEvent>();
                 transaction = await Task.Run(() => FindEventDevice(transaction, DateCurrent));
+                transaction = await Task.Run(() => FixNoTimeEvent(transaction));
                 if (transaction.ListEvent.Count > 0)
                 {
                     foreach (KeyValuePair<DateTime, TransactionEvent> vars in transaction.ListEvent)
