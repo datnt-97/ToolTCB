@@ -18,7 +18,7 @@ namespace Transaction_Statistical.UControl
     {
         public UC_RegisterLicense()
         {
-            InitializeComponent();
+            InitializeComponent2();
             LoadInfo();
         }
         private void LoadInfo()
@@ -37,7 +37,6 @@ namespace Transaction_Statistical.UControl
                 rd.Checked = true;
                 gs_Module.AddControl = rd;
             }
-            cbb_Date.Items.AddRange(License.Duration.Values.ToArray());
             cbb_Date.SelectedIndex = 0;
         }
         private bool CheckInfo()
@@ -76,14 +75,13 @@ namespace Transaction_Statistical.UControl
                 foreach (Control cb in gs_Module.ControlsGroup)
                     if (cb is Mode_CheckBox && (cb as Mode_CheckBox).Checked) s += cb.Text + ",";
                 s = s.TrimEnd(',');
-                s += Environment.NewLine + "Duration: " + cbb_Date.Text;
+                s += Environment.NewLine + "Duration: " + nup_Day.Value +" "+ cbb_Date.Text;
                 s += Environment.NewLine + "Company: " + txt_Company.Text;
                 s += Environment.NewLine + "Name: " + txt_Name.Text;
                 s += Environment.NewLine + "Email: " + txt_Email.Text;
                 s += Environment.NewLine + "Phone: " + txt_Phone.Text;
                 string content = s;
-                s += Environment.NewLine + "MAC: " + InitParametar.GetMacAddress();
-                s += Environment.NewLine + "SID: " + InitParametar.GetComputerSid();
+                s += Environment.NewLine + "SID: " + HardwareInfo.Info();
                 s = ManagedAes.Encrypt(s, InitParametar.prKey);
                 content += Environment.NewLine + "PublicKey: " + s;
 

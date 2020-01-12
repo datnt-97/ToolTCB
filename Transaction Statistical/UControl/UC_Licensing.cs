@@ -24,7 +24,7 @@ namespace Transaction_Statistical.UControl
             foreach (KeyValuePair<License.Types, string> key in License.ListType)
             {
                 Mode_RadioButton rd = new Mode_RadioButton();
-                rd.Text = key.Key.ToString();
+                rd.Text = key.Key.ToString();  
                 gs_Type.AddControl = rd;
             }
             foreach (string s in Enum.GetNames(typeof(License.Modules)))
@@ -33,7 +33,6 @@ namespace Transaction_Statistical.UControl
                 rd.Text = s;
                 gs_Module.AddControl = rd;
             }
-            cbb_Date.Items.AddRange(License.Duration.Values.ToArray());
         }
 
         private void btn_LoadFile_Click(object sender, EventArgs e)
@@ -75,10 +74,17 @@ namespace Transaction_Statistical.UControl
                 string content = string.Empty;
                 foreach (Mode_RadioButton ctr in gs_Type.ControlsGroup)
                     if (ctr.Checked)
-                        content = ctr.Text + '' + txt_MAC.Text+ txt_SID.Text + '';
+                        content = ctr.Text + '' + txt_SID.Text + '';
+                DateTime dt = DateTime.Now;
+                if (cbb_Date.Text.Equals("Days"))
+                    dt = DateTime.Now.AddDays((double)nup_Day.Value);
+                else if(cbb_Date.Text.Equals("Months"))
+                    dt = DateTime.Now.AddMonths((int)nup_Day.Value);
+                else
+                    dt = DateTime.Now.AddYears((int)nup_Day.Value);
                 foreach (Mode_CheckBox chk in gs_Module.ControlsGroup)
                     if (chk.Checked)
-                        content += DateTime.Now.ToString(License.FormatDate) + '' + DateTime.Now.AddMonths(License.Duration.Where(v => v.Value.Equals(cbb_Date.Text)).FirstOrDefault().Key).ToString(License.FormatDate) + '' + chk.Text + '';
+                        content += DateTime.Now.ToString(License.FormatDate) + '' + dt.ToString(License.FormatDate) + '' + chk.Text + '';
                 content = content.TrimEnd('') + '' + DateTime.Now.ToString(License.FormatDateAccess);
 
                 using (StreamWriter sw = new StreamWriter(LicenseFile, true))
@@ -99,40 +105,38 @@ namespace Transaction_Statistical.UControl
         {
             try
             {
-                txt_Company.Text = txt_Email.Text = txt_MAC.Text = txt_Name.Text = txt_Phone.Text = txt_SID.Text = string.Empty;
+                txt_Company.Text = txt_Email.Text = txt_Name.Text = txt_Phone.Text = txt_SID.Text = string.Empty;
                 string s = ManagedAes.Decrypt(fctb_PublicKey.Text, InitParametar.prKey);
 
                 foreach (string file in s.Split('\n'))
-                    switch (file.Split(':')[0])
+                    switch (file.Substring(0,file.IndexOf(':')))
                     {
                         case "Type":
                             foreach (Mode_RadioButton ctr in gs_Type.ControlsGroup)
-                                if (ctr.Text.Equals(file.Split(':')[1].Trim())) ctr.Checked = true;
+                                if (ctr.Text.Equals(file.Substring(file.IndexOf(':') + 1).Trim())) ctr.Checked = true;
                             break;
                         case "Modules":
                             foreach (Mode_CheckBox chk in gs_Module.ControlsGroup)
-                                if (file.Split(':')[1].Trim().Split(',').Contains(chk.Text)) chk.Checked = true;
+                                if (file.Substring(file.IndexOf(':')+1).Contains(chk.Text)) chk.Checked = true;
                             break;
                         case "Duration":
-                            cbb_Date.Text = file.Split(':')[1].Trim();
+                            nup_Day.Value = decimal.Parse(file.Substring(file.IndexOf(':') + 1).Trim().Split(' ')[0].Trim());
+                            cbb_Date.Text = file.Substring(file.IndexOf(':')+1).Trim().Split(' ')[1];
                             break;
                         case "Company":
-                            txt_Company.Text = file.Split(':')[1].Trim();
+                            txt_Company.Text = file.Substring(file.IndexOf(':')+1).Trim();
                             break;
                         case "Name":
-                            txt_Name.Text = file.Split(':')[1].Trim();
+                            txt_Name.Text = file.Substring(file.IndexOf(':')+1).Trim();
                             break;
                         case "Email":
-                            txt_Email.Text = file.Split(':')[1].Trim();
+                            txt_Email.Text = file.Substring(file.IndexOf(':')+1).Trim();
                             break;
                         case "Phone":
-                            txt_Phone.Text = file.Split(':')[1].Trim();
-                            break;
-                        case "MAC":
-                            txt_MAC.Text = file.Split(':')[1].Trim();
-                            break;
+                            txt_Phone.Text = file.Substring(file.IndexOf(':')+1).Trim();
+                            break;                        
                         case "SID":
-                            txt_SID.Text = file.Split(':')[1].Trim();
+                            txt_SID.Text = file.Substring(file.IndexOf(':')+1).Trim();
                             break;
                     }
             }

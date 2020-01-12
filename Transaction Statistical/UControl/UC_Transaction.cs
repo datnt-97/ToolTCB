@@ -172,7 +172,7 @@ namespace Transaction_Statistical.UControl
                         int countTransactionEvent = kTerminal.Value.Where(x => (x.Value is TransactionEvent)).ToList().Count;
                         TreeNode ndTerminal = tre_LstTrans.Nodes.Add(kTerminal.Key, String.Format("Terminal ID: [{0}] - Total: {1} transactions", kTerminal.Key, kTerminal.Value.Count), "Terminal", "Terminal");
                         ndTerminal.Tag = kTerminal.Value.Where(x => (x.Value is Cycle)).ToDictionary(x => x.Key, x => (Cycle)x.Value);
-
+                        
                         foreach (KeyValuePair<DateTime, object> kTransaction in kTerminal.Value.OrderBy(x => x.Key))
                         {
 
@@ -220,7 +220,7 @@ namespace Transaction_Statistical.UControl
                     TreeNode ndTransaction = ndDay.Nodes.Add(textDisplay, textDisplay);
                     ndTransaction.Tag = obj;
                     ndTransaction.ImageKey = "Flag_" + (obj as Transaction).Status;
-                    ndTransaction.SelectedImageKey = "Flag";
+                    ndTransaction.SelectedImageKey = "Select";
                 }
                 else if (obj is TransactionEvent)
                 {
