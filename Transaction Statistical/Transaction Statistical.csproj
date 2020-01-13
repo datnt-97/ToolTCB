@@ -93,6 +93,10 @@
     <Reference Include="EPPlus, Version=4.1.0.0, Culture=neutral, PublicKeyToken=ea159fdaa78159a1, processorArchitecture=MSIL">
       <HintPath>..\packages\EPPlus.4.1.0\lib\net40\EPPlus.dll</HintPath>
     </Reference>
+    <Reference Include="Interop.MSHTML">
+      <HintPath>..\..\..\FDM_Console\FDMS - 12-05-2018 - Copy\TextControl\TextControl\obj\Debug\Interop.MSHTML.dll</HintPath>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </Reference>
     <Reference Include="Mono.Cecil, Version=0.9.6.0, Culture=neutral, PublicKeyToken=0738eb9f132ed756, processorArchitecture=MSIL">
       <HintPath>..\packages\Mono.Cecil.0.9.6.1\lib\net45\Mono.Cecil.dll</HintPath>
     </Reference>
@@ -249,6 +253,18 @@
     <Compile Include="UControl\UC_ExportCus.Designer.cs">
       <DependentUpon>UC_ExportCus.cs</DependentUpon>
     </Compile>
+    <Compile Include="UControl\UC_Feekback.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UControl\UC_Feekback.Designer.cs">
+      <DependentUpon>UC_Feekback.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UControl\UC_HTMLEditor.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UControl\UC_HTMLEditor.Designer.cs">
+      <DependentUpon>UC_HTMLEditor.cs</DependentUpon>
+    </Compile>
     <Compile Include="UControl\UC_Licensing.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -376,6 +392,9 @@
     <EmbeddedResource Include="UControl\UC_ExportCus.resx">
       <DependentUpon>UC_ExportCus.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="UControl\UC_Feekback.resx">
+      <DependentUpon>UC_Feekback.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="UControl\UC_Licensing.resx">
       <DependentUpon>UC_Licensing.cs</DependentUpon>
     </EmbeddedResource>
@@ -448,6 +467,23 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="logo_big.ico" />
+    <None Include="Resources\uol.bmp" />
+    <None Include="Resources\underscore.bmp" />
+    <None Include="Resources\rj.bmp" />
+    <None Include="Resources\right_arrow.bmp" />
+    <None Include="Resources\outdent.bmp" />
+    <None Include="Resources\ol.bmp" />
+    <None Include="Resources\lj.bmp" />
+    <None Include="Resources\link1.bmp" />
+    <None Include="Resources\italic.bmp" />
+    <None Include="Resources\indent.bmp" />
+    <None Include="Resources\image.png" />
+    <None Include="Resources\fj.bmp" />
+    <None Include="Resources\color.bmp" />
+    <None Include="Resources\cj.bmp" />
+    <None Include="Resources\bold.bmp" />
+    <None Include="Resources\backcolor.bmp" />
+    <None Include="Resources\link.bmp" />
     <None Include="Resources\Next_Select.png" />
     <None Include="Resources\next.png" />
     <None Include="Resources\key.png" />

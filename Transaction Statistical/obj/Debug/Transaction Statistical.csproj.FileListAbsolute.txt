@@ -447,3 +447,4 @@ D:\05-TEMP\Source\GitHub\ToolTCB\Transaction Statistical\bin\Debug\Mono.Cecil.Ro
 D:\05-TEMP\Source\GitHub\ToolTCB\Transaction Statistical\bin\Debug\SharpCompress.dll
 D:\05-TEMP\Source\GitHub\ToolTCB\Transaction Statistical\bin\Debug\Splat.dll
 D:\05-TEMP\Source\GitHub\ToolTCB\Transaction Statistical\bin\Debug\Splat.pdb
+D:\05-TEMP\Source\GitHub\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.UControl.UC_Feekback.resources
