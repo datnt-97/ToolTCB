@@ -71,7 +71,7 @@ namespace Transaction_Statistical.UControl
             this.txt_Destination.Name = "txt_Destination";
             this.txt_Destination.Size = new System.Drawing.Size(559, 22);
             this.txt_Destination.TabIndex = 28;
-            this.txt_Destination.Text = "D:\\Export";
+            this.txt_Destination.Text = @"E:\Project\NPS\ToolTCB_Back_up\Back_up_16\99109001_EJF (1)\99109001_EJF";
             this.txt_Destination.MouseClick += new System.Windows.Forms.MouseEventHandler(this.txt_Path_MouseEnter);
             // 
             // chb_Open

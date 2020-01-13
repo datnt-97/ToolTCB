@@ -37,7 +37,7 @@ namespace Transaction_Statistical
     }
     public class InitParametar
     {
-        
+
         public static string sCompany = InfoAssembly.attributes.Company;
         public static string SAuthor = string.Format("{0}, {1}", InfoAssembly.copyright.Copyright, sCompany);
         public static string STitle = @"Transaction Statistical";
@@ -376,7 +376,7 @@ namespace Transaction_Statistical
             }
             return false;
         }
-        
+
     }
 
     public class TransactionType
@@ -1463,28 +1463,27 @@ namespace Transaction_Statistical
                 {
                     endDate = transaction.ListRequest.Values.FirstOrDefault().DateBegin;
                 }
+
                 foreach (TransactionEvent evt in transaction.ListEvent.Values)
                 {
+                    endDate = evt.DateBegin;
                     await Task.Run(() =>
                     {
                         if ((transaction.ListRequest.Count == 0 || transaction.ListRequest.LastOrDefault().Value.EndRequest) && CheckRequestName(evt.Name, ref req.Request))
                         {
                             TransactionRequest req_New = new TransactionRequest();
                             req_New.DateBegin = evt.DateBegin;
-                            req_New.DateEnd = evt.DateBegin;
+                            req_New.DateEnd = endDate;
                             req_New.Status = Status.Types.UnSucceeded;
                             req_New.Request = req.Request;
                             transaction.ListRequest[req_New.DateBegin] = req_New;
                         }
-                        endDate = evt.DateBegin;
                         if (transaction.ListRequest.Count != 0 && (evt.Type.Equals(TransactionEvent.Events.Transaction) || evt.Type.Equals(TransactionEvent.Events.CashIn) || evt.Type.Equals(TransactionEvent.Events.CashOut)))
                         {
-                            //Add time end request
-                            if (endDate != new DateTime() && transaction.ListRequest.LastOrDefault().Value.DateBegin <= endDate)
+                            if (transaction.ListRequest.Count == 1)
                             {
-                                transaction.ListRequest.LastOrDefault().Value.DateEnd = endDate;
+                                transaction.ListRequest.LastOrDefault().Value.DateEnd = transaction.ListEvent.Values.LastOrDefault().DateBegin;
                             }
-
                             string transNo = string.Empty;
                             var billCheckPin = transaction.ListBills.Where(x => x.Value.Type == Bills.Types.Bill_CheckPin).FirstOrDefault().Value;
                             var bills = transaction.ListBills.Where(x => x.Value.Type != Bills.Types.Bill_CheckPin).ToDictionary(x => x.Key, x => x.Value);
@@ -1506,13 +1505,15 @@ namespace Transaction_Statistical
                                     transaction.ListRequest.LastOrDefault().Value.Status = Status.Types.Succeeded;
                                     transaction.Status = Status.Types.Succeeded.ToString();
                                     transaction.ListRequest.LastOrDefault().Value.EndRequest = true;
-
+                                    transaction.ListRequest.LastOrDefault().Value.DateEnd = evt.DateBegin;
                                 }
                                 else if (Template_TransType_Select[name].UnSuccessful.Split(',').Contains(evt.Name))
                                 {
                                     transaction.ListRequest.LastOrDefault().Value.Status = Status.Types.UnSucceeded;
                                     transaction.Status = Status.Types.UnSucceeded.ToString();
                                     transaction.ListRequest.LastOrDefault().Value.EndRequest = true;
+                                    transaction.ListRequest.LastOrDefault().Value.DateEnd = evt.DateBegin;
+
                                 }
                             }
 
@@ -2187,9 +2188,9 @@ namespace Transaction_Statistical
         public static Dictionary<Types, string> ListType = new Dictionary<Types, string>()
         {   { Types.Trial,"One licensed user can use application with 7 days" },
             { Types.Free,"One licensed user can use application" },
-            { Types.Business,"One licensed user can use application" },         
-            { Types.Premium,"Multiple licensed users can use application" },         
-        };       
+            { Types.Business,"One licensed user can use application" },
+            { Types.Premium,"Multiple licensed users can use application" },
+        };
         public enum Types
         {
             Business,
