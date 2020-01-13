@@ -627,10 +627,10 @@ namespace Transaction_Statistical.Class
                 foreach (var trans in ListTransaction)
                 {
                     var itemTrans = trans.Value;
-                    //if (itemTrans.ListEvent.Where(x => x.Value.Name == "Cash Retracted").Count() > 0)
-                    //{
-                    //    int a = 0;
-                    //}
+                    if (itemTrans.CardNumber == "970407******4338")
+                    {
+                        int a = 0;
+                    }
                     Dictionary<DateTime, TransactionRequest> TransactionRequest = trans.Value.ListRequest;
                     if (tEMPLATE == TEMPLATE.BaoCaoGiaoDichTaiChinhKhongThanhCong)
                     {

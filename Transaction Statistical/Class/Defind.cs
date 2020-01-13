@@ -1022,6 +1022,10 @@ namespace Transaction_Statistical
                                 {
                                     evt.isWarning = true;
                                 }
+                                //if (regx.value.ContainsKey("Total"))
+                                //{
+                                //    //tran.am
+                                //}
                                 if (regx.value.ContainsKey("TimeSeparation"))
                                 {
 
@@ -1480,6 +1484,88 @@ namespace Transaction_Statistical
                         }
                         if (transaction.ListRequest.Count != 0 && (evt.Type.Equals(TransactionEvent.Events.Transaction) || evt.Type.Equals(TransactionEvent.Events.CashIn) || evt.Type.Equals(TransactionEvent.Events.CashOut)))
                         {
+
+                            string transNo = string.Empty;
+                            var billCheckPin = transaction.ListBills.Where(x => x.Value.Type == Bills.Types.Bill_CheckPin).FirstOrDefault().Value;
+                            var bills = transaction.ListBills.Where(x => x.Value.Type != Bills.Types.Bill_CheckPin).ToDictionary(x => x.Key, x => x.Value);
+                            if (billCheckPin != null)
+                            {
+                                transaction.ListRequest.LastOrDefault().Value.TranNo = billCheckPin.TranNo;
+                            }
+                            string name = transaction.ListRequest.LastOrDefault().Value.Request;
+                            if (Template_TransType_Select.ContainsKey(name))
+                            {
+                                var billReq = bills.OrderBy(x => x.Key).Where(x => (x.Value.Date >= evt.DateBegin)
+                                    && (x.Value.Type.ToString().ToUpper().Contains(name))).ToDictionary(x => x.Key, x => x.Value).FirstOrDefault().Value;
+                                if (billReq != null)
+                                {
+                                    transaction.ListRequest.LastOrDefault().Value.TranNo = billReq.TranNo;
+                                }
+                                if (Template_TransType_Select[name].Successful.Split(',').Contains(evt.Name))
+                                {
+                                    transaction.ListRequest.LastOrDefault().Value.Status = Status.Types.Succeeded;
+                                    transaction.Status = Status.Types.Succeeded.ToString();
+                                    transaction.ListRequest.LastOrDefault().Value.EndRequest = true;
+                                    transaction.ListRequest.LastOrDefault().Value.DateEnd = evt.DateBegin;
+                                }
+                                else if (Template_TransType_Select[name].UnSuccessful.Split(',').Contains(evt.Name))
+                                {
+                                    transaction.ListRequest.LastOrDefault().Value.Status = Status.Types.UnSucceeded;
+                                    transaction.Status = Status.Types.UnSucceeded.ToString();
+                                    transaction.ListRequest.LastOrDefault().Value.EndRequest = true;
+                                    transaction.ListRequest.LastOrDefault().Value.DateEnd = evt.DateBegin;
+
+                                }
+                            }
+
+                        }
+                    });
+
+                }
+
+                
+                if (transaction.ListRequest.Count == 1)
+                {
+                    transaction.ListRequest.OrderBy(x => x.Key).LastOrDefault().Value.DateEnd = transaction.ListEvent.Values.LastOrDefault().DateBegin;
+                }
+            }
+            catch (Exception ex)
+            {
+                InitParametar.Send_Error(ex.ToString(), MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name);
+            }
+            return transaction;
+        }
+
+        private async Task<Transaction> SplitRequest_2(Transaction transaction)
+        {
+            try
+            {
+                TransactionRequest req = new TransactionRequest();
+                req.DateBegin = transaction.DateBegin;
+                req.Status = Status.Types.UnSucceeded;
+                transaction.Status = Status.Types.Warning.ToString();
+                DateTime endDate = new DateTime();
+                if (transaction.ListRequest.Values.FirstOrDefault() != null)
+                {
+                    endDate = transaction.ListRequest.Values.FirstOrDefault().DateBegin;
+                }
+
+                foreach (TransactionEvent evt in transaction.ListEvent.Values)
+                {
+                    endDate = evt.DateBegin;
+                    await Task.Run(() =>
+                    {
+                        if ((transaction.ListRequest.Count == 0 || transaction.ListRequest.LastOrDefault().Value.EndRequest) && CheckRequestName(evt.Name, ref req.Request))
+                        {
+                            TransactionRequest req_New = new TransactionRequest();
+                            req_New.DateBegin = evt.DateBegin;
+                            req_New.DateEnd = endDate;
+                            req_New.Status = Status.Types.UnSucceeded;
+                            req_New.Request = req.Request;
+                            transaction.ListRequest[req_New.DateBegin] = req_New;
+                        }
+                        if (transaction.ListRequest.Count != 0 && (evt.Type.Equals(TransactionEvent.Events.Transaction) || evt.Type.Equals(TransactionEvent.Events.CashIn) || evt.Type.Equals(TransactionEvent.Events.CashOut)))
+                        {
                             if (transaction.ListRequest.Count == 1)
                             {
                                 transaction.ListRequest.OrderBy(x => x.Key).LastOrDefault().Value.DateEnd = transaction.ListEvent.Values.LastOrDefault().DateBegin;
@@ -1519,6 +1605,11 @@ namespace Transaction_Statistical
 
                         }
                     });
+
+                }
+
+                foreach (var reqItem in transaction.ListEvent)
+                {
 
                 }
             }
