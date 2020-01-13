@@ -16,7 +16,7 @@
         "Entry"
         {
         "MsmKey" = "8:_01878E3976AF86A429E48F4F5A4D414F"
-        "OwnerKey" = "8:_FD7780A3B3AB4A80B69CF6206BBBF3A0"
+        "OwnerKey" = "8:_90619983B844456B84CB938F11F21822"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -130,24 +130,30 @@
         "Entry"
         {
         "MsmKey" = "8:_879A77810B9B9BA008FD1B30CF45370E"
-        "OwnerKey" = "8:_DBA8D5053EA042198E1890F3E2720E0D"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_879A77810B9B9BA008FD1B30CF45370E"
-        "OwnerKey" = "8:_FD7780A3B3AB4A80B69CF6206BBBF3A0"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_879A77810B9B9BA008FD1B30CF45370E"
         "OwnerKey" = "8:_4A4FD29EB76F48E8AEF9499B382361B7"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
+        "MsmKey" = "8:_879A77810B9B9BA008FD1B30CF45370E"
+        "OwnerKey" = "8:_90619983B844456B84CB938F11F21822"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_879A77810B9B9BA008FD1B30CF45370E"
+        "OwnerKey" = "8:_DBA8D5053EA042198E1890F3E2720E0D"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_888761BDFE684A4EB118F8EC1627C52A"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_90619983B844456B84CB938F11F21822"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -184,7 +190,7 @@
         "Entry"
         {
         "MsmKey" = "8:_BC0C998F84976E87E86244982FDEF5F9"
-        "OwnerKey" = "8:_FD7780A3B3AB4A80B69CF6206BBBF3A0"
+        "OwnerKey" = "8:_90619983B844456B84CB938F11F21822"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -273,12 +279,6 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_FD7780A3B3AB4A80B69CF6206BBBF3A0"
-        "OwnerKey" = "8:_UNDEFINED"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
         "MsmKey" = "8:_FF02100893CB44B196B67D8D20DFB9AF"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
@@ -292,7 +292,7 @@
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_FD7780A3B3AB4A80B69CF6206BBBF3A0"
+        "OwnerKey" = "8:_90619983B844456B84CB938F11F21822"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -916,6 +916,37 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
+            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_90619983B844456B84CB938F11F21822"
+            {
+            "AssemblyRegister" = "3:1"
+            "AssemblyIsInGAC" = "11:FALSE"
+            "AssemblyAsmDisplayName" = "8:Transaction Statistical, Version=1.0.7.0, Culture=neutral, processorArchitecture=MSIL"
+                "ScatterAssemblies"
+                {
+                    "_90619983B844456B84CB938F11F21822"
+                    {
+                    "Name" = "8:Transaction Statistical.exe"
+                    "Attributes" = "3:512"
+                    }
+                }
+            "SourcePath" = "8:..\\Transaction Statistical\\bin\\Debug\\Transaction Statistical.exe"
+            "TargetName" = "8:"
+            "Tag" = "8:"
+            "Folder" = "8:_FEF57AB081D24169B942D7DC93C92222"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_9418B64778B145768D5446DE82E3F9AF"
             {
             "SourcePath" = "8:..\\Transaction Statistical\\Resources\\Internet.ico"
@@ -1371,37 +1402,6 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
-            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_FD7780A3B3AB4A80B69CF6206BBBF3A0"
-            {
-            "AssemblyRegister" = "3:1"
-            "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:Transaction Statistical, Version=1.0.6.0, Culture=neutral, processorArchitecture=MSIL"
-                "ScatterAssemblies"
-                {
-                    "_FD7780A3B3AB4A80B69CF6206BBBF3A0"
-                    {
-                    "Name" = "8:Transaction Statistical.exe"
-                    "Attributes" = "3:512"
-                    }
-                }
-            "SourcePath" = "8:..\\Transaction Statistical\\bin\\Debug\\Transaction Statistical.exe"
-            "TargetName" = "8:"
-            "Tag" = "8:"
-            "Folder" = "8:_FEF57AB081D24169B942D7DC93C92222"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_FF02100893CB44B196B67D8D20DFB9AF"
             {
             "SourcePath" = "8:..\\Transaction Statistical\\bin\\Debug\\Config\\AppConfig.dat"
@@ -1532,16 +1532,16 @@
         "Product"
         {
         "Name" = "8:Microsoft Visual Studio"
-        "ProductName" = "8:Transaction Statistical 1.0.6.0"
-        "ProductCode" = "8:{6E3401DB-4266-43DD-8A71-6ACAA481FDC4}"
-        "PackageCode" = "8:{4E414C85-C15C-4C43-B6F2-77DA043B9D37}"
+        "ProductName" = "8:Transaction Statistical 1.0.7.0"
+        "ProductCode" = "8:{E299FF84-1EA1-48B7-838D-18881DA1EFED}"
+        "PackageCode" = "8:{48CD520F-41AA-4DB8-B177-5248120BC14F}"
         "UpgradeCode" = "8:{AAD84087-1F86-48F4-861F-61E3658A745D}"
         "AspNetVersion" = "8:4.0.30319.0"
         "RestartWWWService" = "11:FALSE"
         "RemovePreviousVersions" = "11:FALSE"
         "DetectNewerInstalledVersion" = "11:TRUE"
         "InstallAllUsers" = "11:FALSE"
-        "ProductVersion" = "8:1.0.6"
+        "ProductVersion" = "8:1.0.7"
         "Manufacturer" = "8:NPS Company, Ltd."
         "ARPHELPTELEPHONE" = "8:"
         "ARPHELPLINK" = "8:"
@@ -1656,13 +1656,13 @@
         {
             "{970C0BB2-C7D0-45D7-ABFA-7EC378858BC0}:_25C1B128F8BC455DBF256EF167BEEF48"
             {
-            "Name" = "8:Transaction Statistical 1.0.6"
+            "Name" = "8:Transaction Statistical 1.0.7"
             "Arguments" = "8:"
             "Description" = "8:"
             "ShowCmd" = "3:1"
             "IconIndex" = "3:0"
             "Transitive" = "11:FALSE"
-            "Target" = "8:_FD7780A3B3AB4A80B69CF6206BBBF3A0"
+            "Target" = "8:_90619983B844456B84CB938F11F21822"
             "Folder" = "8:_79CCA81B18D34015AEEA69124EA6ED2C"
             "WorkingFolder" = "8:_FEF57AB081D24169B942D7DC93C92222"
             "Icon" = "8:_624039062B954CBA8B3B0B2275686E95"
@@ -1670,13 +1670,13 @@
             }
             "{970C0BB2-C7D0-45D7-ABFA-7EC378858BC0}:_D9F298D0B1864596AB93FABE4900E52A"
             {
-            "Name" = "8:Transaction Statistical 1.0.6"
+            "Name" = "8:Transaction Statistical 1.0.7"
             "Arguments" = "8:"
             "Description" = "8:"
             "ShowCmd" = "3:1"
             "IconIndex" = "3:0"
             "Transitive" = "11:FALSE"
-            "Target" = "8:_FD7780A3B3AB4A80B69CF6206BBBF3A0"
+            "Target" = "8:_90619983B844456B84CB938F11F21822"
             "Folder" = "8:_8D3218D403AB4FFCAABFE8292EBB325E"
             "WorkingFolder" = "8:_FEF57AB081D24169B942D7DC93C92222"
             "Icon" = "8:_624039062B954CBA8B3B0B2275686E95"

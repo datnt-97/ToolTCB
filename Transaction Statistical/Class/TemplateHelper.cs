@@ -627,7 +627,10 @@ namespace Transaction_Statistical.Class
                 foreach (var trans in ListTransaction)
                 {
                     var itemTrans = trans.Value;
-
+                    //if (itemTrans.ListEvent.Where(x => x.Value.Name == "Cash Retracted").Count() > 0)
+                    //{
+                    //    int a = 0;
+                    //}
                     Dictionary<DateTime, TransactionRequest> TransactionRequest = trans.Value.ListRequest;
                     if (tEMPLATE == TEMPLATE.BaoCaoGiaoDichTaiChinhKhongThanhCong)
                     {
@@ -637,6 +640,7 @@ namespace Transaction_Statistical.Class
                     {
                         TransactionRequest = TransactionRequest.Where(x => x.Value.Status != Status.Types.Succeeded).ToDictionary(x => x.Key, x => x.Value);
                     }
+                    var tranNoTemp = "-";
                     foreach (var requestLast in TransactionRequest.Values)
                     {
                         var evts = itemTrans.ListEvent.Where(x => x.Value.DateBegin >= requestLast.DateBegin
@@ -649,11 +653,14 @@ namespace Transaction_Statistical.Class
                         var evtCounter = evts.OrderBy(x => x.Key).Where(x => x.Value.hasCouter).ToList();
 
                         // var lastBill = itemTrans.ListBills.OrderBy(x => x.Key).LastOrDefault();
+                        var billCheckPin = itemTrans.ListBills.Where(x => x.Value.Type == Bills.Types.Bill_CheckPin).FirstOrDefault().Value;
+                        var bills = itemTrans.ListBills.OrderBy(x => x.Key).Where(x => x.Value.Type != Bills.Types.Bill_CheckPin && x.Value.TranNo != tranNoTemp).FirstOrDefault().Value;
 
                         using (ExcelRange rng = worksheet.Cells[string.Format("A{0}:A{1}", indexData, indexTo)])
                         {
                             rng.Merge = true;
-                            rng.Value = string.IsNullOrEmpty(requestLast.TranNo) ? "-" : requestLast.TranNo;
+                            rng.Value = bills != null ? bills.TranNo : (billCheckPin != null ? billCheckPin.TranNo : "-");
+                            tranNoTemp = bills != null ? bills.TranNo : (billCheckPin != null ? billCheckPin.TranNo : "-");
                         }
                         using (ExcelRange rng = worksheet.Cells[string.Format("B{0}:B{1}", indexData, indexTo)])
                         {

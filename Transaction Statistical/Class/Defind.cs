@@ -1482,7 +1482,7 @@ namespace Transaction_Statistical
                         {
                             if (transaction.ListRequest.Count == 1)
                             {
-                                transaction.ListRequest.LastOrDefault().Value.DateEnd = transaction.ListEvent.Values.LastOrDefault().DateBegin;
+                                transaction.ListRequest.OrderBy(x => x.Key).LastOrDefault().Value.DateEnd = transaction.ListEvent.Values.LastOrDefault().DateBegin;
                             }
                             string transNo = string.Empty;
                             var billCheckPin = transaction.ListBills.Where(x => x.Value.Type == Bills.Types.Bill_CheckPin).FirstOrDefault().Value;
