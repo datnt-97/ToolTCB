@@ -305,8 +305,6 @@ namespace Transaction_Statistical
                                             StatusLicense = License.StatusS.Activated;
                                         else StatusLicense = License.StatusS.Invalid;
                                     }
-                                    else
-                                        StatusLicense = License.StatusS.Activated;
                                     foreach (string s in items[2].Split(''))
                                     {
                                         License lic = new License();
