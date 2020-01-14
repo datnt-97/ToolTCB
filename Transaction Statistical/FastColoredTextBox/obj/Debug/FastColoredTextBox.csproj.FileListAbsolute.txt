@@ -61,7 +61,6 @@ D:\05-TEMP\Source\GitHub\ToolTCB\Transaction Statistical\FastColoredTextBox\obj\
 E:\Project\NPS\TCB\ToolTCB\Transaction Statistical\FastColoredTextBox\bin\Debug\FastColoredTextBox.XML
 E:\Project\NPS\TCB\ToolTCB\Transaction Statistical\FastColoredTextBox\bin\Debug\FastColoredTextBox.dll
 E:\Project\NPS\TCB\ToolTCB\Transaction Statistical\FastColoredTextBox\bin\Debug\FastColoredTextBox.pdb
-E:\Project\NPS\TCB\ToolTCB\Transaction Statistical\FastColoredTextBox\obj\Debug\FastColoredTextBox.csprojAssemblyReference.cache
 E:\Project\NPS\TCB\ToolTCB\Transaction Statistical\FastColoredTextBox\obj\Debug\FastColoredTextBoxNS.FastColoredTextBox.resources
 E:\Project\NPS\TCB\ToolTCB\Transaction Statistical\FastColoredTextBox\obj\Debug\FastColoredTextBoxNS.FindForm.resources
 E:\Project\NPS\TCB\ToolTCB\Transaction Statistical\FastColoredTextBox\obj\Debug\FastColoredTextBoxNS.GoToForm.resources

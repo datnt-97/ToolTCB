@@ -723,26 +723,30 @@ namespace Transaction_Statistical
                                 evt.Status = Status.Types.Succeeded;
                                 evt.TContent = regx.stringfind;
                                 evt.Type = TransactionEvent.Events.Transaction;
-                                evt.IndexContent = regx.index;
+                                evt.IndexContent = transaction.TraceJournalFull.IndexOf(regx.stringfind);
                                 if (regx.value.ContainsKey("Warning") && !string.IsNullOrEmpty(regx.value["Warning"]))
                                 {
                                     evt.isWarning = true;
                                 }
                                 if (regx.value.ContainsKey("Time") && !string.IsNullOrEmpty(regx.value["Time"]))
                                 {
-
                                     DateTime.TryParseExact(String.Format("{0:yyyyMMdd}", DateCurrent) + regx.value["Time"], "yyyyMMdd" + FormatTime, CultureInfo.InvariantCulture, DateTimeStyles.None, out evt.DateBegin);
                                     DateCurrent = evt.DateBegin;
                                 }
                                 else
+                                {
+                                    evt.DateBegin = DateCurrent.AddTicks(1);
                                     evt.DateBegin = DateCurrent.AddYears(88);
+                                    evt.hasTime = false;
+                                }
 
                                 if (regx.value.ContainsKey("Bill") && !string.IsNullOrEmpty(regx.value["Bill"]))
                                 {
                                     Bills bills = new Bills();
-                                    DateTime dateBill = new DateTime();
-                                    DateTime.TryParseExact(String.Format("{0:yyyyMMdd}", DateCurrent) + regx.value["Time"], "yyyyMMdd" + FormatTime, CultureInfo.InvariantCulture, DateTimeStyles.None, out dateBill);
-                                    bills.Date = dateBill;
+                                    bills.index = regx.index;
+                                    //DateTime dateBill = new DateTime();
+                                    //DateTime.TryParseExact(String.Format("{0:yyyyMMdd}", DateCurrent) + regx.value["Time"], "yyyyMMdd" + FormatTime, CultureInfo.InvariantCulture, DateTimeStyles.None, out dateBill);
+                                    bills.Date = evt.DateBegin;
                                     var values = Enum.GetValues(typeof(Bills.Types)).Cast<Bills.Types>();
                                     foreach (var type in values)
                                     {
@@ -761,15 +765,31 @@ namespace Transaction_Statistical
                                         bills.RequireAmount = string.IsNullOrEmpty(regx.value["RequireAmount"]) ? string.Empty : regx.value["RequireAmount"];
                                     }
                                     long tmps = 0;
-                                    if (!transaction.ListBills.ContainsKey(bills.Date) && long.TryParse(bills.TranNo, out tmps))
+                                    if (long.TryParse(bills.TranNo, out tmps))
                                     {
-                                        transaction.ListBills[bills.Date] = bills;
+                                        if (transaction.ListBills.ContainsKey(bills.Date))
+                                        {
+                                            int milis = 0;
+                                            while (transaction.ListBills.ContainsKey(bills.Date.AddMilliseconds(milis)))
+                                            {
+                                                milis++;
+                                            }
+                                            transaction.ListBills[bills.Date.AddMilliseconds(milis)] = bills;
+
+                                        }
+                                        else transaction.ListBills[bills.Date] = bills;
                                     }
                                 }
+                                if (transaction.ListEvent.ContainsKey(evt.DateBegin))
+                                {
+                                    int milis = 0;
+                                    while (transaction.ListEvent.ContainsKey(evt.DateBegin.AddMilliseconds(milis)))
+                                    {
+                                        milis++;
+                                    }
+                                    transaction.ListEvent[evt.DateBegin.AddMilliseconds(milis)] = evt;
 
-
-
-                                if (transaction.ListEvent.ContainsKey(evt.DateBegin)) transaction.ListEvent[evt.DateBegin.AddMilliseconds(1)] = evt;
+                                }
                                 else transaction.ListEvent[evt.DateBegin] = evt;
                                 transaction.TraceJournal_Remaining = transaction.TraceJournal_Remaining.Replace(regx.stringfind, string.Empty);
                             });
@@ -801,7 +821,14 @@ namespace Transaction_Statistical
                                 evt.Status = Status.Types.Succeeded;
                                 evt.TContent = regx.stringfind;
                                 evt.Type = TransactionEvent.Events.Device;
-                                evt.IndexContent = regx.index;
+                                if (!string.IsNullOrEmpty(transaction.TraceJournalFull))
+                                {
+                                    evt.IndexContent = transaction.TraceJournalFull.IndexOf(regx.stringfind);
+                                }
+                                else
+                                {
+                                    evt.IndexContent = 0;
+                                }
                                 if (regx.value.ContainsKey("Warning") && !string.IsNullOrEmpty(regx.value["Warning"]))
                                 {
                                     evt.isWarning = true;
@@ -914,7 +941,7 @@ namespace Transaction_Statistical
                                 evt.Name = tmp.Key;
                                 evt.Status = (Status.Types.Succeeded);
                                 evt.TContent = regx.stringfind;
-                                evt.IndexContent = regx.index;
+                                //evt.IndexContent = transaction.TraceJournalFull.IndexOf(regx.stringfind);
                                 if (regx.value.ContainsKey("Warning") && !string.IsNullOrEmpty(regx.value["Warning"]))
                                 {
                                     evt.isWarning = true;
@@ -965,7 +992,7 @@ namespace Transaction_Statistical
                                 evt.Name = tmp.Key;
                                 evt.Status = (Status.Types.Succeeded);
                                 evt.TContent = regx.stringfind;
-                                evt.IndexContent = regx.index;
+                                evt.IndexContent = tran.TraceJournalFull.IndexOf(regx.stringfind);
                                 if (regx.value.ContainsKey("Warning") && !string.IsNullOrEmpty(regx.value["Warning"]))
                                 {
                                     evt.isWarning = true;
@@ -1009,7 +1036,7 @@ namespace Transaction_Statistical
                                 evt.Name = tmp.Key;
                                 evt.Status = (Status.Types.Succeeded);
                                 evt.TContent = regx.stringfind;
-                                evt.IndexContent = regx.index;
+                                evt.IndexContent = tran.TraceJournalFull.IndexOf(regx.stringfind);
                                 if (regx.value.ContainsKey("Time") && !string.IsNullOrEmpty(regx.value["Time"]))
                                 {
                                     DateTime.TryParseExact(string.Format("{0:yyyyMMdd}", DateCurrent) + regx.value["Time"], "yyyyMMdd" + FormatTime, CultureInfo.InvariantCulture, DateTimeStyles.None, out evt.DateBegin);
@@ -1126,28 +1153,50 @@ namespace Transaction_Statistical
             try
             {
                 Dictionary<DateTime, TransactionEvent> lsNew = new Dictionary<DateTime, TransactionEvent>();
+                Dictionary<DateTime, Bills> lsBillNew = new Dictionary<DateTime, Bills>();
 
                 foreach (var evt in tran.ListEvent)
                 {
-
                     var evtNew = evt;
                     if (!evtNew.Value.hasTime || (evtNew.Value.DateBegin.Year > DateTime.Now.Year))
                     {
+
                         var newTime = tran.ListEvent.Where(x => x.Value.IndexContent < evtNew.Value.IndexContent).OrderBy(x => x.Value.IndexContent).ToList();
                         if (newTime.Count() > 0)
                         {
                             evtNew.Value.DateBegin = newTime.LastOrDefault().Value.DateBegin.AddMilliseconds(1);
+                            var bill = tran.ListBills.OrderBy(x => x.Value.index).Where(x => x.Key == evt.Key).LastOrDefault();
+                            if (bill.Value != null)
+                            {
+                                Bills b = bill.Value;
+                                b.Date = evtNew.Value.DateBegin;
+                                if (lsBillNew.ContainsKey(b.Date))
+                                {
+                                    lsBillNew[b.Date.AddMilliseconds(1)] = b;
+                                }
+                                else
+                                    lsBillNew[b.Date] = b;
+                                //tran.ListBills.Where(x => x.Value.index == evt.Value.IndexContent).LastOrDefault().Value.Date = evtNew.Value.DateBegin;
+                            }
                         }
 
                     }
+
                     if (lsNew.ContainsKey(evt.Value.DateBegin))
                     {
                         lsNew[evt.Value.DateBegin.AddMilliseconds(1)] = evtNew.Value;
                     }
                     else
                         lsNew[evt.Value.DateBegin] = evtNew.Value;
+
+
                 }
+
                 tran.ListEvent = lsNew.OrderBy(x => x.Key).ToDictionary(k => k.Key, v => v.Value);
+                tran.ListBills = lsBillNew.OrderBy(x => x.Key).ToDictionary(k => k.Key, v => v.Value);
+
+
+
             }
             catch (Exception ex)
             {
@@ -1175,7 +1224,7 @@ namespace Transaction_Statistical
                                 evt.Status = (Status.Types.Unknow);
                                 evt.TContent = regx.stringfind;
                                 evt.Type = TransactionEvent.Events.TransactionReqSend;
-                                evt.IndexContent = regx.index;
+                                evt.IndexContent = tran.TraceJournalFull.IndexOf(regx.stringfind);
                                 if (regx.value.ContainsKey("Warning") && !string.IsNullOrEmpty(regx.value["Warning"]))
                                 {
                                     evt.isWarning = true;
@@ -1432,6 +1481,7 @@ namespace Transaction_Statistical
 
             try
             {
+                transaction.TraceJournalFull = sString;
                 transaction.TraceJournal_Remaining = sString;
                 Dictionary<DateTime, TransactionEvent> t = new Dictionary<DateTime, TransactionEvent>();
                 transaction = await Task.Run(() => FindEventDevice(transaction, DateCurrent));
@@ -1462,59 +1512,34 @@ namespace Transaction_Statistical
                 req.DateBegin = transaction.DateBegin;
                 req.Status = Status.Types.UnSucceeded;
                 transaction.Status = Status.Types.Warning.ToString();
-                DateTime endDate = new DateTime();
-                if (transaction.ListRequest.Values.FirstOrDefault() != null)
-                {
-                    endDate = transaction.ListRequest.Values.FirstOrDefault().DateBegin;
-                }
-
                 foreach (TransactionEvent evt in transaction.ListEvent.Values)
                 {
-                    endDate = evt.DateBegin;
                     await Task.Run(() =>
                     {
                         if ((transaction.ListRequest.Count == 0 || transaction.ListRequest.LastOrDefault().Value.EndRequest) && CheckRequestName(evt.Name, ref req.Request))
                         {
                             TransactionRequest req_New = new TransactionRequest();
                             req_New.DateBegin = evt.DateBegin;
-                            req_New.DateEnd = endDate;
                             req_New.Status = Status.Types.UnSucceeded;
                             req_New.Request = req.Request;
                             transaction.ListRequest[req_New.DateBegin] = req_New;
                         }
                         if (transaction.ListRequest.Count != 0 && (evt.Type.Equals(TransactionEvent.Events.Transaction) || evt.Type.Equals(TransactionEvent.Events.CashIn) || evt.Type.Equals(TransactionEvent.Events.CashOut)))
                         {
-
-                            string transNo = string.Empty;
-                            var billCheckPin = transaction.ListBills.Where(x => x.Value.Type == Bills.Types.Bill_CheckPin).FirstOrDefault().Value;
-                            var bills = transaction.ListBills.Where(x => x.Value.Type != Bills.Types.Bill_CheckPin).ToDictionary(x => x.Key, x => x.Value);
-                            if (billCheckPin != null)
-                            {
-                                transaction.ListRequest.LastOrDefault().Value.TranNo = billCheckPin.TranNo;
-                            }
                             string name = transaction.ListRequest.LastOrDefault().Value.Request;
                             if (Template_TransType_Select.ContainsKey(name))
                             {
-                                var billReq = bills.OrderBy(x => x.Key).Where(x => (x.Value.Date >= evt.DateBegin)
-                                    && (x.Value.Type.ToString().ToUpper().Contains(name))).ToDictionary(x => x.Key, x => x.Value).FirstOrDefault().Value;
-                                if (billReq != null)
-                                {
-                                    transaction.ListRequest.LastOrDefault().Value.TranNo = billReq.TranNo;
-                                }
                                 if (Template_TransType_Select[name].Successful.Split(',').Contains(evt.Name))
                                 {
                                     transaction.ListRequest.LastOrDefault().Value.Status = Status.Types.Succeeded;
                                     transaction.Status = Status.Types.Succeeded.ToString();
                                     transaction.ListRequest.LastOrDefault().Value.EndRequest = true;
-                                    transaction.ListRequest.LastOrDefault().Value.DateEnd = evt.DateBegin;
                                 }
                                 else if (Template_TransType_Select[name].UnSuccessful.Split(',').Contains(evt.Name))
                                 {
                                     transaction.ListRequest.LastOrDefault().Value.Status = Status.Types.UnSucceeded;
                                     transaction.Status = Status.Types.UnSucceeded.ToString();
                                     transaction.ListRequest.LastOrDefault().Value.EndRequest = true;
-                                    transaction.ListRequest.LastOrDefault().Value.DateEnd = evt.DateBegin;
-
                                 }
                             }
 
@@ -1523,11 +1548,37 @@ namespace Transaction_Statistical
 
                 }
 
-                
+
                 if (transaction.ListRequest.Count == 1)
                 {
-                    transaction.ListRequest.OrderBy(x => x.Key).LastOrDefault().Value.DateEnd = transaction.ListEvent.Values.LastOrDefault().DateBegin;
+                    transaction.ListRequest.LastOrDefault().Value.DateEnd = transaction.ListEvent.Values.LastOrDefault().DateBegin;
                 }
+                else if (transaction.ListRequest.Count > 1)
+                {
+                    int count = 1;
+                    var endDates = transaction.ListRequest.ToArray()[count].Key;
+                    foreach (var request in transaction.ListRequest)
+                    {
+                        var lastEvt = transaction.ListEvent.Values.Where(x => x.DateBegin >= request.Key && x.DateBegin <= endDates)
+                            .OrderBy(x => x.DateBegin).LastOrDefault();
+
+                        if (lastEvt != null)
+                        {
+                            transaction.ListRequest.Where(x => x.Key == request.Key).LastOrDefault().Value.DateEnd = lastEvt.DateBegin;
+                        }
+
+                        count++;
+                        if (transaction.ListRequest.Count <= count)
+                        {
+                            endDates = transaction.ListEvent.Values.OrderBy(x => x.DateBegin).LastOrDefault().DateBegin;
+                        }
+                        else
+                        {
+                            endDates = transaction.ListRequest.ToArray()[count].Key;
+                        }
+                    }
+                }
+
             }
             catch (Exception ex)
             {
@@ -1815,6 +1866,14 @@ namespace Transaction_Statistical
             get
             {
                 return Value_10K * 10000 + Value_20K * 20000 + Value_50K * 50000 + Value_100K * 100000 + Value_200K * 200000 + Value_500K * 500000;
+            }
+        }
+        public int AmountCounterRetracted
+        {
+            get
+            {
+                return Value_10K_Retracted * 10000 + Value_20K_Retracted * 20000 + Value_50K_Retracted * 50000 +
+                    Value_100K_Retracted * 100000 + Value_200K_Retracted * 200000 + Value_500K_Retracted * 500000;
             }
         }
         public int Amount;
@@ -2188,6 +2247,7 @@ namespace Transaction_Statistical
         public string Text { get; set; }
         public DateTime Date { get; set; }
         public Types Type { get; set; }
+        public int index { get; set; }
     }
 
     public class Algorithm_TripleDES

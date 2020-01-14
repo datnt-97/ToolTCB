@@ -627,10 +627,7 @@ namespace Transaction_Statistical.Class
                 foreach (var trans in ListTransaction)
                 {
                     var itemTrans = trans.Value;
-                    if (itemTrans.CardNumber == "970407******4338")
-                    {
-                        int a = 0;
-                    }
+
                     Dictionary<DateTime, TransactionRequest> TransactionRequest = trans.Value.ListRequest;
                     if (tEMPLATE == TEMPLATE.BaoCaoGiaoDichTaiChinhKhongThanhCong)
                     {
@@ -641,6 +638,7 @@ namespace Transaction_Statistical.Class
                         TransactionRequest = TransactionRequest.Where(x => x.Value.Status != Status.Types.Succeeded).ToDictionary(x => x.Key, x => x.Value);
                     }
                     var tranNoTemp = "-";
+                
                     foreach (var requestLast in TransactionRequest.Values)
                     {
                         var evts = itemTrans.ListEvent.Where(x => x.Value.DateBegin >= requestLast.DateBegin
@@ -653,22 +651,22 @@ namespace Transaction_Statistical.Class
                         var evtCounter = evts.OrderBy(x => x.Key).Where(x => x.Value.hasCouter).ToList();
 
                         // var lastBill = itemTrans.ListBills.OrderBy(x => x.Key).LastOrDefault();
-                        var billCheckPin = itemTrans.ListBills.Where(x => x.Value.Type == Bills.Types.Bill_CheckPin).FirstOrDefault().Value;
-                        var bills = itemTrans.ListBills.OrderBy(x => x.Key).Where(x => x.Value.Type != Bills.Types.Bill_CheckPin && x.Value.TranNo != tranNoTemp).FirstOrDefault().Value;
+                        var billCheckPin = itemTrans.ListBills.Where(x => x.Value.Type == Bills.Types.Bill_CheckPin).LastOrDefault().Value;
+                        var bills = itemTrans.ListBills.OrderBy(x => x.Value.Date).Where(x => x.Value.Type != Bills.Types.Bill_CheckPin
+                        && x.Value.TranNo != tranNoTemp && x.Value.Date >= requestLast.DateBegin && x.Value.Date <= requestLast.DateEnd).LastOrDefault().Value;
 
                         using (ExcelRange rng = worksheet.Cells[string.Format("A{0}:A{1}", indexData, indexTo)])
                         {
                             rng.Merge = true;
                             rng.Value = bills != null ? bills.TranNo : (billCheckPin != null ? billCheckPin.TranNo : "-");
                             tranNoTemp = bills != null ? bills.TranNo : (billCheckPin != null ? billCheckPin.TranNo : "-");
+
                         }
                         using (ExcelRange rng = worksheet.Cells[string.Format("B{0}:B{1}", indexData, indexTo)])
                         {
                             rng.Merge = true;
                             rng.Value = string.IsNullOrEmpty(requestLast.Request) ? "N/A" : requestLast.Request;
                         }
-                        //worksheet.Cells[indexData, index].Value = string.IsNullOrEmpty(requestLast.TranNo) ? "-" : requestLast.TranNo;
-                        //worksheet.Cells[indexData, index + 1].Value = string.IsNullOrEmpty(requestLast.Request) ? "N/A" : requestLast.Request;
 
 
                         if (countEvts > 0 && evts.Values.Where(x => x.isWarning).Count() > 0)
@@ -725,7 +723,14 @@ namespace Transaction_Statistical.Class
                         using (ExcelRange rng = worksheet.Cells[string.Format("J{0}:J{1}", indexData, indexTo)])
                         {
                             rng.Merge = true;
-                            rng.Value = Math.Abs(evtCounter.Sum(x => x.Value.AmountCounter));
+                            if (requestLast.Status == Status.Types.UnSucceeded)
+                            {
+                                rng.Value = Math.Abs(evtCounter.Sum(x => x.Value.AmountCounter));
+                            }
+                            else
+                            {
+                                rng.Value = Math.Abs(evtCounter.Sum(x => x.Value.AmountCounter));
+                            }
                             rng.Style.Numberformat.Format = "###,###,##0.0";
 
                         }

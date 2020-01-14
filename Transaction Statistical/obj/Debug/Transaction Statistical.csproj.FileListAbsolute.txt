@@ -378,26 +378,35 @@ E:\Project\NPS\ToolTCB_Back_up\Back_up_16\ToolTCB\Transaction Statistical\obj\De
 E:\Project\NPS\ToolTCB_Back_up\Back_up_16\ToolTCB\Transaction Statistical\obj\Debug\Transaction Statistical.exe
 E:\Project\NPS\ToolTCB_Back_up\Back_up_16\ToolTCB\Transaction Statistical\obj\Debug\Transaction Statistical.pdb
 D:\05-TEMP\Source\GitHub\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.UControl.UC_Search.resources
-E:\Project\NPS\TCB\ToolTCB\Transaction Statistical\bin\Debug\Transaction Statistical.exe.config
 E:\Project\NPS\TCB\ToolTCB\Transaction Statistical\bin\Debug\Transaction Statistical.exe
-E:\Project\NPS\TCB\ToolTCB\Transaction Statistical\bin\Debug\Transaction Statistical.pdb
+E:\Project\NPS\TCB\ToolTCB\Transaction Statistical\bin\Debug\EPPlus.dll
+E:\Project\NPS\TCB\ToolTCB\Transaction Statistical\bin\Debug\FastColoredTextBox.dll
+E:\Project\NPS\TCB\ToolTCB\Transaction Statistical\bin\Debug\System.Data.SQLite.dll
+D:\05-TEMP\Source\GitHub\ToolTCB\Transaction Statistical\bin\Debug\DeltaCompressionDotNet.dll
+D:\05-TEMP\Source\GitHub\ToolTCB\Transaction Statistical\bin\Debug\DeltaCompressionDotNet.MsDelta.dll
+D:\05-TEMP\Source\GitHub\ToolTCB\Transaction Statistical\bin\Debug\DeltaCompressionDotNet.PatchApi.dll
+D:\05-TEMP\Source\GitHub\ToolTCB\Transaction Statistical\bin\Debug\Mono.Cecil.dll
+D:\05-TEMP\Source\GitHub\ToolTCB\Transaction Statistical\bin\Debug\Mono.Cecil.Mdb.dll
+D:\05-TEMP\Source\GitHub\ToolTCB\Transaction Statistical\bin\Debug\Mono.Cecil.Pdb.dll
+D:\05-TEMP\Source\GitHub\ToolTCB\Transaction Statistical\bin\Debug\Mono.Cecil.Rocks.dll
+D:\05-TEMP\Source\GitHub\ToolTCB\Transaction Statistical\bin\Debug\SharpCompress.dll
+D:\05-TEMP\Source\GitHub\ToolTCB\Transaction Statistical\bin\Debug\Splat.dll
+D:\05-TEMP\Source\GitHub\ToolTCB\Transaction Statistical\bin\Debug\Splat.pdb
 E:\Project\NPS\TCB\ToolTCB\Transaction Statistical\bin\Debug\DeltaCompressionDotNet.dll
 E:\Project\NPS\TCB\ToolTCB\Transaction Statistical\bin\Debug\DeltaCompressionDotNet.MsDelta.dll
 E:\Project\NPS\TCB\ToolTCB\Transaction Statistical\bin\Debug\DeltaCompressionDotNet.PatchApi.dll
 E:\Project\NPS\TCB\ToolTCB\Transaction Statistical\bin\Debug\EntityFramework.dll
 E:\Project\NPS\TCB\ToolTCB\Transaction Statistical\bin\Debug\EntityFramework.SqlServer.dll
-E:\Project\NPS\TCB\ToolTCB\Transaction Statistical\bin\Debug\EPPlus.dll
-E:\Project\NPS\TCB\ToolTCB\Transaction Statistical\bin\Debug\FastColoredTextBox.dll
 E:\Project\NPS\TCB\ToolTCB\Transaction Statistical\bin\Debug\Mono.Cecil.dll
 E:\Project\NPS\TCB\ToolTCB\Transaction Statistical\bin\Debug\Mono.Cecil.Mdb.dll
 E:\Project\NPS\TCB\ToolTCB\Transaction Statistical\bin\Debug\Mono.Cecil.Pdb.dll
 E:\Project\NPS\TCB\ToolTCB\Transaction Statistical\bin\Debug\Mono.Cecil.Rocks.dll
 E:\Project\NPS\TCB\ToolTCB\Transaction Statistical\bin\Debug\SharpCompress.dll
 E:\Project\NPS\TCB\ToolTCB\Transaction Statistical\bin\Debug\Splat.dll
-E:\Project\NPS\TCB\ToolTCB\Transaction Statistical\bin\Debug\System.Data.SQLite.dll
 E:\Project\NPS\TCB\ToolTCB\Transaction Statistical\bin\Debug\System.Data.SQLite.EF6.dll
 E:\Project\NPS\TCB\ToolTCB\Transaction Statistical\bin\Debug\System.Data.SQLite.Linq.dll
 E:\Project\NPS\TCB\ToolTCB\Transaction Statistical\bin\Debug\FastColoredTextBox.pdb
+E:\Project\NPS\TCB\ToolTCB\Transaction Statistical\bin\Debug\FastColoredTextBox.xml
 E:\Project\NPS\TCB\ToolTCB\Transaction Statistical\bin\Debug\EntityFramework.xml
 E:\Project\NPS\TCB\ToolTCB\Transaction Statistical\bin\Debug\EntityFramework.SqlServer.xml
 E:\Project\NPS\TCB\ToolTCB\Transaction Statistical\bin\Debug\EPPlus.xml
@@ -433,17 +442,8 @@ E:\Project\NPS\TCB\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statist
 E:\Project\NPS\TCB\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.UControl.UC_Transaction.resources
 E:\Project\NPS\TCB\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.UControl.UC_USBKey.resources
 E:\Project\NPS\TCB\ToolTCB\Transaction Statistical\obj\Debug\Transaction Statistical.csproj.GenerateResource.cache
-E:\Project\NPS\TCB\ToolTCB\Transaction Statistical\obj\Debug\Transaction Statistical.csproj.CopyComplete
 E:\Project\NPS\TCB\ToolTCB\Transaction Statistical\obj\Debug\Transaction Statistical.exe
 E:\Project\NPS\TCB\ToolTCB\Transaction Statistical\obj\Debug\Transaction Statistical.pdb
-E:\Project\NPS\TCB\ToolTCB\Transaction Statistical\bin\Debug\FastColoredTextBox.xml
-D:\05-TEMP\Source\GitHub\ToolTCB\Transaction Statistical\bin\Debug\DeltaCompressionDotNet.dll
-D:\05-TEMP\Source\GitHub\ToolTCB\Transaction Statistical\bin\Debug\DeltaCompressionDotNet.MsDelta.dll
-D:\05-TEMP\Source\GitHub\ToolTCB\Transaction Statistical\bin\Debug\DeltaCompressionDotNet.PatchApi.dll
-D:\05-TEMP\Source\GitHub\ToolTCB\Transaction Statistical\bin\Debug\Mono.Cecil.dll
-D:\05-TEMP\Source\GitHub\ToolTCB\Transaction Statistical\bin\Debug\Mono.Cecil.Mdb.dll
-D:\05-TEMP\Source\GitHub\ToolTCB\Transaction Statistical\bin\Debug\Mono.Cecil.Pdb.dll
-D:\05-TEMP\Source\GitHub\ToolTCB\Transaction Statistical\bin\Debug\Mono.Cecil.Rocks.dll
-D:\05-TEMP\Source\GitHub\ToolTCB\Transaction Statistical\bin\Debug\SharpCompress.dll
-D:\05-TEMP\Source\GitHub\ToolTCB\Transaction Statistical\bin\Debug\Splat.dll
-D:\05-TEMP\Source\GitHub\ToolTCB\Transaction Statistical\bin\Debug\Splat.pdb
+E:\Project\NPS\TCB\ToolTCB\Transaction Statistical\bin\Debug\Transaction Statistical.exe.config
+E:\Project\NPS\TCB\ToolTCB\Transaction Statistical\bin\Debug\Transaction Statistical.pdb
+E:\Project\NPS\TCB\ToolTCB\Transaction Statistical\obj\Debug\Transaction Statistical.csproj.CopyComplete
