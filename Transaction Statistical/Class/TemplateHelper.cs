@@ -149,10 +149,18 @@ namespace Transaction_Statistical.Class
             Dictionary<DateTime, Cycle> cycles,
             Dictionary<string, string> Template_EventDevice, TemplateHelper.TEMPLATE tEMPLATE)
         {
-            this.excelPackage.Workbook.Worksheets.Add(WorksheetsName);
-            var lastWS = excelPackage.Workbook.Worksheets.Last();
-            lastWS = DrawGDTC(lastWS, ListTransaction.OrderBy(x => x.Key).ToDictionary(d => d.Key, d => d.Value), cycles, Template_EventDevice, tEMPLATE);
-            this.excelPackage.Save();
+            try
+            {
+                this.excelPackage.Workbook.Worksheets.Add(WorksheetsName);
+                var lastWS = excelPackage.Workbook.Worksheets.Last();
+                lastWS = DrawGDTC(lastWS, ListTransaction.OrderBy(x => x.Key).ToDictionary(d => d.Key, d => d.Value), cycles, Template_EventDevice, tEMPLATE);
+                this.excelPackage.Save();
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
+
         }
 
         public void BaoCaoGiaoDichEmptyCassett(string WorksheetsName, TableStyles tableStyles, Dictionary<string, Dictionary<DateTime, object>> ListTransaction, bool isCycle)
@@ -638,196 +646,199 @@ namespace Transaction_Statistical.Class
                         TransactionRequest = TransactionRequest.Where(x => x.Value.Status != Status.Types.Succeeded).ToDictionary(x => x.Key, x => x.Value);
                     }
                     var tranNoTemp = "-";
-                
-                    foreach (var requestLast in TransactionRequest.Values)
+                    if (TransactionRequest.Count > 0)
                     {
-                        var evts = itemTrans.ListEvent.Where(x => x.Value.DateBegin >= requestLast.DateBegin
-                            && x.Value.DateBegin <= requestLast.DateEnd).ToDictionary(x => x.Key, x => x.Value);
-                        int countEvts = evts.Values.Where(x => x.isWarning).Count();
-                        int indexTo = countEvts > 1 ? indexData + countEvts - 1 : indexData;
-                        var cycleOfTransction = cycles.Where(x => x.Value.SettlementPeriodDateBegin <= itemTrans.DateBegin
-                        && x.Value.SettlementPeriodDateEnd >= itemTrans.DateBegin
-                        && itemTrans.Terminal.Contains(x.Value.TerminalID)).OrderBy(x => x.Value.SettlementPeriodDateBegin).LastOrDefault().Value;
-                        var evtCounter = evts.OrderBy(x => x.Key).Where(x => x.Value.hasCouter).ToList();
-
-                        // var lastBill = itemTrans.ListBills.OrderBy(x => x.Key).LastOrDefault();
-                        var billCheckPin = itemTrans.ListBills.Where(x => x.Value.Type == Bills.Types.Bill_CheckPin).LastOrDefault().Value;
-                        var bills = itemTrans.ListBills.OrderBy(x => x.Value.Date).Where(x => x.Value.Type != Bills.Types.Bill_CheckPin
-                        && x.Value.TranNo != tranNoTemp && x.Value.Date >= requestLast.DateBegin && x.Value.Date <= requestLast.DateEnd).LastOrDefault().Value;
-
-                        using (ExcelRange rng = worksheet.Cells[string.Format("A{0}:A{1}", indexData, indexTo)])
+                        foreach (var requestLast in TransactionRequest.Values)
                         {
-                            rng.Merge = true;
-                            rng.Value = bills != null ? bills.TranNo : (billCheckPin != null ? billCheckPin.TranNo : "-");
-                            tranNoTemp = bills != null ? bills.TranNo : (billCheckPin != null ? billCheckPin.TranNo : "-");
+                            var evts = itemTrans.ListEvent.Where(x => x.Value.DateBegin >= requestLast.DateBegin
+                                && x.Value.DateBegin <= requestLast.DateEnd).ToDictionary(x => x.Key, x => x.Value);
+                            int countEvts = evts.Values.Where(x => x.isWarning).Count();
+                            int indexTo = countEvts > 1 ? indexData + countEvts - 1 : indexData;
+                            var cycleOfTransction = cycles.Where(x => x.Value.SettlementPeriodDateBegin <= itemTrans.DateBegin
+                            && x.Value.SettlementPeriodDateEnd >= itemTrans.DateBegin
+                            && itemTrans.Terminal.Contains(x.Value.TerminalID)).OrderBy(x => x.Value.SettlementPeriodDateBegin).LastOrDefault().Value;
+                            var evtCounter = evts.OrderBy(x => x.Key).Where(x => x.Value.hasCouter).ToList();
 
-                        }
-                        using (ExcelRange rng = worksheet.Cells[string.Format("B{0}:B{1}", indexData, indexTo)])
-                        {
-                            rng.Merge = true;
-                            rng.Value = string.IsNullOrEmpty(requestLast.Request) ? "N/A" : requestLast.Request;
-                        }
+                            // var lastBill = itemTrans.ListBills.OrderBy(x => x.Key).LastOrDefault();
+                            var billCheckPin = itemTrans.ListBills.Where(x => x.Value.Type == Bills.Types.Bill_CheckPin).LastOrDefault().Value;
+                            var bills = itemTrans.ListBills.OrderBy(x => x.Value.Date).Where(x => x.Value.Type != Bills.Types.Bill_CheckPin
+                            && x.Value.TranNo != tranNoTemp && x.Value.Date >= requestLast.DateBegin && x.Value.Date <= requestLast.DateEnd).LastOrDefault().Value;
 
-
-                        if (countEvts > 0 && evts.Values.Where(x => x.isWarning).Count() > 0)
-                        {
-                            int count = indexData;
-                            foreach (var e in evts.Where(x => x.Value.isWarning).ToDictionary(x => x.Key, x => x.Value))
-                            {
-                                worksheet.Cells[count, index + 2].Value = e.Value.Name;
-                                worksheet.Cells[string.Format("X{0}", count)].Value = e.Value.Data;
-                                count++;
-                            }
-                        }
-                        else
-                        {
-                            using (ExcelRange rng = worksheet.Cells[string.Format("C{0}:C{1}", indexData, indexTo)])
+                            using (ExcelRange rng = worksheet.Cells[string.Format("A{0}:A{1}", indexData, indexTo)])
                             {
                                 rng.Merge = true;
-                                rng.Value = requestLast.Status;
+                                rng.Value = bills != null ? bills.TranNo : (billCheckPin != null ? billCheckPin.TranNo : "-");
+                                tranNoTemp = bills != null ? bills.TranNo : (billCheckPin != null ? billCheckPin.TranNo : "-");
+
                             }
-                        }
-
-
-                        using (ExcelRange rng = worksheet.Cells[string.Format("D{0}:D{1}", indexData, indexTo)])
-                        {
-                            rng.Merge = true;
-                            rng.Value = itemTrans.Terminal;
-                        }
-                        using (ExcelRange rng = worksheet.Cells[string.Format("E{0}:E{1}", indexData, indexTo)])
-                        {
-                            rng.Merge = true;
-                            rng.Value = cycleOfTransction != null ? cycleOfTransction.SettlementPeriodDateBegin.ToString() : "";
-                        }
-                        using (ExcelRange rng = worksheet.Cells[string.Format("F{0}:F{1}", indexData, indexTo)])
-                        {
-                            rng.Merge = true;
-                            rng.Value = cycleOfTransction != null ? cycleOfTransction.SettlementPeriodDateEnd.ToString() : "";
-                        }
-                        using (ExcelRange rng = worksheet.Cells[string.Format("G{0}:G{1}", indexData, indexTo)])
-                        {
-                            rng.Merge = true;
-                            rng.Value = itemTrans.CardType == Transaction.CardTypes.CardLess ? "CardLess" : itemTrans.CardNumber;
-                        }
-                        using (ExcelRange rng = worksheet.Cells[string.Format("H{0}:H{1}", indexData, indexTo)])
-                        {
-                            rng.Merge = true;
-                            rng.Value = itemTrans.DataInput;
-                        }
-                        using (ExcelRange rng = worksheet.Cells[string.Format("I{0}:I{1}", indexData, indexTo)])
-                        {
-                            rng.Merge = true;
-                            rng.Value = itemTrans.DateBegin;
-                            rng.Style.Numberformat.Format = "MM-dd-yyyy HH:mm:ss";
-                        }
-                        using (ExcelRange rng = worksheet.Cells[string.Format("J{0}:J{1}", indexData, indexTo)])
-                        {
-                            rng.Merge = true;
-                            if (requestLast.Status == Status.Types.UnSucceeded)
+                            using (ExcelRange rng = worksheet.Cells[string.Format("B{0}:B{1}", indexData, indexTo)])
                             {
-                                rng.Value = Math.Abs(evtCounter.Sum(x => x.Value.AmountCounter));
+                                rng.Merge = true;
+                                rng.Value = string.IsNullOrEmpty(requestLast.Request) ? "N/A" : requestLast.Request;
+                            }
+
+
+                            if (countEvts > 0 && evts.Values.Where(x => x.isWarning).Count() > 0)
+                            {
+                                int count = indexData;
+                                foreach (var e in evts.Where(x => x.Value.isWarning).ToDictionary(x => x.Key, x => x.Value))
+                                {
+                                    worksheet.Cells[count, index + 2].Value = !string.IsNullOrEmpty(e.Value.Name) ? e.Value.Name : string.Empty;
+                                    worksheet.Cells[string.Format("X{0}", count)].Value = !string.IsNullOrEmpty(e.Value.Data) ? e.Value.Data : string.Empty;
+                                    count++;
+                                }
                             }
                             else
                             {
-                                rng.Value = Math.Abs(evtCounter.Sum(x => x.Value.AmountCounter));
+                                using (ExcelRange rng = worksheet.Cells[string.Format("C{0}:C{1}", indexData, indexTo)])
+                                {
+                                    rng.Merge = true;
+                                    rng.Value = !string.IsNullOrEmpty(requestLast.Status.ToString()) ? requestLast.Status.ToString() : string.Empty;
+                                }
                             }
-                            rng.Style.Numberformat.Format = "###,###,##0.0";
 
-                        }
 
-                        if (itemTrans.ListEvent.Values.Where(e => e.isWarning).Count() > 0)
-                        {
-                            using (ExcelRange rng = worksheet.Cells[string.Format("A{0}:Z{1}", indexData, indexTo)])
-                            {
-                                rng.Style.Fill.PatternType = OfficeOpenXml.Style.ExcelFillStyle.Solid;
-                                rng.Style.Fill.BackgroundColor.SetColor(Lightskyblue);
-                            }
-                        }
-                        using (ExcelRange rng = worksheet.Cells[string.Format("K{0}:K{1}", indexData, indexTo)])
-                        {
-                            rng.Merge = true;
-                            rng.Value = Math.Abs(evtCounter.Sum(x => x.Value.Value_500K));
-                        }
-                        using (ExcelRange rng = worksheet.Cells[string.Format("L{0}:L{1}", indexData, indexTo)])
-                        {
-                            rng.Merge = true;
-                            rng.Value = Math.Abs(evtCounter.Sum(x => x.Value.Value_500K_Retracted));
-                        }
-
-                        using (ExcelRange rng = worksheet.Cells[string.Format("M{0}:M{1}", indexData, indexTo)])
-                        {
-                            rng.Merge = true;
-                            rng.Value = Math.Abs(evtCounter.Sum(x => x.Value.Value_200K));
-                        }
-                        using (ExcelRange rng = worksheet.Cells[string.Format("N{0}:N{1}", indexData, indexTo)])
-                        {
-                            rng.Merge = true;
-                            rng.Value = Math.Abs(evtCounter.Sum(x => x.Value.Value_200K_Retracted));
-                        }
-
-                        using (ExcelRange rng = worksheet.Cells[string.Format("O{0}:O{1}", indexData, indexTo)])
-                        {
-                            rng.Merge = true;
-                            rng.Value = Math.Abs(evtCounter.Sum(x => x.Value.Value_100K));
-                        }
-                        using (ExcelRange rng = worksheet.Cells[string.Format("P{0}:P{1}", indexData, indexTo)])
-                        {
-                            rng.Merge = true;
-                            rng.Value = Math.Abs(evtCounter.Sum(x => x.Value.Value_100K_Retracted));
-                        }
-
-                        using (ExcelRange rng = worksheet.Cells[string.Format("Q{0}:Q{1}", indexData, indexTo)])
-                        {
-                            rng.Merge = true;
-                            rng.Value = Math.Abs(evtCounter.Sum(x => x.Value.Value_50K));
-                        }
-                        using (ExcelRange rng = worksheet.Cells[string.Format("R{0}:R{1}", indexData, indexTo)])
-                        {
-                            rng.Merge = true;
-                            rng.Value = Math.Abs(evtCounter.Sum(x => x.Value.Value_50K_Retracted));
-                        }
-
-                        using (ExcelRange rng = worksheet.Cells[string.Format("S{0}:S{1}", indexData, indexTo)])
-                        {
-                            rng.Merge = true;
-                            rng.Value = Math.Abs(evtCounter.Sum(x => x.Value.Value_20K));
-                        }
-                        using (ExcelRange rng = worksheet.Cells[string.Format("T{0}:T{1}", indexData, indexTo)])
-                        {
-                            rng.Merge = true;
-                            rng.Value = Math.Abs(evtCounter.Sum(x => x.Value.Value_20K_Retracted));
-                        }
-
-                        using (ExcelRange rng = worksheet.Cells[string.Format("U{0}:U{1}", indexData, indexTo)])
-                        {
-                            rng.Merge = true;
-                            rng.Value = Math.Abs(evtCounter.Sum(x => x.Value.Value_10K));
-                        }
-                        using (ExcelRange rng = worksheet.Cells[string.Format("V{0}:V{1}", indexData, indexTo)])
-                        {
-                            rng.Merge = true;
-                            rng.Value = Math.Abs(evtCounter.Sum(x => x.Value.Value_10K_Retracted));
-                        }
-                        using (ExcelRange rng = worksheet.Cells[string.Format("W{0}:W{1}", indexData, indexTo)])
-                        {
-                            rng.Merge = true;
-                            rng.Value = Math.Abs(evtCounter.Sum(x => x.Value.Unknow));
-                        }
-                        using (ExcelRange rng = worksheet.Cells[string.Format("Y{0}:Y{1}", indexData, indexTo)])
-                        {
-                            rng.Merge = true;
-                            rng.Value = string.Join("=>", itemTrans.ListEvent.Values);
-                            rng.Style.HorizontalAlignment = ExcelHorizontalAlignment.Left;
-                        }
-                        if (requestLast.Status == Status.Types.UnSucceeded)
-                        {
-                            using (ExcelRange rng = worksheet.Cells[string.Format("Z{0}:Z{1}", indexData, indexTo)])
+                            using (ExcelRange rng = worksheet.Cells[string.Format("D{0}:D{1}", indexData, indexTo)])
                             {
                                 rng.Merge = true;
-                                rng.Value = itemTrans.TraceJournalFull;
+                                rng.Value = !string.IsNullOrEmpty(itemTrans.Terminal) ? itemTrans.Terminal : string.Empty;
                             }
+                            using (ExcelRange rng = worksheet.Cells[string.Format("E{0}:E{1}", indexData, indexTo)])
+                            {
+                                rng.Merge = true;
+                                rng.Value = cycleOfTransction != null ? cycleOfTransction.SettlementPeriodDateBegin.ToString() : "";
+                            }
+                            using (ExcelRange rng = worksheet.Cells[string.Format("F{0}:F{1}", indexData, indexTo)])
+                            {
+                                rng.Merge = true;
+                                rng.Value = cycleOfTransction != null ? cycleOfTransction.SettlementPeriodDateEnd.ToString() : "";
+                            }
+                            using (ExcelRange rng = worksheet.Cells[string.Format("G{0}:G{1}", indexData, indexTo)])
+                            {
+                                rng.Merge = true;
+                                rng.Value = itemTrans.CardType == Transaction.CardTypes.CardLess ? "CardLess" : itemTrans.CardNumber;
+                            }
+                            using (ExcelRange rng = worksheet.Cells[string.Format("H{0}:H{1}", indexData, indexTo)])
+                            {
+                                rng.Merge = true;
+                                rng.Value = itemTrans.DataInput.Count > 0 ? string.Join(Environment.NewLine, itemTrans.DataInput) : string.Empty;
+                            }
+                            using (ExcelRange rng = worksheet.Cells[string.Format("I{0}:I{1}", indexData, indexTo)])
+                            {
+                                rng.Merge = true;
+                                rng.Value = itemTrans.DateBegin;
+                                rng.Style.Numberformat.Format = "MM-dd-yyyy HH:mm:ss";
+                            }
+                            using (ExcelRange rng = worksheet.Cells[string.Format("J{0}:J{1}", indexData, indexTo)])
+                            {
+                                rng.Merge = true;
+                                if (requestLast.Status == Status.Types.UnSucceeded)
+                                {
+                                    rng.Value = Math.Abs(evtCounter.Sum(x => x.Value.AmountCounterRetracted));
+                                }
+                                else
+                                {
+                                    rng.Value = Math.Abs(evtCounter.Sum(x => x.Value.AmountCounter));
+                                }
+                                rng.Style.Numberformat.Format = "###,###,##0.0";
+
+                            }
+
+                            if (itemTrans.ListEvent.Values.Where(e => e.isWarning).Count() > 0)
+                            {
+                                using (ExcelRange rng = worksheet.Cells[string.Format("A{0}:Z{1}", indexData, indexTo)])
+                                {
+                                    rng.Style.Fill.PatternType = OfficeOpenXml.Style.ExcelFillStyle.Solid;
+                                    rng.Style.Fill.BackgroundColor.SetColor(Lightskyblue);
+                                }
+                            }
+                            using (ExcelRange rng = worksheet.Cells[string.Format("K{0}:K{1}", indexData, indexTo)])
+                            {
+                                rng.Merge = true;
+                                rng.Value = Math.Abs(evtCounter.Sum(x => x.Value.Value_500K));
+                            }
+                            using (ExcelRange rng = worksheet.Cells[string.Format("L{0}:L{1}", indexData, indexTo)])
+                            {
+                                rng.Merge = true;
+                                rng.Value = Math.Abs(evtCounter.Sum(x => x.Value.Value_500K_Retracted));
+                            }
+
+                            using (ExcelRange rng = worksheet.Cells[string.Format("M{0}:M{1}", indexData, indexTo)])
+                            {
+                                rng.Merge = true;
+                                rng.Value = Math.Abs(evtCounter.Sum(x => x.Value.Value_200K));
+                            }
+                            using (ExcelRange rng = worksheet.Cells[string.Format("N{0}:N{1}", indexData, indexTo)])
+                            {
+                                rng.Merge = true;
+                                rng.Value = Math.Abs(evtCounter.Sum(x => x.Value.Value_200K_Retracted));
+                            }
+
+                            using (ExcelRange rng = worksheet.Cells[string.Format("O{0}:O{1}", indexData, indexTo)])
+                            {
+                                rng.Merge = true;
+                                rng.Value = Math.Abs(evtCounter.Sum(x => x.Value.Value_100K));
+                            }
+                            using (ExcelRange rng = worksheet.Cells[string.Format("P{0}:P{1}", indexData, indexTo)])
+                            {
+                                rng.Merge = true;
+                                rng.Value = Math.Abs(evtCounter.Sum(x => x.Value.Value_100K_Retracted));
+                            }
+
+                            using (ExcelRange rng = worksheet.Cells[string.Format("Q{0}:Q{1}", indexData, indexTo)])
+                            {
+                                rng.Merge = true;
+                                rng.Value = Math.Abs(evtCounter.Sum(x => x.Value.Value_50K));
+                            }
+                            using (ExcelRange rng = worksheet.Cells[string.Format("R{0}:R{1}", indexData, indexTo)])
+                            {
+                                rng.Merge = true;
+                                rng.Value = Math.Abs(evtCounter.Sum(x => x.Value.Value_50K_Retracted));
+                            }
+
+                            using (ExcelRange rng = worksheet.Cells[string.Format("S{0}:S{1}", indexData, indexTo)])
+                            {
+                                rng.Merge = true;
+                                rng.Value = Math.Abs(evtCounter.Sum(x => x.Value.Value_20K));
+                            }
+                            using (ExcelRange rng = worksheet.Cells[string.Format("T{0}:T{1}", indexData, indexTo)])
+                            {
+                                rng.Merge = true;
+                                rng.Value = Math.Abs(evtCounter.Sum(x => x.Value.Value_20K_Retracted));
+                            }
+
+                            using (ExcelRange rng = worksheet.Cells[string.Format("U{0}:U{1}", indexData, indexTo)])
+                            {
+                                rng.Merge = true;
+                                rng.Value = Math.Abs(evtCounter.Sum(x => x.Value.Value_10K));
+                            }
+                            using (ExcelRange rng = worksheet.Cells[string.Format("V{0}:V{1}", indexData, indexTo)])
+                            {
+                                rng.Merge = true;
+                                rng.Value = Math.Abs(evtCounter.Sum(x => x.Value.Value_10K_Retracted));
+                            }
+                            using (ExcelRange rng = worksheet.Cells[string.Format("W{0}:W{1}", indexData, indexTo)])
+                            {
+                                rng.Merge = true;
+                                rng.Value = Math.Abs(evtCounter.Sum(x => x.Value.Unknow));
+                            }
+                            using (ExcelRange rng = worksheet.Cells[string.Format("Y{0}:Y{1}", indexData, indexTo)])
+                            {
+                                rng.Merge = true;
+                                rng.Value = itemTrans.ListEvent.Values.Count > 0 ? string.Join("=>", itemTrans.ListEvent.Values) : string.Empty;
+                                rng.Style.HorizontalAlignment = ExcelHorizontalAlignment.Left;
+                            }
+                            if (requestLast.Status == Status.Types.UnSucceeded)
+                            {
+                                using (ExcelRange rng = worksheet.Cells[string.Format("Z{0}:Z{1}", indexData, indexTo)])
+                                {
+                                    rng.Merge = true;
+                                    rng.Value = !string.IsNullOrEmpty(itemTrans.TraceJournalFull) ? itemTrans.TraceJournalFull : string.Empty;
+                                }
+                            }
+                            indexData = indexTo + 1;
                         }
-                        indexData = indexTo + 1;
+
                     }
                 }
 

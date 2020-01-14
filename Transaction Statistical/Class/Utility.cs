@@ -471,11 +471,11 @@ namespace Transaction_Statistical
             try
             {
                 int n = 0;
-                if (info.Contains(GetComputerSid())) n++; 
-                else return false;              
-                if (info.Contains(GetHDDSerialNo())) n++; 
+                if (info.Contains(GetComputerSid())) n++;
+                else return false;
+                if (info.Contains(GetHDDSerialNo())) n++;
                 if (info.Contains(GetMACAddress())) n++;
-                if (info.Contains(GetBoardProductId())) n++;          
+                if (info.Contains(GetBoardProductId())) n++;
                 if (n >= 3) return true;
             }
             catch
@@ -489,7 +489,7 @@ namespace Transaction_Statistical
             {
                 inf += GetComputerSid();
                 inf += GetHDDSerialNo();
-                inf += GetMACAddress();              
+                inf += GetMACAddress();
                 inf += GetBoardProductId();
             }
             catch
@@ -505,7 +505,7 @@ namespace Transaction_Statistical
         {
             return (new SecurityIdentifier((byte[])new DirectoryEntry(string.Format("WinNT://{0},Computer", Environment.MachineName)).Children.Cast<DirectoryEntry>().First().InvokeGet("objectSID"), 0).AccountDomainSid).ToString();
         }
-     
+
         /// <summary>
         /// Retrieving HDD Serial No.
         /// </summary>
@@ -523,8 +523,8 @@ namespace Transaction_Statistical
                     result += Convert.ToString(strt["VolumeSerialNumber"]);
                 }
             }
-            catch 
-            {               
+            catch
+            {
             }
             return result;
         }
@@ -533,12 +533,12 @@ namespace Transaction_Statistical
         /// </summary>
         /// <returns></returns>
         private static string GetMACAddress()
-        { 
+        {
             String sMacAddress = string.Empty;
-            try     
+            try
             {
                 NetworkInterface[] nics = NetworkInterface.GetAllNetworkInterfaces();
-          
+
                 foreach (NetworkInterface adapter in nics)
                 {
                     if (sMacAddress == String.Empty)// only return MAC Address from first card  
@@ -551,7 +551,7 @@ namespace Transaction_Statistical
             catch
             { }
             return sMacAddress;
-        }      
+        }
         /// <summary>
         /// Retrieving Motherboard Product Id.
         /// </summary>
@@ -574,7 +574,7 @@ namespace Transaction_Statistical
                 }
             }
             catch (Exception ex)
-            {              
+            {
             }
             return "Unknown";
         }
@@ -583,7 +583,7 @@ namespace Transaction_Statistical
         /// Retrieving BIOS Maker.
         /// </summary>
         /// <returns></returns>
-      
+
         /// <summary>
         /// Retrieving BIOS Serial No.
         /// </summary>
@@ -607,7 +607,7 @@ namespace Transaction_Statistical
             }
             catch
             {
-              
+
             }
             return "Unknown";
         }
@@ -633,9 +633,27 @@ namespace Transaction_Statistical
             }
             catch (Exception ex)
             {
-              
+
             }
             return "Unknown";
-        }      
+        }
+    }
+
+    public class FunctionGenaral<T>
+    {
+        public static void Parse(ref Dictionary<DateTime, T> ls, DateTime Date, T b)
+        {
+            if (ls.ContainsKey(Date))
+            {
+                int milis = 0;
+                while (ls.ContainsKey(Date.AddMilliseconds(milis)))
+                {
+                    milis++;
+                }
+                ls[Date.AddMilliseconds(milis)] = b;
+
+            }
+            else ls[Date] = b;
+        }
     }
 }

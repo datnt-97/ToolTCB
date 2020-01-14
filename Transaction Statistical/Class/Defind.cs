@@ -735,7 +735,6 @@ namespace Transaction_Statistical
                                 }
                                 else
                                 {
-                                    evt.DateBegin = DateCurrent.AddTicks(1);
                                     evt.DateBegin = DateCurrent.AddYears(88);
                                     evt.hasTime = false;
                                 }
@@ -743,7 +742,8 @@ namespace Transaction_Statistical
                                 if (regx.value.ContainsKey("Bill") && !string.IsNullOrEmpty(regx.value["Bill"]))
                                 {
                                     Bills bills = new Bills();
-                                    bills.index = regx.index;
+                                    bills.Name = tmp.Key;
+                                    bills.index = evt.IndexContent;
                                     //DateTime dateBill = new DateTime();
                                     //DateTime.TryParseExact(String.Format("{0:yyyyMMdd}", DateCurrent) + regx.value["Time"], "yyyyMMdd" + FormatTime, CultureInfo.InvariantCulture, DateTimeStyles.None, out dateBill);
                                     bills.Date = evt.DateBegin;
@@ -767,30 +767,34 @@ namespace Transaction_Statistical
                                     long tmps = 0;
                                     if (long.TryParse(bills.TranNo, out tmps))
                                     {
-                                        if (transaction.ListBills.ContainsKey(bills.Date))
-                                        {
-                                            int milis = 0;
-                                            while (transaction.ListBills.ContainsKey(bills.Date.AddMilliseconds(milis)))
-                                            {
-                                                milis++;
-                                            }
-                                            transaction.ListBills[bills.Date.AddMilliseconds(milis)] = bills;
+                                        //if (transaction.ListBills.ContainsKey(bills.Date))
+                                        //{
+                                        //    int milis = 0;
+                                        //    while (transaction.ListBills.ContainsKey(bills.Date.AddMilliseconds(milis)))
+                                        //    {
+                                        //        milis++;
+                                        //    }
+                                        //    transaction.ListBills[bills.Date.AddMilliseconds(milis)] = bills;
 
-                                        }
-                                        else transaction.ListBills[bills.Date] = bills;
+                                        //}
+                                        //else transaction.ListBills[bills.Date] = bills;
+                                        FunctionGenaral<Bills>.Parse(ref transaction.ListBills, bills.Date, bills);
+
                                     }
                                 }
-                                if (transaction.ListEvent.ContainsKey(evt.DateBegin))
-                                {
-                                    int milis = 0;
-                                    while (transaction.ListEvent.ContainsKey(evt.DateBegin.AddMilliseconds(milis)))
-                                    {
-                                        milis++;
-                                    }
-                                    transaction.ListEvent[evt.DateBegin.AddMilliseconds(milis)] = evt;
+                                //if (transaction.ListEvent.ContainsKey(evt.DateBegin))
+                                //{
+                                //    int milis = 0;
+                                //    while (transaction.ListEvent.ContainsKey(evt.DateBegin.AddMilliseconds(milis)))
+                                //    {
+                                //        milis++;
+                                //    }
+                                //    transaction.ListEvent[evt.DateBegin.AddMilliseconds(milis)] = evt;
 
-                                }
-                                else transaction.ListEvent[evt.DateBegin] = evt;
+                                //}
+                                //else transaction.ListEvent[evt.DateBegin] = evt;
+                                FunctionGenaral<TransactionEvent>.Parse(ref transaction.ListEvent, evt.DateBegin, evt);
+
                                 transaction.TraceJournal_Remaining = transaction.TraceJournal_Remaining.Replace(regx.stringfind, string.Empty);
                             });
                         }
@@ -897,17 +901,19 @@ namespace Transaction_Statistical
                                 }
 
 
-                                if (transaction.ListEvent.ContainsKey(evt.DateBegin))
-                                {
-                                    int milis = 0;
-                                    while (transaction.ListEvent.ContainsKey(evt.DateBegin.AddMilliseconds(milis)))
-                                    {
-                                        milis++;
-                                    }
-                                    transaction.ListEvent[evt.DateBegin.AddMilliseconds(milis)] = evt;
+                                //if (transaction.ListEvent.ContainsKey(evt.DateBegin))
+                                //{
+                                //    int milis = 0;
+                                //    while (transaction.ListEvent.ContainsKey(evt.DateBegin.AddMilliseconds(milis)))
+                                //    {
+                                //        milis++;
+                                //    }
+                                //    transaction.ListEvent[evt.DateBegin.AddMilliseconds(milis)] = evt;
 
-                                }
-                                else transaction.ListEvent[evt.DateBegin] = evt;
+                                //}
+                                //else transaction.ListEvent[evt.DateBegin] = evt;
+                                FunctionGenaral<TransactionEvent>.Parse(ref transaction.ListEvent, evt.DateBegin, evt);
+
 
                                 transaction.TraceJournal_Remaining = transaction.TraceJournal_Remaining.Replace(regx.stringfind, string.Empty);
                             });
@@ -960,8 +966,9 @@ namespace Transaction_Statistical
                                     transaction.CardType = Transaction.CardTypes.CardNumber;
                                     transaction.CardNumber = regx.value["Data"];
                                 }
-                                if (transaction.ListEvent.ContainsKey(evt.DateBegin)) transaction.ListEvent[evt.DateBegin.AddMilliseconds(1)] = evt;
-                                else transaction.ListEvent[evt.DateBegin] = evt;
+                                //if (transaction.ListEvent.ContainsKey(evt.DateBegin)) transaction.ListEvent[evt.DateBegin.AddMilliseconds(1)] = evt;
+                                //else transaction.ListEvent[evt.DateBegin] = evt;
+                                FunctionGenaral<TransactionEvent>.Parse(ref transaction.ListEvent, evt.DateBegin, evt);
                                 transaction.TraceJournal_Remaining = transaction.TraceJournal_Remaining.Replace(regx.stringfind, string.Empty);
                             });
                         }
@@ -1049,6 +1056,10 @@ namespace Transaction_Statistical
                                 {
                                     evt.isWarning = true;
                                 }
+                                //if (regx.value.ContainsKey("Total"))
+                                //{
+                                //    //tran.am
+                                //}
                                 if (regx.value.ContainsKey("TimeSeparation"))
                                 {
 
@@ -1128,8 +1139,10 @@ namespace Transaction_Statistical
                                     }
                                     //if (int.TryParse(regx.value["StoReject"], out node)) tran.Node_Rejects += node;
                                 }
-                                if (tran.ListEvent.ContainsKey(evt.DateBegin)) tran.ListEvent[evt.DateBegin.AddMilliseconds(1)] = evt;
-                                else tran.ListEvent[evt.DateBegin] = evt;
+                                //if (tran.ListEvent.ContainsKey(evt.DateBegin)) tran.ListEvent[evt.DateBegin.AddMilliseconds(1)] = evt;
+                                //else tran.ListEvent[evt.DateBegin] = evt;
+                                FunctionGenaral<TransactionEvent>.Parse(ref tran.ListEvent, evt.DateBegin, evt);
+
                                 tran.TraceJournal_Remaining = tran.TraceJournal_Remaining.Replace(regx.stringfind, string.Empty);
                             });
 
@@ -1151,39 +1164,42 @@ namespace Transaction_Statistical
                 Dictionary<DateTime, TransactionEvent> lsNew = new Dictionary<DateTime, TransactionEvent>();
                 Dictionary<DateTime, Bills> lsBillNew = new Dictionary<DateTime, Bills>();
 
-                foreach (var evt in tran.ListEvent)
+                foreach (var evt in tran.ListEvent.OrderBy(x => x.Value.IndexContent).ToDictionary(x => x.Key, x => x.Value))
                 {
                     var evtNew = evt;
                     if (!evtNew.Value.hasTime || (evtNew.Value.DateBegin.Year > DateTime.Now.Year))
                     {
-
-                        var newTime = tran.ListEvent.Where(x => x.Value.IndexContent < evtNew.Value.IndexContent).OrderBy(x => x.Value.IndexContent).ToList();
+                        var newTime = lsNew.Where(x => x.Value.IndexContent < evtNew.Value.IndexContent).OrderBy(x => x.Value.IndexContent).ToList();
                         if (newTime.Count() > 0)
                         {
                             evtNew.Value.DateBegin = newTime.LastOrDefault().Value.DateBegin.AddMilliseconds(1);
-                            var bill = tran.ListBills.OrderBy(x => x.Value.index).Where(x => x.Key == evt.Key).LastOrDefault();
+                            var bill = tran.ListBills.OrderBy(x => x.Value.index).Where(x => x.Value.index == evt.Value.IndexContent &&
+                            x.Value.Name == evt.Value.Name).LastOrDefault();
                             if (bill.Value != null)
                             {
                                 Bills b = bill.Value;
                                 b.Date = evtNew.Value.DateBegin;
-                                if (lsBillNew.ContainsKey(b.Date))
-                                {
-                                    lsBillNew[b.Date.AddMilliseconds(1)] = b;
-                                }
-                                else
-                                    lsBillNew[b.Date] = b;
+                                FunctionGenaral<Bills>.Parse(ref lsBillNew, b.Date, b);
+
+                                //if (lsBillNew.ContainsKey(b.Date))
+                                //{
+                                //    lsBillNew[b.Date.AddMilliseconds(1)] = b;
+                                //}
+                                //else
+                                //    lsBillNew[b.Date] = b;
                                 //tran.ListBills.Where(x => x.Value.index == evt.Value.IndexContent).LastOrDefault().Value.Date = evtNew.Value.DateBegin;
                             }
                         }
 
                     }
 
-                    if (lsNew.ContainsKey(evt.Value.DateBegin))
-                    {
-                        lsNew[evt.Value.DateBegin.AddMilliseconds(1)] = evtNew.Value;
-                    }
-                    else
-                        lsNew[evt.Value.DateBegin] = evtNew.Value;
+                    FunctionGenaral<TransactionEvent>.Parse(ref lsNew, evt.Value.DateBegin, evtNew.Value);
+                    //if (lsNew.ContainsKey(evt.Value.DateBegin))
+                    //{
+                    //    lsNew[evt.Value.DateBegin.AddMilliseconds(1)] = evtNew.Value;
+                    //}
+                    //else
+                    //    lsNew[evt.Value.DateBegin] = evtNew.Value;
 
 
                 }
@@ -1233,8 +1249,10 @@ namespace Transaction_Statistical
                                 }
                                 else
                                     evt.DateBegin = DateCurrent.AddYears(88);
-                                if (tran.ListEvent.ContainsKey(evt.DateBegin)) tran.ListEvent[evt.DateBegin.AddMilliseconds(1)] = evt;
-                                else tran.ListEvent[evt.DateBegin] = evt;
+                                //if (tran.ListEvent.ContainsKey(evt.DateBegin)) tran.ListEvent[evt.DateBegin.AddMilliseconds(1)] = evt;
+                                //else tran.ListEvent[evt.DateBegin] = evt;
+                                FunctionGenaral<TransactionEvent>.Parse(ref tran.ListEvent, evt.DateBegin, evt);
+
                                 tran.TraceJournal_Remaining = tran.TraceJournal_Remaining.Replace(regx.stringfind, string.Empty);
                             });
 
@@ -2230,6 +2248,8 @@ namespace Transaction_Statistical
             Bill_CheckPin
 
         }
+        public string Name { get; set; }
+
         public string TranNo { get; set; }
         public string CardNo { get; set; }
         public string Terminal { get; set; }
