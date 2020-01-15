@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -53,9 +54,9 @@ namespace Transaction_Statistical.Class
                 this.excelPackage.Save();
 
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
-                throw e;
+                InitParametar.Send_Error(ex.ToString(), MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name);
             }
         }
         public void BaoCaoHoatDongBatThuong(string WorksheetsName, TableStyles tableStyles, Dictionary<string, Dictionary<DateTime, object>> ListTransaction, Dictionary<string, string> Template_EventDevice, bool isCycle)
@@ -140,7 +141,7 @@ namespace Transaction_Statistical.Class
             }
             catch (Exception ex)
             {
-                throw ex;
+                InitParametar.Send_Error(ex.ToString(), MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name);
             }
 
         }
@@ -156,9 +157,9 @@ namespace Transaction_Statistical.Class
                 lastWS = DrawGDTC(lastWS, ListTransaction.OrderBy(x => x.Key).ToDictionary(d => d.Key, d => d.Value), cycles, Template_EventDevice, tEMPLATE);
                 this.excelPackage.Save();
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
-                throw e;
+                InitParametar.Send_Error(ex.ToString(), MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name);
             }
 
         }
@@ -337,9 +338,9 @@ namespace Transaction_Statistical.Class
                 worksheet.Cells[worksheet.Dimension.Address].AutoFitColumns();
 
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
-                throw e;
+                InitParametar.Send_Error(ex.ToString(), MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name);
             }
             return worksheet;
         }
@@ -432,9 +433,9 @@ namespace Transaction_Statistical.Class
                 allCells.Style.VerticalAlignment = ExcelVerticalAlignment.Center;
                 allCells.Style.WrapText = true;
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
-                throw e;
+                InitParametar.Send_Error(ex.ToString(), MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name);
             }
             return worksheet;
         }
@@ -502,7 +503,7 @@ namespace Transaction_Statistical.Class
             }
             catch (Exception ex)
             {
-                throw ex;
+                InitParametar.Send_Error(ex.ToString(), MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name);
             }
 
             return worksheet;
@@ -650,19 +651,20 @@ namespace Transaction_Statistical.Class
                     {
                         foreach (var requestLast in TransactionRequest.Values)
                         {
-                            var evts = itemTrans.ListEvent.Where(x => x.Value.DateBegin >= requestLast.DateBegin
-                                && x.Value.DateBegin <= requestLast.DateEnd).ToDictionary(x => x.Key, x => x.Value);
+                            var evts = itemTrans.ListEvent.Where(x => (requestLast.DateBegin != null && requestLast.DateEnd != null) && (x.Value.DateBegin >= requestLast.DateBegin
+                                && x.Value.DateBegin <= requestLast.DateEnd)).ToDictionary(x => x.Key, x => x.Value);
                             int countEvts = evts.Values.Where(x => x.isWarning).Count();
                             int indexTo = countEvts > 1 ? indexData + countEvts - 1 : indexData;
-                            var cycleOfTransction = cycles.Where(x => x.Value.SettlementPeriodDateBegin <= itemTrans.DateBegin
+                            var cycleOfTransction = cycles.Where(x => (!string.IsNullOrEmpty(itemTrans.Terminal) && itemTrans.DateBegin != null) && (x.Value.SettlementPeriodDateBegin <= itemTrans.DateBegin
                             && x.Value.SettlementPeriodDateEnd >= itemTrans.DateBegin
-                            && itemTrans.Terminal.Contains(x.Value.TerminalID)).OrderBy(x => x.Value.SettlementPeriodDateBegin).LastOrDefault().Value;
+                            && itemTrans.Terminal.Contains(x.Value.TerminalID))).OrderBy(x => x.Value.SettlementPeriodDateBegin).LastOrDefault().Value;
                             var evtCounter = evts.OrderBy(x => x.Key).Where(x => x.Value.hasCouter).ToList();
 
                             // var lastBill = itemTrans.ListBills.OrderBy(x => x.Key).LastOrDefault();
                             var billCheckPin = itemTrans.ListBills.Where(x => x.Value.Type == Bills.Types.Bill_CheckPin).LastOrDefault().Value;
-                            var bills = itemTrans.ListBills.OrderBy(x => x.Value.Date).Where(x => x.Value.Type != Bills.Types.Bill_CheckPin
-                            && x.Value.TranNo != tranNoTemp && x.Value.Date >= requestLast.DateBegin && x.Value.Date <= requestLast.DateEnd).LastOrDefault().Value;
+                            var bills = itemTrans.ListBills.OrderBy(x => x.Value.Date).Where(x => (requestLast.DateBegin != null && requestLast.DateEnd != null)
+                            && (x.Value.Type != Bills.Types.Bill_CheckPin
+                            && x.Value.TranNo != tranNoTemp && x.Value.Date >= requestLast.DateBegin && x.Value.Date <= requestLast.DateEnd)).LastOrDefault().Value;
 
                             using (ExcelRange rng = worksheet.Cells[string.Format("A{0}:A{1}", indexData, indexTo)])
                             {
@@ -726,7 +728,7 @@ namespace Transaction_Statistical.Class
                             using (ExcelRange rng = worksheet.Cells[string.Format("I{0}:I{1}", indexData, indexTo)])
                             {
                                 rng.Merge = true;
-                                rng.Value = itemTrans.DateBegin;
+                                rng.Value = itemTrans.DateBegin != null ? itemTrans.DateBegin.ToString() : string.Empty;
                                 rng.Style.Numberformat.Format = "MM-dd-yyyy HH:mm:ss";
                             }
                             using (ExcelRange rng = worksheet.Cells[string.Format("J{0}:J{1}", indexData, indexTo)])
@@ -744,7 +746,7 @@ namespace Transaction_Statistical.Class
 
                             }
 
-                            if (itemTrans.ListEvent.Values.Where(e => e.isWarning).Count() > 0)
+                            if (evts.Values.Where(e => e.isWarning).Count() > 0)
                             {
                                 using (ExcelRange rng = worksheet.Cells[string.Format("A{0}:Z{1}", indexData, indexTo)])
                                 {
@@ -871,9 +873,9 @@ namespace Transaction_Statistical.Class
 
                 //allCells.Style.WrapText = true;
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
-                throw e;
+                InitParametar.Send_Error(ex.ToString(), MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name);
             }
             return worksheet;
         }

@@ -305,6 +305,8 @@ namespace Transaction_Statistical
                                             StatusLicense = License.StatusS.Activated;
                                         else StatusLicense = License.StatusS.Invalid;
                                     }
+                                    else
+                                        StatusLicense = License.StatusS.Activated;
                                     foreach (string s in items[2].Split(''))
                                     {
                                         License lic = new License();
@@ -607,7 +609,7 @@ namespace Transaction_Statistical
             }
             catch (Exception ex)
             {
-                throw ex;
+                InitParametar.Send_Error(ex.ToString(), MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name);
             }
             return false;
         }
@@ -686,7 +688,7 @@ namespace Transaction_Statistical
                 {
                     if (Regexs.RunPatternRegular(sString, reg, out lst))
                     {
-                        // Transaction trans;
+                        //// Transaction trans;
                         List<Task> tasks = new List<Task>();
                         foreach (KeyValuePair<int, RegesValue> key in lst)
                         {
@@ -695,6 +697,7 @@ namespace Transaction_Statistical
                         }
                         await Task.WhenAll(tasks);
                     }
+                    //sString = sString.Replace(reg, string.Empty);
                     sString = Regex.Replace(sString, reg, string.Empty);
                 }
             }
@@ -1285,6 +1288,9 @@ namespace Transaction_Statistical
                     trans.DateBegin = dateFile;
                 if (val.value.ContainsKey("TerminalID"))
                     trans.Terminal = val.value["TerminalID"];
+                else
+                    trans.Terminal = terminalFile;
+
                 if (val.value.ContainsKey("MachineNo"))
                     trans.MachineSequenceNo = val.value["MachineNo"];
                 if (val.value.ContainsKey("SStart"))
@@ -1526,14 +1532,20 @@ namespace Transaction_Statistical
                 req.DateBegin = transaction.DateBegin;
                 req.Status = Status.Types.UnSucceeded;
                 transaction.Status = Status.Types.Warning.ToString();
+             
                 foreach (TransactionEvent evt in transaction.ListEvent.Values)
                 {
                     await Task.Run(() =>
                     {
+                        if(transaction.ListRequest.Count > 0)
+                        {
+                            transaction.ListRequest.LastOrDefault().Value.DateEnd = evt.DateBegin;
+                        }
                         if ((transaction.ListRequest.Count == 0 || transaction.ListRequest.LastOrDefault().Value.EndRequest) && CheckRequestName(evt.Name, ref req.Request))
                         {
                             TransactionRequest req_New = new TransactionRequest();
                             req_New.DateBegin = evt.DateBegin;
+                            req_New.DateEnd = evt.DateBegin;
                             req_New.Status = Status.Types.UnSucceeded;
                             req_New.Request = req.Request;
                             transaction.ListRequest[req_New.DateBegin] = req_New;
@@ -1541,6 +1553,7 @@ namespace Transaction_Statistical
                         if (transaction.ListRequest.Count != 0 && (evt.Type.Equals(TransactionEvent.Events.Transaction) || evt.Type.Equals(TransactionEvent.Events.CashIn) || evt.Type.Equals(TransactionEvent.Events.CashOut)))
                         {
                             string name = transaction.ListRequest.LastOrDefault().Value.Request;
+
                             if (Template_TransType_Select.ContainsKey(name))
                             {
                                 if (Template_TransType_Select[name].Successful.Split(',').Contains(evt.Name))
@@ -1562,37 +1575,6 @@ namespace Transaction_Statistical
 
                 }
 
-
-                if (transaction.ListRequest.Count == 1)
-                {
-                    transaction.ListRequest.LastOrDefault().Value.DateEnd = transaction.ListEvent.Values.LastOrDefault().DateBegin;
-                }
-                else if (transaction.ListRequest.Count > 1)
-                {
-                    int count = 1;
-                    var endDates = transaction.ListRequest.ToArray()[count].Key;
-                    foreach (var request in transaction.ListRequest)
-                    {
-                        var lastEvt = transaction.ListEvent.Values.Where(x => x.DateBegin >= request.Key && x.DateBegin <= endDates)
-                            .OrderBy(x => x.DateBegin).LastOrDefault();
-
-                        if (lastEvt != null)
-                        {
-                            transaction.ListRequest.Where(x => x.Key == request.Key).LastOrDefault().Value.DateEnd = lastEvt.DateBegin;
-                        }
-
-                        count++;
-                        if (transaction.ListRequest.Count <= count)
-                        {
-                            endDates = transaction.ListEvent.Values.OrderBy(x => x.DateBegin).LastOrDefault().DateBegin;
-                        }
-                        else
-                        {
-                            endDates = transaction.ListRequest.ToArray()[count].Key;
-                        }
-                    }
-                }
-
             }
             catch (Exception ex)
             {
@@ -1601,84 +1583,7 @@ namespace Transaction_Statistical
             return transaction;
         }
 
-        private async Task<Transaction> SplitRequest_2(Transaction transaction)
-        {
-            try
-            {
-                TransactionRequest req = new TransactionRequest();
-                req.DateBegin = transaction.DateBegin;
-                req.Status = Status.Types.UnSucceeded;
-                transaction.Status = Status.Types.Warning.ToString();
-                DateTime endDate = new DateTime();
-                if (transaction.ListRequest.Values.FirstOrDefault() != null)
-                {
-                    endDate = transaction.ListRequest.Values.FirstOrDefault().DateBegin;
-                }
-
-                foreach (TransactionEvent evt in transaction.ListEvent.Values)
-                {
-                    endDate = evt.DateBegin;
-                    await Task.Run(() =>
-                    {
-                        if ((transaction.ListRequest.Count == 0 || transaction.ListRequest.LastOrDefault().Value.EndRequest) && CheckRequestName(evt.Name, ref req.Request))
-                        {
-                            TransactionRequest req_New = new TransactionRequest();
-                            req_New.DateBegin = evt.DateBegin;
-                            req_New.DateEnd = endDate;
-                            req_New.Status = Status.Types.UnSucceeded;
-                            req_New.Request = req.Request;
-                            transaction.ListRequest[req_New.DateBegin] = req_New;
-                        }
-                        if (transaction.ListRequest.Count != 0 && (evt.Type.Equals(TransactionEvent.Events.Transaction) || evt.Type.Equals(TransactionEvent.Events.CashIn) || evt.Type.Equals(TransactionEvent.Events.CashOut)))
-                        {
-                            if (transaction.ListRequest.Count == 1)
-                            {
-                                transaction.ListRequest.LastOrDefault().Value.DateEnd = transaction.ListEvent.Values.LastOrDefault().DateBegin;
-                            }
-                            string transNo = string.Empty;
-                            var billCheckPin = transaction.ListBills.Where(x => x.Value.Type == Bills.Types.Bill_CheckPin).FirstOrDefault().Value;
-                            var bills = transaction.ListBills.Where(x => x.Value.Type != Bills.Types.Bill_CheckPin).ToDictionary(x => x.Key, x => x.Value);
-                            if (billCheckPin != null)
-                            {
-                                transaction.ListRequest.LastOrDefault().Value.TranNo = billCheckPin.TranNo;
-                            }
-                            string name = transaction.ListRequest.LastOrDefault().Value.Request;
-                            if (Template_TransType_Select.ContainsKey(name))
-                            {
-                                var billReq = bills.OrderBy(x => x.Key).Where(x => (x.Value.Date >= evt.DateBegin)
-                                    && (x.Value.Type.ToString().ToUpper().Contains(name))).ToDictionary(x => x.Key, x => x.Value).FirstOrDefault().Value;
-                                if (billReq != null)
-                                {
-                                    transaction.ListRequest.LastOrDefault().Value.TranNo = billReq.TranNo;
-                                }
-                                if (Template_TransType_Select[name].Successful.Split(',').Contains(evt.Name))
-                                {
-                                    transaction.ListRequest.LastOrDefault().Value.Status = Status.Types.Succeeded;
-                                    transaction.Status = Status.Types.Succeeded.ToString();
-                                    transaction.ListRequest.LastOrDefault().Value.EndRequest = true;
-                                    transaction.ListRequest.LastOrDefault().Value.DateEnd = evt.DateBegin;
-                                }
-                                else if (Template_TransType_Select[name].UnSuccessful.Split(',').Contains(evt.Name))
-                                {
-                                    transaction.ListRequest.LastOrDefault().Value.Status = Status.Types.UnSucceeded;
-                                    transaction.Status = Status.Types.UnSucceeded.ToString();
-                                    transaction.ListRequest.LastOrDefault().Value.EndRequest = true;
-                                    transaction.ListRequest.LastOrDefault().Value.DateEnd = evt.DateBegin;
-
-                                }
-                            }
-
-                        }
-                    });
-
-                }
-            }
-            catch (Exception ex)
-            {
-                InitParametar.Send_Error(ex.ToString(), MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name);
-            }
-            return transaction;
-        }
+       
         private bool CheckRequestName(string name, ref string transactionType)
         {
             foreach (TransactionType type in Template_TransType_Select.Values)
@@ -1980,7 +1885,6 @@ namespace Transaction_Statistical
             {
                 Regex myRegex = new Regex(sReg, RegexOptions.ExplicitCapture);
                 MatchCollection m = myRegex.Matches(sString);
-                Match ma = myRegex.Match(sString);
                 if (m.Count != 0)
                 {
                     foreach (Match n in m)
@@ -2006,6 +1910,39 @@ namespace Transaction_Statistical
                 InitParametar.Send_Error(ex.ToString(), MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name);
             }
             return false;
+        }
+
+        public static  async  Task<Dictionary<int, RegesValue>>  RunPatternRegular(string sString, string sReg)
+        {
+            Dictionary<int, RegesValue> listResult = new Dictionary<int, RegesValue>();
+            try
+            {
+                Regex myRegex = new Regex(sReg, RegexOptions.ExplicitCapture);
+                MatchCollection m = myRegex.Matches(sString);
+                if (m.Count != 0)
+                {
+                    Parallel.ForEach(m.OfType<Match>(),(n)=> {
+                        RegesValue results = new RegesValue();
+                        results.stringfind = n.ToString();
+                        results.index = n.Index;
+                        foreach (string groupName in myRegex.GetGroupNames())
+                        {
+                            if (groupName.Equals("0")) continue;
+                            results.value[groupName] = n.Groups[groupName].ToString();
+                        }
+                        listResult[n.Index] = results;
+                    });
+                    
+                }
+            }
+
+            catch (TimeoutException)
+            { }
+            catch (Exception ex)
+            {
+                InitParametar.Send_Error(ex.ToString(), MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name);
+            }
+            return listResult;
         }
         //Dat 5/12/2019
         public static bool RunPatternRegular(string sString, string sReg, out Dictionary<int, RegesValueWithPatternOfGroup> listResult)

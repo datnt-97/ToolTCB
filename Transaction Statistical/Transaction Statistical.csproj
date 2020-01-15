@@ -93,6 +93,10 @@
     <Reference Include="EPPlus, Version=4.1.0.0, Culture=neutral, PublicKeyToken=ea159fdaa78159a1, processorArchitecture=MSIL">
       <HintPath>..\packages\EPPlus.4.1.0\lib\net40\EPPlus.dll</HintPath>
     </Reference>
+    <Reference Include="Interop.MSHTML">
+      <HintPath>C:\Users\datnt\Documents\Zalo Received Files\Interop.MSHTML.dll</HintPath>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </Reference>
     <Reference Include="Mono.Cecil, Version=0.9.6.0, Culture=neutral, PublicKeyToken=0738eb9f132ed756, processorArchitecture=MSIL">
       <HintPath>..\packages\Mono.Cecil.0.9.6.1\lib\net45\Mono.Cecil.dll</HintPath>
     </Reference>
@@ -156,6 +160,12 @@
     </Compile>
     <Compile Include="AddOn\CheckboxCombobox.Designer.cs">
       <DependentUpon>CheckboxCombobox.cs</DependentUpon>
+    </Compile>
+    <Compile Include="AddOn\EditorHTML.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="AddOn\EditorHTML.Designer.cs">
+      <DependentUpon>EditorHTML.cs</DependentUpon>
     </Compile>
     <Compile Include="AddOn\InitGUI.cs" />
     <Compile Include="AddOn\TextProcessBar.cs">
@@ -248,6 +258,12 @@
     </Compile>
     <Compile Include="UControl\UC_ExportCus.Designer.cs">
       <DependentUpon>UC_ExportCus.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UControl\UC_Feedback.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UControl\UC_Feedback.Designer.cs">
+      <DependentUpon>UC_Feedback.cs</DependentUpon>
     </Compile>
     <Compile Include="UControl\UC_Licensing.cs">
       <SubType>UserControl</SubType>
@@ -448,6 +464,22 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="logo_big.ico" />
+    <None Include="Resources\uol2.bmp" />
+    <None Include="Resources\underscore2.bmp" />
+    <None Include="Resources\rj2.bmp" />
+    <None Include="Resources\right_arrow2.bmp" />
+    <None Include="Resources\outdent2.bmp" />
+    <None Include="Resources\ol2.bmp" />
+    <None Include="Resources\lj2.bmp" />
+    <None Include="Resources\link2.bmp" />
+    <None Include="Resources\italic2.bmp" />
+    <None Include="Resources\indent2.bmp" />
+    <None Include="Resources\image2.png" />
+    <None Include="Resources\fj2.bmp" />
+    <None Include="Resources\color2.bmp" />
+    <None Include="Resources\cj2.bmp" />
+    <None Include="Resources\bold2.bmp" />
+    <None Include="Resources\backcolor2.bmp" />
     <None Include="Resources\Next_Select.png" />
     <None Include="Resources\next.png" />
     <None Include="Resources\key.png" />

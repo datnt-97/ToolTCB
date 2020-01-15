@@ -71,7 +71,7 @@ namespace Transaction_Statistical.UControl
             this.txt_Destination.Name = "txt_Destination";
             this.txt_Destination.Size = new System.Drawing.Size(559, 22);
             this.txt_Destination.TabIndex = 28;
-            this.txt_Destination.Text = @"E:\Project\NPS\ToolTCB_Back_up\Back_up_16\99109001_EJF (1)\99109001_EJF";
+            this.txt_Destination.Text = @"D:\";
             this.txt_Destination.MouseClick += new System.Windows.Forms.MouseEventHandler(this.txt_Path_MouseEnter);
             // 
             // chb_Open
@@ -142,7 +142,7 @@ namespace Transaction_Statistical.UControl
             this.PerformLayout();
 
         }
-        public void LoadTemplate()
+        public void LoadTemplate(bool isLoad)
         {
             try
             {
@@ -154,20 +154,17 @@ namespace Transaction_Statistical.UControl
                 ckbl_Forms.DataSource = bindingSource;
                 ckbl_Forms.DisplayMember = "Value";
                 UC_Menu_Startup.Template.ToList().ForEach(x => { ckbl_Forms.SetItemChecked(x.Key, true); });
-
                 UtilityIniFile fini = new UtilityIniFile(InitParametar.PathDirectoryCurrentUserConfigData + "\\AppConfig.dat");
                 if (isLoad)
                 {
-                    txt_Destination.Text = fini.GetEntryValue("Directory", "FolderTemp_Export");
+                    txt_Destination.Text = fini.GetEntryValue("Directory", "FolderTempExport");
                     if (Directory.Exists(txt_Destination.Text) || File.Exists(txt_Destination.Text)) return;
                     txt_Destination.Text = "D:\\";
                 }
                 else
                 {
-                    fini.Write("FolderTemp_Export", txt_Destination.Text, "Directory");
+                    fini.Write("FolderTempExport", txt_Destination.Text, "Directory");
                 }
-                //lblPercent.Hide();
-                //prgExport.Hide();
             }
             catch (Exception ex)
             {
@@ -178,8 +175,6 @@ namespace Transaction_Statistical.UControl
 
         private void btn_Export_Click(object sender, EventArgs e)
         {
-            //prgExport.Show();
-            //lblPercent.Show();
             try
             {
                 prb_Process.Size = btn_Read.Size;
@@ -205,12 +200,15 @@ namespace Transaction_Statistical.UControl
                     MessageBox.Show("Export successfully. (Execute : " + (w.ElapsedMilliseconds).ToString() + " ms)", "Export", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     if (chb_Open.Checked)
                         new Thread(() => UC_Explorer.OpenFile(InitParametar.ReadTrans.FileExport, false)).Start();
-                    (this.Parent as Form).Close();
+                    //(this.Parent as Form).Close();
                 }
             }
-            catch { }
+            catch (Exception ex)
+            {
+                InitParametar.Send_Error(ex.ToString(), MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name);
+            }
             prb_Process.Size = new Size(0, 0);
-            LoadTemplate(false);
+            LoadTemplate(true);
         }
 
         private void chb_Open_CheckedChanged(object sender, EventArgs e)
