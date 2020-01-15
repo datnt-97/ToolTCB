@@ -29,7 +29,6 @@ namespace Transaction_Statistical
         /// </summary>
         private void InitializeComponent2()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Frm_Main));
             this.mainPanel = new System.Windows.Forms.Panel();
             this.label2 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
@@ -155,7 +154,6 @@ namespace Transaction_Statistical
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.Frm_LoadingApp_FormClosed);
             this.mainPanel.ResumeLayout(false);
             this.mainPanel.PerformLayout();
-            this.Icon= ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.ResumeLayout(false);
 

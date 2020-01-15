@@ -77,7 +77,6 @@
             this.mode_Label5.MouseEnter += new System.EventHandler(this.mode_Label_MouseEnter);
             this.mode_Label5.MouseLeave += new System.EventHandler(this.mode_Label_Leave);
             this.mode_Label5.MouseHover += new System.EventHandler(this.mode_Label_MouseHover);
-            this.mode_Label5.Click += new System.EventHandler(mode_Label5_Click);
             // 
             // mode_Label6
             // 

@@ -305,8 +305,6 @@ namespace Transaction_Statistical
                                             StatusLicense = License.StatusS.Activated;
                                         else StatusLicense = License.StatusS.Invalid;
                                     }
-                                    else
-                                        StatusLicense = License.StatusS.Activated;
                                     foreach (string s in items[2].Split(''))
                                     {
                                         License lic = new License();
@@ -609,7 +607,7 @@ namespace Transaction_Statistical
             }
             catch (Exception ex)
             {
-                InitParametar.Send_Error(ex.ToString(), MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name);
+                throw ex;
             }
             return false;
         }
@@ -1288,9 +1286,6 @@ namespace Transaction_Statistical
                     trans.DateBegin = dateFile;
                 if (val.value.ContainsKey("TerminalID"))
                     trans.Terminal = val.value["TerminalID"];
-                else
-                    trans.Terminal = terminalFile;
-
                 if (val.value.ContainsKey("MachineNo"))
                     trans.MachineSequenceNo = val.value["MachineNo"];
                 if (val.value.ContainsKey("SStart"))

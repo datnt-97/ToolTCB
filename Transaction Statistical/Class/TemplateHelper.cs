@@ -6,7 +6,6 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 using System.Linq;
-using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -54,9 +53,9 @@ namespace Transaction_Statistical.Class
                 this.excelPackage.Save();
 
             }
-            catch (Exception ex)
+            catch (Exception e)
             {
-                InitParametar.Send_Error(ex.ToString(), MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name);
+                throw e;
             }
         }
         public void BaoCaoHoatDongBatThuong(string WorksheetsName, TableStyles tableStyles, Dictionary<string, Dictionary<DateTime, object>> ListTransaction, Dictionary<string, string> Template_EventDevice, bool isCycle)
@@ -141,7 +140,7 @@ namespace Transaction_Statistical.Class
             }
             catch (Exception ex)
             {
-                InitParametar.Send_Error(ex.ToString(), MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name);
+                throw ex;
             }
 
         }
@@ -157,9 +156,9 @@ namespace Transaction_Statistical.Class
                 lastWS = DrawGDTC(lastWS, ListTransaction.OrderBy(x => x.Key).ToDictionary(d => d.Key, d => d.Value), cycles, Template_EventDevice, tEMPLATE);
                 this.excelPackage.Save();
             }
-            catch (Exception ex)
+            catch (Exception e)
             {
-                InitParametar.Send_Error(ex.ToString(), MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name);
+                throw e;
             }
 
         }
@@ -338,9 +337,9 @@ namespace Transaction_Statistical.Class
                 worksheet.Cells[worksheet.Dimension.Address].AutoFitColumns();
 
             }
-            catch (Exception ex)
+            catch (Exception e)
             {
-                InitParametar.Send_Error(ex.ToString(), MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name);
+                throw e;
             }
             return worksheet;
         }
@@ -433,9 +432,9 @@ namespace Transaction_Statistical.Class
                 allCells.Style.VerticalAlignment = ExcelVerticalAlignment.Center;
                 allCells.Style.WrapText = true;
             }
-            catch (Exception ex)
+            catch (Exception e)
             {
-                InitParametar.Send_Error(ex.ToString(), MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name);
+                throw e;
             }
             return worksheet;
         }
@@ -503,7 +502,7 @@ namespace Transaction_Statistical.Class
             }
             catch (Exception ex)
             {
-                InitParametar.Send_Error(ex.ToString(), MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name);
+                throw ex;
             }
 
             return worksheet;
@@ -873,9 +872,9 @@ namespace Transaction_Statistical.Class
 
                 //allCells.Style.WrapText = true;
             }
-            catch (Exception ex)
+            catch (Exception e)
             {
-                InitParametar.Send_Error(ex.ToString(), MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name);
+                throw e;
             }
             return worksheet;
         }
