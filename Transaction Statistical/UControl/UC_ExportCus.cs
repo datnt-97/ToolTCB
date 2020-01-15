@@ -20,6 +20,25 @@ namespace Transaction_Statistical.UControl
         {
             InitializeComponent2();
             LoadTemplate();
+            LoadPathTemp(true);
+        }
+        private void LoadPathTemp(bool isLoad)
+        {
+            try
+            {
+                UtilityIniFile fini = new UtilityIniFile(InitParametar.PathDirectoryCurrentUserConfigData + "\\AppConfig.dat");
+                if (isLoad)
+                {
+                    txt_Destination.Text = fini.GetEntryValue("Directory", "FolderTempExport");
+                    if (Directory.Exists(txt_Destination.Text) || File.Exists(txt_Destination.Text)) return;
+                    txt_Destination.Text = "D:\\";
+                }
+                else
+                {
+                    fini.Write("FolderTempExport", txt_Destination.Text, "Directory");
+                }
+            }
+            catch { }
         }
         private void InitializeComponent2()
         {
@@ -71,7 +90,7 @@ namespace Transaction_Statistical.UControl
             this.txt_Destination.Name = "txt_Destination";
             this.txt_Destination.Size = new System.Drawing.Size(559, 22);
             this.txt_Destination.TabIndex = 28;
-            this.txt_Destination.Text = @"E:\Project\NPS\ToolTCB_Back_up\Back_up_16\99109001_EJF (1)\99109001_EJF";
+            this.txt_Destination.Text = @"D:\";
             this.txt_Destination.MouseClick += new System.Windows.Forms.MouseEventHandler(this.txt_Path_MouseEnter);
             // 
             // chb_Open
@@ -155,8 +174,6 @@ namespace Transaction_Statistical.UControl
                 ckbl_Forms.DisplayMember = "Value";
                 UC_Menu_Startup.Template.ToList().ForEach(x => { ckbl_Forms.SetItemChecked(x.Key, true); });
 
-                //lblPercent.Hide();
-                //prgExport.Hide();
             }
             catch (Exception ex)
             {
@@ -167,8 +184,6 @@ namespace Transaction_Statistical.UControl
 
         private void btn_Export_Click(object sender, EventArgs e)
         {
-            //prgExport.Show();
-            //lblPercent.Show();
             try
             {
                 prb_Process.Size = btn_Read.Size;
@@ -199,6 +214,7 @@ namespace Transaction_Statistical.UControl
             }
             catch { }
             prb_Process.Size = new Size(0, 0);
+            LoadPathTemp(false);
         }
 
         private void chb_Open_CheckedChanged(object sender, EventArgs e)
