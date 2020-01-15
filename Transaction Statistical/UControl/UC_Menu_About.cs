@@ -92,6 +92,13 @@ namespace Transaction_Statistical.UControl
             Frm_TemplateDefault frm = new Frm_TemplateDefault(uc, mode_Label6.Text);
             frm.ShowDialog();
         }
+        private void mode_Label5_Click(object sender, EventArgs e)
+        {
+            UC_Feedback uc = new UC_Feedback();
+            uc.Dock = DockStyle.Fill;
+            Frm_TemplateDefault frm = new Frm_TemplateDefault(uc, mode_Label5.Text);
+            frm.ShowDialog();
+        }
         private void mode_Label_MouseHover(object sender, EventArgs e)
         {
             (sender as Mode_Label).ForeColor = Color.Blue;

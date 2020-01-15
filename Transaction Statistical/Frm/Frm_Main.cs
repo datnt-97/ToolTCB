@@ -22,7 +22,6 @@ namespace Transaction_Statistical
             uc_Transaction.Dock = DockStyle.Fill;
             tpc.Controls.Add(uc_Transaction);
             tabControlX1.AddTab("Transaction Statistical", tpc, false);
-            //  th_loadForm.Abort();
         }
         private void LoadingApp()
         {
@@ -303,9 +302,9 @@ namespace Transaction_Statistical
 
         }
         protected override void OnShown(EventArgs e)
-        {
-            base.OnShown(e);      
-            th_loadForm.Abort();               
+        { th_loadForm.Abort();     
+            base.OnShown(e);
+           // this.WindowState = FormWindowState.Normal;
         }
 
     }
