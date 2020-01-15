@@ -37,6 +37,7 @@
             this.columnHeader3 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader4 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.btn_Refresh = new Mode_Button();
+            this.btn_Maximize = new Mode_Button();
             this.cbo_Keyword_LstKeyword = new Mode_ComboBox();
             ((System.ComponentModel.ISupportInitialize)(this.fctxt_Pattern)).BeginInit();
             this.SuspendLayout();
@@ -92,6 +93,8 @@
             // 
             // listView1
             // 
+            this.listView1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+            |( System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right))));
             this.listView1.BackColor = InitGUI.Custom.Menu_RightBckgd.DisplayColor;
             this.listView1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.listView1.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
@@ -131,17 +134,32 @@
             // 
             // btn_Refresh
             // 
+            this.btn_Refresh.Anchor = (System.Windows.Forms.AnchorStyles)(System.Windows.Forms.AnchorStyles.Right | System.Windows.Forms.AnchorStyles.Bottom);
             this.btn_Refresh.AutoSize = true;
             this.btn_Refresh.BackColor = InitGUI.Custom.Menu_RightBckgd.DisplayColor;
-            this.btn_Refresh.Location = new System.Drawing.Point(824, 150);
+            this.btn_Refresh.Location = new System.Drawing.Point(820, 154);
             this.btn_Refresh.Name = "btn_Refresh";
             this.btn_Refresh.Size = new System.Drawing.Size(105, 31);
             this.btn_Refresh.TabIndex = 16;
             this.btn_Refresh.Text = "Refresh";
             this.btn_Refresh.Click += new System.EventHandler(this.btn_Refresh_Click);
             // 
+            // btn_Maximize
+            // 
+            this.btn_Maximize.Anchor = (System.Windows.Forms.AnchorStyles)(System.Windows.Forms.AnchorStyles.Right | System.Windows.Forms.AnchorStyles.Bottom);
+            this.btn_Maximize.AutoSize = true;
+            this.btn_Maximize.BackColor = InitGUI.Custom.Menu_RightBckgd.DisplayColor;
+            this.btn_Maximize.Location = new System.Drawing.Point(700, 154);
+            this.btn_Maximize.Name = "btn_Maximize";
+            this.btn_Maximize.Size = new System.Drawing.Size(105, 31);
+            this.btn_Maximize.TabIndex = 16;
+            this.btn_Maximize.Text = "Maximize";
+            this.btn_Maximize.Click += new System.EventHandler(this.btn_Maximize_Click);
+            // 
             // cbo_Keyword_LstKeyword
             // 
+            this.cbo_Keyword_LstKeyword.Anchor = (System.Windows.Forms.AnchorStyles)(System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Bottom);
+         
             this.cbo_Keyword_LstKeyword.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.Suggest;
             this.cbo_Keyword_LstKeyword.BackColor = InitGUI.Custom.Menu_RightBckgd.DisplayColor;
             this.cbo_Keyword_LstKeyword.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.ListItems;
@@ -153,6 +171,9 @@
             this.cbo_Keyword_LstKeyword.Size = new System.Drawing.Size(431, 24);
             this.cbo_Keyword_LstKeyword.Sorted = true;
             this.cbo_Keyword_LstKeyword.TabIndex = 17;
+            this.cbo_Keyword_LstKeyword.TextUpdate += new System.EventHandler(cbo_Keyword_LstKeyword_TextChange);
+            this.cbo_Keyword_LstKeyword.SelectedValueChanged += new System.EventHandler(cbo_Keyword_LstKeyword_TextChange);
+            this.cbo_Keyword_LstKeyword.KeyDown += new System.Windows.Forms.KeyEventHandler(cbo_Keyword_LstKeyword_OnKeyPress);
             // 
             // UC_Menu_History
             // 
@@ -161,6 +182,7 @@
             this.BackColor = InitGUI.Custom.Menu_RightBckgd.DisplayColor;
             this.Controls.Add(this.cbo_Keyword_LstKeyword);
             this.Controls.Add(this.btn_Refresh);
+            this.Controls.Add(this.btn_Maximize);
             this.Controls.Add(this.listView1);
             this.Controls.Add(this.fctxt_Pattern);
             this.Name = "UC_Menu_History";
@@ -210,6 +232,14 @@
             btn_Refresh.FlatAppearance.MouseDownBackColor = InitGUI.Custom.Menu_ButtonDown.DisplayColor;
             btn_Refresh.FlatAppearance.MouseOverBackColor = InitGUI.Custom.Menu_ButtonHover.DisplayColor;
             // 
+            // btn_Maximize
+            // 
+            btn_Maximize.BackColor = InitGUI.Custom.Menu_RightBckgd.DisplayColor;
+            btn_Maximize.ForeColor = InitGUI.Custom.Frm_ForeColor.DisplayColor;
+            btn_Maximize.FlatAppearance.BorderColor = InitGUI.Custom.Menu_Border.DisplayColor;
+            btn_Maximize.FlatAppearance.MouseDownBackColor = InitGUI.Custom.Menu_ButtonDown.DisplayColor;
+            btn_Maximize.FlatAppearance.MouseOverBackColor = InitGUI.Custom.Menu_ButtonHover.DisplayColor;
+            // 
             // cbo_Keyword_LstKeyword
             // 
             this.cbo_Keyword_LstKeyword.BackColor = InitGUI.Custom.Menu_RightBckgd.DisplayColor;
@@ -229,6 +259,7 @@
         private System.Windows.Forms.ColumnHeader columnHeader3;
         private System.Windows.Forms.ColumnHeader columnHeader4;
         private Mode_Button btn_Refresh;
+        private Mode_Button btn_Maximize;
         private Mode_ComboBox cbo_Keyword_LstKeyword;
     }
 }

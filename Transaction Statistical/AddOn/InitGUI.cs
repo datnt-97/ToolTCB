@@ -28,7 +28,7 @@ namespace Transaction_Statistical
             if (row["Field"].ToString().Equals(InitGUI_Mode.Light.ToString()))
             {
                 Mode = InitGUI_Mode.Light;
-                Custom.Frm_TopToolbar.DisplayColor = Color.FromArgb(37, 37, 38);
+                Custom.Frm_TopToolbar.DisplayColor = Color.FromArgb(240, 240, 240);// Color.FromArgb(37, 37, 38);
                 Custom.Frm_Background.DisplayColor = Color.White;
                 Custom.Frm_Border.DisplayColor = Color.Green;
                 Custom.Frm_TextTilte.DisplayColor = Color.DimGray;
@@ -71,7 +71,7 @@ namespace Transaction_Statistical
                 Custom.Tab_MouseHvrColor.DisplayColor = Color.LightGreen;
                 Custom.Tab_MouseClkColor.DisplayColor = Color.LimeGreen;
                 Custom.Tab_Ribbon_Color.DisplayColor = Color.YellowGreen;
-                Custom.Tab_CtrlPanel_Backcolor.DisplayColor = Color.FromArgb(40, 40, 40);
+                Custom.Tab_CtrlPanel_Backcolor.DisplayColor = Color.FromArgb(245, 240, 240);
                 Custom.Tab_CtrlButPanel_Backcolor.DisplayColor = Color.FromArgb(245, 245, 245);
             }
             else if (row["Field"].ToString().Equals(InitGUI_Mode.Dark.ToString()))

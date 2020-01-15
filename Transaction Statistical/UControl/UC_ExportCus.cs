@@ -19,7 +19,7 @@ namespace Transaction_Statistical.UControl
         public UC_ExportCus()
         {
             InitializeComponent2();
-            LoadTemplate();
+            LoadTemplate(true);
         }
         private void InitializeComponent2()
         {
@@ -71,7 +71,7 @@ namespace Transaction_Statistical.UControl
             this.txt_Destination.Name = "txt_Destination";
             this.txt_Destination.Size = new System.Drawing.Size(559, 22);
             this.txt_Destination.TabIndex = 28;
-            this.txt_Destination.Text = "D:\\Export";
+            this.txt_Destination.Text = @"E:\Project\NPS\ToolTCB_Back_up\Back_up_16\99109001_EJF (1)\99109001_EJF";
             this.txt_Destination.MouseClick += new System.Windows.Forms.MouseEventHandler(this.txt_Path_MouseEnter);
             // 
             // chb_Open
@@ -155,6 +155,17 @@ namespace Transaction_Statistical.UControl
                 ckbl_Forms.DisplayMember = "Value";
                 UC_Menu_Startup.Template.ToList().ForEach(x => { ckbl_Forms.SetItemChecked(x.Key, true); });
 
+                UtilityIniFile fini = new UtilityIniFile(InitParametar.PathDirectoryCurrentUserConfigData + "\\AppConfig.dat");
+                if (isLoad)
+                {
+                    txt_Destination.Text = fini.GetEntryValue("Directory", "FolderTemp_Export");
+                    if (Directory.Exists(txt_Destination.Text) || File.Exists(txt_Destination.Text)) return;
+                    txt_Destination.Text = "D:\\";
+                }
+                else
+                {
+                    fini.Write("FolderTemp_Export", txt_Destination.Text, "Directory");
+                }
                 //lblPercent.Hide();
                 //prgExport.Hide();
             }
@@ -199,6 +210,7 @@ namespace Transaction_Statistical.UControl
             }
             catch { }
             prb_Process.Size = new Size(0, 0);
+            LoadTemplate(false);
         }
 
         private void chb_Open_CheckedChanged(object sender, EventArgs e)

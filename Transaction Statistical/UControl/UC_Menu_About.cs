@@ -18,18 +18,32 @@ namespace Transaction_Statistical.UControl
         {
             InitializeComponent2();
             lv_Version.Text = String.Format("Version: {0}, build: {1:yyyy MMM dd}", Assembly.GetExecutingAssembly().GetName().Version.ToString(),
-               InfoAssembly.fileVersion.CreationTime);
-            if (InitParametar.TypeLicense.Equals(License.Types.Unknow)) mode_Label9.Text = "License: " + InitParametar.TypeLicense.ToString();
+               InfoAssembly.fileVersion.CreationTime); 
+            mode_Label9.Text = "License: " + InitParametar.TypeLicense.ToString();
+            if (InitParametar.TypeLicense.Equals(License.Types.Unknow))
+            {
+                mode_Label9.Click += new EventHandler(mode_Label6_Click);
+                mode_Label9.Cursor = System.Windows.Forms.Cursors.Hand;
+            }
             else
             {
-                string remaining = string.Empty;
-                if ((InitParametar.DateMaximum - DateTime.Now).TotalDays / 365 >= 1)
-                    remaining = (int)(InitParametar.DateMaximum - DateTime.Now).TotalDays / 365 + " years";
-                else if ((InitParametar.DateMaximum - DateTime.Now).TotalDays >= 1)
-                    remaining = (int)(InitParametar.DateMaximum - DateTime.Now).TotalDays + " days";
+                if (InitParametar.StatusLicense.Equals(License.StatusS.Expired) || InitParametar.StatusLicense.Equals(License.StatusS.Invalid))
+                {
+                    mode_Label9.Click += new EventHandler(mode_Label6_Click);
+                    mode_Label9.Cursor = System.Windows.Forms.Cursors.Hand;
+                    mode_Label9.Text = "License: " + InitParametar.TypeLicense.ToString() + "\n" + InitParametar.StatusLicense;
+                }
                 else
-                    remaining = (int)(InitParametar.DateMaximum - DateTime.Now).TotalHours + " hours";
-                mode_Label9.Text = "License: " + InitParametar.TypeLicense.ToString() + "\n Remaining: " + remaining;
+                {
+                    string remaining = string.Empty;
+                    if ((InitParametar.DateMaximum - DateTime.Now).TotalDays / 365 >= 1)
+                        remaining = (int)(InitParametar.DateMaximum - DateTime.Now).TotalDays / 365 + " years";
+                    else if ((InitParametar.DateMaximum - DateTime.Now).TotalDays >= 1)
+                        remaining = (int)(InitParametar.DateMaximum - DateTime.Now).TotalDays + " days";
+                    else
+                        remaining = (int)(InitParametar.DateMaximum - DateTime.Now).TotalHours + " hours";
+                    mode_Label9.Text = "License: " + InitParametar.TypeLicense.ToString() + "\n Remaining: " + remaining + "\n" + InitParametar.StatusLicense;
+                }
             }
             #region Read Me File
             mode_FastColoredTextBox1.WordWrap = true;

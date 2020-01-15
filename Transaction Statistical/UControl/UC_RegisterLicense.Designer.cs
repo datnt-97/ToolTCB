@@ -26,13 +26,14 @@
         /// Required method for Designer support - do not modify 
         /// the contents of this method with the code editor.
         /// </summary>
-        private void InitializeComponent()
+        private void InitializeComponent2()
         {
             this.components = new System.ComponentModel.Container();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
-            this.cbb_Date = new Transaction_Statistical.Mode_ComboBox();
             this.btn_Export = new Transaction_Statistical.Mode_Button();
             this.btn_Send = new Transaction_Statistical.Mode_Button();
+            this.nup_Day = new System.Windows.Forms.NumericUpDown();
+            this.cbb_Date = new Transaction_Statistical.Mode_ComboBox();
             this.mode_GroupBox1 = new Transaction_Statistical.Mode_GroupBox();
             this.txt_Phone = new Transaction_Statistical.Mode_TextBox();
             this.mode_Label4 = new Transaction_Statistical.Mode_Label();
@@ -44,29 +45,18 @@
             this.mode_Label1 = new Transaction_Statistical.Mode_Label();
             this.gs_Module = new Transaction_Statistical.Mode_GroupBox();
             this.gs_Type = new Transaction_Statistical.Mode_GroupBox();
+            ((System.ComponentModel.ISupportInitialize)(this.nup_Day)).BeginInit();
             this.mode_GroupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
-            // cbb_Date
-            // 
-            this.cbb_Date.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(40)))), ((int)(((byte)(40)))));
-            this.cbb_Date.BorderColor = System.Drawing.Color.Blue;
-            this.cbb_Date.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cbb_Date.ForeColor = System.Drawing.Color.White;
-            this.cbb_Date.FormattingEnabled = true;
-            this.cbb_Date.Location = new System.Drawing.Point(23, 192);
-            this.cbb_Date.Name = "cbb_Date";
-            this.cbb_Date.Size = new System.Drawing.Size(620, 24);
-            this.cbb_Date.TabIndex = 5;
-            // 
             // btn_Export
             // 
-            this.btn_Export.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(40)))), ((int)(((byte)(40)))));
-            this.btn_Export.FlatAppearance.BorderColor = System.Drawing.Color.Silver;
-            this.btn_Export.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(98)))), ((int)(((byte)(215)))));
-            this.btn_Export.FlatAppearance.MouseOverBackColor = System.Drawing.Color.DeepSkyBlue;
+            this.btn_Export.BackColor = InitGUI.Custom.Menu_Button.DisplayColor;
+            this.btn_Export.FlatAppearance.BorderColor = InitGUI.Custom.Menu_Border.DisplayColor;
+            this.btn_Export.FlatAppearance.MouseDownBackColor = InitGUI.Custom.Menu_ButtonDown.DisplayColor;
+            this.btn_Export.FlatAppearance.MouseOverBackColor = InitGUI.Custom.Menu_ButtonHover.DisplayColor;
             this.btn_Export.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btn_Export.ForeColor = System.Drawing.Color.White;
+            this.btn_Export.ForeColor = InitGUI.Custom.Menu_Text.DisplayColor;
             this.btn_Export.Location = new System.Drawing.Point(320, 415);
             this.btn_Export.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.btn_Export.Name = "btn_Export";
@@ -80,12 +70,12 @@
             // 
             // btn_Send
             // 
-            this.btn_Send.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(40)))), ((int)(((byte)(40)))));
-            this.btn_Send.FlatAppearance.BorderColor = System.Drawing.Color.Silver;
-            this.btn_Send.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(98)))), ((int)(((byte)(215)))));
-            this.btn_Send.FlatAppearance.MouseOverBackColor = System.Drawing.Color.DeepSkyBlue;
+            this.btn_Send.BackColor = InitGUI.Custom.Menu_Button.DisplayColor;
+            this.btn_Send.FlatAppearance.BorderColor = InitGUI.Custom.Menu_Border.DisplayColor;
+            this.btn_Send.FlatAppearance.MouseDownBackColor = InitGUI.Custom.Menu_ButtonDown.DisplayColor;
+            this.btn_Send.FlatAppearance.MouseOverBackColor = InitGUI.Custom.Menu_ButtonHover.DisplayColor;
             this.btn_Send.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btn_Send.ForeColor = System.Drawing.Color.White;
+            this.btn_Send.ForeColor = InitGUI.Custom.Menu_Text.DisplayColor;
             this.btn_Send.Location = new System.Drawing.Point(197, 415);
             this.btn_Send.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.btn_Send.Name = "btn_Send";
@@ -96,6 +86,36 @@
             this.toolTip1.SetToolTip(this.btn_Send, "If your PC connected internet");
             this.btn_Send.UseVisualStyleBackColor = true;
             this.btn_Send.Click += new System.EventHandler(this.btn_Send_Click);
+            // 
+            // nup_Day
+            // 
+            this.nup_Day.BackColor = InitGUI.Custom.Frm_Background.DisplayColor;
+            this.nup_Day.ForeColor = InitGUI.Custom.Frm_ForeColor.DisplayColor;
+            this.nup_Day.Location = new System.Drawing.Point(367, 193);
+            this.nup_Day.Name = "nup_Day";
+            this.nup_Day.Size = new System.Drawing.Size(120, 22);
+            this.nup_Day.TabIndex = 13;
+            this.nup_Day.Value = new decimal(new int[] {
+            7,
+            0,
+            0,
+            0});
+            // 
+            // cbb_Date
+            // 
+            this.cbb_Date.BackColor = InitGUI.Custom.Frm_Background.DisplayColor;
+            this.cbb_Date.BorderColor = InitGUI.Custom.Menu_Border.DisplayColor;
+            this.cbb_Date.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbb_Date.ForeColor = InitGUI.Custom.Frm_ForeColor.DisplayColor;
+            this.cbb_Date.FormattingEnabled = true;
+            this.cbb_Date.Items.AddRange(new object[] {
+            "Days",
+            "Months",
+            "Years"});
+            this.cbb_Date.Location = new System.Drawing.Point(493, 191);
+            this.cbb_Date.Name = "cbb_Date";
+            this.cbb_Date.Size = new System.Drawing.Size(150, 24);
+            this.cbb_Date.TabIndex = 5;
             // 
             // mode_GroupBox1
             // 
@@ -108,7 +128,7 @@
             this.mode_GroupBox1.Controls.Add(this.mode_Label2);
             this.mode_GroupBox1.Controls.Add(this.txt_Company);
             this.mode_GroupBox1.Controls.Add(this.mode_Label1);
-            this.mode_GroupBox1.ForeColor = System.Drawing.Color.Black;
+            this.mode_GroupBox1.ForeColor = InitGUI.Custom.Menu_Text.DisplayColor;
             this.mode_GroupBox1.Location = new System.Drawing.Point(23, 236);
             this.mode_GroupBox1.Name = "mode_GroupBox1";
             this.mode_GroupBox1.Size = new System.Drawing.Size(620, 161);
@@ -118,8 +138,8 @@
             // 
             // txt_Phone
             // 
-            this.txt_Phone.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(40)))), ((int)(((byte)(40)))));
-            this.txt_Phone.ForeColor = System.Drawing.Color.White;
+            this.txt_Phone.BackColor = InitGUI.Custom.Frm_Background.DisplayColor;
+            this.txt_Phone.ForeColor = InitGUI.Custom.Frm_ForeColor.DisplayColor;
             this.txt_Phone.Location = new System.Drawing.Point(89, 115);
             this.txt_Phone.Name = "txt_Phone";
             this.txt_Phone.Size = new System.Drawing.Size(512, 22);
@@ -130,7 +150,7 @@
             // 
             this.mode_Label4.AutoSize = true;
             this.mode_Label4.BackColor = System.Drawing.Color.Transparent;
-            this.mode_Label4.ForeColor = System.Drawing.Color.Black;
+            this.mode_Label4.ForeColor = InitGUI.Custom.Frm_ForeColor.DisplayColor;
             this.mode_Label4.Location = new System.Drawing.Point(34, 118);
             this.mode_Label4.Name = "mode_Label4";
             this.mode_Label4.Size = new System.Drawing.Size(49, 17);
@@ -139,8 +159,8 @@
             // 
             // txt_Email
             // 
-            this.txt_Email.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(40)))), ((int)(((byte)(40)))));
-            this.txt_Email.ForeColor = System.Drawing.Color.White;
+            this.txt_Email.BackColor = InitGUI.Custom.Frm_Background.DisplayColor;
+            this.txt_Email.ForeColor = InitGUI.Custom.Frm_ForeColor.DisplayColor;
             this.txt_Email.Location = new System.Drawing.Point(89, 87);
             this.txt_Email.Name = "txt_Email";
             this.txt_Email.Size = new System.Drawing.Size(512, 22);
@@ -151,7 +171,7 @@
             // 
             this.mode_Label3.AutoSize = true;
             this.mode_Label3.BackColor = System.Drawing.Color.Transparent;
-            this.mode_Label3.ForeColor = System.Drawing.Color.Black;
+            this.mode_Label3.ForeColor = InitGUI.Custom.Frm_ForeColor.DisplayColor;
             this.mode_Label3.Location = new System.Drawing.Point(41, 90);
             this.mode_Label3.Name = "mode_Label3";
             this.mode_Label3.Size = new System.Drawing.Size(42, 17);
@@ -160,8 +180,8 @@
             // 
             // txt_Name
             // 
-            this.txt_Name.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(40)))), ((int)(((byte)(40)))));
-            this.txt_Name.ForeColor = System.Drawing.Color.White;
+            this.txt_Name.BackColor = InitGUI.Custom.Frm_Background.DisplayColor;
+            this.txt_Name.ForeColor = InitGUI.Custom.Frm_ForeColor.DisplayColor;
             this.txt_Name.Location = new System.Drawing.Point(89, 59);
             this.txt_Name.Name = "txt_Name";
             this.txt_Name.Size = new System.Drawing.Size(512, 22);
@@ -172,7 +192,7 @@
             // 
             this.mode_Label2.AutoSize = true;
             this.mode_Label2.BackColor = System.Drawing.Color.Transparent;
-            this.mode_Label2.ForeColor = System.Drawing.Color.Black;
+            this.mode_Label2.ForeColor = InitGUI.Custom.Frm_ForeColor.DisplayColor;
             this.mode_Label2.Location = new System.Drawing.Point(15, 34);
             this.mode_Label2.Name = "mode_Label2";
             this.mode_Label2.Size = new System.Drawing.Size(67, 17);
@@ -181,8 +201,8 @@
             // 
             // txt_Company
             // 
-            this.txt_Company.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(40)))), ((int)(((byte)(40)))));
-            this.txt_Company.ForeColor = System.Drawing.Color.White;
+            this.txt_Company.BackColor = InitGUI.Custom.Frm_Background.DisplayColor;
+            this.txt_Company.ForeColor = InitGUI.Custom.Frm_ForeColor.DisplayColor;
             this.txt_Company.Location = new System.Drawing.Point(89, 31);
             this.txt_Company.Name = "txt_Company";
             this.txt_Company.Size = new System.Drawing.Size(512, 22);
@@ -192,7 +212,7 @@
             // 
             this.mode_Label1.AutoSize = true;
             this.mode_Label1.BackColor = System.Drawing.Color.Transparent;
-            this.mode_Label1.ForeColor = System.Drawing.Color.Black;
+            this.mode_Label1.ForeColor = InitGUI.Custom.Frm_ForeColor.DisplayColor;
             this.mode_Label1.Location = new System.Drawing.Point(38, 62);
             this.mode_Label1.Name = "mode_Label1";
             this.mode_Label1.Size = new System.Drawing.Size(45, 17);
@@ -202,7 +222,7 @@
             // gs_Module
             // 
             this.gs_Module.BackColor = System.Drawing.Color.Transparent;
-            this.gs_Module.ForeColor = System.Drawing.Color.Black;
+            this.gs_Module.ForeColor = InitGUI.Custom.Frm_ForeColor.DisplayColor;
             this.gs_Module.Location = new System.Drawing.Point(23, 98);
             this.gs_Module.Name = "gs_Module";
             this.gs_Module.Size = new System.Drawing.Size(620, 72);
@@ -213,7 +233,7 @@
             // gs_Type
             // 
             this.gs_Type.BackColor = System.Drawing.Color.Transparent;
-            this.gs_Type.ForeColor = System.Drawing.Color.Black;
+            this.gs_Type.ForeColor = InitGUI.Custom.Frm_ForeColor.DisplayColor;
             this.gs_Type.Location = new System.Drawing.Point(23, 12);
             this.gs_Type.Name = "gs_Type";
             this.gs_Type.Size = new System.Drawing.Size(620, 69);
@@ -226,6 +246,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.cbb_Date);
+            this.Controls.Add(this.nup_Day);
             this.Controls.Add(this.btn_Export);
             this.Controls.Add(this.btn_Send);
             this.Controls.Add(this.mode_GroupBox1);
@@ -233,12 +254,13 @@
             this.Controls.Add(this.gs_Type);
             this.Name = "UC_RegisterLicense";
             this.Size = new System.Drawing.Size(666, 458);
+            ((System.ComponentModel.ISupportInitialize)(this.nup_Day)).EndInit();
             this.mode_GroupBox1.ResumeLayout(false);
             this.mode_GroupBox1.PerformLayout();
             this.ResumeLayout(false);
 
         }
-
+      
         #endregion
 
         private System.Windows.Forms.ToolTip toolTip1;
@@ -256,5 +278,6 @@
         private Mode_Label mode_Label2;
         private Mode_TextBox txt_Company;
         private Mode_ComboBox cbb_Date;
+        private System.Windows.Forms.NumericUpDown nup_Day;
     }
 }

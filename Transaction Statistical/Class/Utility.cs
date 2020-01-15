@@ -1,11 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.DirectoryServices;
 using System.IO;
 using System.Linq;
 using System.Management;
+using System.Net.NetworkInformation;
 using System.Reflection;
 using System.Runtime.InteropServices;
+using System.Security.Principal;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -459,6 +462,198 @@ namespace Transaction_Statistical
                     return result.ToString();
                 }
             }
+        }
+    }
+    public class HardwareInfo
+    {
+        public static bool IsInvalid(string info)
+        {
+            try
+            {
+                int n = 0;
+                if (info.Contains(GetComputerSid())) n++;
+                else return false;
+                if (info.Contains(GetHDDSerialNo())) n++;
+                if (info.Contains(GetMACAddress())) n++;
+                if (info.Contains(GetBoardProductId())) n++;
+                if (n >= 3) return true;
+            }
+            catch
+            { }
+            return false;
+        }
+        public static string Info()
+        {
+            string inf = string.Empty;
+            try
+            {
+                inf += GetComputerSid();
+                inf += GetHDDSerialNo();
+                inf += GetMACAddress();
+                inf += GetBoardProductId();
+            }
+            catch
+            { }
+            return inf;
+        }
+
+        /// <summary>
+        /// Gets the SID of the current PC.
+        /// </summary>
+        /// <returns></returns>       
+        public static string GetComputerSid()
+        {
+            return (new SecurityIdentifier((byte[])new DirectoryEntry(string.Format("WinNT://{0},Computer", Environment.MachineName)).Children.Cast<DirectoryEntry>().First().InvokeGet("objectSID"), 0).AccountDomainSid).ToString();
+        }
+
+        /// <summary>
+        /// Retrieving HDD Serial No.
+        /// </summary>
+        /// <returns></returns>
+        private static String GetHDDSerialNo()
+        {
+            string result = "";
+            try
+            {
+                ManagementClass mangnmt = new ManagementClass("Win32_LogicalDisk");
+                ManagementObjectCollection mcol = mangnmt.GetInstances();
+
+                foreach (ManagementObject strt in mcol)
+                {
+                    result += Convert.ToString(strt["VolumeSerialNumber"]);
+                }
+            }
+            catch
+            {
+            }
+            return result;
+        }
+        /// <summary>
+        /// Retrieving System MAC Address.
+        /// </summary>
+        /// <returns></returns>
+        private static string GetMACAddress()
+        {
+            String sMacAddress = string.Empty;
+            try
+            {
+                NetworkInterface[] nics = NetworkInterface.GetAllNetworkInterfaces();
+
+                foreach (NetworkInterface adapter in nics)
+                {
+                    if (sMacAddress == String.Empty)// only return MAC Address from first card  
+                    {
+                        IPInterfaceProperties properties = adapter.GetIPProperties();
+                        sMacAddress = adapter.GetPhysicalAddress().ToString();
+                    }
+                }
+            }
+            catch
+            { }
+            return sMacAddress;
+        }
+        /// <summary>
+        /// Retrieving Motherboard Product Id.
+        /// </summary>
+        /// <returns></returns>
+        private static string GetBoardProductId()
+        {
+            try
+            {
+                ManagementObjectSearcher searcher = new ManagementObjectSearcher("root\\CIMV2", "SELECT * FROM Win32_BaseBoard");
+
+                foreach (ManagementObject wmi in searcher.Get())
+                {
+                    try
+                    {
+                        return wmi.GetPropertyValue("Product").ToString();
+                    }
+
+                    catch { }
+
+                }
+            }
+            catch (Exception ex)
+            {
+            }
+            return "Unknown";
+        }
+
+        /// <summary>
+        /// Retrieving BIOS Maker.
+        /// </summary>
+        /// <returns></returns>
+
+        /// <summary>
+        /// Retrieving BIOS Serial No.
+        /// </summary>
+        /// <returns></returns>
+        private static string GetBIOSserNo()
+        {
+            try
+            {
+                ManagementObjectSearcher searcher = new ManagementObjectSearcher("root\\CIMV2", "SELECT * FROM Win32_BIOS");
+
+                foreach (ManagementObject wmi in searcher.Get())
+                {
+                    try
+                    {
+                        return wmi.GetPropertyValue("SerialNumber").ToString();
+                    }
+
+                    catch { }
+
+                }
+            }
+            catch
+            {
+
+            }
+            return "Unknown";
+        }
+        /// <summary>
+        /// Retrieving BIOS Caption.
+        /// </summary>
+        /// <returns></returns>
+        private static string GetBIOScaption()
+        {
+            try
+            {
+                ManagementObjectSearcher searcher = new ManagementObjectSearcher("root\\CIMV2", "SELECT * FROM Win32_BIOS");
+
+                foreach (ManagementObject wmi in searcher.Get())
+                {
+                    try
+                    {
+                        return wmi.GetPropertyValue("Caption").ToString();
+
+                    }
+                    catch { }
+                }
+            }
+            catch (Exception ex)
+            {
+
+            }
+            return "Unknown";
+        }
+    }
+
+    public class FunctionGenaral<T>
+    {
+        public static void Parse(ref Dictionary<DateTime, T> ls, DateTime Date, T b)
+        {
+            if (ls.ContainsKey(Date))
+            {
+                int milis = 0;
+                while (ls.ContainsKey(Date.AddMilliseconds(milis)))
+                {
+                    milis++;
+                }
+                ls[Date.AddMilliseconds(milis)] = b;
+
+            }
+            else ls[Date] = b;
         }
     }
 }

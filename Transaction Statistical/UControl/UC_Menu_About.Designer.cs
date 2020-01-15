@@ -174,8 +174,8 @@
             // 
             // mode_Panel1
             // 
-            this.mode_Panel1.BackColor = InitGUI.Custom.Frm_TopToolbar.DisplayColor;
-            this.mode_Panel1.BorderColor = InitGUI.Custom.Menu_Border.DisplayColor;
+            this.mode_Panel1.BackColor = InitGUI.Custom.Menu_RightBckgd.DisplayColor;
+            this.mode_Panel1.BorderColor = InitGUI.Custom.Frm_Border.DisplayColor;
             this.mode_Panel1.Controls.Add(this.mode_Label9);
             this.mode_Panel1.Controls.Add(this.lv_Version);
             this.mode_Panel1.Controls.Add(this.mode_Label2);
@@ -301,7 +301,7 @@
             // 
             // mode_Panel1
             // 
-            this.mode_Panel1.BackColor = InitGUI.Custom.Frm_TopToolbar.DisplayColor;
+            this.mode_Panel1.BackColor = InitGUI.Custom.Menu_RightBckgd.DisplayColor;
             this.mode_Panel1.BorderColor = InitGUI.Custom.Frm_Border.DisplayColor;
             // 
             // lv_Version
