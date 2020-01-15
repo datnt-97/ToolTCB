@@ -384,7 +384,36 @@ namespace Transaction_Statistical
         {
             base.BackColor = InitGUI.Custom.Frm_Background.DisplayColor;
             base.ForeColor = InitGUI.Custom.Frm_ForeColor.DisplayColor;
-        }       
+        }
+        public void CloneFrom(Mode_TreeView treeviewNew)
+        {
+            try
+            {
+                this.Nodes.Clear();
+                TreeNode newTn;
+                foreach (TreeNode tn in treeviewNew.Nodes)
+                {
+                    newTn = new TreeNode(tn.Text, tn.ImageIndex, tn.SelectedImageIndex);
+                    if (tn.Tag != null) newTn.Tag = tn.Tag;
+                    CopyChildren(newTn, tn);
+                    this.Nodes.Add(newTn);
+                    if (tn.IsExpanded) newTn.Expand();
+                }
+            }
+            catch { }
+        }
+        private void CopyChildren(TreeNode parent, TreeNode original)
+        {
+            TreeNode newTn;
+            foreach (TreeNode tn in original.Nodes)
+            {
+                newTn = new TreeNode(tn.Text, tn.ImageIndex, tn.SelectedImageIndex);
+                if (tn.Tag != null) newTn.Tag = tn.Tag;
+                parent.Nodes.Add(newTn);
+                CopyChildren(newTn, tn);
+                if (tn.IsExpanded) newTn.Expand();
+            }
+        }
     }
     public class Mode_ComboBox : ComboBox
     {

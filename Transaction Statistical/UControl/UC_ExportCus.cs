@@ -161,7 +161,7 @@ namespace Transaction_Statistical.UControl
             this.PerformLayout();
 
         }
-        public void LoadTemplate(bool isLoad)
+        public void LoadTemplate()
         {
             try
             {

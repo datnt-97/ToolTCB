@@ -164,7 +164,7 @@ namespace Transaction_Statistical.UControl
                     prb_Process.CustomText = "Show data";
                     btn_Export.Enabled = true;
                     string day;
-                    int countDisplay = 10;
+                    int countDisplay = 500;
                     foreach (KeyValuePair<string, Dictionary<DateTime, object>> kTerminal in InitParametar.ReadTrans.ListTransaction)
                     {
                         int countCycle = kTerminal.Value.Where(x => (x.Value is Cycle)).ToList().Count;
@@ -285,10 +285,6 @@ namespace Transaction_Statistical.UControl
         {
             try
             {
-                TreeNode ndRoot = e.Node;
-                while (ndRoot.Parent != null)
-                    ndRoot = ndRoot.Parent;
-                string terminal = ndRoot.Text.Substring(ndRoot.Text.IndexOf('[') + 1, ndRoot.Text.IndexOf(']') - ndRoot.Text.IndexOf('[') - 1);
                 if (e.Node != null && e.Node.Tag != null && e.Node.Tag is Transaction)
                 {
 
@@ -525,6 +521,11 @@ namespace Transaction_Statistical.UControl
                 }
                 else if (e.Node != null && e.Node.Tag != null && e.Node.Tag is DateTime)
                 {
+                    TreeNode ndRoot = e.Node;
+                    while (ndRoot.Parent != null)
+                        ndRoot = ndRoot.Parent;
+                    string terminal = ndRoot.Text.Substring(ndRoot.Text.IndexOf('[') + 1, ndRoot.Text.IndexOf(']') - ndRoot.Text.IndexOf('[') - 1);
+
                     DateTime dNode = (DateTime)e.Node.Tag;
                     foreach (KeyValuePair<DateTime, object> kTransaction in InitParametar.ReadTrans.ListTransaction[terminal].OrderBy(x => x.Key))
                         AddTransactionToNode(e.Node, kTransaction.Key, terminal, kTransaction.Value);
