@@ -745,7 +745,7 @@ namespace Transaction_Statistical.Class
 
                             }
 
-                            if (itemTrans.ListEvent.Values.Where(e => e.isWarning).Count() > 0)
+                            if (evts.Values.Where(e => e.isWarning).Count() > 0)
                             {
                                 using (ExcelRange rng = worksheet.Cells[string.Format("A{0}:Z{1}", indexData, indexTo)])
                                 {
