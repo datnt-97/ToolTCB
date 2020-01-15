@@ -22,16 +22,16 @@ namespace Transaction_Statistical.AddOn
         private List<TabPanelControl> tabPanelCtrlList = new List<TabPanelControl> { };
 
         private Size tab_size = new Size(110, 25);
-        private Color sel_tab_forecolor = Color.White;
-        private Color unsel_tab_forecolor = Color.White;
-        private Color sel_tab_backcolor = Color.FromArgb(20, 120, 240);
-        private Color un_sel_tab_backcolor = Color.FromArgb(40, 40, 40);
-        private Color tab_mouseHvrColor = Color.FromArgb(20, 120, 240);
-        private Color tab_mouseClkColor = Color.FromArgb(20, 80, 200);
+        private Color sel_tab_forecolor = InitGUI.Custom.Tab_sel_forecolor.DisplayColor;
+        private Color unsel_tab_forecolor = InitGUI.Custom.Tab_unsel_forecolor.DisplayColor;
+        private Color sel_tab_backcolor = InitGUI.Custom.Tab_Sel_Backcolor.DisplayColor;
+        private Color un_sel_tab_backcolor = InitGUI.Custom.Tab_UnSel_Backcolor.DisplayColor;
+        private Color tab_mouseHvrColor = InitGUI.Custom.Tab_MouseHvrColor.DisplayColor;
+        private Color tab_mouseClkColor = InitGUI.Custom.Tab_MouseClkColor.DisplayColor;
         private int txt_x_loc = 10, txt_y_loc = 5;
-        private Color ribbon_Color = Color.FromArgb(20, 120, 240);
-        private Color tabCtrlPanel_backcolor = Color.FromArgb(40, 40, 40);
-        private Color tabCtrlButPanel_backcolor = Color.FromArgb(30, 30, 30);
+        private Color ribbon_Color = InitGUI.Custom.Tab_Ribbon_Color.DisplayColor;
+        private Color tabCtrlPanel_backcolor = InitGUI.Custom.Tab_CtrlPanel_Backcolor.DisplayColor;
+        private Color tabCtrlButPanel_backcolor = InitGUI.Custom.Tab_CtrlButPanel_Backcolor.DisplayColor;
 
         void setHeight()
         {

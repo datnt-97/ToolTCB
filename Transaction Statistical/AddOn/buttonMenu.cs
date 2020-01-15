@@ -16,9 +16,9 @@ namespace Transaction_Statistical.AddOn
         private System.Windows.Forms.Panel pnl_4;
         int zoomSite = 1;
         bool zoomed = false;
-        Color color4point=Color.FromArgb(20,120,240);
-        Color color4pointHover=Color.DeepSkyBlue;
-        Color color4pointDown = Color.FromArgb(0, 98, 215);
+        Color color4point = System.Drawing.Color.FromArgb(20, 120, 240);
+        Color color4pointHover = System.Drawing.Color.DeepSkyBlue;
+        Color color4pointDown = System.Drawing.Color.FromArgb(0,98, 215);
 
         public ButtonMenu()
         {
@@ -37,7 +37,7 @@ namespace Transaction_Statistical.AddOn
             this.pnl_1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.pnl_1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(120)))), ((int)(((byte)(240)))));
+            this.pnl_1.BackColor = color4point;
             this.pnl_1.Location = new System.Drawing.Point(1, 1);
             this.pnl_1.Name = "pnl_1";
             this.pnl_1.Size = new System.Drawing.Size(16, 16);
@@ -53,7 +53,7 @@ namespace Transaction_Statistical.AddOn
             this.pnl_2.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.pnl_2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(120)))), ((int)(((byte)(240)))));
+            this.pnl_2.BackColor = color4point;
             this.pnl_2.Location = new System.Drawing.Point(20, 1);
             this.pnl_2.Name = "pnl_2";
             this.pnl_2.Size = new System.Drawing.Size(16, 16);
@@ -69,7 +69,7 @@ namespace Transaction_Statistical.AddOn
             this.pnl_3.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.pnl_3.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(120)))), ((int)(((byte)(240)))));
+            this.pnl_3.BackColor = color4point;
             this.pnl_3.Location = new System.Drawing.Point(1, 20);
             this.pnl_3.Name = "pnl_3";
             this.pnl_3.Size = new System.Drawing.Size(16, 16);
@@ -85,7 +85,7 @@ namespace Transaction_Statistical.AddOn
             this.pnl_4.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.pnl_4.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(120)))), ((int)(((byte)(240)))));
+            this.pnl_4.BackColor = color4point;
             this.pnl_4.Location = new System.Drawing.Point(20, 20);
             this.pnl_4.Name = "pnl_4";
             this.pnl_4.Size = new System.Drawing.Size(16, 16);
@@ -112,7 +112,9 @@ namespace Transaction_Statistical.AddOn
         public Color Color4point
         {
             get { return color4point; }
-            set { color4point = value; Invalidate(); }
+            set { color4point = value;
+                this.pnl_1.BackColor = this.pnl_2.BackColor = this.pnl_3.BackColor = this.pnl_4.BackColor = value;
+                Invalidate(); }
         }
         public Color Color4pointHover
         {
@@ -132,7 +134,8 @@ namespace Transaction_Statistical.AddOn
             if (zoomed) return;
             zoomed = true;
             Thread.Sleep(10);
-          if(OnMouseEnterHandler!=null)  OnMouseEnterHandler(this, e);
+            pnl_1.BackColor = pnl_2.BackColor = pnl_3.BackColor = pnl_4.BackColor = color4pointHover;
+            if (OnMouseEnterHandler!=null)  OnMouseEnterHandler(this, e);
             int n = 0;
             while (zoomSite >= n)
             {
@@ -174,7 +177,7 @@ namespace Transaction_Statistical.AddOn
                 pnl_4.Size = new System.Drawing.Size(pnl_4.Width - 1, pnl_4.Height - 1);
                 n++;
             }
-           
+            pnl_1.BackColor = pnl_2.BackColor = pnl_3.BackColor = pnl_4.BackColor = color4point;
         }
         
        

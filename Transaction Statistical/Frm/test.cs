@@ -15,21 +15,20 @@ namespace Transaction_Statistical.Frm
         public test()
         {
             InitializeComponent();
+            Test1();
         }
-
-        private void buttonZ1_MouseClick(object sender, MouseEventArgs e)
+        private void Test1()
         {
+            string[] coloursArr = { "Red", "Green", "Black",
+                                "White", "Orange", "Yellow",
+                                "Blue", "Maroon", "Pink", "Purple" };
 
+            for (int i = 0; i < coloursArr.Length; i++)
+            {
+                CCBoxItem item = new CCBoxItem(coloursArr[i], i);
+                checkedComboBox3.Items.Add(item);
+            }
         }
 
-        private void buttonZ1_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void buttonZ1_BackColorChanged(object sender, EventArgs e)
-        {
-
-        }
     }
 }

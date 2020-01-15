@@ -1254,16 +1254,18 @@ namespace Transaction_Statistical
                 DataReader = sqliteCommand.ExecuteReader();
                 DataTables.Load(DataReader);
                 DbDisconnect();
+                if (DataTables.Rows.Count != 0)
+                    return DataTables.Rows[0][ColumnData].ToString();
             }
             catch (Exception ex)
             {
                 SystemLog.WriteSQLLog(this.GetType().Name, MethodBase.GetCurrentMethod().Name, ex.ToString());
                 DbDisconnect();
-                return null;
+               
                 // MsgInfo.MessageBoxError("Class SQLite", "SQLite", "GetTableDataWith2ColumnName", "Parameter1: " + TableName + "\n Parameter2: " + ColumnName1 + "\n Parameter3: " + Equals1 + "\n Parameter4: " + ColumnName2 + "\n Parameter5: " + Equals2 + "\n" +ex.ToString());
                 //MessageBox.Show("Error: " + ex.Message.ToString(), "Error", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
             }
-            return DataTables.Rows[0][ColumnData].ToString();
+            return null;
         }
         public bool CheckExistValue(string TableName, string ColumnName, string Equals)
         {
@@ -1466,8 +1468,8 @@ namespace Transaction_Statistical
         {
             try
             {
-                string Pathlog = InitParametar.FolderSystemLog + @"\" + string.Format("{0:yyyyMMdd}", DateTime.Now);
-                string FileLog = Pathlog + @"\SQL.log";
+                string Pathlog = InitParametar.FolderSystemTrace + @"\" + string.Format("{0:yyyyMMdd}", DateTime.Now);
+                string FileLog = Pathlog + @".log";
                 if (!Directory.Exists(Pathlog))
                 {
                     Directory.CreateDirectory(Pathlog);
@@ -1489,7 +1491,7 @@ namespace Transaction_Statistical
         {
             try
             {
-                string Pathlog = InitParametar.FolderSystemLog + @"\" + string.Format("{0:yyyyMMdd}", DateTime.Now);
+                string Pathlog = InitParametar.FolderSystemTrace + @"\" + string.Format("{0:yyyyMMdd}", DateTime.Now);
                 string FileLog = Pathlog + @"\" + TID + ".log";
                 if (!Directory.Exists(Pathlog))
                 {

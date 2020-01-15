@@ -14,6 +14,22 @@
     <Deterministic>true</Deterministic>
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <PublishUrl>D:\Export\</PublishUrl>
+    <Install>true</Install>
+    <InstallFrom>Disk</InstallFrom>
+    <UpdateEnabled>false</UpdateEnabled>
+    <UpdateMode>Foreground</UpdateMode>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdateRequired>false</UpdateRequired>
+    <MapFileExtensions>true</MapFileExtensions>
+    <ApplicationRevision>3</ApplicationRevision>
+    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
+    <UseApplicationTrust>false</UseApplicationTrust>
+    <PublishWizardCompleted>true</PublishWizardCompleted>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -39,7 +55,35 @@
   <PropertyGroup>
     <ApplicationIcon>logo_big.ico</ApplicationIcon>
   </PropertyGroup>
+  <PropertyGroup />
+  <PropertyGroup>
+    <ManifestCertificateThumbprint>F591B111D3E3C00DD2C644684D1B96E3D587815F</ManifestCertificateThumbprint>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ManifestKeyFile>Transaction Statistical_TemporaryKey.pfx</ManifestKeyFile>
+  </PropertyGroup>
+  <PropertyGroup>
+    <GenerateManifests>false</GenerateManifests>
+  </PropertyGroup>
+  <PropertyGroup>
+    <SignManifests>true</SignManifests>
+  </PropertyGroup>
+  <PropertyGroup>
+    <TargetZone>LocalIntranet</TargetZone>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationManifest>Properties\app.manifest</ApplicationManifest>
+  </PropertyGroup>
   <ItemGroup>
+    <Reference Include="DeltaCompressionDotNet, Version=1.1.0.0, Culture=neutral, PublicKeyToken=1d14d6e5194e7f4a, processorArchitecture=MSIL">
+      <HintPath>..\packages\DeltaCompressionDotNet.1.1.0\lib\net20\DeltaCompressionDotNet.dll</HintPath>
+    </Reference>
+    <Reference Include="DeltaCompressionDotNet.MsDelta, Version=1.1.0.0, Culture=neutral, PublicKeyToken=46b2138a390abf55, processorArchitecture=MSIL">
+      <HintPath>..\packages\DeltaCompressionDotNet.1.1.0\lib\net20\DeltaCompressionDotNet.MsDelta.dll</HintPath>
+    </Reference>
+    <Reference Include="DeltaCompressionDotNet.PatchApi, Version=1.1.0.0, Culture=neutral, PublicKeyToken=3e8888ee913ed789, processorArchitecture=MSIL">
+      <HintPath>..\packages\DeltaCompressionDotNet.1.1.0\lib\net20\DeltaCompressionDotNet.PatchApi.dll</HintPath>
+    </Reference>
     <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <HintPath>..\packages\EntityFramework.6.3.0\lib\net45\EntityFramework.dll</HintPath>
     </Reference>
@@ -49,17 +93,31 @@
     <Reference Include="EPPlus, Version=4.1.0.0, Culture=neutral, PublicKeyToken=ea159fdaa78159a1, processorArchitecture=MSIL">
       <HintPath>..\packages\EPPlus.4.1.0\lib\net40\EPPlus.dll</HintPath>
     </Reference>
-    <Reference Include="MetroFramework, Version=1.4.0.0, Culture=neutral, PublicKeyToken=5f91a84759bf584a, processorArchitecture=MSIL">
-      <HintPath>..\packages\MetroModernUI.1.4.0.0\lib\net\MetroFramework.dll</HintPath>
+    <Reference Include="Interop.MSHTML">
+      <HintPath>C:\Users\datnt\Documents\Zalo Received Files\Interop.MSHTML.dll</HintPath>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
     </Reference>
-    <Reference Include="MetroFramework.Design, Version=1.4.0.0, Culture=neutral, PublicKeyToken=5f91a84759bf584a, processorArchitecture=MSIL">
-      <HintPath>..\packages\MetroModernUI.1.4.0.0\lib\net\MetroFramework.Design.dll</HintPath>
+    <Reference Include="Mono.Cecil, Version=0.9.6.0, Culture=neutral, PublicKeyToken=0738eb9f132ed756, processorArchitecture=MSIL">
+      <HintPath>..\packages\Mono.Cecil.0.9.6.1\lib\net45\Mono.Cecil.dll</HintPath>
     </Reference>
-    <Reference Include="MetroFramework.Fonts, Version=1.4.0.0, Culture=neutral, PublicKeyToken=5f91a84759bf584a, processorArchitecture=MSIL">
-      <HintPath>..\packages\MetroModernUI.1.4.0.0\lib\net\MetroFramework.Fonts.dll</HintPath>
+    <Reference Include="Mono.Cecil.Mdb, Version=0.9.6.0, Culture=neutral, PublicKeyToken=0738eb9f132ed756, processorArchitecture=MSIL">
+      <HintPath>..\packages\Mono.Cecil.0.9.6.1\lib\net45\Mono.Cecil.Mdb.dll</HintPath>
+    </Reference>
+    <Reference Include="Mono.Cecil.Pdb, Version=0.9.6.0, Culture=neutral, PublicKeyToken=0738eb9f132ed756, processorArchitecture=MSIL">
+      <HintPath>..\packages\Mono.Cecil.0.9.6.1\lib\net45\Mono.Cecil.Pdb.dll</HintPath>
+    </Reference>
+    <Reference Include="Mono.Cecil.Rocks, Version=0.9.6.0, Culture=neutral, PublicKeyToken=0738eb9f132ed756, processorArchitecture=MSIL">
+      <HintPath>..\packages\Mono.Cecil.0.9.6.1\lib\net45\Mono.Cecil.Rocks.dll</HintPath>
+    </Reference>
+    <Reference Include="SharpCompress, Version=0.17.1.0, Culture=neutral, PublicKeyToken=afb0a02973931d96, processorArchitecture=MSIL">
+      <HintPath>..\packages\SharpCompress.0.17.1\lib\net45\SharpCompress.dll</HintPath>
+    </Reference>
+    <Reference Include="Splat, Version=1.6.2.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Splat.1.6.2\lib\Net45\Splat.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data.SQLite, Version=1.0.112.0, Culture=neutral, PublicKeyToken=db937bc2d44ff139, processorArchitecture=MSIL">
       <HintPath>..\packages\System.Data.SQLite.Core.1.0.112.0\lib\net45\System.Data.SQLite.dll</HintPath>
@@ -72,6 +130,8 @@
     </Reference>
     <Reference Include="System.Design" />
     <Reference Include="System.DirectoryServices" />
+    <Reference Include="System.Management" />
+    <Reference Include="System.Web.Extensions" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -86,7 +146,29 @@
     <Compile Include="AddOn\buttonMenu.cs">
       <SubType>UserControl</SubType>
     </Compile>
+    <Compile Include="AddOn\ButtonSetColor.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="AddOn\ButtonSetColor.Designer.cs">
+      <DependentUpon>ButtonSetColor.cs</DependentUpon>
+    </Compile>
     <Compile Include="AddOn\buttonX.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="AddOn\CheckboxCombobox.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="AddOn\CheckboxCombobox.Designer.cs">
+      <DependentUpon>CheckboxCombobox.cs</DependentUpon>
+    </Compile>
+    <Compile Include="AddOn\EditorHTML.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="AddOn\EditorHTML.Designer.cs">
+      <DependentUpon>EditorHTML.cs</DependentUpon>
+    </Compile>
+    <Compile Include="AddOn\InitGUI.cs" />
+    <Compile Include="AddOn\TextProcessBar.cs">
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="AddOn\TreeNodeX.cs" />
@@ -116,8 +198,10 @@
     </Compile>
     <Compile Include="Class\Defind.cs" />
     <Compile Include="Class\IconHelper.cs" />
+    <Compile Include="Class\MailUtility.cs" />
     <Compile Include="Class\SQLiteHelper.cs" />
     <Compile Include="Class\TemplateHelper.cs" />
+    <Compile Include="Class\Aes.cs" />
     <Compile Include="Class\Utility.cs" />
     <Compile Include="Frm\Frm_TemplateDefault.cs">
       <SubType>Form</SubType>
@@ -145,18 +229,59 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="UControl\TaskService.cs" />
+    <Compile Include="UControl\UC_Access.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UControl\UC_Access.Designer.cs">
+      <DependentUpon>UC_Access.cs</DependentUpon>
+    </Compile>
     <Compile Include="UControl\UC_CfgTemplate.cs">
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="UControl\UC_CfgTemplate.Designer.cs">
       <DependentUpon>UC_CfgTemplate.cs</DependentUpon>
     </Compile>
+    <Compile Include="UControl\UC_CustomTemplate.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UControl\UC_CustomTemplate.Designer.cs">
+      <DependentUpon>UC_CustomTemplate.cs</DependentUpon>
+    </Compile>
     <Compile Include="UControl\UC_Explorer.cs">
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="UControl\UC_Explorer.Designer.cs">
       <DependentUpon>UC_Explorer.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UControl\UC_ExportCus.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UControl\UC_ExportCus.Designer.cs">
+      <DependentUpon>UC_ExportCus.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UControl\UC_Feedback.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UControl\UC_Feedback.Designer.cs">
+      <DependentUpon>UC_Feedback.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UControl\UC_Licensing.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UControl\UC_Licensing.Designer.cs">
+      <DependentUpon>UC_Licensing.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UControl\UC_Menu_About.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UControl\UC_Menu_About.Designer.cs">
+      <DependentUpon>UC_Menu_About.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UControl\UC_Menu_History.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UControl\UC_Menu_History.Designer.cs">
+      <DependentUpon>UC_Menu_History.cs</DependentUpon>
     </Compile>
     <Compile Include="UControl\UC_Info.cs">
       <SubType>UserControl</SubType>
@@ -188,14 +313,41 @@
     <Compile Include="UControl\UC_Menu_Startup.Designer.cs">
       <DependentUpon>UC_Menu_Startup.cs</DependentUpon>
     </Compile>
+    <Compile Include="UControl\UC_NewTemplate.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UControl\UC_NewTemplate.Designer.cs">
+      <DependentUpon>UC_NewTemplate.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UControl\UC_RegisterLicense.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UControl\UC_RegisterLicense.Designer.cs">
+      <DependentUpon>UC_RegisterLicense.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UControl\UC_Search.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UControl\UC_Search.Designer.cs">
+      <DependentUpon>UC_Search.cs</DependentUpon>
+    </Compile>
     <Compile Include="UControl\UC_Transaction.cs">
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="UControl\UC_Transaction.Designer.cs">
       <DependentUpon>UC_Transaction.cs</DependentUpon>
     </Compile>
+    <Compile Include="UControl\UC_USBKey.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UControl\UC_USBKey.Designer.cs">
+      <DependentUpon>UC_USBKey.cs</DependentUpon>
+    </Compile>
     <EmbeddedResource Include="AddOn\buttonMenu.resx">
       <DependentUpon>buttonMenu.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="AddOn\ButtonSetColor.resx">
+      <DependentUpon>ButtonSetColor.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="AddOn\TabControlX.resx">
       <DependentUpon>TabControlX.cs</DependentUpon>
@@ -225,11 +377,29 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
+    <EmbeddedResource Include="UControl\UC_Access.resx">
+      <DependentUpon>UC_Access.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="UControl\UC_CfgTemplate.resx">
       <DependentUpon>UC_CfgTemplate.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="UControl\UC_CustomTemplate.resx">
+      <DependentUpon>UC_CustomTemplate.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="UControl\UC_Explorer.resx">
       <DependentUpon>UC_Explorer.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UControl\UC_ExportCus.resx">
+      <DependentUpon>UC_ExportCus.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UControl\UC_Licensing.resx">
+      <DependentUpon>UC_Licensing.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UControl\UC_Menu_About.resx">
+      <DependentUpon>UC_Menu_About.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UControl\UC_Menu_History.resx">
+      <DependentUpon>UC_Menu_History.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UControl\UC_Info.resx">
       <DependentUpon>UC_Info.cs</DependentUpon>
@@ -246,10 +416,23 @@
     <EmbeddedResource Include="UControl\UC_Menu_Startup.resx">
       <DependentUpon>UC_Menu_Startup.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="UControl\UC_NewTemplate.resx">
+      <DependentUpon>UC_NewTemplate.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UControl\UC_RegisterLicense.resx">
+      <DependentUpon>UC_RegisterLicense.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UControl\UC_Search.resx">
+      <DependentUpon>UC_Search.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="UControl\UC_Transaction.resx">
       <DependentUpon>UC_Transaction.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="UControl\UC_USBKey.resx">
+      <DependentUpon>UC_USBKey.cs</DependentUpon>
+    </EmbeddedResource>
     <None Include="packages.config" />
+    <None Include="Properties\app.manifest" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -259,6 +442,7 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <None Include="Transaction Statistical_TemporaryKey.pfx" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
@@ -280,6 +464,26 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="logo_big.ico" />
+    <None Include="Resources\uol2.bmp" />
+    <None Include="Resources\underscore2.bmp" />
+    <None Include="Resources\rj2.bmp" />
+    <None Include="Resources\right_arrow2.bmp" />
+    <None Include="Resources\outdent2.bmp" />
+    <None Include="Resources\ol2.bmp" />
+    <None Include="Resources\lj2.bmp" />
+    <None Include="Resources\link2.bmp" />
+    <None Include="Resources\italic2.bmp" />
+    <None Include="Resources\indent2.bmp" />
+    <None Include="Resources\image2.png" />
+    <None Include="Resources\fj2.bmp" />
+    <None Include="Resources\color2.bmp" />
+    <None Include="Resources\cj2.bmp" />
+    <None Include="Resources\bold2.bmp" />
+    <None Include="Resources\backcolor2.bmp" />
+    <None Include="Resources\Next_Select.png" />
+    <None Include="Resources\next.png" />
+    <None Include="Resources\key.png" />
+    <None Include="Resources\keys.png" />
     <None Include="Resources\NewFile.ico" />
     <None Include="Resources\Shorcut.ico" />
     <None Include="Resources\Folder_Close.ico" />
@@ -287,6 +491,115 @@
     <None Include="Resources\CDROM.ico" />
     <None Include="Resources\Internet.ico" />
     <None Include="Resources\Computer.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <PublishFile Include="EntityFramework">
+      <Visible>False</Visible>
+      <Group>
+      </Group>
+      <TargetPath>
+      </TargetPath>
+      <PublishState>Include</PublishState>
+      <IncludeHash>True</IncludeHash>
+      <FileType>Assembly</FileType>
+    </PublishFile>
+    <PublishFile Include="EntityFramework.SqlServer">
+      <Visible>False</Visible>
+      <Group>
+      </Group>
+      <TargetPath>
+      </TargetPath>
+      <PublishState>Include</PublishState>
+      <IncludeHash>True</IncludeHash>
+      <FileType>Assembly</FileType>
+    </PublishFile>
+    <PublishFile Include="EPPlus">
+      <Visible>False</Visible>
+      <Group>
+      </Group>
+      <TargetPath>
+      </TargetPath>
+      <PublishState>Include</PublishState>
+      <IncludeHash>True</IncludeHash>
+      <FileType>Assembly</FileType>
+    </PublishFile>
+    <PublishFile Include="FastColoredTextBox">
+      <Visible>False</Visible>
+      <Group>
+      </Group>
+      <TargetPath>
+      </TargetPath>
+      <PublishState>Include</PublishState>
+      <IncludeHash>True</IncludeHash>
+      <FileType>Assembly</FileType>
+    </PublishFile>
+    <PublishFile Include="FastColoredTextBox.pdb">
+      <Visible>False</Visible>
+      <Group>
+      </Group>
+      <TargetPath>
+      </TargetPath>
+      <PublishState>Include</PublishState>
+      <IncludeHash>True</IncludeHash>
+      <FileType>File</FileType>
+    </PublishFile>
+    <PublishFile Include="logo_big.ico">
+      <Visible>False</Visible>
+      <Group>
+      </Group>
+      <TargetPath>
+      </TargetPath>
+      <PublishState>Include</PublishState>
+      <IncludeHash>True</IncludeHash>
+      <FileType>File</FileType>
+    </PublishFile>
+    <PublishFile Include="System.Data.SQLite">
+      <Visible>False</Visible>
+      <Group>
+      </Group>
+      <TargetPath>
+      </TargetPath>
+      <PublishState>Include</PublishState>
+      <IncludeHash>True</IncludeHash>
+      <FileType>Assembly</FileType>
+    </PublishFile>
+    <PublishFile Include="System.Data.SQLite.EF6">
+      <Visible>False</Visible>
+      <Group>
+      </Group>
+      <TargetPath>
+      </TargetPath>
+      <PublishState>Include</PublishState>
+      <IncludeHash>True</IncludeHash>
+      <FileType>Assembly</FileType>
+    </PublishFile>
+    <PublishFile Include="System.Data.SQLite.Linq">
+      <Visible>False</Visible>
+      <Group>
+      </Group>
+      <TargetPath>
+      </TargetPath>
+      <PublishState>Include</PublishState>
+      <IncludeHash>True</IncludeHash>
+      <FileType>Assembly</FileType>
+    </PublishFile>
+    <PublishFile Include="Transaction Statistical.pdb">
+      <Visible>False</Visible>
+      <Group>
+      </Group>
+      <TargetPath>
+      </TargetPath>
+      <PublishState>Include</PublishState>
+      <IncludeHash>True</IncludeHash>
+      <FileType>File</FileType>
+    </PublishFile>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

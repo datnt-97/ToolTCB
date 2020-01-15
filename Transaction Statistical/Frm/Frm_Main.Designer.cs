@@ -1,4 +1,6 @@
-﻿namespace Transaction_Statistical
+﻿using System.Threading;
+
+namespace Transaction_Statistical
 {
     partial class Frm_Main
     {
@@ -26,7 +28,7 @@
         /// Required method for Designer support - do not modify
         /// the contents of this method with the code editor.
         /// </summary>
-        private void InitializeComponent()
+        private void InitializeComponent2()
         {
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Frm_Main));
@@ -47,7 +49,7 @@
             // 
             // TopBorderPanel
             // 
-            this.TopBorderPanel.BackColor = System.Drawing.Color.Blue;
+            this.TopBorderPanel.BackColor = InitGUI.Custom.Frm_Border.DisplayColor;
             this.TopBorderPanel.Cursor = System.Windows.Forms.Cursors.SizeNS;
             this.TopBorderPanel.Dock = System.Windows.Forms.DockStyle.Top;
             this.TopBorderPanel.Location = new System.Drawing.Point(0, 0);
@@ -63,7 +65,7 @@
             // 
             this.TopPanel.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.TopPanel.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(37)))), ((int)(((byte)(37)))), ((int)(((byte)(38)))));
+            this.TopPanel.BackColor = InitGUI.Custom.Frm_TopToolbar.DisplayColor;
             this.TopPanel.Controls.Add(this.pictureBox1);
             this.TopPanel.Controls.Add(this.btn_MaxButton);
             this.TopPanel.Controls.Add(this.btn_MinButton);
@@ -79,7 +81,7 @@
             // 
             // pictureBox1
             // 
-            this.pictureBox1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(37)))), ((int)(((byte)(37)))), ((int)(((byte)(38)))));
+            this.pictureBox1.BackColor = System.Drawing.Color.Transparent;
             this.pictureBox1.BackgroundImage = global::Transaction_Statistical.Properties.Resources.favticon;
             this.pictureBox1.ErrorImage = global::Transaction_Statistical.Properties.Resources.favticon;
             this.pictureBox1.Image = global::Transaction_Statistical.Properties.Resources.favticon;
@@ -95,12 +97,12 @@
             // btn_MaxButton
             // 
             this.btn_MaxButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btn_MaxButton.BZBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(37)))), ((int)(((byte)(37)))), ((int)(((byte)(38)))));
+            this.btn_MaxButton.BZBackColor = InitGUI.Custom.Frm_TopToolbar.DisplayColor;
             this.btn_MaxButton.CFormState = Transaction_Statistical.AddOn.MinMaxButton.CustomFormState.Normal;
             this.btn_MaxButton.DisplayText = "_";
             this.btn_MaxButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btn_MaxButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btn_MaxButton.ForeColor = System.Drawing.Color.White;
+            this.btn_MaxButton.ForeColor = InitGUI.Custom.Frm_TextTilte.DisplayColor;
             this.btn_MaxButton.Location = new System.Drawing.Point(940, 0);
             this.btn_MaxButton.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.btn_MaxButton.MouseClickColor1 = System.Drawing.Color.Silver;
@@ -118,11 +120,11 @@
             // 
             this.btn_MinButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btn_MinButton.BorderLeft = false;
-            this.btn_MinButton.BZBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(37)))), ((int)(((byte)(37)))), ((int)(((byte)(38)))));
+            this.btn_MinButton.BZBackColor = InitGUI.Custom.Frm_TopToolbar.DisplayColor;
             this.btn_MinButton.DisplayText = "_";
             this.btn_MinButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btn_MinButton.Font = new System.Drawing.Font("Microsoft YaHei UI", 18F, System.Drawing.FontStyle.Bold);
-            this.btn_MinButton.ForeColor = System.Drawing.Color.White;
+            this.btn_MinButton.ForeColor = InitGUI.Custom.Frm_TextTilte.DisplayColor;
             this.btn_MinButton.Location = new System.Drawing.Point(910, 0);
             this.btn_MinButton.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.btn_MinButton.MouseClickColor1 = System.Drawing.Color.Silver;
@@ -142,11 +144,11 @@
             // 
             this.btn_Close.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btn_Close.BorderLeft = false;
-            this.btn_Close.BZBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(37)))), ((int)(((byte)(37)))), ((int)(((byte)(38)))));
+            this.btn_Close.BZBackColor = InitGUI.Custom.Frm_TopToolbar.DisplayColor;
             this.btn_Close.DisplayText = "X";
             this.btn_Close.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btn_Close.Font = new System.Drawing.Font("Microsoft YaHei UI", 11.25F, System.Drawing.FontStyle.Bold);
-            this.btn_Close.ForeColor = System.Drawing.Color.White;
+            this.btn_Close.ForeColor = InitGUI.Custom.Frm_TextTilte.DisplayColor;
             this.btn_Close.Location = new System.Drawing.Point(970, 0);
             this.btn_Close.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.btn_Close.MouseClickColor1 = System.Drawing.Color.FromArgb(((int)(((byte)(150)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
@@ -164,7 +166,7 @@
             // 
             // LeftPanel
             // 
-            this.LeftPanel.BackColor = System.Drawing.Color.Blue;
+            this.LeftPanel.BackColor = InitGUI.Custom.Frm_Border.DisplayColor;
             this.LeftPanel.Cursor = System.Windows.Forms.Cursors.SizeWE;
             this.LeftPanel.Dock = System.Windows.Forms.DockStyle.Left;
             this.LeftPanel.Location = new System.Drawing.Point(0, 1);
@@ -178,7 +180,7 @@
             // 
             // RightPanel
             // 
-            this.RightPanel.BackColor = System.Drawing.Color.Blue;
+            this.RightPanel.BackColor = InitGUI.Custom.Frm_Border.DisplayColor;
             this.RightPanel.Cursor = System.Windows.Forms.Cursors.SizeWE;
             this.RightPanel.Dock = System.Windows.Forms.DockStyle.Right;
             this.RightPanel.Location = new System.Drawing.Point(999, 1);
@@ -192,7 +194,7 @@
             // 
             // BottomPanel
             // 
-            this.BottomPanel.BackColor = System.Drawing.Color.Blue;
+            this.BottomPanel.BackColor = InitGUI.Custom.Frm_Border.DisplayColor;
             this.BottomPanel.Cursor = System.Windows.Forms.Cursors.SizeNS;
             this.BottomPanel.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.BottomPanel.Location = new System.Drawing.Point(1, 431);
@@ -209,19 +211,19 @@
             this.tabControlX1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.tabControlX1.CtrlPanelColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(40)))), ((int)(((byte)(40)))));
+          //  this.tabControlX1.CtrlPanelColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(40)))), ((int)(((byte)(40)))));
             this.tabControlX1.Location = new System.Drawing.Point(2, 24);
-            this.tabControlX1.MouseClkTabColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(80)))), ((int)(((byte)(200)))));
-            this.tabControlX1.MouseHrTabColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(120)))), ((int)(((byte)(240)))));
+           // this.tabControlX1.MouseClkTabColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(80)))), ((int)(((byte)(200)))));
+          //  this.tabControlX1.MouseHrTabColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(120)))), ((int)(((byte)(240)))));
             this.tabControlX1.Name = "tabControlX1";
-            this.tabControlX1.RibbonColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(120)))), ((int)(((byte)(240)))));
-            this.tabControlX1.SelTabBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(120)))), ((int)(((byte)(240)))));
+          //  this.tabControlX1.RibbonColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(120)))), ((int)(((byte)(240)))));
+          //  this.tabControlX1.SelTabBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(120)))), ((int)(((byte)(240)))));
             this.tabControlX1.SelTabForeColor = System.Drawing.Color.White;
             this.tabControlX1.Size = new System.Drawing.Size(997, 403);
             this.tabControlX1.TabIndex = 5;
-            this.tabControlX1.TabPanelColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(30)))), ((int)(((byte)(30)))));
+         //   this.tabControlX1.TabPanelColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(30)))), ((int)(((byte)(30)))));
             this.tabControlX1.TabSize = new System.Drawing.Size(110, 25);
-            this.tabControlX1.UnSelTabBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(40)))), ((int)(((byte)(40)))));
+          //  this.tabControlX1.UnSelTabBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(40)))), ((int)(((byte)(40)))));
             this.tabControlX1.UnSelTabForeColor = System.Drawing.Color.White;
             this.tabControlX1.X_TextLoc = 10;
             this.tabControlX1.Y_TextLoc = 5;
@@ -231,7 +233,8 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(37)))), ((int)(((byte)(37)))), ((int)(((byte)(38)))));
+            this.BackColor = InitGUI.Custom.Frm_Background.DisplayColor;
+
             this.ClientSize = new System.Drawing.Size(1000, 432);
             this.Controls.Add(this.tabControlX1);
             this.Controls.Add(this.BottomPanel);
@@ -245,12 +248,53 @@
             this.Name = "Frm_Main";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Transaction Statistical";
+          //  this.TopMost = true;
             this.TopPanel.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.ResumeLayout(false);
 
-        }
+            //
+            InitGUI.Custom.Frm_TopToolbar.OnColorHandler += InitializeComponent_Refresh;
+            InitGUI.Custom.Frm_Border.OnColorHandler += InitializeComponent_Refresh;
+            InitGUI.Custom.Frm_TextTilte.OnColorHandler += InitializeComponent_Refresh;
+            InitGUI.Custom.Frm_Background.OnColorHandler += InitializeComponent_Refresh;
 
+            InitGUI.Custom.Tab_sel_forecolor.OnColorHandler += InitializeComponent_Refresh;
+            InitGUI.Custom.Tab_unsel_forecolor.OnColorHandler += InitializeComponent_Refresh;
+            InitGUI.Custom.Tab_UnSel_Backcolor.OnColorHandler += InitializeComponent_Refresh;
+            InitGUI.Custom.Tab_MouseHvrColor.OnColorHandler += InitializeComponent_Refresh;
+            InitGUI.Custom.Tab_MouseClkColor.OnColorHandler += InitializeComponent_Refresh;
+            InitGUI.Custom.Tab_Ribbon_Color.OnColorHandler += InitializeComponent_Refresh;
+            InitGUI.Custom.Tab_CtrlPanel_Backcolor.OnColorHandler += InitializeComponent_Refresh;
+            InitGUI.Custom.Tab_CtrlButPanel_Backcolor.OnColorHandler += InitializeComponent_Refresh;
+        }
+        private void InitializeComponent_Refresh(object sender,System.Drawing.Color e)
+        {
+            this.TopBorderPanel.BackColor = InitGUI.Custom.Frm_Border.DisplayColor;
+            this.TopPanel.BackColor = InitGUI.Custom.Frm_TopToolbar.DisplayColor;
+            this.btn_MaxButton.BZBackColor = InitGUI.Custom.Frm_TopToolbar.DisplayColor;
+            this.btn_MaxButton.ForeColor = InitGUI.Custom.Frm_TextTilte.DisplayColor;
+            this.btn_MinButton.BZBackColor = InitGUI.Custom.Frm_TopToolbar.DisplayColor;
+            this.btn_MinButton.ForeColor = InitGUI.Custom.Frm_TextTilte.DisplayColor;
+            this.btn_Close.BZBackColor = InitGUI.Custom.Frm_TopToolbar.DisplayColor;
+            this.btn_Close.ForeColor = InitGUI.Custom.Frm_TextTilte.DisplayColor;
+            this.LeftPanel.BackColor = InitGUI.Custom.Frm_Border.DisplayColor;
+            this.RightPanel.BackColor = InitGUI.Custom.Frm_Border.DisplayColor;
+            this.BottomPanel.BackColor = InitGUI.Custom.Frm_Border.DisplayColor;
+            this.BackColor = InitGUI.Custom.Frm_Background.DisplayColor;
+
+            this.tabControlX1.SelTabForeColor = InitGUI.Custom.Tab_sel_forecolor.DisplayColor;
+            this.tabControlX1.SelTabBackColor = InitGUI.Custom.Tab_Sel_Backcolor.DisplayColor;
+            this.tabControlX1.UnSelTabForeColor = InitGUI.Custom.Tab_unsel_forecolor.DisplayColor;
+            this.tabControlX1.UnSelTabBackColor = InitGUI.Custom.Tab_UnSel_Backcolor.DisplayColor;
+            this.tabControlX1.MouseHrTabColor = InitGUI.Custom.Tab_MouseHvrColor.DisplayColor;
+            this.tabControlX1.MouseClkTabColor = InitGUI.Custom.Tab_MouseClkColor.DisplayColor;
+            this.tabControlX1.RibbonColor = InitGUI.Custom.Tab_Ribbon_Color.DisplayColor;
+            this.tabControlX1.CtrlPanelColor = InitGUI.Custom.Tab_CtrlPanel_Backcolor.DisplayColor;
+            this.tabControlX1.TabPanelColor = InitGUI.Custom.Tab_CtrlButPanel_Backcolor.DisplayColor;
+           
+            this.tabControlX1.Invalidate();
+        }
         #endregion
 
         private System.Windows.Forms.Panel TopBorderPanel;
