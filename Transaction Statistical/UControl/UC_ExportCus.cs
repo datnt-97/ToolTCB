@@ -155,6 +155,19 @@ namespace Transaction_Statistical.UControl
                 ckbl_Forms.DisplayMember = "Value";
                 UC_Menu_Startup.Template.ToList().ForEach(x => { ckbl_Forms.SetItemChecked(x.Key, true); });
 
+                UtilityIniFile fini = new UtilityIniFile(InitParametar.PathDirectoryCurrentUserConfigData + "\\AppConfig.dat");
+                if (isLoad)
+                {
+                    txt_Destination.Text = fini.GetEntryValue("Directory", "FolderTemp_Export");
+                    if (Directory.Exists(txt_Destination.Text) || File.Exists(txt_Destination.Text)) return;
+                    txt_Destination.Text = "D:\\";
+                }
+                else
+                {
+                    fini.Write("FolderTemp_Export", txt_Destination.Text, "Directory");
+                }
+                //lblPercent.Hide();
+                //prgExport.Hide();
             }
             catch (Exception ex)
             {
@@ -195,11 +208,9 @@ namespace Transaction_Statistical.UControl
                     (this.Parent as Form).Close();
                 }
             }
-            catch (Exception ex ){ 
-                InitParametar.Send_Error(ex.ToString(), MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name);
-            }
+            catch { }
             prb_Process.Size = new Size(0, 0);
-            LoadPathTemp(false);
+            LoadTemplate(false);
         }
 
         private void chb_Open_CheckedChanged(object sender, EventArgs e)
