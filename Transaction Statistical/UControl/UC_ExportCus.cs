@@ -205,10 +205,12 @@ namespace Transaction_Statistical.UControl
                     MessageBox.Show("Export successfully. (Execute : " + (w.ElapsedMilliseconds).ToString() + " ms)", "Export", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     if (chb_Open.Checked)
                         new Thread(() => UC_Explorer.OpenFile(InitParametar.ReadTrans.FileExport, false)).Start();
-                    (this.Parent as Form).Close();
+                    //(this.Parent as Form).Close();
                 }
             }
-            catch { }
+            catch (Exception ex ){ 
+                InitParametar.Send_Error(ex.ToString(), MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name);
+            }
             prb_Process.Size = new Size(0, 0);
             LoadTemplate(false);
         }
