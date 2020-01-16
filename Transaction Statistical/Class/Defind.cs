@@ -93,13 +93,13 @@ namespace Transaction_Statistical
                 InitParametar.Send_Error(ex.ToString(), MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name); ;
             }
         }
-        public static void AutoStart(string taskName)
+        public static async Task AutoStartAsync(string taskName)
         {
             try
             {
                 AutoRunMode = true;
-                if (!InitParametar.License_CheckModule(License.Modules.Read)) return ;
-               
+                if (!InitParametar.License_CheckModule(License.Modules.Read)) return;
+
                 WriteLogApplication(string.Format("{0:HH:mm:ss fff} Class: Auto Task", DateTime.Now), true, false);
                 WriteLogApplication("   => Task name: " + taskName, false, false);
 
@@ -112,7 +112,7 @@ namespace Transaction_Statistical
                 {
                     WriteLogApplication("   => Load Template Info => Unsuccessfully", false, false);
                     WriteLogApplication("   ==> Auto end, result => Unsuccessfully", false, true);
-                    return ;
+                    return;
                 }
                 WriteLogApplication("   => Load Template Info => Successfully", false, false);
 
@@ -130,7 +130,7 @@ namespace Transaction_Statistical
                 {
                     WriteLogApplication("   => Found: 0 files", false, false);
                     WriteLogApplication("   ==> Auto end, result => Unsuccessfully", false, true);
-                    return ;
+                    return;
 
                 }
                 WriteLogApplication(string.Format("   => Found: {0} files", lsFile_Journal.Count), false, false);
@@ -139,29 +139,30 @@ namespace Transaction_Statistical
                 var watch = System.Diagnostics.Stopwatch.StartNew(); watch.Start();
                 //  ReadTrans = new ReadTransaction();
                 bool readR = false;
-                readR = Task.Run(() => ReadTrans.Reads(lsFile_Journal)).Result;
-                if (! readR)
+                readR = await Task.Run(() => ReadTrans.Reads(lsFile_Journal));
+                if (!readR)
                 {
-                    WriteLogApplication("   ==> Auto end, result => Unsuccessfully", false, true); return ;
+                    WriteLogApplication("   ==> Auto end, result => Unsuccessfully", false, true); return;
                 }
                 watch.Stop();
                 int count = ReadTrans.ListTransaction.Values.LastOrDefault().Keys.Count;
                 WriteLogApplication(string.Format("   => Read time: {0} s\n   =>Transactions: {1}\n   =>Files: {2}", watch.ElapsedMilliseconds / 1000, count, lsFile_Journal.Count), false, false);
                 Dictionary<int, string> TemplateChoosen = data[4].Substring(data[4].IndexOf('[')).Replace("[", "").Replace("]", "").Split(';').ToDictionary(x => int.Parse(x.Split(',')[0]), x => x.Split(',')[1]);
 
+                if (TemplateChoosen.Count == 0)
+                {
+                    WriteLogApplication("   ==> Auto end, result => Unsuccessfully", false, true); return;
+                }
                 watch.Start();
                 WriteLogApplication(string.Format("   => Export begin: {0:HH:mm:ss fff} ", DateTime.Now), false, false);
                 WriteLogApplication("   => Export destination: " + data[3], false, false);
                 WriteLogApplication("   => Export forms: " + TemplateChoosen.Values.ToString(), false, false);
-                if (TemplateChoosen.Count == 0)
-                {
-                    WriteLogApplication("   ==> Auto end, result => Unsuccessfully", false, true); return ;
-                }
+
                 ReadTrans.Export(data[3], TemplateChoosen, null);
                 watch.Stop();
                 WriteLogApplication(string.Format("   => Export time:{0} s", watch.ElapsedMilliseconds / 1000), false, false);
                 WriteLogApplication(string.Format("   ==> File: {0}, size {1} kb", ReadTrans.FileExport, new FileInfo(ReadTrans.FileExport).Length / 1024), false, false);
-                WriteLogApplication("   ==> Auto end, result => Successfully", false, true);             
+                WriteLogApplication("   ==> Auto end, result => Successfully", false, true);
             }
             catch (Exception ex)
             {
@@ -180,7 +181,7 @@ namespace Transaction_Statistical
                 }
                 if (AutoRunMode) return;
                 UC_Info msg = new UC_Info();
-              
+
                 msg.TextCustom.ReadOnly = false;
                 msg.TextCustom.Text = "Host name: " + Environment.MachineName;
                 msg.TextCustom.AppendText(Environment.NewLine + "Class: " + ClassName);
@@ -204,8 +205,8 @@ namespace Transaction_Statistical
                 msg.TextCustom.Update();
                 msg.Dock = DockStyle.Fill;
             }
-            catch 
-            {             
+            catch
+            {
             }
 
         }
@@ -235,9 +236,9 @@ namespace Transaction_Statistical
                     }
                 }
             }
-            catch 
+            catch
             {
-             //   MessageBox.Show(ex.Message + Environment.NewLine + FolderSystemTrace, "WriteLogApplication", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                //   MessageBox.Show(ex.Message + Environment.NewLine + FolderSystemTrace, "WriteLogApplication", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
@@ -559,7 +560,7 @@ namespace Transaction_Statistical
                         int i = 0;
                         foreach (var item in templateChoosen)
                         {
-                          if(progress!=null)  progress.CustomText = item.Value;
+                            if (progress != null) progress.CustomText = item.Value;
                             switch (item.Key)
                             {
                                 case (int)TemplateHelper.TEMPLATE.CanQuyTheoCouterTrenMay:
@@ -1011,8 +1012,11 @@ namespace Transaction_Statistical
                                 }
                                 else
                                     evt.DateBegin = DateCurrent.AddYears(88);
-                                if (tran.ListEvent.ContainsKey(evt.DateBegin)) tran.ListEvent[evt.DateBegin.AddMilliseconds(1)] = evt;
-                                else tran.ListEvent[evt.DateBegin] = evt;
+
+                                FunctionGenaral<TransactionEvent>.Parse(ref tran.ListEvent, evt.DateBegin, evt);
+
+                                //if (tran.ListEvent.ContainsKey(evt.DateBegin)) tran.ListEvent[evt.DateBegin.AddMilliseconds(1)] = evt;
+                                //else tran.ListEvent[evt.DateBegin] = evt;
                                 tran.TraceJournal_Remaining = tran.TraceJournal_Remaining.Replace(regx.stringfind, string.Empty);
                             });
                         }
@@ -1319,7 +1323,7 @@ namespace Transaction_Statistical
                     evEnd.TContent = val.value["SEnd"];
                     trans.ListEvent[evEnd.DateBegin] = evEnd;
                 }
-               
+
                 trans = await Task.Run(() => FindEventBeginInput(trans));
                 trans = await Task.Run(() => FindEventRequest(trans.DateBegin, trans));
                 trans = await Task.Run(() => FindEventTransaction(trans, trans.DateBegin));
@@ -1530,12 +1534,12 @@ namespace Transaction_Statistical
                 req.DateBegin = transaction.DateBegin;
                 req.Status = Status.Types.UnSucceeded;
                 transaction.Status = Status.Types.Warning.ToString();
-             
+
                 foreach (TransactionEvent evt in transaction.ListEvent.Values)
                 {
                     await Task.Run(() =>
                     {
-                        if(transaction.ListRequest.Count > 0)
+                        if (transaction.ListRequest.Count > 0)
                         {
                             transaction.ListRequest.LastOrDefault().Value.DateEnd = evt.DateBegin;
                         }
@@ -1572,7 +1576,20 @@ namespace Transaction_Statistical
                     });
 
                 }
-
+                var billCheckPin = transaction.ListBills.Where(x => x.Value.Type == Bills.Types.Bill_CheckPin).LastOrDefault();
+                foreach (var requ in transaction.ListRequest)
+                {
+                    var evts = transaction.ListBills.Where(x => x.Value.Date >= requ.Value.DateBegin
+                    && x.Value.Date <= requ.Value.DateEnd).LastOrDefault();
+                    if (evts.Value != null)
+                    {
+                        requ.Value.TranNo = evts.Value.TranNo;
+                    }
+                    else if (billCheckPin.Value != null)
+                    {
+                        requ.Value.TranNo = billCheckPin.Value != null ? billCheckPin.Value.TranNo : "-";
+                    }
+                }
             }
             catch (Exception ex)
             {
@@ -1581,7 +1598,7 @@ namespace Transaction_Statistical
             return transaction;
         }
 
-       
+
         private bool CheckRequestName(string name, ref string transactionType)
         {
             foreach (TransactionType type in Template_TransType_Select.Values)
@@ -1909,7 +1926,7 @@ namespace Transaction_Statistical
             return false;
         }
 
-        public static Dictionary<int, RegesValue>  RunPatternRegular(string sString, string sReg)
+        public static Dictionary<int, RegesValue> RunPatternRegular(string sString, string sReg)
         {
             Dictionary<int, RegesValue> listResult = new Dictionary<int, RegesValue>();
             try
@@ -1918,7 +1935,8 @@ namespace Transaction_Statistical
                 MatchCollection m = myRegex.Matches(sString);
                 if (m.Count != 0)
                 {
-                    Parallel.ForEach(m.OfType<Match>(),(n)=> {
+                    Parallel.ForEach(m.OfType<Match>(), (n) =>
+                    {
                         RegesValue results = new RegesValue();
                         results.stringfind = n.ToString();
                         results.index = n.Index;
@@ -1929,7 +1947,7 @@ namespace Transaction_Statistical
                         }
                         listResult[n.Index] = results;
                     });
-                    
+
                 }
             }
 

@@ -69,3 +69,4 @@ E:\Project\NPS\TCB\ToolTCB\Transaction Statistical\FastColoredTextBox\obj\Debug\
 E:\Project\NPS\TCB\ToolTCB\Transaction Statistical\FastColoredTextBox\obj\Debug\FastColoredTextBox.csproj.GenerateResource.cache
 E:\Project\NPS\TCB\ToolTCB\Transaction Statistical\FastColoredTextBox\obj\Debug\FastColoredTextBox.dll
 E:\Project\NPS\TCB\ToolTCB\Transaction Statistical\FastColoredTextBox\obj\Debug\FastColoredTextBox.pdb
+E:\Project\NPS\TCB\ToolTCB\Transaction Statistical\FastColoredTextBox\obj\Debug\FastColoredTextBox.csprojAssemblyReference.cache

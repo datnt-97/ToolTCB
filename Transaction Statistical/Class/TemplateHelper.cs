@@ -646,7 +646,7 @@ namespace Transaction_Statistical.Class
                     {
                         TransactionRequest = TransactionRequest.Where(x => x.Value.Status != Status.Types.Succeeded).ToDictionary(x => x.Key, x => x.Value);
                     }
-                    var tranNoTemp = "-";
+                    //var tranNoTemp = "-";
                     if (TransactionRequest.Count > 0)
                     {
                         foreach (var requestLast in TransactionRequest.Values)
@@ -661,16 +661,17 @@ namespace Transaction_Statistical.Class
                             var evtCounter = evts.OrderBy(x => x.Key).Where(x => x.Value.hasCouter).ToList();
 
                             // var lastBill = itemTrans.ListBills.OrderBy(x => x.Key).LastOrDefault();
-                            var billCheckPin = itemTrans.ListBills.Where(x => x.Value.Type == Bills.Types.Bill_CheckPin).LastOrDefault().Value;
-                            var bills = itemTrans.ListBills.OrderBy(x => x.Value.Date).Where(x => (requestLast.DateBegin != null && requestLast.DateEnd != null)
-                            && (x.Value.Type != Bills.Types.Bill_CheckPin
-                            && x.Value.TranNo != tranNoTemp && x.Value.Date >= requestLast.DateBegin && x.Value.Date <= requestLast.DateEnd)).LastOrDefault().Value;
+                            //var billCheckPin = itemTrans.ListBills.Where(x => x.Value.Type == Bills.Types.Bill_CheckPin).LastOrDefault().Value;
+                            //var bills = itemTrans.ListBills.OrderBy(x => x.Value.Date).Where(x => (requestLast.DateBegin != null && requestLast.DateEnd != null)
+                            //&& (x.Value.Type != Bills.Types.Bill_CheckPin
+                            //&& x.Value.TranNo != tranNoTemp && x.Value.Date >= requestLast.DateBegin && x.Value.Date <= requestLast.DateEnd)).LastOrDefault().Value;
 
                             using (ExcelRange rng = worksheet.Cells[string.Format("A{0}:A{1}", indexData, indexTo)])
                             {
                                 rng.Merge = true;
-                                rng.Value = bills != null ? bills.TranNo : (billCheckPin != null ? billCheckPin.TranNo : "-");
-                                tranNoTemp = bills != null ? bills.TranNo : (billCheckPin != null ? billCheckPin.TranNo : "-");
+                                rng.Value = !string.IsNullOrEmpty(requestLast.TranNo) ? requestLast.TranNo : "-";
+                                //rng.Value = bills != null ? bills.TranNo : (billCheckPin != null ? billCheckPin.TranNo : "-");
+                                //tranNoTemp = bills != null ? bills.TranNo : (billCheckPin != null ? billCheckPin.TranNo : "-");
 
                             }
                             using (ExcelRange rng = worksheet.Cells[string.Format("B{0}:B{1}", indexData, indexTo)])
@@ -708,12 +709,15 @@ namespace Transaction_Statistical.Class
                             using (ExcelRange rng = worksheet.Cells[string.Format("E{0}:E{1}", indexData, indexTo)])
                             {
                                 rng.Merge = true;
-                                rng.Value = cycleOfTransction != null ? cycleOfTransction.SettlementPeriodDateBegin.ToString() : "";
+                                rng.Value = cycleOfTransction != null ? cycleOfTransction.SettlementPeriodDateBegin.ToString("MM-dd-yyyy HH:mm:ss") : "";
+                                rng.Style.Numberformat.Format = "MM-dd-yyyy HH:mm:ss";
+
                             }
                             using (ExcelRange rng = worksheet.Cells[string.Format("F{0}:F{1}", indexData, indexTo)])
                             {
                                 rng.Merge = true;
-                                rng.Value = cycleOfTransction != null ? cycleOfTransction.SettlementPeriodDateEnd.ToString() : "";
+                                rng.Value = cycleOfTransction != null ? cycleOfTransction.SettlementPeriodDateEnd.ToString("MM-dd-yyyy HH:mm:ss") : "";
+                                rng.Style.Numberformat.Format = "MM-dd-yyyy HH:mm:ss";
                             }
                             using (ExcelRange rng = worksheet.Cells[string.Format("G{0}:G{1}", indexData, indexTo)])
                             {
@@ -728,7 +732,7 @@ namespace Transaction_Statistical.Class
                             using (ExcelRange rng = worksheet.Cells[string.Format("I{0}:I{1}", indexData, indexTo)])
                             {
                                 rng.Merge = true;
-                                rng.Value = itemTrans.DateBegin != null ? itemTrans.DateBegin.ToString() : string.Empty;
+                                rng.Value = itemTrans.DateBegin != null ? itemTrans.DateBegin.ToString("MM-dd-yyyy HH:mm:ss") : string.Empty;
                                 rng.Style.Numberformat.Format = "MM-dd-yyyy HH:mm:ss";
                             }
                             using (ExcelRange rng = worksheet.Cells[string.Format("J{0}:J{1}", indexData, indexTo)])
@@ -882,6 +886,7 @@ namespace Transaction_Statistical.Class
 
         private ExcelWorksheet DrawGDEmptyCassett(ExcelWorksheet worksheet)
         {
+            int index = 1;
 
             //DRAW CHUDE
             using (ExcelRange rng = worksheet.Cells["A1:N1"])

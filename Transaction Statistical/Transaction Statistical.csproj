@@ -97,6 +97,10 @@
       <HintPath>..\..\..\FDM_Console\FDMS - 12-05-2018 - Copy\TextControl\TextControl\obj\Debug\Interop.MSHTML.dll</HintPath>
       <EmbedInteropTypes>True</EmbedInteropTypes>
     </Reference>
+    <Reference Include="Microsoft.mshtml, Version=7.0.3300.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+      <HintPath>..\packages\Unofficial.Microsoft.mshtml.7.0.3300\lib\net40\Microsoft.mshtml.dll</HintPath>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </Reference>
     <Reference Include="Mono.Cecil, Version=0.9.6.0, Culture=neutral, PublicKeyToken=0738eb9f132ed756, processorArchitecture=MSIL">
       <HintPath>..\packages\Mono.Cecil.0.9.6.1\lib\net45\Mono.Cecil.dll</HintPath>
     </Reference>

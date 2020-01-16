@@ -5,7 +5,6 @@ using System.Data;
 using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
-using MSHTML;
 using System.Diagnostics;
 using System.Text.RegularExpressions;
 using System.IO;
@@ -13,6 +12,7 @@ using System.Web;
 using System.Threading;
 using System.Net.Mail;
 using System.Net.Mime;
+using mshtml;
 
 namespace Transaction_Statistical.AddOn
 {

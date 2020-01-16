@@ -129,13 +129,13 @@ namespace Transaction_Statistical
         {
             try
             {
-                string fileExe = Process.GetCurrentProcess().MainModule.FileName + " " + taskName ;
+                string fileExe = Process.GetCurrentProcess().MainModule.FileName + " " + taskName;
                 if (cbo_TypeStart.SelectedItem.Equals(TypeStart[0]) || cbo_TypeStart.SelectedItem.Equals(TypeStart[1]))
-                    process.StartInfo.Arguments = string.Format("/Create /RU SYSTEM /SC {0} /TN \"{1}\" /TR \"{2}\" /ST {3} /F", cbo_TypeStart.Text, TaskName + taskName, fileExe, txt_HH.Text);
+                    process.StartInfo.Arguments = string.Format("/Create  /SC {0} /TN \"{1}\" /TR \"{2}\" /ST {3} /F", cbo_TypeStart.Text, TaskName + taskName, fileExe, txt_HH.Text);
                 else if (cbo_TypeStart.SelectedItem.Equals(TypeStart[2]))
-                    process.StartInfo.Arguments = string.Format("/Create /RU SYSTEM /SC {0} /TN \"{1}\" /TR \"{2}\" /ST {3} /D \"{4}\" /F", cbo_TypeStart.Text, TaskName + taskName, fileExe, txt_HH.Text, cbo_Week.Text.Replace(",", " "));
+                    process.StartInfo.Arguments = string.Format("/Create  /SC {0} /TN \"{1}\" /TR \"{2}\" /ST {3} /D \"{4}\" /F", cbo_TypeStart.Text, TaskName + taskName, fileExe, txt_HH.Text, cbo_Week.Text.Replace(",", " "));
                 else
-                    process.StartInfo.Arguments = string.Format("/Create /RU SYSTEM /SC {0} /TN \"{1}\" /TR \"{2}\" /ST {3} /M \"{4}\" /D {5} /F", cbo_TypeStart.Text, TaskName + taskName, fileExe, txt_HH.Text, cbo_Month.Text.Replace(",", " "), Nud_Day.Value);
+                    process.StartInfo.Arguments = string.Format("/Create  /SC {0} /TN \"{1}\" /TR \"{2}\" /ST {3} /M \"{4}\" /D {5} /F", cbo_TypeStart.Text, TaskName + taskName, fileExe, txt_HH.Text, cbo_Month.Text.Replace(",", " "), Nud_Day.Value);
 
                 process.StartInfo.UseShellExecute = false;
                 process.StartInfo.RedirectStandardOutput = true;

@@ -16,12 +16,12 @@ namespace Transaction_Statistical
         static void Main(string[] args)
         {
             InitParametar.Init();
-            //  args = new string[] { "aotoooooooo" };
+            //args = new string[] { "fgdfgdfgdfg" };
             if (args.Length == 0)
             {
-              //  InitGUI.Init();
+                //  InitGUI.Init();
                 Application.EnableVisualStyles();
-             //   Application.SetCompatibleTextRenderingDefault(false);
+                //   Application.SetCompatibleTextRenderingDefault(false);
                 InitGUI.Mode = InitGUI_Mode.Light;
                 InitGUI.Init();
                 Application.Run(new Frm_Main());
@@ -29,8 +29,13 @@ namespace Transaction_Statistical
             else
             {
                 //Auto start - not GUI               
-                InitParametar.AutoStart(args[0]);
+                Task.Run(async () =>
+                {
+                    await InitParametar.AutoStartAsync(args[0]);
+                }).GetAwaiter().GetResult();
             }
         }
+
+
     }
 }
