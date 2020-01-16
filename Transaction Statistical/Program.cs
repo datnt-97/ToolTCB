@@ -16,7 +16,7 @@ namespace Transaction_Statistical
         static void Main(string[] args)
         {
             InitParametar.Init();
-            //  args = new string[] { "AutoStart" };
+            //  args = new string[] { "aotoooooooo" };
             if (args.Length == 0)
             {
               //  InitGUI.Init();

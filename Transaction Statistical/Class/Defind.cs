@@ -147,7 +147,7 @@ namespace Transaction_Statistical
                 watch.Stop();
                 int count = ReadTrans.ListTransaction.Values.LastOrDefault().Keys.Count;
                 WriteLogApplication(string.Format("   => Read time: {0} s\n   =>Transactions: {1}\n   =>Files: {2}", watch.ElapsedMilliseconds / 1000, count, lsFile_Journal.Count), false, false);
-                Dictionary<int, string> TemplateChoosen = data[4].Replace("[", "").Replace("]", "").Split(';').ToDictionary(x => int.Parse(x.Split(',')[0]), x => x.Split(',')[1]);
+                Dictionary<int, string> TemplateChoosen = data[4].Substring(data[4].IndexOf('[')).Replace("[", "").Replace("]", "").Split(';').ToDictionary(x => int.Parse(x.Split(',')[0]), x => x.Split(',')[1]);
 
                 watch.Start();
                 WriteLogApplication(string.Format("   => Export begin: {0:HH:mm:ss fff} ", DateTime.Now), false, false);
@@ -161,15 +161,13 @@ namespace Transaction_Statistical
                 watch.Stop();
                 WriteLogApplication(string.Format("   => Export time:{0} s", watch.ElapsedMilliseconds / 1000), false, false);
                 WriteLogApplication(string.Format("   ==> File: {0}, size {1} kb", ReadTrans.FileExport, new FileInfo(ReadTrans.FileExport).Length / 1024), false, false);
-                WriteLogApplication("   ==> Auto end, result => Successfully", false, true);
-             
+                WriteLogApplication("   ==> Auto end, result => Successfully", false, true);             
             }
             catch (Exception ex)
             {
                 InitParametar.Send_Error(ex.ToString(), MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name); WriteLogApplication(ex.Message, false, true);
+                WriteLogApplication("   ==> Auto end, result => Unsuccessfully", false, true);
             }
-            WriteLogApplication("   ==> Auto end, result => Unsuccessfully", false, true);
-
         }
 
         public static void Send_Error(string MsgError, string ClassName, string MethodName)

@@ -113,7 +113,6 @@ namespace Transaction_Statistical
         }
         private bool CheckTaskExist(string taskName)
         {
-            string fileExe = Process.GetCurrentProcess().MainModule.FileName + " Auto";
             process.StartInfo.Arguments = string.Format("/query /TN \"{0}\"", TaskName + taskName);
             process.StartInfo.UseShellExecute = false;
             process.StartInfo.RedirectStandardOutput = true;
@@ -130,7 +129,7 @@ namespace Transaction_Statistical
         {
             try
             {
-                string fileExe = Process.GetCurrentProcess().MainModule.FileName + " \"" + taskName + "\"";
+                string fileExe = Process.GetCurrentProcess().MainModule.FileName + " " + taskName ;
                 if (cbo_TypeStart.SelectedItem.Equals(TypeStart[0]) || cbo_TypeStart.SelectedItem.Equals(TypeStart[1]))
                     process.StartInfo.Arguments = string.Format("/Create /RU SYSTEM /SC {0} /TN \"{1}\" /TR \"{2}\" /ST {3} /F", cbo_TypeStart.Text, TaskName + taskName, fileExe, txt_HH.Text);
                 else if (cbo_TypeStart.SelectedItem.Equals(TypeStart[2]))
