@@ -19,26 +19,7 @@ namespace Transaction_Statistical.UControl
         public UC_ExportCus()
         {
             InitializeComponent2();
-            LoadTemplate();
-            LoadPathTemp(true);
-        }
-        private void LoadPathTemp(bool isLoad)
-        {
-            try
-            {
-                UtilityIniFile fini = new UtilityIniFile(InitParametar.PathDirectoryCurrentUserConfigData + "\\AppConfig.dat");
-                if (isLoad)
-                {
-                    txt_Destination.Text = fini.GetEntryValue("Directory", "FolderTempExport");
-                    if (Directory.Exists(txt_Destination.Text) || File.Exists(txt_Destination.Text)) return;
-                    txt_Destination.Text = "D:\\";
-                }
-                else
-                {
-                    fini.Write("FolderTempExport", txt_Destination.Text, "Directory");
-                }
-            }
-            catch { }
+            LoadTemplate(true);
         }
         private void InitializeComponent2()
         {
@@ -173,7 +154,17 @@ namespace Transaction_Statistical.UControl
                 ckbl_Forms.DataSource = bindingSource;
                 ckbl_Forms.DisplayMember = "Value";
                 UC_Menu_Startup.Template.ToList().ForEach(x => { ckbl_Forms.SetItemChecked(x.Key, true); });
-
+                UtilityIniFile fini = new UtilityIniFile(InitParametar.PathDirectoryCurrentUserConfigData + "\\AppConfig.dat");
+                if (isLoad)
+                {
+                    txt_Destination.Text = fini.GetEntryValue("Directory", "FolderTempExport");
+                    if (Directory.Exists(txt_Destination.Text) || File.Exists(txt_Destination.Text)) return;
+                    txt_Destination.Text = "D:\\";
+                }
+                else
+                {
+                    fini.Write("FolderTempExport", txt_Destination.Text, "Directory");
+                }
             }
             catch (Exception ex)
             {
@@ -209,12 +200,15 @@ namespace Transaction_Statistical.UControl
                     MessageBox.Show("Export successfully. (Execute : " + (w.ElapsedMilliseconds).ToString() + " ms)", "Export", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     if (chb_Open.Checked)
                         new Thread(() => UC_Explorer.OpenFile(InitParametar.ReadTrans.FileExport, false)).Start();
-                    (this.Parent as Form).Close();
+                    //(this.Parent as Form).Close();
                 }
             }
-            catch { }
+            catch (Exception ex)
+            {
+                InitParametar.Send_Error(ex.ToString(), MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name);
+            }
             prb_Process.Size = new Size(0, 0);
-            LoadPathTemp(false);
+            LoadTemplate(true);
         }
 
         private void chb_Open_CheckedChanged(object sender, EventArgs e)
