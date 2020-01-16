@@ -93,12 +93,13 @@ namespace Transaction_Statistical
                 InitParametar.Send_Error(ex.ToString(), MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name); ;
             }
         }
-        public async static Task<bool> AutoStart(string taskName)
+        public static void AutoStart(string taskName)
         {
             try
             {
-                if (!InitParametar.License_CheckModule(License.Modules.Read)) return false;
                 AutoRunMode = true;
+                if (!InitParametar.License_CheckModule(License.Modules.Read)) return ;
+               
                 WriteLogApplication(string.Format("{0:HH:mm:ss fff} Class: Auto Task", DateTime.Now), true, false);
                 WriteLogApplication("   => Task name: " + taskName, false, false);
 
@@ -111,7 +112,7 @@ namespace Transaction_Statistical
                 {
                     WriteLogApplication("   => Load Template Info => Unsuccessfully", false, false);
                     WriteLogApplication("   ==> Auto end, result => Unsuccessfully", false, true);
-                    return false;
+                    return ;
                 }
                 WriteLogApplication("   => Load Template Info => Successfully", false, false);
 
@@ -129,17 +130,19 @@ namespace Transaction_Statistical
                 {
                     WriteLogApplication("   => Found: 0 files", false, false);
                     WriteLogApplication("   ==> Auto end, result => Unsuccessfully", false, true);
-                    return false;
+                    return ;
 
                 }
                 WriteLogApplication(string.Format("   => Found: {0} files", lsFile_Journal.Count), false, false);
 
                 WriteLogApplication(string.Format("   => Read begin: {0:HH:mm:ss fff} ", DateTime.Now), false, false);
                 var watch = System.Diagnostics.Stopwatch.StartNew(); watch.Start();
-                ReadTrans = new ReadTransaction();
-                if (!await ReadTrans.Reads(lsFile_Journal))
+                //  ReadTrans = new ReadTransaction();
+                bool readR = false;
+                readR = Task.Run(() => ReadTrans.Reads(lsFile_Journal)).Result;
+                if (! readR)
                 {
-                    WriteLogApplication("   ==> Auto end, result => Unsuccessfully", false, true); return false;
+                    WriteLogApplication("   ==> Auto end, result => Unsuccessfully", false, true); return ;
                 }
                 watch.Stop();
                 int count = ReadTrans.ListTransaction.Values.LastOrDefault().Keys.Count;
@@ -152,22 +155,20 @@ namespace Transaction_Statistical
                 WriteLogApplication("   => Export forms: " + TemplateChoosen.Values.ToString(), false, false);
                 if (TemplateChoosen.Count == 0)
                 {
-                    WriteLogApplication("   ==> Auto end, result => Unsuccessfully", false, true); return false;
+                    WriteLogApplication("   ==> Auto end, result => Unsuccessfully", false, true); return ;
                 }
                 ReadTrans.Export(data[3], TemplateChoosen, null);
                 watch.Stop();
                 WriteLogApplication(string.Format("   => Export time:{0} s", watch.ElapsedMilliseconds / 1000), false, false);
                 WriteLogApplication(string.Format("   ==> File: {0}, size {1} kb", ReadTrans.FileExport, new FileInfo(ReadTrans.FileExport).Length / 1024), false, false);
                 WriteLogApplication("   ==> Auto end, result => Successfully", false, true);
-                return false;
-
+             
             }
             catch (Exception ex)
             {
                 InitParametar.Send_Error(ex.ToString(), MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name); WriteLogApplication(ex.Message, false, true);
             }
             WriteLogApplication("   ==> Auto end, result => Unsuccessfully", false, true);
-            return true;
 
         }
 
@@ -181,7 +182,7 @@ namespace Transaction_Statistical
                 }
                 if (AutoRunMode) return;
                 UC_Info msg = new UC_Info();
-                File.AppendAllText(@"D:\expert.log", MsgError);
+              
                 msg.TextCustom.ReadOnly = false;
                 msg.TextCustom.Text = "Host name: " + Environment.MachineName;
                 msg.TextCustom.AppendText(Environment.NewLine + "Class: " + ClassName);
@@ -205,9 +206,8 @@ namespace Transaction_Statistical
                 msg.TextCustom.Update();
                 msg.Dock = DockStyle.Fill;
             }
-            catch (Exception ex)
-            {
-                Send_Error(ex.ToString(), MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name);
+            catch 
+            {             
             }
 
         }
@@ -237,9 +237,9 @@ namespace Transaction_Statistical
                     }
                 }
             }
-            catch (Exception ex)
+            catch 
             {
-                MessageBox.Show(ex.Message + Environment.NewLine + FolderSystemTrace, "WriteLogApplication", MessageBoxButtons.OK, MessageBoxIcon.Error);
+             //   MessageBox.Show(ex.Message + Environment.NewLine + FolderSystemTrace, "WriteLogApplication", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
@@ -561,7 +561,7 @@ namespace Transaction_Statistical
                         int i = 0;
                         foreach (var item in templateChoosen)
                         {
-                            progress.CustomText = item.Value;
+                          if(progress!=null)  progress.CustomText = item.Value;
                             switch (item.Key)
                             {
                                 case (int)TemplateHelper.TEMPLATE.CanQuyTheoCouterTrenMay:
@@ -983,7 +983,6 @@ namespace Transaction_Statistical
                 InitParametar.Send_Error(ex.ToString(), MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name);
             }
             return transaction;
-
         }
         private async Task<Transaction> FindEventReceive(DateTime DateCurrent, Transaction tran)
         {
@@ -1160,7 +1159,7 @@ namespace Transaction_Statistical
             }
             return tran;
         }
-        private async Task<Transaction> FixNoTimeEvent(Transaction tran)
+        private Transaction FixNoTimeEvent(Transaction tran)
         {
             try
             {
@@ -1322,6 +1321,7 @@ namespace Transaction_Statistical
                     evEnd.TContent = val.value["SEnd"];
                     trans.ListEvent[evEnd.DateBegin] = evEnd;
                 }
+               
                 trans = await Task.Run(() => FindEventBeginInput(trans));
                 trans = await Task.Run(() => FindEventRequest(trans.DateBegin, trans));
                 trans = await Task.Run(() => FindEventTransaction(trans, trans.DateBegin));
@@ -1706,7 +1706,6 @@ namespace Transaction_Statistical
 
         [CategoryAttribute("3. Transaction"), DescriptionAttribute("Machine Sequence No")]
         public string MachineSequenceNo { get; set; }
-        TransactionType _type = TransactionType.Withdrawal;
         [CategoryAttribute("3. Transaction"), DescriptionAttribute("Type the transaction")]
         public string Type
         {
@@ -1912,7 +1911,7 @@ namespace Transaction_Statistical
             return false;
         }
 
-        public static  async  Task<Dictionary<int, RegesValue>>  RunPatternRegular(string sString, string sReg)
+        public static Dictionary<int, RegesValue>  RunPatternRegular(string sString, string sReg)
         {
             Dictionary<int, RegesValue> listResult = new Dictionary<int, RegesValue>();
             try

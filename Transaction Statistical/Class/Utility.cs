@@ -573,7 +573,7 @@ namespace Transaction_Statistical
 
                 }
             }
-            catch (Exception ex)
+            catch 
             {
             }
             return "Unknown";
@@ -631,8 +631,7 @@ namespace Transaction_Statistical
                     catch { }
                 }
             }
-            catch (Exception ex)
-            {
+            catch            {
 
             }
             return "Unknown";

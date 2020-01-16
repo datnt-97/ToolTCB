@@ -169,7 +169,7 @@ namespace Transaction_Statistical.UControl
                 //    TreeTrans.Update();
                 //}
             }
-            catch(Exception ex)
+            catch
             { 
 
             }
@@ -194,7 +194,7 @@ namespace Transaction_Statistical.UControl
                         SearchNodes(node.Nodes, txt);
                 }
             }
-            catch(Exception ex)
+            catch
             { }         
         }
 

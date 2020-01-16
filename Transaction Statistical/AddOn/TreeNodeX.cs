@@ -68,17 +68,17 @@ public class TreeNodeX : TreeNode
     //     An array of child System.Windows.Forms.TreeNode objects.
     public TreeNodeX(string text, int imageIndex, int selectedImageIndex, TreeNode[] children) : base() { }
     
-    public string FullPath() 
-    {
-        string s = this.Key;
-        TreeNodeX parent =(TreeNodeX)this.Parent;
-        while(parent !=null && parent.Key!=null)
-        {
-            s = parent.Key + "\\" + s;
-            parent = (TreeNodeX)parent.Parent;
-        }
-        return s;
-    }
+    //public string FullPath() 
+    //{
+    //    string s = this.Key;
+    //    TreeNodeX parent =(TreeNodeX)this.Parent;
+    //    while(parent !=null && parent.Key!=null)
+    //    {
+    //        s = parent.Key + "\\" + s;
+    //        parent = (TreeNodeX)parent.Parent;
+    //    }
+    //    return s;
+    //}
     public string Key { get; set; }
     public TreeNodeX(string text, string key)
     {

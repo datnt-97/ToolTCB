@@ -137,7 +137,7 @@ namespace Transaction_Statistical
                         }
                     }
                 }
-            }catch(Exception ex)
+            }catch
             {
 
             }
@@ -229,7 +229,7 @@ namespace Transaction_Statistical
                     }
                     return true;
                 }
-                catch(Exception ex)
+                catch
                 {
                     //  NodeRoot.CheckBoxVisible = false;
                     //DevComponents.DotNetBar.ElementStyle styleDeny = new DevComponents.DotNetBar.ElementStyle();
@@ -253,7 +253,7 @@ namespace Transaction_Statistical
                 if (tre_Explorer.SelectedNode.Tag is FileInfo) textBoxShow.Text = (tre_Explorer.SelectedNode.Tag as FileInfo).FullName;
 
             }
-            catch (Exception ex)
+            catch 
             {
             }
         }

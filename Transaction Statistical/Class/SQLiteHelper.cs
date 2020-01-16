@@ -158,12 +158,12 @@ namespace Transaction_Statistical
         public void DbDisconnect()
         {
             return;
-            while (true)
-            {
-                if (DataBaseConnnection.State != System.Data.ConnectionState.Executing) break;
-                Thread.Sleep(1);
-            }
-            DataBaseConnnection.Close();
+            //while (true)
+            //{
+            //    if (DataBaseConnnection.State != System.Data.ConnectionState.Executing) break;
+            //    Thread.Sleep(1);
+            //}
+            //DataBaseConnnection.Close();
         }
         public void CreateDatabase()
         {
@@ -269,7 +269,6 @@ namespace Transaction_Statistical
                 SQLiteCommand VacuumCommand = new SQLiteCommand("vacuum;", DataBaseConnnection);
                 VacuumCommand.ExecuteNonQuery();
                 DbDisconnect();
-                return true;
             }
             catch (Exception ex)
             {
@@ -290,7 +289,6 @@ namespace Transaction_Statistical
                 SQLiteCommand VacuumCommand = new SQLiteCommand("vacuum;", DataBaseConnnection);
                 VacuumCommand.ExecuteNonQuery();
                 DbDisconnect();
-                return true;
             }
             catch (Exception ex)
             {
@@ -318,8 +316,7 @@ namespace Transaction_Statistical
                 sqliteCommand.ExecuteNonQuery();
                 SQLiteCommand VacuumCommand = new SQLiteCommand("vacuum;", DataBaseConnnection);
                 VacuumCommand.ExecuteNonQuery();
-                DbDisconnect();
-                return true;
+                DbDisconnect();              
             }
             catch (Exception ex)
             {
@@ -347,8 +344,7 @@ namespace Transaction_Statistical
                 sqliteCommand.ExecuteNonQuery();
                 SQLiteCommand VacuumCommand = new SQLiteCommand("vacuum;", DataBaseConnnection);
                 VacuumCommand.ExecuteNonQuery();
-                DbDisconnect();
-                return true;
+                DbDisconnect();              
             }
             catch (Exception ex)
             {
@@ -376,14 +372,13 @@ namespace Transaction_Statistical
                 sqliteCommand.ExecuteNonQuery();
                 SQLiteCommand VacuumCommand = new SQLiteCommand("vacuum;", DataBaseConnnection);
                 VacuumCommand.ExecuteNonQuery();
-                DbDisconnect();
-                return true;
+                DbDisconnect();               
             }
             catch (Exception ex)
             {
                 SystemLog.WriteSQLLog(this.GetType().Name, MethodBase.GetCurrentMethod().Name, ex.ToString());
                 return false;
-                DbDisconnect();
+               // DbDisconnect();
                 // MsgInfo.MessageBoxError("Class SQLite", "SQLite", "CopyTableToNew", "Parameter1: " + TableSource + "\n Parameter2: " + TableNew + "\n Parameter3: " + Structure.ToString() + "\n" + ex.ToString());
                 //MessageBox.Show("Error: " + ex.Message.ToString(), "Error", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
                 //   frmPassword fp = new frmPassword();
@@ -1386,7 +1381,8 @@ namespace Transaction_Statistical
                 SetConnection();
                 SQLiteCommand sqliteCommand = new SQLiteCommand(query, DataBaseConnnection);
                 ob = (object)sqliteCommand.ExecuteNonQuery();
-                DbDisconnect(); return null;
+                DbDisconnect();
+              //  return null;
             }
             catch (Exception ex)
             {

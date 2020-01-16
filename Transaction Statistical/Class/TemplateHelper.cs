@@ -882,7 +882,6 @@ namespace Transaction_Statistical.Class
 
         private ExcelWorksheet DrawGDEmptyCassett(ExcelWorksheet worksheet)
         {
-            int index = 1;
 
             //DRAW CHUDE
             using (ExcelRange rng = worksheet.Cells["A1:N1"])
