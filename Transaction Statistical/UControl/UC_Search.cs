@@ -79,12 +79,15 @@ namespace Transaction_Statistical.UControl
         }
         private void Icon_Search_Click(object sender, EventArgs e)
         {
+           
+
             if (string.IsNullOrEmpty(txt_Search.Text.Trim())) ShowControl();
             else
-            {
-                object obj = SearchText(txt_Search.Text.Trim());
-                if (obj != null)
-                    ShowResultSearch(obj, TreeTrans.Nodes);
+            { 
+                SearchTextInNode(txt_Search.Text.Trim());
+                //object obj = SearchText(txt_Search.Text.Trim());
+                //if (obj != null)
+                //    ShowResultSearch(obj, TreeTrans.Nodes);
             }
         }
         private void txt_Search_Click(object sender, KeyPressEventArgs e)

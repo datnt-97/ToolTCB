@@ -94,7 +94,7 @@
       <HintPath>..\packages\EPPlus.4.1.0\lib\net40\EPPlus.dll</HintPath>
     </Reference>
     <Reference Include="Interop.MSHTML">
-      <HintPath>C:\Users\datnt\Documents\Zalo Received Files\Interop.MSHTML.dll</HintPath>
+      <HintPath>..\..\..\FDM_Console\FDMS - 12-05-2018 - Copy\TextControl\TextControl\obj\Debug\Interop.MSHTML.dll</HintPath>
       <EmbedInteropTypes>True</EmbedInteropTypes>
     </Reference>
     <Reference Include="Mono.Cecil, Version=0.9.6.0, Culture=neutral, PublicKeyToken=0738eb9f132ed756, processorArchitecture=MSIL">
