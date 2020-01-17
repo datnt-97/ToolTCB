@@ -738,14 +738,14 @@ namespace Transaction_Statistical.Class
                             using (ExcelRange rng = worksheet.Cells[string.Format("J{0}:J{1}", indexData, indexTo)])
                             {
                                 rng.Merge = true;
-                                if (requestLast.Status == Status.Types.UnSucceeded)
-                                {
-                                    rng.Value = Math.Abs(evtCounter.Sum(x => x.Value.AmountCounterRetracted));
-                                }
-                                else
-                                {
-                                    rng.Value = Math.Abs(evtCounter.Sum(x => x.Value.AmountCounter));
-                                }
+                                //if (requestLast.Status == Status.Types.UnSucceeded)
+                                //{
+                                //    rng.Value = Math.Abs(evtCounter.Sum(x => x.Value.AmountCounterRetracted));
+                                //}
+                                //else
+                                //{
+                                rng.Value = evtCounter.Sum(x => x.Value.AmountCounter) != 0 ? evtCounter.Sum(x => x.Value.AmountCounter) : evtCounter.Sum(x => x.Value.AmountCounterRetracted);
+                                //}
                                 rng.Style.Numberformat.Format = "###,###,##0.0";
 
                             }

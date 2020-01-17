@@ -93,7 +93,7 @@ namespace Transaction_Statistical
                 InitParametar.Send_Error(ex.ToString(), MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name); ;
             }
         }
-        public static async Task AutoStartAsync(string taskName)
+        public static void AutoStart(string taskName)
         {
             try
             {
@@ -139,25 +139,24 @@ namespace Transaction_Statistical
                 var watch = System.Diagnostics.Stopwatch.StartNew(); watch.Start();
                 //  ReadTrans = new ReadTransaction();
                 bool readR = false;
-                readR = await Task.Run(() => ReadTrans.Reads(lsFile_Journal));
+                readR = Task.Run(() => ReadTrans.Reads(lsFile_Journal)).Result;
                 if (!readR)
                 {
                     WriteLogApplication("   ==> Auto end, result => Unsuccessfully", false, true); return;
                 }
                 watch.Stop();
                 int count = ReadTrans.ListTransaction.Values.LastOrDefault().Keys.Count;
-                WriteLogApplication(string.Format("   => Read time: {0} s\n   =>Transactions: {1}\n   =>Files: {2}", watch.ElapsedMilliseconds / 1000, count, lsFile_Journal.Count), false, false);
+                WriteLogApplication(string.Format("   => Read time: {0} s\n   => Transactions: {1}\n   => Files: {2}", watch.ElapsedMilliseconds / 1000, count, lsFile_Journal.Count), false, false);
                 Dictionary<int, string> TemplateChoosen = data[4].Substring(data[4].IndexOf('[')).Replace("[", "").Replace("]", "").Split(';').ToDictionary(x => int.Parse(x.Split(',')[0]), x => x.Split(',')[1]);
 
+                watch.Start();
+                WriteLogApplication(string.Format("   => Export begin: {0:HH:mm:ss fff} ", DateTime.Now), false, false);
+                WriteLogApplication("   => Export destination: " + data[3], false, false);
+                WriteLogApplication("   => Export forms: " + TemplateChoosen.Values.ToList().ToString(), false, false);
                 if (TemplateChoosen.Count == 0)
                 {
                     WriteLogApplication("   ==> Auto end, result => Unsuccessfully", false, true); return;
                 }
-                watch.Start();
-                WriteLogApplication(string.Format("   => Export begin: {0:HH:mm:ss fff} ", DateTime.Now), false, false);
-                WriteLogApplication("   => Export destination: " + data[3], false, false);
-                WriteLogApplication("   => Export forms: " + TemplateChoosen.Values.ToString(), false, false);
-
                 ReadTrans.Export(data[3], TemplateChoosen, null);
                 watch.Stop();
                 WriteLogApplication(string.Format("   => Export time:{0} s", watch.ElapsedMilliseconds / 1000), false, false);
@@ -688,16 +687,17 @@ namespace Transaction_Statistical
                     if (Regexs.RunPatternRegular(sString, reg, out lst))
                     {
                         //// Transaction trans;
-                        List<Task> tasks = new List<Task>();
+                        // List<Task> tasks = new List<Task>();
                         foreach (KeyValuePair<int, RegesValue> key in lst)
                         {
-                            //await Task.Run(() => SplitTransactionEJ_Info(key.Value));
-                            tasks.Add(SplitTransactionEJ_InfoAsync(key.Value, dateFile, TerminalFile));
+                            var tran = await Task.Run(() => (SplitTransactionEJ_InfoAsync(key.Value, dateFile, TerminalFile)));
+                            //tasks.Add(SplitTransactionEJ_InfoAsync(key.Value, dateFile, TerminalFile));
+                            sString = sString.Replace(key.Value.stringfind, tran.ListEvent.OrderBy(x => x.Key).LastOrDefault().Value.DateBegin.ToString(FormatDateTime_2));
                         }
-                        await Task.WhenAll(tasks);
+                        // await Task.WhenAll(tasks);
                     }
                     //sString = sString.Replace(reg, string.Empty);
-                    sString = Regex.Replace(sString, reg, string.Empty);
+                    // sString = Regex.Replace(sString, reg, string.Empty);
                 }
             }
             catch (Exception ex)
@@ -752,7 +752,7 @@ namespace Transaction_Statistical
                                     var values = Enum.GetValues(typeof(Bills.Types)).Cast<Bills.Types>();
                                     foreach (var type in values)
                                     {
-                                        if (tmp.Key.Contains(type.ToString()))
+                                        if (tmp.Key.Equals(type.ToString().Replace("_", " ")))
                                         {
                                             bills.Type = type;
                                         }
@@ -1012,11 +1012,8 @@ namespace Transaction_Statistical
                                 }
                                 else
                                     evt.DateBegin = DateCurrent.AddYears(88);
-
-                                FunctionGenaral<TransactionEvent>.Parse(ref tran.ListEvent, evt.DateBegin, evt);
-
-                                //if (tran.ListEvent.ContainsKey(evt.DateBegin)) tran.ListEvent[evt.DateBegin.AddMilliseconds(1)] = evt;
-                                //else tran.ListEvent[evt.DateBegin] = evt;
+                                if (tran.ListEvent.ContainsKey(evt.DateBegin)) tran.ListEvent[evt.DateBegin.AddMilliseconds(1)] = evt;
+                                else tran.ListEvent[evt.DateBegin] = evt;
                                 tran.TraceJournal_Remaining = tran.TraceJournal_Remaining.Replace(regx.stringfind, string.Empty);
                             });
                         }
@@ -1073,37 +1070,37 @@ namespace Transaction_Statistical
                                     if (regx.value.ContainsKey("Sep10k") && int.TryParse(regx.value["Sep10k"], out node))
                                     {
                                         tran.Value_10K -= node;
-                                        evt.Value_10K = node;
+                                        evt.Value_10K -= node;
                                     }
                                     if (regx.value.ContainsKey("Sep20k") && int.TryParse(regx.value["Sep20k"], out node))
                                     {
                                         tran.Value_20K -= node;
-                                        evt.Value_20K = node;
+                                        evt.Value_20K -= node;
                                     }
                                     if (regx.value.ContainsKey("Sep50k") && int.TryParse(regx.value["Sep50k"], out node))
                                     {
                                         tran.Value_50K -= node;
-                                        evt.Value_50K = node;
+                                        evt.Value_50K -= node;
                                     }
                                     if (regx.value.ContainsKey("Sep100k") && int.TryParse(regx.value["Sep100k"], out node))
                                     {
                                         tran.Value_100K -= node;
-                                        evt.Value_100K = node;
+                                        evt.Value_100K -= node;
                                     }
                                     if (int.TryParse(regx.value["Sep200k"], out node))
                                     {
                                         tran.Value_200K -= node;
-                                        evt.Value_200K = node;
+                                        evt.Value_200K -= node;
                                     }
                                     if (int.TryParse(regx.value["Sep500k"], out node))
                                     {
                                         tran.Value_500K -= node;
-                                        evt.Value_500K = node;
+                                        evt.Value_500K -= node;
                                     }
                                     if (int.TryParse(regx.value["Reject"], out node))
                                     {
                                         tran.Rejects -= node;
-                                        evt.Rejects = node;
+                                        evt.Rejects -= node;
                                     }
                                 }
                                 if (regx.value.ContainsKey("TimeStored"))
@@ -1114,32 +1111,32 @@ namespace Transaction_Statistical
                                     if (regx.value.ContainsKey("Sto10k") && int.TryParse(regx.value["Sto10k"], out node))
                                     {
                                         tran.Value_10K += node;
-                                        evt.Value_10K = node;
+                                        evt.Value_10K += node;
                                     }
                                     if (regx.value.ContainsKey("Sto20k") && int.TryParse(regx.value["Sto20k"], out node))
                                     {
                                         tran.Value_20K += node;
-                                        evt.Value_20K = node;
+                                        evt.Value_20K += node;
                                     }
                                     if (regx.value.ContainsKey("Sto50k") && int.TryParse(regx.value["Sto50k"], out node))
                                     {
                                         tran.Value_50K += node;
-                                        evt.Value_50K = node;
+                                        evt.Value_50K += node;
                                     }
                                     if (int.TryParse(regx.value["Sto100k"], out node))
                                     {
                                         tran.Value_100K += node;
-                                        evt.Value_100K = node;
+                                        evt.Value_100K += node;
                                     }
                                     if (int.TryParse(regx.value["Sto200k"], out node))
                                     {
                                         tran.Value_200K += node;
-                                        evt.Value_200K = node;
+                                        evt.Value_200K += node;
                                     }
                                     if (int.TryParse(regx.value["Sto500k"], out node))
                                     {
                                         tran.Value_500K += node;
-                                        evt.Value_500K = node;
+                                        evt.Value_500K += node;
                                     }
                                     //if (int.TryParse(regx.value["StoReject"], out node)) tran.Node_Rejects += node;
                                 }
@@ -1184,35 +1181,15 @@ namespace Transaction_Statistical
                                 Bills b = bill.Value;
                                 b.Date = evtNew.Value.DateBegin;
                                 FunctionGenaral<Bills>.Parse(ref lsBillNew, b.Date, b);
-
-                                //if (lsBillNew.ContainsKey(b.Date))
-                                //{
-                                //    lsBillNew[b.Date.AddMilliseconds(1)] = b;
-                                //}
-                                //else
-                                //    lsBillNew[b.Date] = b;
-                                //tran.ListBills.Where(x => x.Value.index == evt.Value.IndexContent).LastOrDefault().Value.Date = evtNew.Value.DateBegin;
                             }
                         }
-
                     }
-
                     FunctionGenaral<TransactionEvent>.Parse(ref lsNew, evt.Value.DateBegin, evtNew.Value);
-                    //if (lsNew.ContainsKey(evt.Value.DateBegin))
-                    //{
-                    //    lsNew[evt.Value.DateBegin.AddMilliseconds(1)] = evtNew.Value;
-                    //}
-                    //else
-                    //    lsNew[evt.Value.DateBegin] = evtNew.Value;
-
 
                 }
 
                 tran.ListEvent = lsNew.OrderBy(x => x.Key).ToDictionary(k => k.Key, v => v.Value);
                 tran.ListBills = lsBillNew.OrderBy(x => x.Key).ToDictionary(k => k.Key, v => v.Value);
-
-
-
             }
             catch (Exception ex)
             {
@@ -1270,7 +1247,7 @@ namespace Transaction_Statistical
             }
             return tran;
         }
-        private async Task SplitTransactionEJ_InfoAsync(RegesValue val, DateTime dateFile, string terminalFile)
+        private async Task<Transaction> SplitTransactionEJ_InfoAsync(RegesValue val, DateTime dateFile, string terminalFile)
         {
             Transaction trans = new Transaction();
 
@@ -1283,7 +1260,7 @@ namespace Transaction_Statistical
                 if (val.value.ContainsKey("DateBegin"))
                 {
                     DateTime.TryParseExact(val.value["DateBegin"], "MM-dd-yyyy HH:mm:ss", CultureInfo.InvariantCulture, DateTimeStyles.None, out trans.DateBegin);
-                    if (DateTime.Compare(trans.DateBegin, StartDate) < 0 || DateTime.Compare(trans.DateBegin, EndDate) > 0) return;
+                    if (DateTime.Compare(trans.DateBegin, StartDate) < 0 || DateTime.Compare(trans.DateBegin, EndDate) > 0) return trans;
                 }
                 else
                     trans.DateBegin = dateFile;
@@ -1360,7 +1337,7 @@ namespace Transaction_Statistical
             {
                 InitParametar.Send_Error(ex.ToString(), MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name);
             }
-            //return trans.TraceJournalFull;
+            return trans;
         }
         #endregion
 
@@ -1534,9 +1511,11 @@ namespace Transaction_Statistical
                 req.DateBegin = transaction.DateBegin;
                 req.Status = Status.Types.UnSucceeded;
                 transaction.Status = Status.Types.Warning.ToString();
+                var billCheckPin = transaction.ListBills.Where(x => x.Value.Type == Bills.Types.Bill_CheckPin).LastOrDefault();
 
                 foreach (TransactionEvent evt in transaction.ListEvent.Values)
                 {
+                    evt.TraceID = billCheckPin.Value != null ? billCheckPin.Value.TranNo : "-";
                     await Task.Run(() =>
                     {
                         if (transaction.ListRequest.Count > 0)
@@ -1576,12 +1555,12 @@ namespace Transaction_Statistical
                     });
 
                 }
-                var billCheckPin = transaction.ListBills.Where(x => x.Value.Type == Bills.Types.Bill_CheckPin).LastOrDefault();
                 foreach (var requ in transaction.ListRequest)
                 {
                     var evts = transaction.ListBills.Where(x => x.Value.Date >= requ.Value.DateBegin
                     && x.Value.Date <= requ.Value.DateEnd).LastOrDefault();
-                    if (evts.Value != null)
+                    int check = 0;
+                    if (evts.Value != null && int.TryParse(evts.Value.TranNo.Trim(), out check))
                     {
                         requ.Value.TranNo = evts.Value.TranNo;
                     }
@@ -1589,7 +1568,15 @@ namespace Transaction_Statistical
                     {
                         requ.Value.TranNo = billCheckPin.Value != null ? billCheckPin.Value.TranNo : "-";
                     }
+                    foreach (var evtInReq in transaction.ListEvent.Where(x => x.Value.DateBegin >= requ.Value.DateBegin
+                    && x.Value.DateBegin <= requ.Value.DateEnd).ToDictionary(x => x.Key, x => x.Value))
+                    {
+                        evtInReq.Value.TraceID = requ.Value.TranNo;
+                    }
+
+
                 }
+                int a = 0;
             }
             catch (Exception ex)
             {
@@ -1597,7 +1584,6 @@ namespace Transaction_Statistical
             }
             return transaction;
         }
-
 
         private bool CheckRequestName(string name, ref string transactionType)
         {

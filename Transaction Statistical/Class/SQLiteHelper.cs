@@ -125,7 +125,7 @@ namespace Transaction_Statistical
     public class SQLiteHelper
     {
         SQLiteDataReader DataReader;
-        public string DatabaseFile { set; get; }
+        public string DatabaseFile { set ; get ; }
         public string Password { set; get; }
         public SQLiteConnection DataBaseConnnection = new SQLiteConnection();
 
@@ -134,7 +134,7 @@ namespace Transaction_Statistical
             try
             {
                 DatabaseFile = InitParametar.DatabaseFile;
-
+                Password = "rt345@1$-*";
                 if (DataBaseConnnection.State == System.Data.ConnectionState.Open)
                 {
                     return;
@@ -142,7 +142,7 @@ namespace Transaction_Statistical
                 if (Password != null)
                 {
                     DataBaseConnnection.ConnectionString = @"Data Source=" + DatabaseFile + "; Password=" + Password + ";";
-                    DataBaseConnnection.Open();
+                    DataBaseConnnection.Open(); 
                 }
                 if (Password == null)
                 {
