@@ -687,14 +687,14 @@ namespace Transaction_Statistical
                     if (Regexs.RunPatternRegular(sString, reg, out lst))
                     {
                         //// Transaction trans;
-                        // List<Task> tasks = new List<Task>();
+                        List<Task> tasks = new List<Task>();
                         foreach (KeyValuePair<int, RegesValue> key in lst)
                         {
-                            var tran = await Task.Run(() => (SplitTransactionEJ_InfoAsync(key.Value, dateFile, TerminalFile)));
-                            //tasks.Add(SplitTransactionEJ_InfoAsync(key.Value, dateFile, TerminalFile));
-                            sString = sString.Replace(key.Value.stringfind, tran.ListEvent.OrderBy(x => x.Key).LastOrDefault().Value.DateBegin.ToString(FormatDateTime_2));
+                            //var tran = await Task.Run(() => (SplitTransactionEJ_InfoAsync(key.Value, dateFile, TerminalFile)));
+                            tasks.Add(SplitTransactionEJ_InfoAsync(key.Value, dateFile, TerminalFile));
+                            sString = sString.Replace(key.Value.stringfind, string.Empty);
                         }
-                        // await Task.WhenAll(tasks);
+                        await Task.WhenAll(tasks);
                     }
                     //sString = sString.Replace(reg, string.Empty);
                     // sString = Regex.Replace(sString, reg, string.Empty);
@@ -1557,26 +1557,26 @@ namespace Transaction_Statistical
                 }
                 foreach (var requ in transaction.ListRequest)
                 {
-                    var evts = transaction.ListBills.Where(x => x.Value.Date >= requ.Value.DateBegin
-                    && x.Value.Date <= requ.Value.DateEnd).LastOrDefault();
-                    int check = 0;
-                    if (evts.Value != null && int.TryParse(evts.Value.TranNo.Trim(), out check))
+                    await Task.Run(() =>
                     {
-                        requ.Value.TranNo = evts.Value.TranNo;
-                    }
-                    else if (billCheckPin.Value != null)
-                    {
-                        requ.Value.TranNo = billCheckPin.Value != null ? billCheckPin.Value.TranNo : "-";
-                    }
-                    foreach (var evtInReq in transaction.ListEvent.Where(x => x.Value.DateBegin >= requ.Value.DateBegin
-                    && x.Value.DateBegin <= requ.Value.DateEnd).ToDictionary(x => x.Key, x => x.Value))
-                    {
-                        evtInReq.Value.TraceID = requ.Value.TranNo;
-                    }
-
-
+                        var evts = transaction.ListBills.Where(x => x.Value.Date >= requ.Value.DateBegin
+                       && x.Value.Date <= requ.Value.DateEnd).LastOrDefault();
+                        int check = 0;
+                        if (evts.Value != null && int.TryParse(evts.Value.TranNo.Trim(), out check))
+                        {
+                            requ.Value.TranNo = evts.Value.TranNo;
+                        }
+                        else if (billCheckPin.Value != null)
+                        {
+                            requ.Value.TranNo = billCheckPin.Value != null ? billCheckPin.Value.TranNo : "-";
+                        }
+                        foreach (var evtInReq in transaction.ListEvent.Where(x => x.Value.DateBegin >= requ.Value.DateBegin
+                        && x.Value.DateBegin <= requ.Value.DateEnd).ToDictionary(x => x.Key, x => x.Value))
+                        {
+                            evtInReq.Value.TraceID = requ.Value.TranNo;
+                        }
+                    });
                 }
-                int a = 0;
             }
             catch (Exception ex)
             {
