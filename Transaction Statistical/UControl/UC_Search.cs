@@ -78,7 +78,7 @@ namespace Transaction_Statistical.UControl
         {
             this.Icon_Search.BackgroundImage = icon;
         }
-        private void Icon_Search_Click(object sender, EventArgs e)
+        public void Icon_Search_Click(object sender, EventArgs e)
         {
            
 
@@ -150,13 +150,22 @@ namespace Transaction_Statistical.UControl
                         TreeTransOrg = new Mode_TreeView();
                         TreeTransOrg.CloneFrom(TreeTrans);
                     }
-                    if (TreeTransResult == null) TreeTransResult = new Mode_TreeView();
-                    TreeTransResult.Nodes.Add(DateTime.Now.ToString("hh:MM:ss") + " Result search for [" + txt + "]: ");
+                    if (TreeTransResult == null)
+                    {
+                        TreeTransResult = new Mode_TreeView();
+                    }
+                   TreeNode node= TreeTransResult.Nodes.Add("Search", DateTime.Now.ToString("hh:MM:ss") + " Result search for [" + txt + "]: ", "Search","Select");
                    SearchNodes(TreeTransOrg.Nodes, txt);
-                    TreeTrans.Nodes.Clear();                   
-                    if (TreeTransResult.Nodes.Count != 0)                  
-                        TreeTransResult.Nodes[TreeTransResult.Nodes.Count - 1].Text += TreeTransResult.Nodes[TreeTransResult.Nodes.Count - 1].Nodes.Count + " items.";
-                    else TreeTransResult.Nodes[TreeTransResult.Nodes.Count - 1].Text += "No found items.";
+                    TreeTrans.Nodes.Clear();
+                    if (node.Nodes.Count != 0)
+                    {
+                        node.Text += TreeTransResult.Nodes[TreeTransResult.Nodes.Count - 1].Nodes.Count + " items.";
+                    }
+                    else
+                    {
+                        node.ImageKey = "Search_Warning";
+                        node.Text += "No found items.";
+                    }
                     TreeTrans.CloneFrom(TreeTransResult);
                     TreeTrans.Nodes[TreeTrans.Nodes.Count - 1].Expand();
                     TreeTrans.Update();
@@ -234,14 +243,15 @@ namespace Transaction_Statistical.UControl
                     TreeTrans.Controls.Add(lb_Back);
 
                     lb_Clear = new Mode_Label();
-                    lb_Clear.Text = "Clear";
+                    lb_Clear.Anchor= ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Bottom)));
+                    lb_Clear.Text = "Clear results";
                     lb_Clear.BackColor = Color.Transparent;
                     lb_Clear.AutoSize = false;
                     lb_Clear.BackColor = System.Drawing.Color.Transparent;
                     lb_Clear.Cursor = System.Windows.Forms.Cursors.Hand;
                     lb_Clear.ForeColor = InitGUI.Custom.Menu_Text.DisplayColor;
-                    lb_Clear.Size = new System.Drawing.Size(50, 17);
-                    lb_Clear.Location = new Point(TreeTrans.Width - 69, 5);
+                    lb_Clear.Size = new System.Drawing.Size(100, 17);
+                    lb_Clear.Location = new Point(2, this.Location.Y - this.Height);
                     lb_Clear.MouseEnter += new System.EventHandler(ShowLabelBack_Enter);
                     lb_Clear.MouseLeave += new System.EventHandler(ShowLabelBack_Leave);
                     lb_Clear.MouseHover += new System.EventHandler(ShowLabelBack_Enter);
@@ -281,6 +291,7 @@ namespace Transaction_Statistical.UControl
             if (TreeTransResult.Nodes.Count != 0)
             {               
                 TreeTransResult.Nodes.Clear();
+                TreeTrans.Nodes.Clear();
                 lb_Clear.Visible = false;
             }
         }

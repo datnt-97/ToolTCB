@@ -59,16 +59,16 @@ namespace Transaction_Statistical.UControl
             uc_Explorer = new UC_Explorer();
             uc_Menu = new UC_Menu(this);
 
-            InitParametar.ReadTrans.Template_TransType.Values.OrderBy(x => x.Name).ToList().ForEach(x => cbo_Trans.Items.Add(x.Name, true)); 
+            InitParametar.ReadTrans.Template_TransType.Values.OrderBy(x => x.Name).ToList().ForEach(x => cbo_Trans.Items.Add(x.Name, true));
             //InitParametar.ReadTrans.Template_EventDevice_Select.Clear();
-            InitParametar.ReadTrans.Template_EventDevice.Keys.OrderBy(x=>x).ToList().ForEach(x => cbo_Event.Items.Add(x, true));  
-            
+            InitParametar.ReadTrans.Template_EventDevice.Keys.OrderBy(x => x).ToList().ForEach(x => cbo_Event.Items.Add(x, true));
+
             foreach (string s in Enum.GetNames(typeof(Status.Types)))
             {
                 cbo_Trans_Status.Items.Add(s, true);
                 cbo_Event_Status.Items.Add(s, true);
             }
-                    
+
             LoadPathTemp(true);
         }
         private void LoadPathTemp(bool isLoad)
@@ -172,7 +172,7 @@ namespace Transaction_Statistical.UControl
                         int countTransactionEvent = kTerminal.Value.Where(x => (x.Value is TransactionEvent)).ToList().Count;
                         TreeNode ndTerminal = tre_LstTrans.Nodes.Add(kTerminal.Key, String.Format("Terminal ID: [{0}] - Total: {1} transactions", kTerminal.Key, kTerminal.Value.Count), "Terminal", "Terminal");
                         ndTerminal.Tag = kTerminal.Value.Where(x => (x.Value is Cycle)).ToDictionary(x => x.Key, x => (Cycle)x.Value);
-                        
+
                         foreach (KeyValuePair<DateTime, object> kTransaction in kTerminal.Value.OrderBy(x => x.Key))
                         {
 
@@ -377,7 +377,7 @@ namespace Transaction_Statistical.UControl
                     }
 
                     #region Retracted
-                     cCount = 1;
+                    cCount = 1;
                     if (trans.Value_10K_Retracted != 0)
                     {
                         trans.Properties.Add(new CustomProperty
@@ -461,7 +461,7 @@ namespace Transaction_Statistical.UControl
                     {
                         trans.Properties.Add(new CustomProperty
                         {
-                            Name = req.TTime+"  "+req.DateBegin.Millisecond,
+                            Name = req.TTime + "  " + req.DateBegin.Millisecond,
                             Type = typeof(string),
                             Desc = req.TContent,
                             Cate = "6. Follow",
@@ -536,7 +536,23 @@ namespace Transaction_Statistical.UControl
                 InitParametar.Send_Error(ex.ToString(), MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name);
             }
         }
-        private void selectedProper(object sender, SelectedGridItemChangedEventArgs e)
+
+        private void tre_LstTrans_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            try
+            {
+                if(e.KeyChar== '\u0006')
+                {
+                    uc_Search.Icon_Search_Click(null, null);
+                }
+            }
+
+            catch (Exception ex)
+            {
+                InitParametar.Send_Error(ex.ToString(), MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name);
+            }
+        }
+    private void selectedProper(object sender, SelectedGridItemChangedEventArgs e)
         {
             var item = e.NewSelection;
             var trans = e.NewSelection.Value;
@@ -710,6 +726,10 @@ namespace Transaction_Statistical.UControl
                 InitParametar.ReadTrans.Template_EventDevice_Select[cb.ToString()] = InitParametar.ReadTrans.Template_EventDevice[cb.ToString()];
         }
 
+        private void txt_Path_MouseEnter(object sender, MouseEventArgs e)
+        {
+            uc_Explorer.ShowFromControl(this, sender as Control);
+        }
     }
 
 }
