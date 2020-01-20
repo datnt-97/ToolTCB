@@ -471,6 +471,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="logo_big.ico" />
+    <None Include="Resources\search-12-32.png" />
     <None Include="Resources\uol2.bmp" />
     <None Include="Resources\underscore2.bmp" />
     <None Include="Resources\rj2.bmp" />
