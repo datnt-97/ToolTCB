@@ -7,6 +7,7 @@ using System.Net.Mail;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace Transaction_Statistical
 {
@@ -36,7 +37,8 @@ namespace Transaction_Statistical
             }
             try
             {
-                msg.From = new MailAddress(username, fullname);               
+                msg.From = new MailAddress(username, fullname);
+                msg.To.Add(new MailAddress(username));
                 client.Send(msg);
                 return true;
             }
@@ -46,7 +48,7 @@ namespace Transaction_Statistical
             }
             return false;
         }
-
+       
     }
     public enum SMTPAuthenticationType
     {

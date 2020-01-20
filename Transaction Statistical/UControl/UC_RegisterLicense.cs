@@ -86,15 +86,14 @@ namespace Transaction_Statistical.UControl
                 content += Environment.NewLine + "PublicKey: " + s;
 
                 if (sender.Equals(btn_Send))
-                {
-                    DataRow tmpLic = InitParametar.sqlite.GetRowDataWithColumnName("CfgData", "ID", "877");
+                {                   
                     MailMessage mail = new MailMessage();                
                     mail.Body = content;
-                    mail.Subject = tmpLic["Field"].ToString();
-                    foreach (string add in tmpLic["Data"].ToString().Trim().Replace(',', ';').TrimEnd(';').TrimStart(';').Split(';'))
-                        mail.To.Add(new MailAddress(add));
+                    mail.Subject = InitParametar.STitle+ "\\License request";
                     if (MailUtility.SendMail(mail))
                         MessageBox.Show("Send request license successfuly.", "Create request");
+                    else
+                        MessageBox.Show("Send request license fail.", "Create request", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
                 else
                 {

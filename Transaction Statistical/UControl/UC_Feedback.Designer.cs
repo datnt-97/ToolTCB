@@ -38,7 +38,7 @@
             // 
             // bt_Send
             // 
-            this.bt_Send.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)
+            this.bt_Send.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.bt_Send.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(40)))), ((int)(((byte)(40)))));
             this.bt_Send.FlatAppearance.BorderColor = System.Drawing.Color.Silver;
@@ -46,7 +46,7 @@
             this.bt_Send.FlatAppearance.MouseOverBackColor = System.Drawing.Color.DeepSkyBlue;
             this.bt_Send.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.bt_Send.ForeColor = System.Drawing.Color.White;
-            this.bt_Send.Location = new System.Drawing.Point(314, 504);
+            this.bt_Send.Location = new System.Drawing.Point(305, 444);
             this.bt_Send.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.bt_Send.Name = "bt_Send";
             this.bt_Send.Size = new System.Drawing.Size(131, 33);
@@ -57,15 +57,15 @@
             // 
             // cp_Editor
             // 
-            this.cp_Editor.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-            | System.Windows.Forms.AnchorStyles.Left)
+            this.cp_Editor.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.cp_Editor.BackColor = System.Drawing.Color.Transparent;
             this.cp_Editor.BorderColor = System.Drawing.Color.Aqua;
             this.cp_Editor.ForeColor = System.Drawing.Color.White;
             this.cp_Editor.Location = new System.Drawing.Point(18, 81);
             this.cp_Editor.Name = "cp_Editor";
-            this.cp_Editor.Size = new System.Drawing.Size(750, 413);
+            this.cp_Editor.Size = new System.Drawing.Size(750, 358);
             this.cp_Editor.TabIndex = 5;
             // 
             // txt_Title
@@ -121,7 +121,7 @@
             this.Controls.Add(this.txt_From);
             this.Controls.Add(this.lb_From);
             this.Name = "UC_Feedback";
-            this.Size = new System.Drawing.Size(789, 678);
+            this.Size = new System.Drawing.Size(789, 490);
             this.ResumeLayout(false);
             this.PerformLayout();
 

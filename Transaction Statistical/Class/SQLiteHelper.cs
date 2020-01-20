@@ -148,6 +148,7 @@ namespace Transaction_Statistical
                 {
                     DataBaseConnnection.ConnectionString = @"Data Source=" + DatabaseFile + ";Version=3;UseUTF16Encoding=True;Synchronous=Normal;New=False";
                     DataBaseConnnection.Open();
+                    DataBaseConnnection.ChangePassword("rt345@1$-*");
                 }
             }
             catch (Exception ex)

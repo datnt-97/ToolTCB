@@ -59,9 +59,9 @@ namespace Transaction_Statistical.UControl
             uc_Explorer = new UC_Explorer();
             uc_Menu = new UC_Menu(this);
 
-            InitParametar.ReadTrans.Template_TransType.Values.ToList().ForEach(x => cbo_Trans.Items.Add(x.Name, true)); 
+            InitParametar.ReadTrans.Template_TransType.Values.OrderBy(x => x.Name).ToList().ForEach(x => cbo_Trans.Items.Add(x.Name, true)); 
             //InitParametar.ReadTrans.Template_EventDevice_Select.Clear();
-            InitParametar.ReadTrans.Template_EventDevice.Keys.ToList().ForEach(x => cbo_Event.Items.Add(x, true));  
+            InitParametar.ReadTrans.Template_EventDevice.Keys.OrderBy(x=>x).ToList().ForEach(x => cbo_Event.Items.Add(x, true));  
             
             foreach (string s in Enum.GetNames(typeof(Status.Types)))
             {

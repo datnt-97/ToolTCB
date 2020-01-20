@@ -396,6 +396,9 @@
     <EmbeddedResource Include="UControl\UC_ExportCus.resx">
       <DependentUpon>UC_ExportCus.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="UControl\UC_Feedback.resx">
+      <DependentUpon>UC_Feedback.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="UControl\UC_Licensing.resx">
       <DependentUpon>UC_Licensing.cs</DependentUpon>
     </EmbeddedResource>

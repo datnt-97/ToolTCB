@@ -326,8 +326,6 @@ namespace Transaction_Statistical
                 btn_Transaction_Remove.Enabled = true;
                 btn_Transaction_Save.Enabled = true;
                 btn_Transaction_Add.Enabled = false;
-                //fctxt_Successful.Text = r["SuccessfulTxt"].ToString();
-                //fctxt_Unsuccessful.Text = r["UnsuccessfulTxt"].ToString();  
                 cbo_Transaction_Success.Items.Clear();
                 cbo_Transaction_UnSuccess.Items.Clear();
                 cbo_Transaction_Identification.Items.Clear();
@@ -335,9 +333,9 @@ namespace Transaction_Statistical
                 cbo_Transaction_UnSuccess.Text = r["UnsuccessfulTxt"].ToString();
                 cbo_Transaction_Identification.Text = r["IdentificationTxt"].ToString();
                 DataTable cfg_data = sqlite.GetTableDataWithColumnName("CfgData", "Parent_ID", template_ID);
-                foreach (DataRow row in cfg_data.Rows)
+                foreach (DataRow row in cfg_data.Select().OrderBy(u => u["Field"]).ToArray())
                 {
-                    if (row["Type_ID"].ToString().Equals("525") || row["Type_ID"].ToString().Equals("456"))
+                    if (row["Type_ID"].ToString().Equals("525") || row["Type_ID"].ToString().Equals("456") || row["Type_ID"].ToString().Equals("457"))
                     {
                         cbo_Transaction_Identification.Items.Add(row["Field"], r["IdentificationTxt"].ToString().Split(',').Contains(row["Field"]));
                         cbo_Transaction_Success.Items.Add(row["Field"], r["SuccessfulTxt"].ToString().Split(',').Contains(row["Field"]));
@@ -369,7 +367,7 @@ namespace Transaction_Statistical
                 cbo_Transactions.Items.Clear();
                 cbo_Transactions.Text = string.Empty;
                 DataTable tb_trans = sqlite.GetTableDataWithColumnName("Transactions", "TemplateID", template_ID);
-                foreach (DataRow r in tb_trans.Rows)
+                foreach (DataRow r in tb_trans.Select().OrderBy(u => u["Name"]).ToArray())
                 {
                     ComboBoxItem cb = new ComboBoxItem();
                     cb.Text = r["Name"].ToString();
@@ -389,7 +387,7 @@ namespace Transaction_Statistical
                 cbo_Keyword_LstKeyword.Items.Clear();
                 cbo_Keyword_LstKeyword.Text = string.Empty;
                 fctxt_Pattern.Clear();
-                foreach (DataRow R in cfg_data.Rows)
+                foreach (DataRow R in cfg_data.Select().OrderBy(u => u["Field"]).ToArray())
                 {
                     ComboBoxItem cb = new ComboBoxItem();
                     cb.Text = R["Field"].ToString();
