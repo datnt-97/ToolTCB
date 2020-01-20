@@ -626,3 +626,4 @@ E:\Project\NPS\ToolTCB_Back_up\back_up_20\ToolTCB\ToolTCB\Transaction Statistica
 E:\Project\NPS\ToolTCB_Back_up\back_up_20\ToolTCB\ToolTCB\Transaction Statistical\bin\Debug\System.Data.SQLite.dll.config
 E:\Project\NPS\ToolTCB_Back_up\back_up_20\ToolTCB\ToolTCB\Transaction Statistical\obj\Debug\Transaction Statistical.csproj.CopyComplete
 D:\05-TEMP\Source\GitHub\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.UControl.UC_Feedback.resources
+E:\Project\NPS\TCB\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.UControl.UC_Feedback.resources
