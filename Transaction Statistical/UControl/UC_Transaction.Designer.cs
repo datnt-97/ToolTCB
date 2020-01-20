@@ -188,7 +188,6 @@ namespace Transaction_Statistical.UControl
             this.cbo_Trans_Status.ValueSeparator = ", ";
             this.cbo_Trans_Status.SelectedValueChanged += new System.EventHandler(this.cbo_CheckAll_SelectedValueChanged);
             this.cbo_Trans_Status.TextChanged += new System.EventHandler(this.cbo_CheckAll_SelectedValueChanged);
-          
             // 
             // label3
             // 
@@ -230,7 +229,6 @@ namespace Transaction_Statistical.UControl
             this.tre_LstTrans.TabIndex = 8;
             this.tre_LstTrans.NodeMouseHover += new System.Windows.Forms.TreeNodeMouseHoverEventHandler(this.tre_LstTrans_NodeMouseHover);
             this.tre_LstTrans.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.tre_LstTrans_AfterSelect);
-            this.tre_LstTrans.KeyPress += new KeyPressEventHandler(tre_LstTrans_KeyPress);
             this.uc_Search = new UC_Search(tre_LstTrans);
             this.tre_LstTrans.Controls.Add(uc_Search);
             // 
@@ -256,9 +254,7 @@ namespace Transaction_Statistical.UControl
             this.imageListTre.Images.SetKeyName(15, "Cycle_Error");
             this.imageListTre.Images.SetKeyName(16, "Cycle_Warning");
             this.imageListTre.Images.SetKeyName(17, "Terminal");
-            this.imageListTre.Images.SetKeyName(18, "Select");           
-            this.imageListTre.Images.SetKeyName(19, "Search");
-            this.imageListTre.Images.SetKeyName(20, "Search_Warning");
+            this.imageListTre.Images.SetKeyName(18, "Select");
             // 
             // cb_FullTime
             // 
@@ -606,13 +602,7 @@ namespace Transaction_Statistical.UControl
         {
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(UC_Transaction));
-            this.imageListTre = new System.Windows.Forms.ImageList(this.components);
-            this.panel1 = new System.Windows.Forms.Panel();
-            this.prb_Process = new Transaction_Statistical.TextProgressBar();
-            this.label2 = new Transaction_Statistical.Mode_Label();
-            this.btn_Menu = new Transaction_Statistical.AddOn.ButtonMenu();
-            this.label1 = new Transaction_Statistical.Mode_Label();
-            this.btn_Read = new Transaction_Statistical.AddOn.ButtonZ();
+            this.txt_Path = new Transaction_Statistical.Mode_TextBox();
             this.gpBox_Actions = new Transaction_Statistical.Mode_GroupBox();
             this.label5 = new Transaction_Statistical.Mode_Label();
             this.cbo_Event_Status = new Transaction_Statistical.CheckedComboBox();
@@ -622,12 +612,18 @@ namespace Transaction_Statistical.UControl
             this.cbo_Trans_Status = new Transaction_Statistical.CheckedComboBox();
             this.label3 = new Transaction_Statistical.Mode_Label();
             this.cbo_Trans = new Transaction_Statistical.CheckedComboBox();
-            this.txt_Path = new Transaction_Statistical.Mode_TextBox();
             this.tre_LstTrans = new Transaction_Statistical.Mode_TreeView();
+            this.imageListTre = new System.Windows.Forms.ImageList(this.components);
             this.uc_Search = new Transaction_Statistical.UControl.UC_Search();
-            this.dateTimePicker_Start = new Transaction_Statistical.Mode_DateTimePicker();
             this.cb_FullTime = new Transaction_Statistical.Mode_CheckBox();
+            this.label2 = new Transaction_Statistical.Mode_Label();
             this.dateTimePicker_End = new Transaction_Statistical.Mode_DateTimePicker();
+            this.label1 = new Transaction_Statistical.Mode_Label();
+            this.dateTimePicker_Start = new Transaction_Statistical.Mode_DateTimePicker();
+            this.panel1 = new System.Windows.Forms.Panel();
+            this.prb_Process = new Transaction_Statistical.TextProgressBar();
+            this.btn_Menu = new Transaction_Statistical.AddOn.ButtonMenu();
+            this.btn_Read = new Transaction_Statistical.AddOn.ButtonZ();
             this.panel2 = new System.Windows.Forms.Panel();
             this.propertyGrid1 = new System.Windows.Forms.PropertyGrid();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
@@ -638,131 +634,28 @@ namespace Transaction_Statistical.UControl
             this.panel4 = new System.Windows.Forms.Panel();
             this.tvListCycle = new Transaction_Statistical.Mode_TreeView();
             this.panel5 = new System.Windows.Forms.Panel();
-            this.panel1.SuspendLayout();
             this.gpBox_Actions.SuspendLayout();
             this.tre_LstTrans.SuspendLayout();
+            this.panel1.SuspendLayout();
             this.panel2.SuspendLayout();
             this.panel3.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.fctxt_FullLog)).BeginInit();
             this.panel4.SuspendLayout();
             this.SuspendLayout();
             // 
-            // imageListTre
+            // txt_Path
             // 
-            this.imageListTre.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("imageListTre.ImageStream")));
-            this.imageListTre.TransparentColor = System.Drawing.Color.Transparent;
-            this.imageListTre.Images.SetKeyName(0, "Flag");
-            this.imageListTre.Images.SetKeyName(1, "Flag_Succeeded");
-            this.imageListTre.Images.SetKeyName(2, "Flag_UnSucceeded");
-            this.imageListTre.Images.SetKeyName(3, "Flag_Error");
-            this.imageListTre.Images.SetKeyName(4, "Flag_Warning");
-            this.imageListTre.Images.SetKeyName(5, "Device");
-            this.imageListTre.Images.SetKeyName(6, "Device_Error");
-            this.imageListTre.Images.SetKeyName(7, "Device_Warning");
-            this.imageListTre.Images.SetKeyName(8, "Date");
-            this.imageListTre.Images.SetKeyName(9, "Date_Error");
-            this.imageListTre.Images.SetKeyName(10, "Date_Warning");
-            this.imageListTre.Images.SetKeyName(11, "DateOpen");
-            this.imageListTre.Images.SetKeyName(12, "DateOpen_Error");
-            this.imageListTre.Images.SetKeyName(13, "DateOpen_Warning");
-            this.imageListTre.Images.SetKeyName(14, "Cycle");
-            this.imageListTre.Images.SetKeyName(15, "Cycle_Error");
-            this.imageListTre.Images.SetKeyName(16, "Cycle_Warning");
-            this.imageListTre.Images.SetKeyName(17, "Terminal");
-            this.imageListTre.Images.SetKeyName(18, "Select");
-            this.imageListTre.Images.SetKeyName(19, "Search");
-            this.imageListTre.Images.SetKeyName(20, "Search_Warning");
-            // 
-            // panel1
-            // 
-            this.panel1.Controls.Add(this.prb_Process);
-            this.panel1.Controls.Add(this.label2);
-            this.panel1.Controls.Add(this.btn_Menu);
-            this.panel1.Controls.Add(this.label1);
-            this.panel1.Controls.Add(this.btn_Read);
-            this.panel1.Controls.Add(this.gpBox_Actions);
-            this.panel1.Controls.Add(this.txt_Path);
-            this.panel1.Controls.Add(this.tre_LstTrans);
-            this.panel1.Controls.Add(this.dateTimePicker_Start);
-            this.panel1.Controls.Add(this.cb_FullTime);
-            this.panel1.Controls.Add(this.dateTimePicker_End);
-            this.panel1.Dock = System.Windows.Forms.DockStyle.Left;
-            this.panel1.Location = new System.Drawing.Point(0, 0);
-            this.panel1.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(675, 639);
-            this.panel1.TabIndex = 4;
-            // 
-            // prb_Process
-            // 
-            this.prb_Process.CustomText = "Reading start..";
-            this.prb_Process.Location = new System.Drawing.Point(3, 212);
-            this.prb_Process.Maximum = 1000;
-            this.prb_Process.Name = "prb_Process";
-            this.prb_Process.ProgressColor = System.Drawing.Color.White;
-            this.prb_Process.Size = new System.Drawing.Size(0, 0);
-            this.prb_Process.Step = 1;
-            this.prb_Process.TabIndex = 0;
-            this.prb_Process.TextColor = System.Drawing.Color.White;
-            this.prb_Process.TextFont = new System.Drawing.Font("Microsoft Sans Serif", 7.8F);
-            this.prb_Process.VisualMode = Transaction_Statistical.ProgressBarDisplayMode.TextAndPercentage;
-            // 
-            // label2
-            // 
-            this.label2.AutoSize = true;
-            this.label2.BackColor = System.Drawing.Color.Transparent;
-            this.label2.ForeColor = System.Drawing.Color.White;
-            this.label2.Location = new System.Drawing.Point(323, 27);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(25, 17);
-            this.label2.TabIndex = 6;
-            this.label2.Text = "To";
-            // 
-            // btn_Menu
-            // 
-            this.btn_Menu.BackColor = System.Drawing.Color.Transparent;
-            this.btn_Menu.Color4point = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(120)))), ((int)(((byte)(240)))));
-            this.btn_Menu.Color4pointDown = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(98)))), ((int)(((byte)(215)))));
-            this.btn_Menu.Color4pointHover = System.Drawing.Color.DeepSkyBlue;
-            this.btn_Menu.Location = new System.Drawing.Point(3, 2);
-            this.btn_Menu.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.btn_Menu.Name = "btn_Menu";
-            this.btn_Menu.Size = new System.Drawing.Size(39, 39);
-            this.btn_Menu.TabIndex = 1;
-            this.btn_Menu.OnMouseDownHandler += new Transaction_Statistical.AddOn.ButtonMenu.MouseDownHandler(this.btn_Menu_OnMouseDownHandler);
-            // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.BackColor = System.Drawing.Color.Transparent;
-            this.label1.ForeColor = System.Drawing.Color.White;
-            this.label1.Location = new System.Drawing.Point(67, 27);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(40, 17);
-            this.label1.TabIndex = 4;
-            this.label1.Text = "From";
-            // 
-            // btn_Read
-            // 
-            this.btn_Read.BorderLeft = false;
-            this.btn_Read.BZBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(120)))), ((int)(((byte)(240)))));
-            this.btn_Read.DisplayText = "Read";
-            this.btn_Read.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btn_Read.Font = new System.Drawing.Font("Microsoft YaHei UI", 14F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btn_Read.ForeColor = System.Drawing.Color.White;
-            this.btn_Read.Location = new System.Drawing.Point(13, 220);
-            this.btn_Read.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.btn_Read.MouseClickColor1 = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(98)))), ((int)(((byte)(215)))));
-            this.btn_Read.MouseHoverColor = System.Drawing.Color.DeepSkyBlue;
-            this.btn_Read.Name = "btn_Read";
-            this.btn_Read.NotchangeAfterMouseUP = false;
-            this.btn_Read.Size = new System.Drawing.Size(649, 28);
-            this.btn_Read.TabIndex = 9;
-            this.btn_Read.Text = "Read";
-            this.btn_Read.TextLocation_X = 210;
-            this.btn_Read.TextLocation_Y = -3;
-            this.btn_Read.UseVisualStyleBackColor = true;
-            this.btn_Read.Click += new System.EventHandler(this.bt_Read_Click);
+            this.txt_Path.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.Suggest;
+            this.txt_Path.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.FileSystem;
+            this.txt_Path.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(40)))), ((int)(((byte)(40)))));
+            this.txt_Path.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.txt_Path.ForeColor = System.Drawing.Color.White;
+            this.txt_Path.Location = new System.Drawing.Point(13, 185);
+            this.txt_Path.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.txt_Path.Name = "txt_Path";
+            this.txt_Path.Size = new System.Drawing.Size(651, 22);
+            this.txt_Path.TabIndex = 1;
+            this.txt_Path.MouseClick += new System.Windows.Forms.MouseEventHandler(this.txt_Path_MouseEnter);
             // 
             // gpBox_Actions
             // 
@@ -908,20 +801,6 @@ namespace Transaction_Statistical.UControl
             this.cbo_Trans.ValueSeparator = ", ";
             this.cbo_Trans.TextChanged += new System.EventHandler(this.cbo_Trans_TextChanged);
             // 
-            // txt_Path
-            // 
-            this.txt_Path.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.Suggest;
-            this.txt_Path.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.FileSystem;
-            this.txt_Path.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(40)))), ((int)(((byte)(40)))));
-            this.txt_Path.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.txt_Path.ForeColor = System.Drawing.Color.White;
-            this.txt_Path.Location = new System.Drawing.Point(13, 185);
-            this.txt_Path.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.txt_Path.Name = "txt_Path";
-            this.txt_Path.Size = new System.Drawing.Size(651, 22);
-            this.txt_Path.TabIndex = 1;
-            this.txt_Path.MouseClick += new System.Windows.Forms.MouseEventHandler(this.txt_Path_MouseEnter);
-            // 
             // tre_LstTrans
             // 
             this.tre_LstTrans.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
@@ -941,6 +820,30 @@ namespace Transaction_Statistical.UControl
             this.tre_LstTrans.NodeMouseHover += new System.Windows.Forms.TreeNodeMouseHoverEventHandler(this.tre_LstTrans_NodeMouseHover);
             this.tre_LstTrans.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.tre_LstTrans_AfterSelect);
             // 
+            // imageListTre
+            // 
+            this.imageListTre.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("imageListTre.ImageStream")));
+            this.imageListTre.TransparentColor = System.Drawing.Color.Transparent;
+            this.imageListTre.Images.SetKeyName(0, "Flag");
+            this.imageListTre.Images.SetKeyName(1, "Flag_Succeeded");
+            this.imageListTre.Images.SetKeyName(2, "Flag_UnSucceeded");
+            this.imageListTre.Images.SetKeyName(3, "Flag_Error");
+            this.imageListTre.Images.SetKeyName(4, "Flag_Warning");
+            this.imageListTre.Images.SetKeyName(5, "Device");
+            this.imageListTre.Images.SetKeyName(6, "Device_Error");
+            this.imageListTre.Images.SetKeyName(7, "Device_Warning");
+            this.imageListTre.Images.SetKeyName(8, "Date");
+            this.imageListTre.Images.SetKeyName(9, "Date_Error");
+            this.imageListTre.Images.SetKeyName(10, "Date_Warning");
+            this.imageListTre.Images.SetKeyName(11, "DateOpen");
+            this.imageListTre.Images.SetKeyName(12, "DateOpen_Error");
+            this.imageListTre.Images.SetKeyName(13, "DateOpen_Warning");
+            this.imageListTre.Images.SetKeyName(14, "Cycle");
+            this.imageListTre.Images.SetKeyName(15, "Cycle_Error");
+            this.imageListTre.Images.SetKeyName(16, "Cycle_Warning");
+            this.imageListTre.Images.SetKeyName(17, "Terminal");
+            this.imageListTre.Images.SetKeyName(18, "Select");
+            // 
             // uc_Search
             // 
             this.uc_Search.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
@@ -949,18 +852,6 @@ namespace Transaction_Statistical.UControl
             this.uc_Search.Name = "uc_Search";
             this.uc_Search.Size = new System.Drawing.Size(611, 26);
             this.uc_Search.TabIndex = 0;
-            // 
-            // dateTimePicker_Start
-            // 
-            this.dateTimePicker_Start.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(40)))), ((int)(((byte)(40)))));
-            this.dateTimePicker_Start.CustomFormat = "HH:mm dd/MM/yy";
-            this.dateTimePicker_Start.ForeColor = System.Drawing.Color.White;
-            this.dateTimePicker_Start.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
-            this.dateTimePicker_Start.Location = new System.Drawing.Point(113, 25);
-            this.dateTimePicker_Start.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.dateTimePicker_Start.Name = "dateTimePicker_Start";
-            this.dateTimePicker_Start.Size = new System.Drawing.Size(195, 22);
-            this.dateTimePicker_Start.TabIndex = 3;
             // 
             // cb_FullTime
             // 
@@ -976,6 +867,17 @@ namespace Transaction_Statistical.UControl
             this.cb_FullTime.UseVisualStyleBackColor = true;
             this.cb_FullTime.CheckedChanged += new System.EventHandler(this.cb_FullTime_CheckedChanged);
             // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.BackColor = System.Drawing.Color.Transparent;
+            this.label2.ForeColor = System.Drawing.Color.White;
+            this.label2.Location = new System.Drawing.Point(323, 27);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(25, 17);
+            this.label2.TabIndex = 6;
+            this.label2.Text = "To";
+            // 
             // dateTimePicker_End
             // 
             this.dateTimePicker_End.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(40)))), ((int)(((byte)(40)))));
@@ -987,6 +889,98 @@ namespace Transaction_Statistical.UControl
             this.dateTimePicker_End.Name = "dateTimePicker_End";
             this.dateTimePicker_End.Size = new System.Drawing.Size(195, 22);
             this.dateTimePicker_End.TabIndex = 5;
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.BackColor = System.Drawing.Color.Transparent;
+            this.label1.ForeColor = System.Drawing.Color.White;
+            this.label1.Location = new System.Drawing.Point(67, 27);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(40, 17);
+            this.label1.TabIndex = 4;
+            this.label1.Text = "From";
+            // 
+            // dateTimePicker_Start
+            // 
+            this.dateTimePicker_Start.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(40)))), ((int)(((byte)(40)))));
+            this.dateTimePicker_Start.CustomFormat = "HH:mm dd/MM/yy";
+            this.dateTimePicker_Start.ForeColor = System.Drawing.Color.White;
+            this.dateTimePicker_Start.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
+            this.dateTimePicker_Start.Location = new System.Drawing.Point(113, 25);
+            this.dateTimePicker_Start.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.dateTimePicker_Start.Name = "dateTimePicker_Start";
+            this.dateTimePicker_Start.Size = new System.Drawing.Size(195, 22);
+            this.dateTimePicker_Start.TabIndex = 3;
+            // 
+            // panel1
+            // 
+            this.panel1.Controls.Add(this.prb_Process);
+            this.panel1.Controls.Add(this.label2);
+            this.panel1.Controls.Add(this.btn_Menu);
+            this.panel1.Controls.Add(this.label1);
+            this.panel1.Controls.Add(this.btn_Read);
+            this.panel1.Controls.Add(this.gpBox_Actions);
+            this.panel1.Controls.Add(this.txt_Path);
+            this.panel1.Controls.Add(this.tre_LstTrans);
+            this.panel1.Controls.Add(this.dateTimePicker_Start);
+            this.panel1.Controls.Add(this.cb_FullTime);
+            this.panel1.Controls.Add(this.dateTimePicker_End);
+            this.panel1.Dock = System.Windows.Forms.DockStyle.Left;
+            this.panel1.Location = new System.Drawing.Point(0, 0);
+            this.panel1.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.panel1.Name = "panel1";
+            this.panel1.Size = new System.Drawing.Size(675, 639);
+            this.panel1.TabIndex = 4;
+            // 
+            // prb_Process
+            // 
+            this.prb_Process.CustomText = "Reading start..";
+            this.prb_Process.Location = new System.Drawing.Point(3, 212);
+            this.prb_Process.Maximum = 1000;
+            this.prb_Process.Name = "prb_Process";
+            this.prb_Process.ProgressColor = System.Drawing.Color.White;
+            this.prb_Process.Size = new System.Drawing.Size(0, 0);
+            this.prb_Process.Step = 1;
+            this.prb_Process.TabIndex = 0;
+            this.prb_Process.TextColor = System.Drawing.Color.White;
+            this.prb_Process.TextFont = new System.Drawing.Font("Microsoft Sans Serif", 7.8F);
+            this.prb_Process.VisualMode = Transaction_Statistical.ProgressBarDisplayMode.TextAndPercentage;
+            // 
+            // btn_Menu
+            // 
+            this.btn_Menu.BackColor = System.Drawing.Color.Transparent;
+            this.btn_Menu.Color4point = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(120)))), ((int)(((byte)(240)))));
+            this.btn_Menu.Color4pointDown = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(98)))), ((int)(((byte)(215)))));
+            this.btn_Menu.Color4pointHover = System.Drawing.Color.DeepSkyBlue;
+            this.btn_Menu.Location = new System.Drawing.Point(3, 2);
+            this.btn_Menu.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.btn_Menu.Name = "btn_Menu";
+            this.btn_Menu.Size = new System.Drawing.Size(39, 39);
+            this.btn_Menu.TabIndex = 1;
+            this.btn_Menu.OnMouseDownHandler += new Transaction_Statistical.AddOn.ButtonMenu.MouseDownHandler(this.btn_Menu_OnMouseDownHandler);
+            // 
+            // btn_Read
+            // 
+            this.btn_Read.BorderLeft = false;
+            this.btn_Read.BZBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(120)))), ((int)(((byte)(240)))));
+            this.btn_Read.DisplayText = "Read";
+            this.btn_Read.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btn_Read.Font = new System.Drawing.Font("Microsoft YaHei UI", 14F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btn_Read.ForeColor = System.Drawing.Color.White;
+            this.btn_Read.Location = new System.Drawing.Point(13, 220);
+            this.btn_Read.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.btn_Read.MouseClickColor1 = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(98)))), ((int)(((byte)(215)))));
+            this.btn_Read.MouseHoverColor = System.Drawing.Color.DeepSkyBlue;
+            this.btn_Read.Name = "btn_Read";
+            this.btn_Read.NotchangeAfterMouseUP = false;
+            this.btn_Read.Size = new System.Drawing.Size(649, 28);
+            this.btn_Read.TabIndex = 9;
+            this.btn_Read.Text = "Read";
+            this.btn_Read.TextLocation_X = 210;
+            this.btn_Read.TextLocation_Y = -3;
+            this.btn_Read.UseVisualStyleBackColor = true;
+            this.btn_Read.Click += new System.EventHandler(this.bt_Read_Click);
             // 
             // panel2
             // 
@@ -1091,7 +1085,6 @@ namespace Transaction_Statistical.UControl
             this.fctxt_FullLog.Cursor = System.Windows.Forms.Cursors.IBeam;
             this.fctxt_FullLog.DisabledColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))));
             this.fctxt_FullLog.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.fctxt_FullLog.Font = new System.Drawing.Font("Courier New", 9.75F);
             this.fctxt_FullLog.ForeColor = System.Drawing.Color.White;
             this.fctxt_FullLog.IndentBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(196)))), ((int)(((byte)(196)))), ((int)(((byte)(196)))));
             this.fctxt_FullLog.IsReplaceMode = false;
@@ -1164,11 +1157,11 @@ namespace Transaction_Statistical.UControl
             this.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.Name = "UC_Transaction";
             this.Size = new System.Drawing.Size(1355, 639);
-            this.panel1.ResumeLayout(false);
-            this.panel1.PerformLayout();
             this.gpBox_Actions.ResumeLayout(false);
             this.gpBox_Actions.PerformLayout();
             this.tre_LstTrans.ResumeLayout(false);
+            this.panel1.ResumeLayout(false);
+            this.panel1.PerformLayout();
             this.panel2.ResumeLayout(false);
             this.panel3.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.fctxt_FullLog)).EndInit();
