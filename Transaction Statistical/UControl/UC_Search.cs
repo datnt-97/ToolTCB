@@ -200,6 +200,11 @@ namespace Transaction_Statistical.UControl
                         if ((node.Tag as TransactionEvent).TContent.Contains(txt))
                             TreeTransResult.Nodes[TreeTransResult.Nodes.Count - 1].Nodes.Add(node);
                     }
+                    else if (node.Tag is Cycle)
+                    {
+                        if ((node.Tag as Cycle).LogTxt.Contains(txt))
+                            TreeTransResult.Nodes[TreeTransResult.Nodes.Count - 1].Nodes.Add(node);
+                    }
                     else if (node.Nodes.Count != 0)
                         SearchNodes(node.Nodes, txt);
                 }
