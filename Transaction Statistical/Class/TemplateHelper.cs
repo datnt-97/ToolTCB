@@ -480,7 +480,7 @@ namespace Transaction_Statistical.Class
                         worksheet.Cells[index + i, 6].Value = evt.DateBegin;
                         worksheet.Cells[index + i, 7].Value = evt.TContent;
                         worksheet.Cells[index + i, 8].Value = evt.TraceID;
-                        worksheet.Cells[index + i, 9].Value = evt.Amount;
+                        worksheet.Cells[index + i, 9].Value = Math.Abs(evt.Amount);
                         worksheet.Cells[index + i, 9].Style.Numberformat.Format = "###,###,##0.0";
                     }
                     else
@@ -492,7 +492,7 @@ namespace Transaction_Statistical.Class
                         //worksheet.Cells[index + i, 5].Value = "";
                         worksheet.Cells[index + i, 6].Value = evt.TraceID;
 
-                        worksheet.Cells[index + i, 7].Value = evt.Amount;
+                        worksheet.Cells[index + i, 7].Value = Math.Abs(evt.Amount);
                         worksheet.Cells[index + i, 7].Style.Numberformat.Format = "###,###,##0.0";
                     }
                     i++;
@@ -744,7 +744,7 @@ namespace Transaction_Statistical.Class
                                 //}
                                 //else
                                 //{
-                                rng.Value = evtCounter.Sum(x => x.Value.AmountCounter) != 0 ? evtCounter.Sum(x => x.Value.AmountCounter) : evtCounter.Sum(x => x.Value.AmountCounterRetracted);
+                                rng.Value = evtCounter.Sum(x => x.Value.AmountCounter) != 0 ? Math.Abs(evtCounter.Sum(x => x.Value.AmountCounter)) : Math.Abs(evtCounter.Sum(x => x.Value.AmountCounterRetracted));
                                 //}
                                 rng.Style.Numberformat.Format = "###,###,##0.0";
 
