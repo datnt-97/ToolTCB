@@ -1512,6 +1512,7 @@ namespace Transaction_Statistical
                 req.Status = Status.Types.UnSucceeded;
                 transaction.Status = Status.Types.Warning.ToString();
                 var billCheckPin = transaction.ListBills.Where(x => x.Value.Type == Bills.Types.Bill_CheckPin).LastOrDefault();
+                var billNomal = transaction.ListBills.Where(x => x.Value.Type == Bills.Types.Bill_Nomal).FirstOrDefault();
 
                 foreach (TransactionEvent evt in transaction.ListEvent.Values)
                 {
@@ -1560,23 +1561,44 @@ namespace Transaction_Statistical
                     await Task.Run(() =>
                     {
                         var evts = transaction.ListBills.Where(x => x.Value.Date >= requ.Value.DateBegin
-                       && x.Value.Date <= requ.Value.DateEnd).LastOrDefault();
+                       && x.Value.Date <= requ.Value.DateEnd && x.Value.Type != Bills.Types.Bill_Nomal &&
+                       x.Value.Type != Bills.Types.Bill_CheckPin).LastOrDefault();
                         int check = 0;
-                        if (evts.Value != null && int.TryParse(evts.Value.TranNo.Trim(), out check))
-                        {
-                            requ.Value.TranNo = evts.Value.TranNo;
-                        }
-                        else if (billCheckPin.Value != null)
-                        {
-                            requ.Value.TranNo = billCheckPin.Value != null ? billCheckPin.Value.TranNo : "-";
-                        }
+
                         foreach (var evtInReq in transaction.ListEvent.Where(x => x.Value.DateBegin >= requ.Value.DateBegin
                         && x.Value.DateBegin <= requ.Value.DateEnd).ToDictionary(x => x.Key, x => x.Value))
                         {
                             evtInReq.Value.TraceID = requ.Value.TranNo;
-                            if (evtInReq.Value.Type == TransactionEvent.Events.CashRetracted)
+                            if (evtInReq.Value.Status != Status.Types.UnSucceeded && evtInReq.Value.Type == TransactionEvent.Events.CashRetracted)
                             {
                                 requ.Value.Status = Status.Types.UnSucceeded;
+                            }
+                        }
+                        if (transaction.CardType == Transaction.CardTypes.CardLess)
+                        {
+                            if (evts.Value != null && int.TryParse(evts.Value.TranNo.Trim(), out check))
+                            {
+                                requ.Value.TranNo = evts.Value.TranNo;
+                            }
+                            else if (billCheckPin.Value != null)
+                            {
+                                requ.Value.TranNo = billCheckPin.Value != null ? billCheckPin.Value.TranNo : "-";
+                            }
+                            else
+                            {
+                                requ.Value.TranNo = billNomal.Value != null ? billNomal.Value.TranNo : "-";
+
+                            }
+                        }
+                        else
+                        {
+                            if (evts.Value != null && int.TryParse(evts.Value.TranNo.Trim(), out check))
+                            {
+                                requ.Value.TranNo = evts.Value.TranNo;
+                            }
+                            else if (billCheckPin.Value != null)
+                            {
+                                requ.Value.TranNo = billCheckPin.Value != null ? billCheckPin.Value.TranNo : "-";
                             }
                         }
                     });
@@ -2187,7 +2209,12 @@ namespace Transaction_Statistical
             Bill_Withdrawal_Unsuccess,
             Bill_Deposit,
             Bill_Withdrawal,
-            Bill_CheckPin
+            Bill_CheckPin,
+            Bill_Nomal,
+            Bill_BalanceInquiry,
+            Bill_Mini_Statement,
+            Bill_Pin_Change,
+            Bill_Transfer,
 
         }
         public string Name { get; set; }

@@ -395,6 +395,8 @@ namespace Transaction_Statistical
                 {
                     newTn = new TreeNode(tn.Text, tn.ImageIndex, tn.SelectedImageIndex);
                     if (tn.Tag != null) newTn.Tag = tn.Tag;
+                    newTn.ImageKey = tn.ImageKey;
+                    newTn.SelectedImageKey = tn.SelectedImageKey;
                     CopyChildren(newTn, tn);
                     this.Nodes.Add(newTn);
                     if (tn.IsExpanded) newTn.Expand();
@@ -409,6 +411,8 @@ namespace Transaction_Statistical
             {
                 newTn = new TreeNode(tn.Text, tn.ImageIndex, tn.SelectedImageIndex);
                 if (tn.Tag != null) newTn.Tag = tn.Tag;
+                newTn.ImageKey = tn.ImageKey;
+                newTn.SelectedImageKey = tn.SelectedImageKey;
                 parent.Nodes.Add(newTn);
                 CopyChildren(newTn, tn);
                 if (tn.IsExpanded) newTn.Expand();

@@ -73,7 +73,7 @@
             this.mode_Label5.Name = "mode_Label5";
             this.mode_Label5.Size = new System.Drawing.Size(106, 17);
             this.mode_Label5.TabIndex = 4;
-            this.mode_Label5.Text = "Send Feekback";
+            this.mode_Label5.Text = "Send Feedback";
             this.mode_Label5.MouseEnter += new System.EventHandler(this.mode_Label_MouseEnter);
             this.mode_Label5.MouseLeave += new System.EventHandler(this.mode_Label_Leave);
             this.mode_Label5.MouseHover += new System.EventHandler(this.mode_Label_MouseHover);
