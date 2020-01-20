@@ -1574,6 +1574,10 @@ namespace Transaction_Statistical
                         && x.Value.DateBegin <= requ.Value.DateEnd).ToDictionary(x => x.Key, x => x.Value))
                         {
                             evtInReq.Value.TraceID = requ.Value.TranNo;
+                            if (evtInReq.Value.Type == TransactionEvent.Events.CashRetracted)
+                            {
+                                requ.Value.Status = Status.Types.UnSucceeded;
+                            }
                         }
                     });
                 }

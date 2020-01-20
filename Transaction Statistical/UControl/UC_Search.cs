@@ -24,6 +24,7 @@ namespace Transaction_Statistical.UControl
         Mode_TreeView TreeTransResult;
         Mode_TreeView TreeTransOrg;
         Mode_Label lb_Back;
+        Mode_Label lb_Clear;
         char FieldSplit = ';';
         public UC_Search(Mode_TreeView treeTrans)
         {
@@ -231,20 +232,39 @@ namespace Transaction_Statistical.UControl
                     lb_Back.MouseHover += new System.EventHandler(ShowLabelBack_Enter);
                     lb_Back.Click += new System.EventHandler(BackListOgrinal);
                     TreeTrans.Controls.Add(lb_Back);
+
+                    lb_Clear = new Mode_Label();
+                    lb_Clear.Text = "Clear";
+                    lb_Clear.BackColor = Color.Transparent;
+                    lb_Clear.AutoSize = false;
+                    lb_Clear.BackColor = System.Drawing.Color.Transparent;
+                    lb_Clear.Cursor = System.Windows.Forms.Cursors.Hand;
+                    lb_Clear.ForeColor = InitGUI.Custom.Menu_Text.DisplayColor;
+                    lb_Clear.Size = new System.Drawing.Size(50, 17);
+                    lb_Clear.Location = new Point(TreeTrans.Width - 69, 5);
+                    lb_Clear.MouseEnter += new System.EventHandler(ShowLabelBack_Enter);
+                    lb_Clear.MouseLeave += new System.EventHandler(ShowLabelBack_Leave);
+                    lb_Clear.MouseHover += new System.EventHandler(ShowLabelBack_Enter);
+                    lb_Clear.Click += new System.EventHandler(ClearResults);
+                    TreeTrans.Controls.Add(lb_Clear);
                 }
                 else
+                {
                     lb_Back.Visible = true;
+                    lb_Clear.Visible = true;
+                }
             }
             catch
             { }
         }
         private void ShowLabelBack_Leave(object sender, EventArgs e)
         {
-                lb_Back.ForeColor= InitGUI.Custom.Menu_Text.DisplayColor;
+            (sender as Mode_Label).ForeColor = InitGUI.Custom.Menu_Text.DisplayColor;
         }
         private void ShowLabelBack_Enter(object sender, EventArgs e)
         {
-                lb_Back.ForeColor = Color.Blue;
+            (sender as Mode_Label).ForeColor = Color.Blue;
+
         }
         private void BackListOgrinal(object sender, EventArgs e)
         {
@@ -253,6 +273,15 @@ namespace Transaction_Statistical.UControl
                 TreeTrans.CloneFrom(TreeTransOrg);
                 TreeTransOrg.Nodes.Clear();
                 lb_Back.Visible = false;
+                lb_Clear.Visible = false;
+            }
+        }
+        private void ClearResults(object sender, EventArgs e)
+        {
+            if (TreeTransResult.Nodes.Count != 0)
+            {               
+                TreeTransResult.Nodes.Clear();
+                lb_Clear.Visible = false;
             }
         }
     }
