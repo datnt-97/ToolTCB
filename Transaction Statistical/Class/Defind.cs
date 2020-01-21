@@ -1492,48 +1492,40 @@ namespace Transaction_Statistical
                     foreach (KeyValuePair<DateTime, TransactionEvent> vars in transaction.ListEvent)
                     {
 
-                        Parallel.Invoke(() => {
-                            if (vars.Value.TTime.Equals("00:00:00"))
+                        if (vars.Value.TTime.Equals("00:00:00"))
+                        {
+                            if (lsttmp.Count == 0)
                             {
-                                if (lsttmp.Count == 0)
+                                Dictionary<int, RegesValue> lst = new Dictionary<int, RegesValue>();
+                                if (Regexs.RunPatternRegular(sString, @"(?<Time>\d{2}:\d{2}:\d{2})", out lst))
                                 {
-                                    Dictionary<int, RegesValue> lst = new Dictionary<int, RegesValue>();
-                                    if (Regexs.RunPatternRegular(sString, @"(?<Time>\d{2}:\d{2}:\d{2})", out lst))
+                                    foreach (RegesValue regx in lst.Values)
                                     {
-                                        foreach (RegesValue regx in lst.Values)
-                                        {
-                                            lsttmp[regx.index] = regx.value["Time"];
-                                        }
+                                        lsttmp[regx.index] = regx.value["Time"];
                                     }
                                 }
-
-                                var lastTime = lsttmp.OrderBy(x => x.Key).Where(x => x.Key <= vars.Value.IndexContent).LastOrDefault().Value;
-                                if (lastTime != null)
-                                {
-                                    vars.Value.TTime = lastTime;
-                                    DateTime.TryParseExact(String.Format("{0:yyyyMMdd}", DateCurrent) + lastTime, "yyyyMMdd" + FormatTime, CultureInfo.InvariantCulture, DateTimeStyles.None, out vars.Value.DateBegin);
-                                }
                             }
-                            if(DateTime.Compare(vars.Value.DateBegin, StartDate) >= 0 && DateTime.Compare(vars.Value.DateBegin, EndDate) <= 0)
+
+                            var lastTime = lsttmp.OrderBy(x => x.Key).Where(x => x.Key <= vars.Value.IndexContent).LastOrDefault().Value;
+                            if (lastTime != null)
                             {
-                                if (!ListTransaction.ContainsKey(Terminal)) ListTransaction[Terminal] = new Dictionary<DateTime, object>();
-                                if (ListTransaction[Terminal].ContainsKey(vars.Value.DateBegin))
-                                {
-                                    int milis = 0;
-                                    while (ListTransaction[Terminal].ContainsKey(vars.Value.DateBegin.AddMilliseconds(milis)))
-                                    {
-                                        milis++;
-                                    }
-                                    ListTransaction[Terminal][vars.Value.DateBegin.AddMilliseconds(milis)] = vars.Value;
-
-                                }
-                                else ListTransaction[Terminal][vars.Value.DateBegin] = vars.Value;
+                                vars.Value.TTime = lastTime;
+                                DateTime.TryParseExact(String.Format("{0:yyyyMMdd}", DateCurrent) + lastTime, "yyyyMMdd" + FormatTime, CultureInfo.InvariantCulture, DateTimeStyles.None, out vars.Value.DateBegin);
                             }
-                            //if (DateTime.Compare(vars.Value.DateBegin, StartDate) < 0 || DateTime.Compare(vars.Value.DateBegin, EndDate) > 0) continue;
-                           
-                        });
-                        
+                        }
+                        if (DateTime.Compare(vars.Value.DateBegin, StartDate) < 0 || DateTime.Compare(vars.Value.DateBegin, EndDate) > 0) continue;
+                        if (!ListTransaction.ContainsKey(Terminal)) ListTransaction[Terminal] = new Dictionary<DateTime, object>();
+                        if (ListTransaction[Terminal].ContainsKey(vars.Value.DateBegin))
+                        {
+                            int milis = 0;
+                            while (ListTransaction[Terminal].ContainsKey(vars.Value.DateBegin.AddMilliseconds(milis)))
+                            {
+                                milis++;
+                            }
+                            ListTransaction[Terminal][vars.Value.DateBegin.AddMilliseconds(milis)] = vars.Value;
 
+                        }
+                        else ListTransaction[Terminal][vars.Value.DateBegin] = vars.Value;
 
                     }
                 }
