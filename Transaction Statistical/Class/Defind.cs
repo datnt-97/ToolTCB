@@ -644,8 +644,8 @@ namespace Transaction_Statistical
                     if (int.Parse(currentDate.ToString("yyyyMMdd")) >= int.Parse(StartDate.ToString("yyyyMMdd")) && int.Parse(currentDate.ToString("yyyyMMdd")) <= int.Parse(EndDate.ToString("yyyyMMdd")))
                     {
                         contenFile = await SplitTransactionEJ(Terminal, currentDate, contenFile);
-                        //contenFile = await FindEventDevice2Async(currentDate, Terminal, contenFile);
-                        //FindCounterChangedAsync(contenFile);
+                        contenFile = await FindEventDevice2Async(currentDate, Terminal, contenFile);
+                        FindCounterChangedAsync(contenFile);
                         if (process != null)
                         {
                             process.CustomText = string.Format("Reading.. [{0}]", Path.GetFileName(file));
@@ -656,7 +656,7 @@ namespace Transaction_Statistical
                 }
                 w.Stop();
 
-                MessageBox.Show(w.ElapsedMilliseconds.ToString());
+                //MessageBox.Show(w.ElapsedMilliseconds.ToString());
                 //CHANGE 6/12
                 var ListTransactionTemp = ListTransaction;
                 for (int c = 0; c < ListTransactionTemp.Count; c++)
@@ -689,7 +689,7 @@ namespace Transaction_Statistical
                     if (Regexs.RunPatternRegular(sString, reg, out lst))
                     {
 
-                        //List<Task> tasks = new List<Task>();
+                        List<Task> tasks = new List<Task>();
                         foreach (KeyValuePair<int, RegesValue> key in lst)
                         {
                             trans = new Transaction();
@@ -741,9 +741,9 @@ namespace Transaction_Statistical
                                 trans.ListEvent[evEnd.DateBegin] = evEnd;
                             }
                             tasks.Add(SplitTransactionEJ_InfoAsync(trans, dateFile, TerminalFile));
-                            //sString = sString.Replace(key.Value.stringfind, trans.DateEnd.ToString(FormatTime));
+                            sString = sString.Replace(key.Value.stringfind, trans.DateEnd.ToString(FormatTime));
                         }
-                        //await Task.WhenAll(tasks);
+                        await Task.WhenAll(tasks);
                     }
                     //sString = sString.Replace(reg, string.Empty);
                     // sString = Regex.Replace(sString, reg, string.Empty);
@@ -1491,50 +1491,50 @@ namespace Transaction_Statistical
                 {
                     foreach (KeyValuePair<DateTime, TransactionEvent> vars in transaction.ListEvent)
                     {
-
-                        Parallel.Invoke(() => {
-                            if (vars.Value.TTime.Equals("00:00:00"))
+                        if (vars.Value.TTime.Equals("00:00:00"))
+                        {
+                            if (lsttmp.Count == 0)
                             {
-                                if (lsttmp.Count == 0)
+                                Dictionary<int, RegesValue> lst = new Dictionary<int, RegesValue>();
+                                if (Regexs.RunPatternRegular(sString, @"(?<Time>\d{2}:\d{2}:\d{2})", out lst))
                                 {
-                                    Dictionary<int, RegesValue> lst = new Dictionary<int, RegesValue>();
-                                    if (Regexs.RunPatternRegular(sString, @"(?<Time>\d{2}:\d{2}:\d{2})", out lst))
+                                    foreach (RegesValue regx in lst.Values)
                                     {
-                                        foreach (RegesValue regx in lst.Values)
-                                        {
-                                            lsttmp[regx.index] = regx.value["Time"];
-                                        }
+                                        lsttmp[regx.index] = regx.value["Time"];
                                     }
                                 }
-
-                                var lastTime = lsttmp.OrderBy(x => x.Key).Where(x => x.Key <= vars.Value.IndexContent).LastOrDefault().Value;
-                                if (lastTime != null)
-                                {
-                                    vars.Value.TTime = lastTime;
-                                    DateTime.TryParseExact(String.Format("{0:yyyyMMdd}", DateCurrent) + lastTime, "yyyyMMdd" + FormatTime, CultureInfo.InvariantCulture, DateTimeStyles.None, out vars.Value.DateBegin);
-                                }
                             }
-                            if(DateTime.Compare(vars.Value.DateBegin, StartDate) >= 0 && DateTime.Compare(vars.Value.DateBegin, EndDate) <= 0)
+
+                            var lastTime = lsttmp.OrderBy(x => x.Key).Where(x => x.Key <= vars.Value.IndexContent).LastOrDefault().Value;
+                            if (lastTime != null)
                             {
-                                if (!ListTransaction.ContainsKey(Terminal)) ListTransaction[Terminal] = new Dictionary<DateTime, object>();
-                                if (ListTransaction[Terminal].ContainsKey(vars.Value.DateBegin))
-                                {
-                                    int milis = 0;
-                                    while (ListTransaction[Terminal].ContainsKey(vars.Value.DateBegin.AddMilliseconds(milis)))
-                                    {
-                                        milis++;
-                                    }
-                                    ListTransaction[Terminal][vars.Value.DateBegin.AddMilliseconds(milis)] = vars.Value;
-
-                                }
-                                else ListTransaction[Terminal][vars.Value.DateBegin] = vars.Value;
+                                vars.Value.TTime = lastTime;
+                                DateTime.TryParseExact(String.Format("{0:yyyyMMdd}", DateCurrent) + lastTime, "yyyyMMdd" + FormatTime, CultureInfo.InvariantCulture, DateTimeStyles.None, out vars.Value.DateBegin);
                             }
-                            //if (DateTime.Compare(vars.Value.DateBegin, StartDate) < 0 || DateTime.Compare(vars.Value.DateBegin, EndDate) > 0) continue;
-                           
-                        });
-                        
+                        }
+                        if (DateTime.Compare(vars.Value.DateBegin, StartDate) < 0 || DateTime.Compare(vars.Value.DateBegin, EndDate) > 0) continue;
+                        if (!ListTransaction.ContainsKey(Terminal)) ListTransaction[Terminal] = new Dictionary<DateTime, object>();
 
 
+                        if (ListTransaction[Terminal].ContainsKey(vars.Value.DateBegin))
+                        {
+                            int milis = 0;
+                            while (ListTransaction[Terminal].ContainsKey(vars.Value.DateBegin.AddMilliseconds(milis)))
+                            {
+                                milis++;
+                            }
+                            ListTransaction[Terminal][vars.Value.DateBegin.AddMilliseconds(milis)] = vars.Value;
+
+                        }
+                        else ListTransaction[Terminal][vars.Value.DateBegin] = vars.Value;
+                        //FunctionGenaral<object>.Parse(ref ListTransaction[Terminal], vars.Value.DateBegin, vars.Value);
+
+                        //if (ListTransaction[Terminal].ContainsKey(vars.Value.DateBegin))
+                        //{
+                        //    while (ListTransaction[Terminal].ContainsKey(vars.Value.DateBegin))
+                        //        vars.Value.DateBegin = vars.Value.DateBegin.AddMilliseconds(1);
+                        //}
+                        //ListTransaction[Terminal].Add(vars.Value.DateBegin, vars.Value);
                     }
                 }
             }
