@@ -654,5 +654,6 @@ namespace Transaction_Statistical
             }
             else ls[Date] = b;
         }
+
     }
 }
