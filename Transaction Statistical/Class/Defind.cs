@@ -644,8 +644,8 @@ namespace Transaction_Statistical
                     if (int.Parse(currentDate.ToString("yyyyMMdd")) >= int.Parse(StartDate.ToString("yyyyMMdd")) && int.Parse(currentDate.ToString("yyyyMMdd")) <= int.Parse(EndDate.ToString("yyyyMMdd")))
                     {
                         contenFile = await SplitTransactionEJ(Terminal, currentDate, contenFile);
-                        //contenFile = await FindEventDevice2Async(currentDate, Terminal, contenFile);
-                        //FindCounterChangedAsync(contenFile);
+                        contenFile = await FindEventDevice2Async(currentDate, Terminal, contenFile);
+                        FindCounterChangedAsync(contenFile);
                         if (process != null)
                         {
                             process.CustomText = string.Format("Reading.. [{0}]", Path.GetFileName(file));
@@ -656,7 +656,7 @@ namespace Transaction_Statistical
                 }
                 w.Stop();
 
-                MessageBox.Show(w.ElapsedMilliseconds.ToString());
+                //MessageBox.Show(w.ElapsedMilliseconds.ToString());
                 //CHANGE 6/12
                 var ListTransactionTemp = ListTransaction;
                 for (int c = 0; c < ListTransactionTemp.Count; c++)
@@ -689,7 +689,7 @@ namespace Transaction_Statistical
                     if (Regexs.RunPatternRegular(sString, reg, out lst))
                     {
 
-                        //List<Task> tasks = new List<Task>();
+                        List<Task> tasks = new List<Task>();
                         foreach (KeyValuePair<int, RegesValue> key in lst)
                         {
                             trans = new Transaction();
@@ -741,9 +741,9 @@ namespace Transaction_Statistical
                                 trans.ListEvent[evEnd.DateBegin] = evEnd;
                             }
                             tasks.Add(SplitTransactionEJ_InfoAsync(trans, dateFile, TerminalFile));
-                            //sString = sString.Replace(key.Value.stringfind, trans.DateEnd.ToString(FormatTime));
+                            sString = sString.Replace(key.Value.stringfind, trans.DateEnd.ToString(FormatTime));
                         }
-                        //await Task.WhenAll(tasks);
+                        await Task.WhenAll(tasks);
                     }
                     //sString = sString.Replace(reg, string.Empty);
                     // sString = Regex.Replace(sString, reg, string.Empty);
@@ -998,7 +998,7 @@ namespace Transaction_Statistical
                                 evt.Name = tmp.Key;
                                 evt.Status = (Status.Types.Succeeded);
                                 evt.TContent = regx.stringfind;
-                                //evt.IndexContent = transaction.TraceJournalFull.IndexOf(regx.stringfind);
+                                evt.IndexContent = transaction.TraceJournalFull.IndexOf(regx.stringfind);
                                 if (regx.value.ContainsKey("Warning") && !string.IsNullOrEmpty(regx.value["Warning"]))
                                 {
                                     evt.isWarning = true;
