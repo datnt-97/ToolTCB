@@ -19,15 +19,18 @@ using System.Collections;
 
 namespace Transaction_Statistical.UControl
 {
-   
+
     public partial class UC_Text : UserControl
     {
-      public  string PathFile = string.Empty;
+        UC_Explorer uc_Explorer;
+        public string PathFile = string.Empty;
         public string PathFileSession = string.Empty;
-      public  string TabName = string.Empty;
+        public string TabName = string.Empty;
         public UC_Text(string tabName, string _session, string _path)
         {
             InitializeComponent();
+            pl_Menu.Location = new Point(this.Width, pl_Menu.Location.Y);
+
             Session = _session;
             PathFile = _path;
             TabName = tabName;
@@ -70,6 +73,9 @@ namespace Transaction_Statistical.UControl
             cbo_languageFormat.SelectedIndex = 1;
             LoadFile();
             new Thread(() => UpdateFilesOpened(Session, PathFile, "Text", false)).Start();
+
+            toolTip1.SetToolTip(this.lb_Menu, "Show Menu");
+            toolTip1.SetToolTip(this.lb_Explorer, "Show Explorer");
         }
         private void UpdateFilesOpened(string session, string path, string type, bool checkOpened)
         {
@@ -87,7 +93,7 @@ namespace Transaction_Statistical.UControl
                     {
                         DateTime dt = File.GetLastWriteTime(path);
                         inifile.Write("LastWriteTime", String.Format("{0:yyyyMMddHHmmssffff}", dt), session);
-                        File.Copy(path,PathFileSession, true);
+                        File.Copy(path, PathFileSession, true);
                     }
 
             }
@@ -167,24 +173,26 @@ namespace Transaction_Statistical.UControl
         }
         private void iconMenu_MouseHover(object sender, EventArgs e)
         {
-            this.iconMenu.Font = new System.Drawing.Font("Microsoft Sans Serif", 20F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            (sender as Mode_Label).Font = new System.Drawing.Font("Microsoft Sans Serif", 20F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
         }
         private void iconMenu_MouseLeave(object sender, EventArgs e)
         {
-            this.iconMenu.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            (sender as Mode_Label).Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
         }
 
         private void iconMenu_Click(object sender, EventArgs e)
         {
-            if (this.iconMenu.Text.Equals("«"))
+            ShowMenu();
+            if (this.lb_Menu.Text.Equals("«"))
             {
-                ShowMenu();
-                this.iconMenu.Text = "»";
+                this.lb_Menu.Text = "»";
+                toolTip1.SetToolTip(this.lb_Menu, "Hide Menu");
             }
             else
             {
-                ShowMenu();
-                this.iconMenu.Text = "«";
+
+                this.lb_Menu.Text = "«";
+                toolTip1.SetToolTip(this.lb_Menu, "Show Menu");
             }
         }
 
@@ -201,7 +209,7 @@ namespace Transaction_Statistical.UControl
                 if (showMenu)
                 {
                     this.pl_Menu.Location = new Point(this.pl_Menu.Location.X - 3, this.pl_Menu.Location.Y);
-                    if ((this.pl_Menu.Location.X + this.pl_Menu.Width) <= iconMenu.Location.X) break;
+                    if ((this.pl_Menu.Location.X + this.pl_Menu.Width) <= lb_Menu.Location.X) break;
                 }
                 else
                 {
@@ -260,12 +268,12 @@ namespace Transaction_Statistical.UControl
             {
                 //For example, we will highlight the syntax of C# manually, although could use built-in highlighter
                 case "CSharp (custom highlighter)":
-                    fctb1.Language= Language.Custom;
-                    fctb1.CommentPrefix =fctb2.CommentPrefix = "//";
+                    fctb1.Language = Language.Custom;
+                    fctb1.CommentPrefix = fctb2.CommentPrefix = "//";
                     fctb1.AutoIndentNeeded += fastColoredTextBox1_AutoIndentNeeded;
                     fctb2.AutoIndentNeeded += fastColoredTextBox1_AutoIndentNeeded;
                     //call OnTextChanged for refresh syntax highlighting
-                  
+
                     break;
                 case "CSharp": fctb1.Language = Language.CSharp; break;
                 case "VB": fctb1.Language = Language.VB; break;
@@ -279,7 +287,7 @@ namespace Transaction_Statistical.UControl
                 case "ATMMsg": fctb1.Language = Language.ATMMsg; break;
             }
             fctb1.OnSyntaxHighlight(new TextChangedEventArgs(fctb1.Range));
-            fctb2.Language=fctb1.Language  ;
+            fctb2.Language = fctb1.Language;
             fctb1.OnTextChanged();
             //miChangeColors.Enabled = lang != "CSharp (custom highlighter)";
         }
@@ -325,7 +333,7 @@ namespace Transaction_Statistical.UControl
         string pathFileTmp;
         DateTime lastNavigatedDateTime = DateTime.Now;
         FastColoredTextBox textBoxSelected;
-      public  string Session = string.Empty;
+        public string Session = string.Empty;
         UtilityIniFile inifile;
         bool textselect = true;
         bool disabletxtchange = false;
@@ -334,7 +342,7 @@ namespace Transaction_Statistical.UControl
         int updating;
         Style greenStyle = new MarkerStyle(new SolidBrush(Color.FromArgb(100, Color.Lime)));
         Style redStyle = new MarkerStyle(new SolidBrush(Color.FromArgb(100, Color.Red)));
-      
+
         //Shortcut style
         ShortcutStyle shortCutStyle = new ShortcutStyle(Pens.Maroon);
         //styles
@@ -379,15 +387,15 @@ namespace Transaction_Statistical.UControl
         {
             textBoxSelected = _textbox;
             lb_Length.Text = "Length " + _textbox.Text.Length.ToString();
-            lb_Lines.Text ="Lines "+ _textbox.Lines.Count.ToString();
-            lb_Sel.Text ="Select " + _textbox.SelectionLength.ToString() +"|" + _textbox.Selection.Text.Split('\n').Length.ToString(); 
+            lb_Lines.Text = "Lines " + _textbox.Lines.Count.ToString();
+            lb_Sel.Text = "Select " + _textbox.SelectionLength.ToString() + "|" + _textbox.Selection.Text.Split('\n').Length.ToString();
 
             Place place = _textbox.Selection.End;
             //labelItem_col.Text = _textbox.SelectionStart.ToString();
             //labelItem_ln.Text = (_textbox.Selection.ToLine + 1).ToString();
-            lb_Ln.Text ="Ln "+ (place.iLine + 1).ToString();
-            lb_Col.Text ="Col "+ place.iChar.ToString();
-          //  sliderItem_zoom.Value = _textbox.Zoom;
+            lb_Ln.Text = "Ln " + (place.iLine + 1).ToString();
+            lb_Col.Text = "Col " + place.iChar.ToString();
+            //  sliderItem_zoom.Value = _textbox.Zoom;
         }
         private void CSharpSyntaxHighlight(TextChangedEventArgs e)
         {
@@ -564,7 +572,7 @@ namespace Transaction_Statistical.UControl
 
         private void fctb1_ZoomChanged(object sender, EventArgs e)
         {
-          
+
         }
 
         private void cbo_Font_SelectedIndexChanged(object sender, EventArgs e)
@@ -692,9 +700,9 @@ namespace Transaction_Statistical.UControl
                 else
                     MessageBox.Show("Can't analyze log.\n", "Analyze Error", MessageBoxButtons.OK);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
-                MessageBox.Show("Error: "+ex.Message, "Can't analyze log.");
+                MessageBox.Show("Error: " + ex.Message, "Can't analyze log.");
             }
         }
         private void AnalyzeCCProtDB(string protocol)
@@ -822,7 +830,7 @@ namespace Transaction_Statistical.UControl
         private bool AnalyzeWNFormat(string pathfileIn, string protocol, out string pathfileOut)
         {
             pathfileOut = InitParametar.PathDirectoryTempUsr + "\\" + FileTmpRandom();
-         
+
             string pathExtractInfo = InitParametar.PathDirectoryTempUsr + @"\ExtractFileEx_" + Session + ".txt";
             string pathExtractRun = InitParametar.PathDirectoryTempUsr + @"\ExtracFile_" + Session + ".bat";
 
@@ -861,14 +869,14 @@ namespace Transaction_Statistical.UControl
         {
             (sender as Mode_ComboBox).Items.Clear();
             Control tabcontrol = this.Parent;
-            while (!(tabcontrol is AddOn.TabControlX) && tabcontrol.Parent != null) 
+            while (!(tabcontrol is AddOn.TabControlX) && tabcontrol.Parent != null)
             {
                 tabcontrol = tabcontrol.Parent;
-            }           
-            if(tabcontrol!=null)
+            }
+            if (tabcontrol != null)
             {
 
-                foreach(AddOn.TabPanelControl bt in (tabcontrol as AddOn.TabControlX).TabPanelCtrlList)
+                foreach (AddOn.TabPanelControl bt in (tabcontrol as AddOn.TabControlX).TabPanelCtrlList)
                 {
                     if (bt.Controls[0] is UC_Text)
                     {
@@ -890,9 +898,9 @@ namespace Transaction_Statistical.UControl
                 if (cbo_File1.SelectedItem.ToString() == string.Empty || cbo_File2.SelectedItem.ToString() == string.Empty) return;
 
                 disabletxtchange = true;
-                string file1 = ( string) (cbo_File1.SelectedItem as ComboBoxItem).Value;
-                string file2 = (string) (cbo_File2.SelectedItem as ComboBoxItem).Value;
-                
+                string file1 = (string)(cbo_File1.SelectedItem as ComboBoxItem).Value;
+                string file2 = (string)(cbo_File2.SelectedItem as ComboBoxItem).Value;
+
                 Cursor = Cursors.WaitCursor;
 
                 if (System.IO.Path.GetExtension(file1).ToLower() == ".cs")
@@ -909,7 +917,7 @@ namespace Transaction_Statistical.UControl
                 int width = spl_Main.ClientRectangle.Width;
                 spl_Main.SplitterDistance = width / 2;
                 spl_Main.Panel2Collapsed = false;
-                spl_Main.Orientation = System.Windows.Forms.Orientation.Vertical;               
+                spl_Main.Orientation = System.Windows.Forms.Orientation.Vertical;
                 disabletxtchange = false;
                 textselect = true;
                 ExpandedAllPanel();
@@ -997,7 +1005,7 @@ namespace Transaction_Statistical.UControl
             disabletxtchange = true;
 
             int i;
-            int n = progress.Maximum = DiffLines.Count+1;
+            int n = progress.Maximum = DiffLines.Count + 1;
             int m = 0;
             foreach (DiffResultSpan drs in DiffLines)
             {
@@ -1046,5 +1054,136 @@ namespace Transaction_Statistical.UControl
             progress.Visible = false;
             split.Visible = true;
         }
+
+        private void bt_Hex2ASCII_Click(object sender, EventArgs e)
+        {
+
+            string lineHex;
+            if (fctb1.SelectedText.Length > 1) lineHex = fctb1.SelectedText;
+            else lineHex = fctb1.Text;
+            StringBuilder sb = new StringBuilder();
+            int length = lineHex.Length;
+
+            Dictionary<char, string> lSpecialDict = new Dictionary<char, string>()
+            {
+            { '\0',      "NUL" }, {(char)0x01, "SOH" }, {(char)0x02, "STX" },
+            {(char)0x03, "ETX" }, {(char)0x04, "EOT" }, {(char)0x05, "ENQ" },
+            {(char)0x06, "ACK" }, {(char)0x07, "BEL" }, {(char)0x08, "BS"  },
+            {(char)0x09, "HT"  }, {(char)0x0A, "LF"  }, {(char)0x0B, "VT"  },
+            {(char)0x0C, "FF"  }, {(char)0x0D, "CR"  }, {(char)0x0E, "SO"  },
+            {(char)0x0F, "SI"  }, {(char)0x10, "DLE" }, {(char)0x11, "DC1" },
+            {(char)0x12, "DC2" }, {(char)0x13, "DC3" }, {(char)0x14, "DC4" },
+            {(char)0x15, "NAK" }, {(char)0x16, "SYN" }, {(char)0x17, "ETB" },
+            {(char)0x18, "CAN" }, {(char)0x19, "EM"  }, {(char)0x1A, "SUB" },
+            {(char)0x1B, "ESC" }, {(char)0x1C, "FS"  }, {(char)0x1D, "GS"  },
+            {(char)0x1E, "RS"  }, {(char)0x1F, "US"  }, {(char)0x7F, "DEL" },
+            };
+
+
+            for (int i = 0; i < length; i += 2)
+            {
+                try
+                {
+                    while (lineHex.Substring(i, 2).StartsWith(" "))
+                    {
+                        i++;
+                        if (i == length) break;
+                    }
+                    string hs = lineHex.Substring(i, 2);
+                    try
+                    {
+                        sb.Append(Convert.ToChar(Convert.ToUInt32(hs, 16)));
+                    }
+                    catch (Exception)
+                    {
+                        sb.Append(hs);
+                    }
+
+                }
+                catch (Exception)
+                { }
+            }
+            if (fctb1.SelectedText.Length > 1)
+            {
+                fctb1.SelectedText = sb.ToString();
+            }
+            else
+            {
+                fctb2.Text = sb.ToString();
+                char[] text = sb.ToString().ToCharArray();
+                for (int i = 0; i < text.Length; i++)
+                {
+                    //is this a special ASCII character?
+                    if (lSpecialDict.ContainsKey(text[i]))
+                    {
+                        string replacement;
+                        //get the replacement
+                        lSpecialDict.TryGetValue(text[i], out replacement);
+                        if (replacement != null)
+                            //Print it out with DarkGray as backcolor, Firebrick as font color.
+
+                            fctb2.AppendText(replacement, ASCIIControl);
+                    }
+                    //just a normal character? Then append it.
+                    else
+                        fctb2.AppendText(text[i].ToString());
+                }
+
+
+                spl_Main.Panel2Collapsed = false;
+            }
+        }
+
+        private void bt_ASCII2Hex_Click(object sender, EventArgs e)
+        {
+            string lineAscii;
+            if (fctb1.SelectedText.Length >= 1) lineAscii = fctb1.SelectedText;
+            else lineAscii = fctb1.Text;
+            StringBuilder sb = new StringBuilder();
+            int length = lineAscii.Length;
+
+            byte[] inputBytes = Encoding.UTF8.GetBytes(lineAscii);
+
+            foreach (byte b in inputBytes)
+            {
+
+                sb.Append(string.Format("{0:x2}", b));
+
+            }
+
+            if (fctb1.SelectedText.Length >= 1)
+            {
+                fctb1.SelectedText = sb.ToString();
+            }
+            else
+            {
+                fctb2.Text = sb.ToString();
+                spl_Main.Panel2Collapsed = false;
+            }
+        }
+
+        private void ckb_LineNumbers_CheckedChanged(object sender, EventArgs e)
+        {
+            fctb1.ShowFoldingLines = fctb1.ShowLineNumbers = ckb_LineNumbers.Checked;
+            fctb2.ShowLineNumbers = ckb_LineNumbers.Checked;
+        }
+
+        private void lb_Explorer_Click(object sender, EventArgs e)
+        {
+            if (uc_Explorer == null) uc_Explorer = new UC_Explorer();
+            uc_Explorer.ShowRight2LeftFromControl(this, sender as Control);
+            if (this.lb_Explorer.Text.Equals("«"))
+            {
+                this.lb_Explorer.Text = "»";
+                toolTip1.SetToolTip(this.lb_Explorer, "Hide Explorer");
+            }
+            else
+            {
+                this.lb_Explorer.Text = "«";
+                toolTip1.SetToolTip(this.lb_Explorer, "Show Explorer");
+            }
+        }
+
+       
     }
 }

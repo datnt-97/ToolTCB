@@ -340,7 +340,7 @@ namespace Transaction_Statistical.UControl
 
         private void txt_Path_MouseEnter(object sender, MouseEventArgs e)
         {
-            uc_Explorer.ShowFromControl(this, sender as Control);
+            uc_Explorer.ShowUp2DownFromControl(this, sender as Control);
         }
     }
 }

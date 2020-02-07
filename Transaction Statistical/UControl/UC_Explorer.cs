@@ -55,7 +55,7 @@ namespace Transaction_Statistical
             extensionExtract = fini.GetEntryValue("OpenFile", "FileExtract").Split(';');
             extensionOpen = fini.GetEntryValue("OpenFile", "FileText").Split(';');
         }
-        public void ShowFromControl(Control _Parent, Control _textBoxShow)
+        public void ShowUp2DownFromControl(Control _Parent, Control _textBoxShow)
         {
             if (!_Parent.Controls.Contains(this))
             {
@@ -79,9 +79,47 @@ namespace Transaction_Statistical
             }
             this.SelectPath(textBoxShow.Text);            
         }
+        public void ShowRight2LeftFromControl(Control _Parent, Control _textBoxShow)
+        {
+            textBoxShow = _textBoxShow;
+            if (!_Parent.Controls.Contains(this))
+            {  
+                Point pt = textBoxShow.Parent.PointToScreen(textBoxShow.Location); 
+                this.Size = new Size(400, 600);
+                this.Location = new Point(_Parent.PointToClient(pt).X+1000, _Parent.PointToClient(pt).Y - this.Height + _textBoxShow.Height );
+             
+                _Parent.Controls.Add(this);
+                this.BringToFront();
+                this.SendToBack();
+                _Parent.Controls.SetChildIndex(this, 0);
+              
+            
+            }
+
+            if (showExplorer) showExplorer = false; else showExplorer = true;
+            if (runningShowExplorer) return;
+            runningShowExplorer = true;
+            while (runningShowExplorer)
+            {
+                if (showExplorer)
+                {
+                    this.Location = new Point(this.Location.X - 5, this.Location.Y);
+                    if (this.Location.X <= textBoxShow.Location.X-this.Width -5)
+                        break;
+                }
+                else
+                {
+                    this.Location = new Point(this.Location.X + 5, this.Location.Y);
+                    if (this.Location.X >= textBoxShow.Location.X + 100)
+                        break;
+                }
+                this.Update();
+            }
+            runningShowExplorer = false;
+        }
         private void uc_Explorer_MouseLeave(object sender, EventArgs e)
         {
-            SlideExplorerShow(sender, e);
+            if (textBoxShow is Mode_TextBox) SlideExplorerShow(sender, e);
         }
         private void tre_Explorer_MouseHover(object sender, EventArgs e)
         {
@@ -259,9 +297,11 @@ namespace Transaction_Statistical
                 {
                     GetAllDirectoriesFilesOfDirectoryToNode((tre_Explorer.SelectedNode).Tag as DirectoryInfo, tre_Explorer.SelectedNode, 1);
                 }
-                if (tre_Explorer.SelectedNode.Tag is DirectoryInfo) textBoxShow.Text = (tre_Explorer.SelectedNode.Tag as DirectoryInfo).FullName;
-                if (tre_Explorer.SelectedNode.Tag is FileInfo) textBoxShow.Text = (tre_Explorer.SelectedNode.Tag as FileInfo).FullName;
-
+                if (textBoxShow is Mode_TextBox)
+                {
+                    if (tre_Explorer.SelectedNode.Tag is DirectoryInfo) textBoxShow.Text = (tre_Explorer.SelectedNode.Tag as DirectoryInfo).FullName;
+                    if (tre_Explorer.SelectedNode.Tag is FileInfo) textBoxShow.Text = (tre_Explorer.SelectedNode.Tag as FileInfo).FullName;
+                }
             }
             catch 
             {

@@ -28,9 +28,11 @@
             this.fctb1 = new Transaction_Statistical.Mode_FastColoredTextBox();
             this.spl_Main = new System.Windows.Forms.SplitContainer();
             this.fctb2 = new Transaction_Statistical.Mode_FastColoredTextBox();
-            this.iconMenu = new Transaction_Statistical.Mode_Label();
+            this.lb_Menu = new Transaction_Statistical.Mode_Label();
             this.pl_Menu = new Transaction_Statistical.Mode_Panel();
             this.mode_GroupBox4 = new Transaction_Statistical.Mode_GroupBox();
+            this.bt_Hex2ASCII = new Transaction_Statistical.Mode_Button();
+            this.bt_ASCII2Hex = new Transaction_Statistical.Mode_Button();
             this.mode_GroupBox3 = new Transaction_Statistical.Mode_GroupBox();
             this.bt_Compare = new Transaction_Statistical.Mode_Button();
             this.rd_Slow = new System.Windows.Forms.RadioButton();
@@ -48,11 +50,12 @@
             this.cbo_MachineName = new Transaction_Statistical.Mode_ComboBox();
             this.mode_Label2 = new Transaction_Statistical.Mode_Label();
             this.mode_GroupBox1 = new Transaction_Statistical.Mode_GroupBox();
+            this.ckb_LineNumbers = new Transaction_Statistical.Mode_CheckBox();
             this.cbo_languageFormat = new Transaction_Statistical.Mode_ComboBox();
             this.mode_Label7 = new Transaction_Statistical.Mode_Label();
             this.cbo_Font = new Transaction_Statistical.Mode_ComboBox();
-            this.nup_size = new System.Windows.Forms.NumericUpDown();
             this.mode_Label1 = new Transaction_Statistical.Mode_Label();
+            this.nup_size = new System.Windows.Forms.NumericUpDown();
             this.mode_Label6 = new Transaction_Statistical.Mode_Label();
             this.pl_Bottom = new System.Windows.Forms.FlowLayoutPanel();
             this.lb_TextType = new Transaction_Statistical.Mode_Label();
@@ -66,8 +69,11 @@
             this.bt_Flip = new Transaction_Statistical.AddOn.ButtonZ();
             this.textProgressBar1 = new Transaction_Statistical.TextProgressBar();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
-            this.bt_ASCII2Hex = new Transaction_Statistical.Mode_Button();
-            this.bt_Hex2ASCII = new Transaction_Statistical.Mode_Button();
+            this.lb_Explorer = new Transaction_Statistical.Mode_Label();
+            this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.bt_Open = new Transaction_Statistical.Mode_Button();
+            this.bt_Save = new Transaction_Statistical.Mode_Button();
+            this.bt_SaveAs = new Transaction_Statistical.Mode_Button();
             ((System.ComponentModel.ISupportInitialize)(this.fctb1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.spl_Main)).BeginInit();
             this.spl_Main.Panel1.SuspendLayout();
@@ -81,6 +87,7 @@
             this.mode_GroupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nup_size)).BeginInit();
             this.pl_Bottom.SuspendLayout();
+            this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
             // fctb1
@@ -105,6 +112,7 @@
             this.fctb1.Cursor = System.Windows.Forms.Cursors.IBeam;
             this.fctb1.DisabledColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))));
             this.fctb1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.fctb1.Font = new System.Drawing.Font("Courier New", 9.75F);
             this.fctb1.ForeColor = System.Drawing.Color.White;
             this.fctb1.IndentBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(196)))), ((int)(((byte)(196)))), ((int)(((byte)(196)))));
             this.fctb1.IsReplaceMode = false;
@@ -172,6 +180,7 @@
             this.fctb2.Cursor = System.Windows.Forms.Cursors.IBeam;
             this.fctb2.DisabledColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))));
             this.fctb2.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.fctb2.Font = new System.Drawing.Font("Courier New", 9.75F);
             this.fctb2.ForeColor = System.Drawing.Color.White;
             this.fctb2.IndentBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(196)))), ((int)(((byte)(196)))), ((int)(((byte)(196)))));
             this.fctb2.IsReplaceMode = false;
@@ -185,36 +194,37 @@
             this.fctb2.TabIndex = 1;
             this.fctb2.Zoom = 100;
             // 
-            // iconMenu
+            // lb_Menu
             // 
-            this.iconMenu.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.iconMenu.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(40)))), ((int)(((byte)(40)))));
-            this.iconMenu.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.iconMenu.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.iconMenu.ForeColor = System.Drawing.Color.Blue;
-            this.iconMenu.Location = new System.Drawing.Point(1146, 3);
-            this.iconMenu.Name = "iconMenu";
-            this.iconMenu.Size = new System.Drawing.Size(24, 26);
-            this.iconMenu.TabIndex = 5;
-            this.iconMenu.Text = "«";
-            this.iconMenu.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            this.iconMenu.Click += new System.EventHandler(this.iconMenu_Click);
-            this.iconMenu.MouseLeave += new System.EventHandler(this.iconMenu_MouseLeave);
-            this.iconMenu.MouseHover += new System.EventHandler(this.iconMenu_MouseHover);
+            this.lb_Menu.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.lb_Menu.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(40)))), ((int)(((byte)(40)))));
+            this.lb_Menu.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.lb_Menu.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lb_Menu.ForeColor = System.Drawing.Color.Blue;
+            this.lb_Menu.Location = new System.Drawing.Point(1146, 3);
+            this.lb_Menu.Name = "lb_Menu";
+            this.lb_Menu.Size = new System.Drawing.Size(24, 26);
+            this.lb_Menu.TabIndex = 5;
+            this.lb_Menu.Text = "«";
+            this.lb_Menu.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.lb_Menu.Click += new System.EventHandler(this.iconMenu_Click);
+            this.lb_Menu.MouseLeave += new System.EventHandler(this.iconMenu_MouseLeave);
+            this.lb_Menu.MouseHover += new System.EventHandler(this.iconMenu_MouseHover);
             // 
             // pl_Menu
             // 
             this.pl_Menu.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.pl_Menu.BackColor = System.Drawing.Color.DimGray;
             this.pl_Menu.BorderColor = System.Drawing.Color.White;
+            this.pl_Menu.Controls.Add(this.groupBox1);
             this.pl_Menu.Controls.Add(this.mode_GroupBox4);
             this.pl_Menu.Controls.Add(this.mode_GroupBox3);
             this.pl_Menu.Controls.Add(this.mode_GroupBox2);
             this.pl_Menu.Controls.Add(this.mode_GroupBox1);
             this.pl_Menu.ForeColor = System.Drawing.Color.White;
-            this.pl_Menu.Location = new System.Drawing.Point(483, 14);
+            this.pl_Menu.Location = new System.Drawing.Point(100, 14);
             this.pl_Menu.Name = "pl_Menu";
-            this.pl_Menu.Size = new System.Drawing.Size(662, 409);
+            this.pl_Menu.Size = new System.Drawing.Size(662, 484);
             this.pl_Menu.TabIndex = 6;
             // 
             // mode_GroupBox4
@@ -223,12 +233,46 @@
             this.mode_GroupBox4.Controls.Add(this.bt_Hex2ASCII);
             this.mode_GroupBox4.Controls.Add(this.bt_ASCII2Hex);
             this.mode_GroupBox4.ForeColor = System.Drawing.Color.White;
-            this.mode_GroupBox4.Location = new System.Drawing.Point(20, 221);
+            this.mode_GroupBox4.Location = new System.Drawing.Point(20, 209);
             this.mode_GroupBox4.Name = "mode_GroupBox4";
-            this.mode_GroupBox4.Size = new System.Drawing.Size(623, 79);
+            this.mode_GroupBox4.Size = new System.Drawing.Size(623, 80);
             this.mode_GroupBox4.TabIndex = 7;
             this.mode_GroupBox4.TabStop = false;
             this.mode_GroupBox4.Text = "Convert";
+            // 
+            // bt_Hex2ASCII
+            // 
+            this.bt_Hex2ASCII.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(40)))), ((int)(((byte)(40)))));
+            this.bt_Hex2ASCII.FlatAppearance.BorderColor = System.Drawing.Color.Silver;
+            this.bt_Hex2ASCII.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(98)))), ((int)(((byte)(215)))));
+            this.bt_Hex2ASCII.FlatAppearance.MouseOverBackColor = System.Drawing.Color.DeepSkyBlue;
+            this.bt_Hex2ASCII.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.bt_Hex2ASCII.ForeColor = System.Drawing.Color.White;
+            this.bt_Hex2ASCII.Location = new System.Drawing.Point(125, 26);
+            this.bt_Hex2ASCII.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.bt_Hex2ASCII.Name = "bt_Hex2ASCII";
+            this.bt_Hex2ASCII.Size = new System.Drawing.Size(99, 27);
+            this.bt_Hex2ASCII.TabIndex = 1;
+            this.bt_Hex2ASCII.Text = "Hex->ASCII";
+            this.bt_Hex2ASCII.UseVisualStyleBackColor = true;
+            this.bt_Hex2ASCII.Click += new System.EventHandler(this.bt_Hex2ASCII_Click);
+            // 
+            // bt_ASCII2Hex
+            // 
+            this.bt_ASCII2Hex.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(40)))), ((int)(((byte)(40)))));
+            this.bt_ASCII2Hex.FlatAppearance.BorderColor = System.Drawing.Color.Silver;
+            this.bt_ASCII2Hex.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(98)))), ((int)(((byte)(215)))));
+            this.bt_ASCII2Hex.FlatAppearance.MouseOverBackColor = System.Drawing.Color.DeepSkyBlue;
+            this.bt_ASCII2Hex.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.bt_ASCII2Hex.ForeColor = System.Drawing.Color.White;
+            this.bt_ASCII2Hex.Location = new System.Drawing.Point(20, 26);
+            this.bt_ASCII2Hex.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.bt_ASCII2Hex.Name = "bt_ASCII2Hex";
+            this.bt_ASCII2Hex.Size = new System.Drawing.Size(99, 27);
+            this.bt_ASCII2Hex.TabIndex = 0;
+            this.bt_ASCII2Hex.Text = "ASCII->Hex";
+            this.bt_ASCII2Hex.UseVisualStyleBackColor = true;
+            this.bt_ASCII2Hex.Click += new System.EventHandler(this.bt_ASCII2Hex_Click);
             // 
             // mode_GroupBox3
             // 
@@ -244,7 +288,7 @@
             this.mode_GroupBox3.ForeColor = System.Drawing.Color.White;
             this.mode_GroupBox3.Location = new System.Drawing.Point(20, 109);
             this.mode_GroupBox3.Name = "mode_GroupBox3";
-            this.mode_GroupBox3.Size = new System.Drawing.Size(623, 100);
+            this.mode_GroupBox3.Size = new System.Drawing.Size(623, 91);
             this.mode_GroupBox3.TabIndex = 6;
             this.mode_GroupBox3.TabStop = false;
             this.mode_GroupBox3.Text = "Compare";
@@ -257,7 +301,7 @@
             this.bt_Compare.FlatAppearance.MouseOverBackColor = System.Drawing.Color.DeepSkyBlue;
             this.bt_Compare.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.bt_Compare.ForeColor = System.Drawing.Color.White;
-            this.bt_Compare.Location = new System.Drawing.Point(379, 58);
+            this.bt_Compare.Location = new System.Drawing.Point(430, 52);
             this.bt_Compare.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.bt_Compare.Name = "bt_Compare";
             this.bt_Compare.Size = new System.Drawing.Size(93, 28);
@@ -270,7 +314,7 @@
             // rd_Slow
             // 
             this.rd_Slow.AutoSize = true;
-            this.rd_Slow.Location = new System.Drawing.Point(163, 63);
+            this.rd_Slow.Location = new System.Drawing.Point(221, 57);
             this.rd_Slow.Name = "rd_Slow";
             this.rd_Slow.Size = new System.Drawing.Size(90, 21);
             this.rd_Slow.TabIndex = 8;
@@ -280,7 +324,7 @@
             // rd_Medium
             // 
             this.rd_Medium.AutoSize = true;
-            this.rd_Medium.Location = new System.Drawing.Point(79, 63);
+            this.rd_Medium.Location = new System.Drawing.Point(137, 57);
             this.rd_Medium.Name = "rd_Medium";
             this.rd_Medium.Size = new System.Drawing.Size(78, 21);
             this.rd_Medium.TabIndex = 7;
@@ -291,7 +335,7 @@
             // 
             this.rd_Fast.AutoSize = true;
             this.rd_Fast.Checked = true;
-            this.rd_Fast.Location = new System.Drawing.Point(17, 63);
+            this.rd_Fast.Location = new System.Drawing.Point(75, 57);
             this.rd_Fast.Name = "rd_Fast";
             this.rd_Fast.Size = new System.Drawing.Size(56, 21);
             this.rd_Fast.TabIndex = 6;
@@ -457,19 +501,35 @@
             // mode_GroupBox1
             // 
             this.mode_GroupBox1.BackColor = System.Drawing.Color.Transparent;
+            this.mode_GroupBox1.Controls.Add(this.ckb_LineNumbers);
             this.mode_GroupBox1.Controls.Add(this.cbo_languageFormat);
             this.mode_GroupBox1.Controls.Add(this.mode_Label7);
             this.mode_GroupBox1.Controls.Add(this.cbo_Font);
-            this.mode_GroupBox1.Controls.Add(this.nup_size);
             this.mode_GroupBox1.Controls.Add(this.mode_Label1);
+            this.mode_GroupBox1.Controls.Add(this.nup_size);
             this.mode_GroupBox1.Controls.Add(this.mode_Label6);
             this.mode_GroupBox1.ForeColor = System.Drawing.Color.White;
-            this.mode_GroupBox1.Location = new System.Drawing.Point(20, 306);
+            this.mode_GroupBox1.Location = new System.Drawing.Point(20, 298);
             this.mode_GroupBox1.Name = "mode_GroupBox1";
             this.mode_GroupBox1.Size = new System.Drawing.Size(623, 85);
             this.mode_GroupBox1.TabIndex = 4;
             this.mode_GroupBox1.TabStop = false;
             this.mode_GroupBox1.Text = "Font";
+            // 
+            // ckb_LineNumbers
+            // 
+            this.ckb_LineNumbers.AutoSize = true;
+            this.ckb_LineNumbers.BackColor = System.Drawing.Color.Transparent;
+            this.ckb_LineNumbers.Checked = true;
+            this.ckb_LineNumbers.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.ckb_LineNumbers.ForeColor = System.Drawing.Color.White;
+            this.ckb_LineNumbers.Location = new System.Drawing.Point(198, 54);
+            this.ckb_LineNumbers.Name = "ckb_LineNumbers";
+            this.ckb_LineNumbers.Size = new System.Drawing.Size(118, 21);
+            this.ckb_LineNumbers.TabIndex = 6;
+            this.ckb_LineNumbers.Text = "Line Numbers";
+            this.ckb_LineNumbers.UseVisualStyleBackColor = false;
+            this.ckb_LineNumbers.CheckedChanged += new System.EventHandler(this.ckb_LineNumbers_CheckedChanged);
             // 
             // cbo_languageFormat
             // 
@@ -489,9 +549,9 @@
             "Lua",
             "Text",
             "ATMMsg"});
-            this.cbo_languageFormat.Location = new System.Drawing.Point(140, 54);
+            this.cbo_languageFormat.Location = new System.Drawing.Point(443, 18);
             this.cbo_languageFormat.Name = "cbo_languageFormat";
-            this.cbo_languageFormat.Size = new System.Drawing.Size(221, 24);
+            this.cbo_languageFormat.Size = new System.Drawing.Size(174, 24);
             this.cbo_languageFormat.TabIndex = 5;
             this.cbo_languageFormat.SelectedIndexChanged += new System.EventHandler(this.cbo_languageFormat_SelectedIndexChanged);
             // 
@@ -500,7 +560,7 @@
             this.mode_Label7.AutoSize = true;
             this.mode_Label7.BackColor = System.Drawing.Color.Transparent;
             this.mode_Label7.ForeColor = System.Drawing.Color.White;
-            this.mode_Label7.Location = new System.Drawing.Point(14, 57);
+            this.mode_Label7.Location = new System.Drawing.Point(317, 21);
             this.mode_Label7.Name = "mode_Label7";
             this.mode_Label7.Size = new System.Drawing.Size(120, 17);
             this.mode_Label7.TabIndex = 4;
@@ -512,15 +572,26 @@
             this.cbo_Font.BorderColor = System.Drawing.Color.Blue;
             this.cbo_Font.ForeColor = System.Drawing.Color.White;
             this.cbo_Font.FormattingEnabled = true;
-            this.cbo_Font.Location = new System.Drawing.Point(140, 21);
+            this.cbo_Font.Location = new System.Drawing.Point(88, 18);
             this.cbo_Font.Name = "cbo_Font";
             this.cbo_Font.Size = new System.Drawing.Size(221, 24);
             this.cbo_Font.TabIndex = 1;
             this.cbo_Font.SelectedIndexChanged += new System.EventHandler(this.cbo_Font_SelectedIndexChanged);
             // 
+            // mode_Label1
+            // 
+            this.mode_Label1.AutoSize = true;
+            this.mode_Label1.BackColor = System.Drawing.Color.Transparent;
+            this.mode_Label1.ForeColor = System.Drawing.Color.White;
+            this.mode_Label1.Location = new System.Drawing.Point(7, 21);
+            this.mode_Label1.Name = "mode_Label1";
+            this.mode_Label1.Size = new System.Drawing.Size(75, 17);
+            this.mode_Label1.TabIndex = 0;
+            this.mode_Label1.Text = "Font name";
+            // 
             // nup_size
             // 
-            this.nup_size.Location = new System.Drawing.Point(471, 21);
+            this.nup_size.Location = new System.Drawing.Point(88, 53);
             this.nup_size.Minimum = new decimal(new int[] {
             1,
             0,
@@ -537,23 +608,12 @@
             0});
             this.nup_size.ValueChanged += new System.EventHandler(this.numericUpDown1_ValueChanged);
             // 
-            // mode_Label1
-            // 
-            this.mode_Label1.AutoSize = true;
-            this.mode_Label1.BackColor = System.Drawing.Color.Transparent;
-            this.mode_Label1.ForeColor = System.Drawing.Color.White;
-            this.mode_Label1.Location = new System.Drawing.Point(59, 24);
-            this.mode_Label1.Name = "mode_Label1";
-            this.mode_Label1.Size = new System.Drawing.Size(75, 17);
-            this.mode_Label1.TabIndex = 0;
-            this.mode_Label1.Text = "Font name";
-            // 
             // mode_Label6
             // 
             this.mode_Label6.AutoSize = true;
             this.mode_Label6.BackColor = System.Drawing.Color.Transparent;
             this.mode_Label6.ForeColor = System.Drawing.Color.White;
-            this.mode_Label6.Location = new System.Drawing.Point(430, 23);
+            this.mode_Label6.Location = new System.Drawing.Point(47, 55);
             this.mode_Label6.Name = "mode_Label6";
             this.mode_Label6.Size = new System.Drawing.Size(35, 17);
             this.mode_Label6.TabIndex = 2;
@@ -713,47 +773,97 @@
             this.textProgressBar1.TabIndex = 34;
             this.textProgressBar1.TextColor = System.Drawing.Color.Black;
             this.textProgressBar1.TextFont = new System.Drawing.Font("Microsoft Sans Serif", 8F);
+            this.textProgressBar1.Visible = false;
             this.textProgressBar1.VisualMode = Transaction_Statistical.ProgressBarDisplayMode.CurrProgress;
             // 
-            // bt_ASCII2Hex
+            // lb_Explorer
             // 
-            this.bt_ASCII2Hex.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(40)))), ((int)(((byte)(40)))));
-            this.bt_ASCII2Hex.FlatAppearance.BorderColor = System.Drawing.Color.Silver;
-            this.bt_ASCII2Hex.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(98)))), ((int)(((byte)(215)))));
-            this.bt_ASCII2Hex.FlatAppearance.MouseOverBackColor = System.Drawing.Color.DeepSkyBlue;
-            this.bt_ASCII2Hex.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.bt_ASCII2Hex.ForeColor = System.Drawing.Color.White;
-            this.bt_ASCII2Hex.Location = new System.Drawing.Point(20, 26);
-            this.bt_ASCII2Hex.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.bt_ASCII2Hex.Name = "bt_ASCII2Hex";
-            this.bt_ASCII2Hex.Size = new System.Drawing.Size(99, 27);
-            this.bt_ASCII2Hex.TabIndex = 0;
-            this.bt_ASCII2Hex.Text = "ASCII->Hex";
-            this.bt_ASCII2Hex.UseVisualStyleBackColor = true;
+            this.lb_Explorer.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.lb_Explorer.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(40)))), ((int)(((byte)(40)))));
+            this.lb_Explorer.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.lb_Explorer.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lb_Explorer.ForeColor = System.Drawing.Color.Blue;
+            this.lb_Explorer.Location = new System.Drawing.Point(1146, 486);
+            this.lb_Explorer.Name = "lb_Explorer";
+            this.lb_Explorer.Size = new System.Drawing.Size(24, 26);
+            this.lb_Explorer.TabIndex = 7;
+            this.lb_Explorer.Text = "«";
+            this.lb_Explorer.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.lb_Explorer.Click += new System.EventHandler(this.lb_Explorer_Click);
+            this.lb_Explorer.MouseLeave += new System.EventHandler(this.iconMenu_MouseLeave);
+            this.lb_Explorer.MouseHover += new System.EventHandler(this.iconMenu_MouseHover);
             // 
-            // bt_Hex2ASCII
+            // groupBox1
             // 
-            this.bt_Hex2ASCII.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(40)))), ((int)(((byte)(40)))));
-            this.bt_Hex2ASCII.FlatAppearance.BorderColor = System.Drawing.Color.Silver;
-            this.bt_Hex2ASCII.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(98)))), ((int)(((byte)(215)))));
-            this.bt_Hex2ASCII.FlatAppearance.MouseOverBackColor = System.Drawing.Color.DeepSkyBlue;
-            this.bt_Hex2ASCII.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.bt_Hex2ASCII.ForeColor = System.Drawing.Color.White;
-            this.bt_Hex2ASCII.Location = new System.Drawing.Point(125, 26);
-            this.bt_Hex2ASCII.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.bt_Hex2ASCII.Name = "bt_Hex2ASCII";
-            this.bt_Hex2ASCII.Size = new System.Drawing.Size(99, 27);
-            this.bt_Hex2ASCII.TabIndex = 1;
-            this.bt_Hex2ASCII.Text = "Hex->ASCII";
-            this.bt_Hex2ASCII.UseVisualStyleBackColor = true;
+            this.groupBox1.Controls.Add(this.bt_SaveAs);
+            this.groupBox1.Controls.Add(this.bt_Save);
+            this.groupBox1.Controls.Add(this.bt_Open);
+            this.groupBox1.Location = new System.Drawing.Point(20, 398);
+            this.groupBox1.Name = "groupBox1";
+            this.groupBox1.Size = new System.Drawing.Size(623, 73);
+            this.groupBox1.TabIndex = 8;
+            this.groupBox1.TabStop = false;
+            this.groupBox1.Text = "File";
+            // 
+            // bt_Open
+            // 
+            this.bt_Open.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(40)))), ((int)(((byte)(40)))));
+            this.bt_Open.FlatAppearance.BorderColor = System.Drawing.Color.Silver;
+            this.bt_Open.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(98)))), ((int)(((byte)(215)))));
+            this.bt_Open.FlatAppearance.MouseOverBackColor = System.Drawing.Color.DeepSkyBlue;
+            this.bt_Open.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.bt_Open.ForeColor = System.Drawing.Color.White;
+            this.bt_Open.Location = new System.Drawing.Point(17, 29);
+            this.bt_Open.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.bt_Open.Name = "bt_Open";
+            this.bt_Open.Size = new System.Drawing.Size(93, 28);
+            this.bt_Open.TabIndex = 9;
+            this.bt_Open.Text = "Open";
+            this.bt_Open.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
+            this.bt_Open.UseVisualStyleBackColor = true;
+            // 
+            // bt_Save
+            // 
+            this.bt_Save.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(40)))), ((int)(((byte)(40)))));
+            this.bt_Save.FlatAppearance.BorderColor = System.Drawing.Color.Silver;
+            this.bt_Save.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(98)))), ((int)(((byte)(215)))));
+            this.bt_Save.FlatAppearance.MouseOverBackColor = System.Drawing.Color.DeepSkyBlue;
+            this.bt_Save.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.bt_Save.ForeColor = System.Drawing.Color.White;
+            this.bt_Save.Location = new System.Drawing.Point(137, 29);
+            this.bt_Save.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.bt_Save.Name = "bt_Save";
+            this.bt_Save.Size = new System.Drawing.Size(93, 28);
+            this.bt_Save.TabIndex = 10;
+            this.bt_Save.Text = "Save";
+            this.bt_Save.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
+            this.bt_Save.UseVisualStyleBackColor = true;
+            // 
+            // bt_SaveAs
+            // 
+            this.bt_SaveAs.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(40)))), ((int)(((byte)(40)))));
+            this.bt_SaveAs.FlatAppearance.BorderColor = System.Drawing.Color.Silver;
+            this.bt_SaveAs.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(98)))), ((int)(((byte)(215)))));
+            this.bt_SaveAs.FlatAppearance.MouseOverBackColor = System.Drawing.Color.DeepSkyBlue;
+            this.bt_SaveAs.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.bt_SaveAs.ForeColor = System.Drawing.Color.White;
+            this.bt_SaveAs.Location = new System.Drawing.Point(262, 29);
+            this.bt_SaveAs.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.bt_SaveAs.Name = "bt_SaveAs";
+            this.bt_SaveAs.Size = new System.Drawing.Size(93, 28);
+            this.bt_SaveAs.TabIndex = 11;
+            this.bt_SaveAs.Text = "Save As";
+            this.bt_SaveAs.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
+            this.bt_SaveAs.UseVisualStyleBackColor = true;
             // 
             // UC_Text
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.lb_Explorer);
             this.Controls.Add(this.pl_Bottom);
             this.Controls.Add(this.pl_Menu);
-            this.Controls.Add(this.iconMenu);
+            this.Controls.Add(this.lb_Menu);
             this.Controls.Add(this.spl_Main);
             this.Name = "UC_Text";
             this.Size = new System.Drawing.Size(1198, 561);
@@ -774,6 +884,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.nup_size)).EndInit();
             this.pl_Bottom.ResumeLayout(false);
             this.pl_Bottom.PerformLayout();
+            this.groupBox1.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -789,7 +900,7 @@
         private Mode_FastColoredTextBox fctb1;
         private System.Windows.Forms.SplitContainer spl_Main;
         private Mode_FastColoredTextBox fctb2;
-        private Mode_Label iconMenu;
+        private Mode_Label lb_Menu;
         private Mode_Panel pl_Menu;
         private System.Windows.Forms.FlowLayoutPanel pl_Bottom;
         private Mode_Label lb_TextType;
@@ -829,5 +940,11 @@
         private TextProgressBar textProgressBar1;
         private Mode_Button bt_Hex2ASCII;
         private Mode_Button bt_ASCII2Hex;
+        private Mode_CheckBox ckb_LineNumbers;
+        private Mode_Label lb_Explorer;
+        private System.Windows.Forms.GroupBox groupBox1;
+        private Mode_Button bt_SaveAs;
+        private Mode_Button bt_Save;
+        private Mode_Button bt_Open;
     }
 }

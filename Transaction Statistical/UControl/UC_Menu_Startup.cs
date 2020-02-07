@@ -94,7 +94,7 @@ namespace Transaction_Statistical
         }
         private void txt_MouseDown(object sender, MouseEventArgs e)
         {
-            uc_Explorer.ShowFromControl(this, sender as Control);
+            uc_Explorer.ShowUp2DownFromControl(this, sender as Control);
         }
         private void txt_HH_Validating(object sender, CancelEventArgs e)
         {
