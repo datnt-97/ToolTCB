@@ -14,11 +14,15 @@ using System.Drawing.Drawing2D;
 using System.Threading;
 using System.Diagnostics;
 using System.Timers;
+using System.Text.RegularExpressions;
+using Transaction_Statistical.AddOn;
 
 namespace Transaction_Statistical
 {
     public partial class UC_Explorer : UserControl
     {
+        public static string[] extensionOpen;
+        public static string[] extensionExtract;
         public static Image FolderImage;
         public static Image HardDiskImage;
         public static Image MyComputerImage;
@@ -33,6 +37,9 @@ namespace Transaction_Statistical
             InitializeComponent();
             init();
             textBoxShow = _textBoxShow;
+            UtilityIniFile fini = new UtilityIniFile();
+            extensionExtract = fini.GetEntryValue("OpenFile", "FileExtract").Split(';');
+            extensionOpen = fini.GetEntryValue("OpenFile", "FileText").Split(';');
         }
        
         private void OnTimedEvent(Object source, ElapsedEventArgs e)
@@ -44,6 +51,9 @@ namespace Transaction_Statistical
             InitializeComponent();
             init();
             this.tre_Explorer.MouseLeave += new System.EventHandler(uc_Explorer_MouseLeave);
+            UtilityIniFile fini = new UtilityIniFile();
+            extensionExtract = fini.GetEntryValue("OpenFile", "FileExtract").Split(';');
+            extensionOpen = fini.GetEntryValue("OpenFile", "FileText").Split(';');
         }
         public void ShowFromControl(Control _Parent, Control _textBoxShow)
         {
@@ -297,13 +307,40 @@ namespace Transaction_Statistical
         {
             if (tre_Explorer.SelectedNode !=null && tre_Explorer.SelectedNode.Tag is FileInfo)
             {
-                string path = (tre_Explorer.SelectedNode.Tag as FileInfo).FullName;
-                Thread th_file = new Thread(() => OpenFile(path, false));
-                th_file.Start();
+                if (CheckExtract(extensionOpen.ToList(), (tre_Explorer.SelectedNode.Tag as FileInfo).Name))
+                {
+                    TabPanelControl tpc = new TabPanelControl();
+                    tpc.Dock = DockStyle.Fill;
+                    UControl.UC_Text uc_Text = new UControl.UC_Text((tre_Explorer.SelectedNode.Tag as FileInfo).Name, String.Format("{0:yyyyMMddHHmmssffff}", DateTime.Now),(tre_Explorer.SelectedNode.Tag as FileInfo).FullName);
+                    uc_Text.Dock = DockStyle.Fill;
+                    tpc.Controls.Add(uc_Text);
+                    InitGUI.frm_Main.tabControlX1.AddTab((tre_Explorer.SelectedNode.Tag as FileInfo).Name, (tre_Explorer.SelectedNode.Tag as FileInfo).FullName, tpc, true);
+
+                    
+                }
+                else if (CheckExtract(extensionExtract.ToList(), (tre_Explorer.SelectedNode.Tag as FileInfo).Name))
+                {
+
+                }
+                else
+                {
+                    string path = (tre_Explorer.SelectedNode.Tag as FileInfo).FullName;
+                    Thread th_file = new Thread(() => OpenFile(path, false));
+                    th_file.Start();
+                }
             }
         }
-
         
+        private bool CheckExtract(List<string> lst, string sString)
+        {
+            bool tmp = false;
+            try
+            {
+                lst.ForEach(x => { if (Regex.Match(sString, x.Replace(".", @"\.").Replace("*", @".*"), RegexOptions.IgnoreCase).Success) tmp= true; });
+            }
+            catch { }
+            return tmp;
+        }
     }  
  
 

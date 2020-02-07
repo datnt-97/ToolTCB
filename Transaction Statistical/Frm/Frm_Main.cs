@@ -21,7 +21,7 @@ namespace Transaction_Statistical
             UControl.UC_Transaction uc_Transaction = new UControl.UC_Transaction();
             uc_Transaction.Dock = DockStyle.Fill;
             tpc.Controls.Add(uc_Transaction);
-            tabControlX1.AddTab("Transaction Statistical", tpc, false);
+            tabControlX1.AddTab("Transaction Statistical", "Transaction Statistical", tpc, false);
         }
         private void LoadingApp()
         {

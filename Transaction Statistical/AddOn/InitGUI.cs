@@ -19,6 +19,7 @@ namespace Transaction_Statistical
     }
     class InitGUI
     {
+        public static Frm_Main frm_Main;
         public static InitGUI_Mode Mode = InitGUI_Mode.Light;
         public static UControl.GUI_Custom Custom = new UControl.GUI_Custom();
        
@@ -66,8 +67,8 @@ namespace Transaction_Statistical
 
                 Custom.Tab_sel_forecolor.DisplayColor = Color.FromArgb(0, 0, 0);
                 Custom.Tab_Sel_Backcolor.DisplayColor = Color.YellowGreen;
-                Custom.Tab_unsel_forecolor.DisplayColor = Color.DimGray;
-                Custom.Tab_UnSel_Backcolor.DisplayColor = Color.FromArgb(0, 120, 240);
+                Custom.Tab_unsel_forecolor.DisplayColor = Color.FromArgb(89, 89,89);
+                Custom.Tab_UnSel_Backcolor.DisplayColor = Color.FromArgb(209, 209, 209);
                 Custom.Tab_MouseHvrColor.DisplayColor = Color.LightGreen;
                 Custom.Tab_MouseClkColor.DisplayColor = Color.LimeGreen;
                 Custom.Tab_Ribbon_Color.DisplayColor = Color.YellowGreen;
@@ -115,9 +116,9 @@ namespace Transaction_Statistical
 
                 Custom.Tab_sel_forecolor.DisplayColor = Color.FromArgb(255, 255, 255);
                 Custom.Tab_Sel_Backcolor.DisplayColor = Color.FromArgb(20, 120, 240);
-                Custom.Tab_unsel_forecolor.DisplayColor = Color.FromArgb(196, 196, 196);
-                Custom.Tab_UnSel_Backcolor.DisplayColor = Color.FromArgb(0, 120, 240);
-                Custom.Tab_MouseHvrColor.DisplayColor = Color.FromArgb(20, 120, 240);
+                Custom.Tab_unsel_forecolor.DisplayColor = Color.FromArgb(192, 192, 192);
+                Custom.Tab_UnSel_Backcolor.DisplayColor = Color.FromArgb(54, 54, 54);
+                Custom.Tab_MouseHvrColor.DisplayColor = Color.FromArgb(0, 0, 132);
                 Custom.Tab_MouseClkColor.DisplayColor = Color.FromArgb(20, 80, 200);
                 Custom.Tab_Ribbon_Color.DisplayColor = Color.FromArgb(20, 120, 240);
                 Custom.Tab_CtrlPanel_Backcolor.DisplayColor = Color.FromArgb(40, 40, 40);
@@ -380,6 +381,16 @@ namespace Transaction_Statistical
     }
     public class Mode_TreeView : TreeView
     {
+        private const int GWL_STYLE = -16;
+        private const int WS_VSCROLL = 0x00200000;
+        [DllImport("user32.dll", ExactSpelling = false, CharSet = CharSet.Auto)]
+        private static extern int GetWindowLong(IntPtr hWnd, int nIndex);
+
+        bool VScrollVisible()
+        {
+            int style = GetWindowLong(this.Handle, GWL_STYLE);
+            return ((style & WS_VSCROLL) != 0);
+        }
         public Mode_TreeView() : base()
         {
             base.BackColor = InitGUI.Custom.Frm_Background.DisplayColor;

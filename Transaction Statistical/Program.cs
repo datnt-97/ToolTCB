@@ -22,7 +22,8 @@ namespace Transaction_Statistical
                 Application.EnableVisualStyles();
                 InitGUI.Mode = InitGUI_Mode.Light;
                 InitGUI.Init();
-                Application.Run(new Frm_Main());
+                InitGUI.frm_Main = new Frm_Main();
+                Application.Run(InitGUI.frm_Main);
             }
             else
             {

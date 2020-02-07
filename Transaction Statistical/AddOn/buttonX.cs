@@ -5,6 +5,7 @@ using System.Drawing;
 using System.Data;
 using System.Windows.Forms;
 using System.Threading;
+using System.Timers;
 
 namespace Transaction_Statistical.AddOn
 {
@@ -19,8 +20,8 @@ namespace Transaction_Statistical.AddOn
         private String text = "";
         private bool isChanged = true;
         private bool showCloseButton = true;
-
-
+        private ButtonZ bt_close;
+        private System.Timers.Timer timer;
         public String DisplayText
         {
             get { return text; }
@@ -91,7 +92,7 @@ namespace Transaction_Statistical.AddOn
         {
             if (!showCloseButton) return;
             this.Width = this.Width + 20;
-            ButtonZ bt_close = new ButtonZ();
+            bt_close = new ButtonZ();
             bt_close.Text = "X";
             bt_close.Height = 20;
             bt_close.Width = 20;
@@ -107,16 +108,22 @@ namespace Transaction_Statistical.AddOn
             cp.Location = new Point(this.Width - bt_close.Width - 2, (this.Height - bt_close.Height) / 2);
             cp.Controls.Add(bt_close);
             bt_close.Dock = DockStyle.Fill;
+            bt_close.Visible = false;
             bt_close.Click += Close_Button;
+            bt_close.MouseEnter += new EventHandler(bt_close_MouseEnter);
             this.Controls.Add(cp);
         }
-
+        private void bt_close_MouseEnter(object sender, EventArgs e)
+        {
+            timer.Enabled = false;
+        }
         public delegate void ClickCloseHandler(object sender, EventArgs e);
         public event ClickCloseHandler OnClickCloseHandler;
         private void Close_Button(object sender, EventArgs e)
         {
             OnClickCloseHandler(this, e);
         }
+        
         protected override void OnBackColorChanged(EventArgs e)
         {
             base.OnBackColorChanged(e);
@@ -130,7 +137,8 @@ namespace Transaction_Statistical.AddOn
             clr1 = color;
             color = m_hovercolor;
             SynColorClose(m_hovercolor);
-        }
+          if(bt_close!=null)  bt_close.Visible = true;
+    }
 
         //method mouse leave
         protected override void OnMouseLeave(EventArgs e)
@@ -142,8 +150,21 @@ namespace Transaction_Statistical.AddOn
                 color = clr1;
             }
             SynColorClose(this.BackColor);
+            if(bt_close !=null)
+            {
+                timer = new System.Timers.Timer(100);
+                // Hook up the Elapsed event for the timer. 
+                timer.Elapsed += HideClose; 
+                timer.AutoReset = false;
+                timer.Enabled = true;
+            }
         }
-
+       
+        private void HideClose(Object source, ElapsedEventArgs e)
+        {
+            bt_close.Visible = false;
+            timer.Enabled = false;
+        }
         protected override void OnMouseDown(MouseEventArgs mevent)
         {
             base.OnMouseDown(mevent);
@@ -163,7 +184,6 @@ namespace Transaction_Statistical.AddOn
             }
             SynColorClose(this.BackColor);
         }
-
 
         protected override void OnPaint(PaintEventArgs pe)
         {

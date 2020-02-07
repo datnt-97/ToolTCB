@@ -30,7 +30,8 @@ namespace Transaction_Statistical.UControl
         {
             icon_select = IconHelper.ImageUltility.ChangeColor(global::Transaction_Statistical.Properties.Resources.Next_Select, InitGUI.Custom.Menu_Button.DisplayColor);
             icon = IconHelper.ImageUltility.ChangeColor(global::Transaction_Statistical.Properties.Resources.next, InitGUI.Custom.Menu_Button.DisplayColor);
-            InitializeComponent2();
+           
+          InitializeComponent2(); 
             Icon_Search.BackgroundImage = icon;
             if (treeTrans != null)
             {
@@ -40,7 +41,9 @@ namespace Transaction_Statistical.UControl
                 this.Location = new System.Drawing.Point(XHide, treeTrans.Height - this.Height - 11);
                 this.Anchor = (System.Windows.Forms.AnchorStyles)(System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left);
                 this.BackColor = treeTrans.BackColor;
+                this.txt_Search.BackColor = treeTrans.BackColor;
             }
+            
         }
         public UC_Search()
         {

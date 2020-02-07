@@ -45,7 +45,15 @@ namespace Transaction_Statistical.UControl
                 rd_Mode_Ligh.CheckedChanged += new System.EventHandler(Style_Select);
                 rd_Mode_Custom.CheckedChanged += new System.EventHandler(Style_Select);
 
+                BindingSource bindingSource = new BindingSource();
+                bindingSource.DataSource = UC_Menu_Startup.Template;
+                ckbl_Forms.DataSource = bindingSource;
+                ckbl_Forms.DisplayMember = "Value";
+
                 LoadInfo_Template(false);
+                UtilityIniFile fini = new UtilityIniFile();
+                txt_FormatOpen.Text = fini.GetEntryValue("OpenFile", "FileText");
+                txt_FortmatExtract.Text= fini.GetEntryValue("OpenFile", "FileExtract");
             }
             catch (Exception ex)
             {
@@ -276,6 +284,41 @@ namespace Transaction_Statistical.UControl
             UC_USBKey uc = new UC_USBKey();
             Frm_TemplateDefault frm = new Frm_TemplateDefault(uc, "USB Key");
             frm.Show();
+        }
+
+        private void txt_FormatOpen_Validated(object sender, EventArgs e)
+        {
+            try
+            {
+                UtilityIniFile fini = new UtilityIniFile();               
+                    fini.Write("FileText", txt_FormatOpen.Text, "OpenFile");               
+            }
+            catch { }
+        }
+
+        private void txt_FortmatExtract_Validated(object sender, EventArgs e)
+        {
+            try
+            {
+                UtilityIniFile fini = new UtilityIniFile();
+                fini.Write("FileExtract", txt_FortmatExtract.Text, "OpenFile");
+            }
+            catch { }
+        }
+
+        private void bt_Refresh_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void bt_Remove_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void bt_AddForm_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }

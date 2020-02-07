@@ -45,8 +45,10 @@ namespace Transaction_Statistical
 
         public static string sTest = string.Empty;
         public static SQLiteHelper sqlite;
+        public static string PathDirectoryTempUsr;
         public static string PathDirectoryCurrentApp;
-        public static string PathDirectoryCurrentUserConfigData;
+        private static string PathDirectoryCurrentUserConfigData;
+        public static string PathFileConfig;
         public static string PathDirectoryUtilities;
         public static string FolderSystemTrace;
         public static string DatabaseFile;
@@ -76,10 +78,11 @@ namespace Transaction_Statistical
             try
             {
                 //Init directory and file config
+                PathDirectoryTempUsr = (Path.GetTempPath() + "\\Analyze").Replace(@"\\", @"\"); if (!Directory.Exists(PathDirectoryTempUsr)) Directory.CreateDirectory(PathDirectoryTempUsr);
                 PathDirectoryCurrentApp = Path.GetDirectoryName(Application.ExecutablePath);
                 PathDirectoryCurrentUserConfigData = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + @"\Transaction Statistical"; if (!Directory.Exists(PathDirectoryCurrentUserConfigData)) Directory.CreateDirectory(PathDirectoryCurrentUserConfigData);
-
-                PathDirectoryUtilities = (PathDirectoryCurrentUserConfigData + "\\Utilities").Replace(@"\\", @"\"); if (!Directory.Exists(PathDirectoryUtilities)) Directory.CreateDirectory(PathDirectoryUtilities);
+                PathFileConfig = InitParametar.PathDirectoryCurrentUserConfigData + "\\AppConfig.dat";
+                PathDirectoryUtilities = (PathDirectoryCurrentApp + "\\Utilities").Replace(@"\\", @"\"); if (!Directory.Exists(PathDirectoryUtilities)) Directory.CreateDirectory(PathDirectoryUtilities);
                 FolderSystemTrace = (PathDirectoryCurrentUserConfigData + "\\Trace").Replace(@"\\", @"\"); if (!Directory.Exists(FolderSystemTrace)) Directory.CreateDirectory(FolderSystemTrace);
                 DatabaseFile = PathDirectoryCurrentUserConfigData + "\\DB.s3db";
                 if (!File.Exists(DatabaseFile) && File.Exists(PathDirectoryCurrentApp + "\\DB.s3db")) File.Copy(PathDirectoryCurrentApp + "\\DB.s3db", DatabaseFile, true);

@@ -82,7 +82,7 @@
             // 
             this.lb_Title.AutoSize = true;
             this.lb_Title.BackColor = System.Drawing.Color.Transparent;
-            this.lb_Title.ForeColor = System.Drawing.Color.Black;
+            this.lb_Title.ForeColor = InitGUI.Custom.Frm_ForeColor.DisplayColor;
             this.lb_Title.Location = new System.Drawing.Point(15, 42);
             this.lb_Title.Name = "lb_Title";
             this.lb_Title.Size = new System.Drawing.Size(35, 17);
@@ -103,7 +103,7 @@
             // 
             this.lb_From.AutoSize = true;
             this.lb_From.BackColor = System.Drawing.Color.Transparent;
-            this.lb_From.ForeColor = System.Drawing.Color.Black;
+            this.lb_From.ForeColor = InitGUI.Custom.Frm_ForeColor.DisplayColor;
             this.lb_From.Location = new System.Drawing.Point(15, 14);
             this.lb_From.Name = "lb_From";
             this.lb_From.Size = new System.Drawing.Size(40, 17);

@@ -80,11 +80,10 @@
         }
         private void InitializeComponent_Refresh(object sender, System.Drawing.Color e)
         {
-
             // 
             // mode_TextBox1
             // 
-            this.txt_Search.BackColor = InitGUI.Custom.Trans_Background.DisplayColor;
+            this.txt_Search.BackColor = TreeTrans.BackColor;
             this.txt_Search.ForeColor = InitGUI.Custom.Trans_Terminal.DisplayColor;
             // 
             // pictureBox1

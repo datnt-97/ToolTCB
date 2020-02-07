@@ -84,6 +84,10 @@
     <Reference Include="DeltaCompressionDotNet.PatchApi, Version=1.1.0.0, Culture=neutral, PublicKeyToken=3e8888ee913ed789, processorArchitecture=MSIL">
       <HintPath>..\packages\DeltaCompressionDotNet.1.1.0\lib\net20\DeltaCompressionDotNet.PatchApi.dll</HintPath>
     </Reference>
+    <Reference Include="DifferenceEngine, Version=1.0.5861.26504, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>bin\Debug\DifferenceEngine.dll</HintPath>
+    </Reference>
     <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <HintPath>..\packages\EntityFramework.6.3.0\lib\net45\EntityFramework.dll</HintPath>
     </Reference>
@@ -335,6 +339,12 @@
     <Compile Include="UControl\UC_Search.Designer.cs">
       <DependentUpon>UC_Search.cs</DependentUpon>
     </Compile>
+    <Compile Include="UControl\UC_Text.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UControl\UC_Text.Designer.cs">
+      <DependentUpon>UC_Text.cs</DependentUpon>
+    </Compile>
     <Compile Include="UControl\UC_Transaction.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -431,6 +441,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="UControl\UC_Search.resx">
       <DependentUpon>UC_Search.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UControl\UC_Text.resx">
+      <DependentUpon>UC_Text.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UControl\UC_Transaction.resx">
       <DependentUpon>UC_Transaction.cs</DependentUpon>

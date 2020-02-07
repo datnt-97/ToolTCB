@@ -19,7 +19,7 @@ namespace Transaction_Statistical.AddOn
 
         int selected_index = -1;
         private List<ButtonX> buttonlist = new List<ButtonX> { };
-        private List<TabPanelControl> tabPanelCtrlList = new List<TabPanelControl> { };
+        public List<TabPanelControl> TabPanelCtrlList = new List<TabPanelControl> { };
 
         private Size tab_size = new Size(110, 25);
         private Color sel_tab_forecolor = InitGUI.Custom.Tab_sel_forecolor.DisplayColor;
@@ -146,12 +146,13 @@ namespace Transaction_Statistical.AddOn
         }
 
 
-        void createAndAddButton(string tabtext, TabPanelControl tpcontrol, Point loc, bool showCloseButton)
+        void createAndAddButton(string tabtext,string tooltip, TabPanelControl tpcontrol, Point loc, bool showCloseButton)
         {
             
             ButtonX bx = new ButtonX();
             bx.DisplayText = tabtext;
             bx.Text = tabtext;
+            toolTip1.SetToolTip(bx, tooltip);
             //  bx.Size = tab_size;  
             int width = TextRenderer.MeasureText(tabtext, this.Font).Width + 20;
             if (width < tab_size.Width) width = tab_size.Width;
@@ -174,7 +175,7 @@ namespace Transaction_Statistical.AddOn
             buttonlist.Add(bx);
             selected_index++;
 
-            tabPanelCtrlList.Add(tpcontrol);
+            TabPanelCtrlList.Add(tpcontrol);
             TabPanel.Controls.Clear();
             TabPanel.Controls.Add(tpcontrol);
 
@@ -198,20 +199,37 @@ namespace Transaction_Statistical.AddOn
                 }
             }
             TabPanel.Controls.Clear();
-            TabPanel.Controls.Add(tabPanelCtrlList[index]);
+            TabPanel.Controls.Add(TabPanelCtrlList[index]);
             selected_index = ((ButtonX)sender).TabIndex;
             UpdateButtons();
         }
 
-        public void AddTab(string tabtext, TabPanelControl tpcontrol, bool showClose)
+      public TabPanelControl GetTabPanel(int indexTab)
+        {
+            return TabPanelCtrlList[indexTab];           
+        }
+        public TabPanelControl GetTabPanel(string nameTab)
+        {
+            int index = 0, i;
+            for (i = 0; i < buttonlist.Count; i++)
+            {
+                if (buttonlist[i].Text == nameTab)
+                {
+                    index = i;
+                }
+            }
+            return TabPanelCtrlList[index];
+        }
+
+        public void AddTab(string tabtext,string tooltip, TabPanelControl tpcontrol, bool showClose)
         {
             if (!buttonlist.Any())
             {
-                createAndAddButton(tabtext, tpcontrol, new Point(0, 0), showClose);
+                createAndAddButton(tabtext, tooltip, tpcontrol, new Point(0, 0), showClose);
             }
             else
             {
-                createAndAddButton(tabtext, tpcontrol, new Point(buttonlist[buttonlist.Count - 1].Size.Width + buttonlist[buttonlist.Count - 1].Location.X, 0),showClose);
+                createAndAddButton(tabtext, tooltip, tpcontrol, new Point(buttonlist[buttonlist.Count - 1].Size.Width + buttonlist[buttonlist.Count - 1].Location.X, 0),showClose);
             }
         }
 
@@ -342,17 +360,17 @@ namespace Transaction_Statistical.AddOn
                     buttonlist[i] = temp;
                     buttonlist[j] = but;
 
-                    TabPanelControl uct1 = tabPanelCtrlList[i];
-                    TabPanelControl tempusr = tabPanelCtrlList[j];
-                    tabPanelCtrlList[i] = tempusr;
-                    tabPanelCtrlList[j] = uct1;
+                    TabPanelControl uct1 = TabPanelCtrlList[i];
+                    TabPanelControl tempusr = TabPanelCtrlList[j];
+                    TabPanelCtrlList[i] = tempusr;
+                    TabPanelCtrlList[j] = uct1;
                 }
             }
 
             string btext = ((ToolStripMenuItem)sender).Text;
             BackToFront_SelButton();
             selected_index = 0;
-            TabPanel.Controls.Add(tabPanelCtrlList[buttonlist[0].TabIndex]);
+            TabPanel.Controls.Add(TabPanelCtrlList[buttonlist[0].TabIndex]);
             UpdateButtons();
         }
 
@@ -362,17 +380,17 @@ namespace Transaction_Statistical.AddOn
             if (index >= 0 && buttonlist.Count > 0 && index < buttonlist.Count)
             {
                 buttonlist.RemoveAt(index);
-                tabPanelCtrlList.RemoveAt(index);
+                TabPanelCtrlList.RemoveAt(index);
                 BackToFront_SelButton();
                 if (buttonlist.Count > 1)
                 {
                     if (index - 1 >= 0)
                     {
-                        TabPanel.Controls.Add(tabPanelCtrlList[index - 1]);
+                        TabPanel.Controls.Add(TabPanelCtrlList[index - 1]);
                     }
                     else
                     {
-                        TabPanel.Controls.Add(tabPanelCtrlList[(index - 1) + 1]);
+                        TabPanel.Controls.Add(TabPanelCtrlList[(index - 1) + 1]);
                         selected_index = (index - 1) + 1;
                     }
                 }
@@ -380,7 +398,7 @@ namespace Transaction_Statistical.AddOn
 
                 if (buttonlist.Count == 1)
                 {
-                    TabPanel.Controls.Add(tabPanelCtrlList[0]);
+                    TabPanel.Controls.Add(TabPanelCtrlList[0]);
                     selected_index = 0;
                 }
             }

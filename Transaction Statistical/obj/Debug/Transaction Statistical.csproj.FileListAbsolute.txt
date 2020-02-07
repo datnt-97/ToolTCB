@@ -687,3 +687,5 @@ E:\Project\NPS\ToolTCB_Back_up\Back_up_21\ToolTCB\ToolTCB\Transaction Statistica
 E:\Project\NPS\ToolTCB_Back_up\Back_up_21\ToolTCB\ToolTCB\Transaction Statistical\obj\Debug\Transaction Statistical.exe
 E:\Project\NPS\ToolTCB_Back_up\Back_up_21\ToolTCB\ToolTCB\Transaction Statistical\obj\Debug\Transaction Statistical.pdb
 E:\Project\NPS\TCB\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.UControl.UC_Feedback.resources
+D:\05-TEMP\Source\GitHub\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.UControl.UC_Text.resources
+D:\05-TEMP\Source\GitHub\ToolTCB\Transaction Statistical\bin\Debug\DifferenceEngine.pdb

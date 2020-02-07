@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(TabControlX));
             this.BackTopPanel = new System.Windows.Forms.Panel();
             this.RibbonPanel = new System.Windows.Forms.Panel();
@@ -35,13 +36,14 @@
             this.toolStripDropDownButton1 = new System.Windows.Forms.ToolStripDropDownButton();
             this.TabButtonPanel = new System.Windows.Forms.Panel();
             this.TabPanel = new System.Windows.Forms.Panel();
+            this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.BackTopPanel.SuspendLayout();
             this.toolStripZ1.SuspendLayout();
             this.SuspendLayout();
             // 
             // BackTopPanel
             // 
-            this.BackTopPanel.BackColor = InitGUI.Custom.Tab_CtrlPanel_Backcolor.DisplayColor;// System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(30)))), ((int)(((byte)(30)))));
+            this.BackTopPanel.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(37)))), ((int)(((byte)(37)))), ((int)(((byte)(38)))));
             this.BackTopPanel.Controls.Add(this.RibbonPanel);
             this.BackTopPanel.Controls.Add(this.toolStripZ1);
             this.BackTopPanel.Controls.Add(this.TabButtonPanel);
@@ -54,7 +56,7 @@
             // 
             // RibbonPanel
             // 
-            this.RibbonPanel.BackColor = InitGUI.Custom.Tab_CtrlPanel_Backcolor.DisplayColor;//  System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(120)))), ((int)(((byte)(240)))));
+            this.RibbonPanel.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(37)))), ((int)(((byte)(37)))), ((int)(((byte)(38)))));
             this.RibbonPanel.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.RibbonPanel.Location = new System.Drawing.Point(0, 47);
             this.RibbonPanel.Margin = new System.Windows.Forms.Padding(4);
@@ -69,9 +71,9 @@
             this.toolStripZ1.ImageScalingSize = new System.Drawing.Size(20, 20);
             this.toolStripZ1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripDropDownButton1});
-            this.toolStripZ1.Location = new System.Drawing.Point(472, 2);
+            this.toolStripZ1.Location = new System.Drawing.Point(511, 2);
             this.toolStripZ1.Name = "toolStripZ1";
-            this.toolStripZ1.Size = new System.Drawing.Size(85, 27);
+            this.toolStripZ1.Size = new System.Drawing.Size(46, 27);
             this.toolStripZ1.TabIndex = 0;
             this.toolStripZ1.Text = "toolStripZ1";
             // 
@@ -98,7 +100,7 @@
             // 
             // TabPanel
             // 
-            this.TabPanel.BackColor = InitGUI.Custom.Tab_CtrlPanel_Backcolor.DisplayColor;// System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(40)))), ((int)(((byte)(40)))));
+            this.TabPanel.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(37)))), ((int)(((byte)(37)))), ((int)(((byte)(38)))));
             this.TabPanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.TabPanel.Location = new System.Drawing.Point(0, 49);
             this.TabPanel.Margin = new System.Windows.Forms.Padding(4);
@@ -131,5 +133,6 @@
         private System.Windows.Forms.Panel TabPanel;
         private ToolStripZ toolStripZ1;
         private System.Windows.Forms.ToolStripDropDownButton toolStripDropDownButton1;
+        private System.Windows.Forms.ToolTip toolTip1;
     }
 }

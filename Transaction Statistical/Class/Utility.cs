@@ -361,9 +361,11 @@ namespace Transaction_Statistical
 
         // Set the IniFileName passed from the Main Application.
         public string path;
-        public UtilityIniFile(string INIPath)
+        public UtilityIniFile(string INIPath=null)
         {
-            path = INIPath;
+            if (INIPath == null) path = InitParametar.PathFileConfig;
+            else
+                path = INIPath;
         }
         public void Write(string Key, string Value, string Section)
         {

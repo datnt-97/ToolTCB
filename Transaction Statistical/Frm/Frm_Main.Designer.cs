@@ -307,7 +307,7 @@ namespace Transaction_Statistical
         private AddOn.ButtonZ btn_MinButton;
         private System.Windows.Forms.ToolTip toolTip1;
         private System.Windows.Forms.PictureBox pictureBox1;
-        private AddOn.TabControlX tabControlX1;
+        public AddOn.TabControlX tabControlX1;
     }
 }
 
