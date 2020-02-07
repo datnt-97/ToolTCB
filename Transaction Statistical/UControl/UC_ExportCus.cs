@@ -330,7 +330,7 @@ namespace Transaction_Statistical.UControl
                 InitParametar.Send_Error(ex.ToString(), MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name);
             }
             prb_Process.Size = new Size(0, 0);
-            LoadTemplate(true);
+            LoadTemplate(false);
         }
 
         private void chb_Open_CheckedChanged(object sender, EventArgs e)
