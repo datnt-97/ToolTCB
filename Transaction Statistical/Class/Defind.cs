@@ -687,11 +687,10 @@ namespace Transaction_Statistical
             {
                 Transaction trans;
                 Dictionary<int, RegesValue> lst = new Dictionary<int, RegesValue>();
-                foreach (string reg in Template_SplitTransactions.Values)
+                foreach (string reg in Template_SplitTransactions.OrderBy(x => x.Key).ToDictionary(x => x.Key, x => x.Value).Values)
                 {
                     if (Regexs.RunPatternRegular(sString, reg, out lst))
                     {
-
                         List<Task> tasks = new List<Task>();
                         foreach (KeyValuePair<int, RegesValue> key in lst)
                         {
@@ -724,6 +723,10 @@ namespace Transaction_Statistical
                                 trans.ListEvent[evStart.DateBegin] = evStart;
                                 trans.TraceJournal_Remaining = trans.TraceJournal_Remaining.Replace(key.Value.value["SStart"], null);
                             }
+                            else
+                            {
+                                trans.hasStart = false;
+                            }
                             if (key.Value.value.ContainsKey("TimeEnd"))
                             {
                                 DateTime.TryParseExact(string.Format("{0:MM-dd-yyyy}", trans.DateBegin) + key.Value.value["TimeEnd"], "MM-dd-yyyy" + FormatTime, CultureInfo.InvariantCulture, DateTimeStyles.None, out trans.DateEnd);
@@ -732,8 +735,10 @@ namespace Transaction_Statistical
                                 trans.DateEnd.AddYears(trans.DateBegin.Year);
                             }
                             else
+                            {
+                                trans.hasEnd = false;
                                 trans.DateEnd = trans.DateBegin;
-
+                            }
                             if (key.Value.value.ContainsKey("SEnd"))
                             {
                                 trans.TraceJournal_Remaining = trans.TraceJournal_Remaining.Replace(key.Value.value["SEnd"], null);
@@ -791,6 +796,18 @@ namespace Transaction_Statistical
                                 {
                                     evt.DateBegin = DateCurrent.AddYears(88);
                                     evt.hasTime = false;
+                                }
+
+                                if (regx.value.ContainsKey("Status") && !string.IsNullOrEmpty(regx.value["Status"]))
+                                {
+                                    var values = Enum.GetValues(typeof(Status.Types)).Cast<Status.Types>();
+                                    foreach (var type in values)
+                                    {
+                                        if (regx.value["Status"].Equals(type.ToString().Replace("_", " ")))
+                                        {
+                                            evt.Status = type;
+                                        }
+                                    }
                                 }
 
                                 if (regx.value.ContainsKey("Bill") && !string.IsNullOrEmpty(regx.value["Bill"]))
@@ -954,7 +971,6 @@ namespace Transaction_Statistical
                 evt.Value_100K_Retracted * 100000 + evt.Value_200K_Retracted * 200000 + evt.Value_500K_Retracted * 500000;
                                 }
 
-
                                 //if (transaction.ListEvent.ContainsKey(evt.DateBegin))
                                 //{
                                 //    int milis = 0;
@@ -968,8 +984,7 @@ namespace Transaction_Statistical
                                 //else transaction.ListEvent[evt.DateBegin] = evt;
                                 FunctionGenaral<TransactionEvent>.Parse(ref transaction.ListEvent, evt.DateBegin, evt);
 
-
-                                transaction.TraceJournalFull = transaction.TraceJournalFull.Replace(regx.stringfind, string.Empty);
+                                transaction.TraceJournal_Remaining = transaction.TraceJournal_Remaining.Replace(regx.stringfind, string.Empty);
                             });
                         }
                     }
@@ -1313,7 +1328,10 @@ namespace Transaction_Statistical
                 trans = await Task.Run(() => FindEventCashOutIn(trans.DateBegin, trans));
                 trans = await Task.Run(() => FixNoTimeEvent(trans));
                 trans = await Task.Run(() => SplitRequest(trans));
-
+                if (!trans.hasEnd)
+                {
+                    trans.DateEnd = trans.ListEvent.Values.LastOrDefault() != null ? trans.ListEvent.LastOrDefault().Value.DateBegin : trans.DateBegin;
+                }
                 if (trans.ListRequest.Count != 0)
                 {
                     if (string.IsNullOrEmpty(trans.Terminal))
@@ -1700,6 +1718,8 @@ namespace Transaction_Statistical
         public int Rejects;
         public int Unknow;
         public int IndexContent;
+        public bool hasStart = false;
+        public bool hasEnd = false;
         public int AmountTotal()
         {
             return Value_10K * 10000 + Value_20K * 20000 + Value_50K * 50000 + Value_100K * 100000 + Value_200K * 200000 + Value_500K * 500000;
@@ -1875,6 +1895,7 @@ namespace Transaction_Statistical
         public int IndexContent;
         public bool isWarning = false;
         public bool hasTime = true;
+
         [CategoryAttribute("Event"), DescriptionAttribute("Status of the Event")]
         public Status.Types Status { get; set; }
         [CategoryAttribute("Event"), DescriptionAttribute("Name of the Event")]
