@@ -339,7 +339,7 @@ namespace Transaction_Statistical
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.ToString(), "Open File", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(ex.Message, "Open File", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 

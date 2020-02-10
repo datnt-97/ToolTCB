@@ -57,8 +57,9 @@
             this.txt_PrKey.Location = new System.Drawing.Point(289, 55);
             this.txt_PrKey.Name = "txt_PrKey";
             this.txt_PrKey.Size = new System.Drawing.Size(253, 22);
-            this.txt_PrKey.TabIndex = 1;
-            this.txt_PrKey.UseSystemPasswordChar = true;
+            this.txt_PrKey.TabIndex = 0;
+            this.txt_PrKey.UseSystemPasswordChar = true;           
+            this.txt_PrKey.KeyPress += new System.Windows.Forms.KeyPressEventHandler(txt_PrKey_KeyPress);
             // 
             // mode_Label1
             // 
@@ -68,7 +69,7 @@
             this.mode_Label1.Location = new System.Drawing.Point(286, 26);
             this.mode_Label1.Name = "mode_Label1";
             this.mode_Label1.Size = new System.Drawing.Size(243, 17);
-            this.mode_Label1.TabIndex = 0;
+            this.mode_Label1.TabIndex = 1;
             this.mode_Label1.Text = "Please, input USB Key or Private Key";
             // 
             // UC_Access

@@ -18,8 +18,13 @@ namespace Transaction_Statistical
         public UC_Access()
         {
             InitializeComponent2();
+            this.txt_PrKey.Select();
         }
-          
+          private void txt_PrKey_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (e.KeyChar == '\r')
+                btn_OK_Click(null, null);
+        }
         private void btn_OK_Click(object sender, EventArgs e)
         {
             if (txt_PrKey.Text.Equals(InitParametar.prKey))
