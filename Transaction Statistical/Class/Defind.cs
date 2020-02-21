@@ -117,9 +117,16 @@ namespace Transaction_Statistical
                     {
                         if (sc.Status != ServiceControllerStatus.Running)
                         {
-                            sc.Start();
-                            sc.WaitForStatus(ServiceControllerStatus.Running, new TimeSpan(0, 0, 10));
-                            //service is now Started        
+                            try
+                            {
+                                sc.Start();
+                                sc.WaitForStatus(ServiceControllerStatus.Running, new TimeSpan(0, 0, 10));
+                                //service is now Started      
+                            }
+                            catch(Exception ex) 
+                            {
+                                MessageBox.Show("Can't start service Scheduler.\nPlease, run tool by runas administrator to fix.\n" + ex.Message, "Start service scheduler ", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            }
                         }
 
                     }
@@ -130,8 +137,7 @@ namespace Transaction_Statistical
                     catch (InvalidOperationException)
                     {
                         //This Service does not exist    => install service
-                        if (File.Exists(PathDirectoryCurrentApp + @"\Transaction Statistical Scheduler.InstallLog"))
-                            File.Delete(PathDirectoryCurrentApp + @"\Transaction Statistical Scheduler.InstallLog");
+                        
                         Process process = new Process();
                         process.StartInfo.FileName = @"C:\Windows\Microsoft.NET\Framework\v4.0.30319\installutil.exe";
                         process.StartInfo.Arguments = "\"" + PathDirectoryCurrentApp + "\\Transaction Statistical Scheduler.exe\"";
@@ -142,9 +148,8 @@ namespace Transaction_Statistical
                         string output = process.StandardOutput.ReadToEnd();
                         process.WaitForExit();
 
-                        string s = File.ReadAllText(PathDirectoryCurrentApp + @"\Transaction Statistical Scheduler.InstallLog");
                         if (!output.Contains("The Commit phase completed successfully."))
-                            MessageBox.Show("Can't install Transaction Statistical Scheduler.\n Please, run tool by runas administrator to fix.\n" + output, "Install Transaction Statistical Scheduler ", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            MessageBox.Show("Can't install Transaction Statistical Scheduler.\nPlease, run tool by runas administrator to fix.\n" + output, "Install Transaction Statistical Scheduler ", MessageBoxButtons.OK, MessageBoxIcon.Error);
                         else
                             CheckServiceScheduler();
                     }

@@ -178,6 +178,7 @@ namespace Transaction_Statistical_Scheduler
         {
             try
             {
+                Thread.Sleep(100);
                 string[] line = File.ReadAllLines(e.FullPath);
                 InitParametar.WriteLogApplication(string.Format("{0:HH:mm:ss fff}", DateTime.Now) + " Get command from tool.", true, false);
                 if (line.Length != 0 && !line[line.Length - 1].Equals(LastComnand))
