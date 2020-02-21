@@ -1,0 +1,755 @@
+----------------------------------------------
+08:29:07 848 Clear process to renew.
+ Load Tasks.
+ Load for user: TanySmile
+ Task name: dfsdf
+ Task time: 11:58
+ Task type: DAILY => 
+ Task name: month
+ Task time: 13:10
+ Task type: MONTHLY => FEB, MAR, APR, MAY, JUN, JUL, AUG, SEP, OCT, NOV, DEC, JAN
+ Mission temporarily delayed because timer's too big: 2020-03-20 13:10:00
+ Mission temporarily delayed because timer's too big: 2020-04-20 13:10:00
+ Mission temporarily delayed because timer's too big: 2020-05-20 13:10:00
+ Mission temporarily delayed because timer's too big: 2020-06-20 13:10:00
+ Mission temporarily delayed because timer's too big: 2020-07-20 13:10:00
+ Mission temporarily delayed because timer's too big: 2020-08-20 13:10:00
+ Mission temporarily delayed because timer's too big: 2020-09-20 13:10:00
+ Mission temporarily delayed because timer's too big: 2020-10-20 13:10:00
+ Mission temporarily delayed because timer's too big: 2020-11-20 13:10:00
+ Mission temporarily delayed because timer's too big: 2020-12-20 13:10:00
+ Task name: weekly
+ Task time: 11:44
+ Task type: WEEKLY => WED, THU, FRI, SAT, SUN, MON, TUE
+ Init Service Finished.
+----------------------------------------------
+
+----------------------------------------------
+08:30:08 535 Clear process to renew.
+ Load Tasks.
+ Load for user: TanySmile
+ Task name: dfsdf
+ Task time: 11:58
+ Task type: DAILY => 
+ Task name: month
+ Task time: 13:10
+ Task type: MONTHLY => FEB, MAR, APR, MAY, JUN, JUL, AUG, SEP, OCT, NOV, DEC, JAN
+ Mission temporarily delayed because timer's too big: 2020-03-20 13:10:00
+ Mission temporarily delayed because timer's too big: 2020-04-20 13:10:00
+ Mission temporarily delayed because timer's too big: 2020-05-20 13:10:00
+ Mission temporarily delayed because timer's too big: 2020-06-20 13:10:00
+ Mission temporarily delayed because timer's too big: 2020-07-20 13:10:00
+ Mission temporarily delayed because timer's too big: 2020-08-20 13:10:00
+ Mission temporarily delayed because timer's too big: 2020-09-20 13:10:00
+ Mission temporarily delayed because timer's too big: 2020-10-20 13:10:00
+ Mission temporarily delayed because timer's too big: 2020-11-20 13:10:00
+ Mission temporarily delayed because timer's too big: 2020-12-20 13:10:00
+ Task name: weekly
+ Task time: 11:44
+ Task type: WEEKLY => WED, THU, FRI, SAT, SUN, MON, TUE
+ Init Service Finished.
+----------------------------------------------
+
+----------------------------------------------
+08:31:08 645 Clear process to renew.
+ Load Tasks.
+ Load for user: TanySmile
+ Task name: dfsdf
+ Task time: 11:58
+ Task type: DAILY => 
+ Task name: month
+ Task time: 13:10
+ Task type: MONTHLY => FEB, MAR, APR, MAY, JUN, JUL, AUG, SEP, OCT, NOV, DEC, JAN
+ Mission temporarily delayed because timer's too big: 2020-03-20 13:10:00
+ Mission temporarily delayed because timer's too big: 2020-04-20 13:10:00
+ Mission temporarily delayed because timer's too big: 2020-05-20 13:10:00
+ Mission temporarily delayed because timer's too big: 2020-06-20 13:10:00
+ Mission temporarily delayed because timer's too big: 2020-07-20 13:10:00
+ Mission temporarily delayed because timer's too big: 2020-08-20 13:10:00
+ Mission temporarily delayed because timer's too big: 2020-09-20 13:10:00
+ Mission temporarily delayed because timer's too big: 2020-10-20 13:10:00
+ Mission temporarily delayed because timer's too big: 2020-11-20 13:10:00
+ Mission temporarily delayed because timer's too big: 2020-12-20 13:10:00
+ Task name: weekly
+ Task time: 11:44
+ Task type: WEEKLY => WED, THU, FRI, SAT, SUN, MON, TUE
+ Init Service Finished.
+----------------------------------------------
+
+----------------------------------------------
+08:32:08 770 Clear process to renew.
+ Load Tasks.
+ Load for user: TanySmile
+ Task name: dfsdf
+ Task time: 11:58
+ Task type: DAILY => 
+ Task name: month
+ Task time: 13:10
+ Task type: MONTHLY => FEB, MAR, APR, MAY, JUN, JUL, AUG, SEP, OCT, NOV, DEC, JAN
+ Mission temporarily delayed because timer's too big: 2020-03-20 13:10:00
+ Mission temporarily delayed because timer's too big: 2020-04-20 13:10:00
+ Mission temporarily delayed because timer's too big: 2020-05-20 13:10:00
+ Mission temporarily delayed because timer's too big: 2020-06-20 13:10:00
+ Mission temporarily delayed because timer's too big: 2020-07-20 13:10:00
+ Mission temporarily delayed because timer's too big: 2020-08-20 13:10:00
+ Mission temporarily delayed because timer's too big: 2020-09-20 13:10:00
+ Mission temporarily delayed because timer's too big: 2020-10-20 13:10:00
+ Mission temporarily delayed because timer's too big: 2020-11-20 13:10:00
+ Mission temporarily delayed because timer's too big: 2020-12-20 13:10:00
+ Task name: weekly
+ Task time: 11:44
+ Task type: WEEKLY => WED, THU, FRI, SAT, SUN, MON, TUE
+ Init Service Finished.
+----------------------------------------------
+
+----------------------------------------------
+08:32:29 396 Class: TransactionStatisticalScheduler
+Method: OnChanged
+System.IO.IOException: The process cannot access the file 'D:\05-TEMP\Source\GitHub\ToolTCB\Transaction Statistical\bin\Debug\command.txt' because it is being used by another process.
+   at System.IO.__Error.WinIOError(Int32 errorCode, String maybeFullPath)
+   at System.IO.FileStream.Init(String path, FileMode mode, FileAccess access, Int32 rights, Boolean useRights, FileShare share, Int32 bufferSize, FileOptions options, SECURITY_ATTRIBUTES secAttrs, String msgPath, Boolean bFromProxy, Boolean useLongPath, Boolean checkHost)
+   at System.IO.FileStream..ctor(String path, FileMode mode, FileAccess access, FileShare share, Int32 bufferSize, FileOptions options, String msgPath, Boolean bFromProxy, Boolean useLongPath, Boolean checkHost)
+   at System.IO.StreamReader..ctor(String path, Encoding encoding, Boolean detectEncodingFromByteOrderMarks, Int32 bufferSize, Boolean checkHost)
+   at System.IO.StreamReader..ctor(String path, Encoding encoding)
+   at System.IO.File.InternalReadAllLines(String path, Encoding encoding)
+   at System.IO.File.ReadAllLines(String path)
+   at Transaction_Statistical_Scheduler.TransactionStatisticalScheduler.OnChanged(Object source, FileSystemEventArgs e) in D:\05-TEMP\Source\GitHub\ToolTCB\Transaction Statistical Scheduler\Service1.cs:line 180
+----------------------------------------------
+
+----------------------------------------------
+08:32:29 403 Get command from tool.
+----------------------------------------------
+ Command: [2020-02-21 08:32:29 ReloadTask]
+ Load Tasks.
+ Load for user: TanySmile
+ Task name: dfsdf
+ Task time: 11:58
+ Task type: DAILY => 
+ Task name: month
+ Task time: 13:10
+ Task type: MONTHLY => FEB, MAR, APR, MAY, JUN, JUL, AUG, SEP, OCT, NOV, DEC, JAN
+ Mission temporarily delayed because timer's too big: 2020-03-20 13:10:00
+ Mission temporarily delayed because timer's too big: 2020-04-20 13:10:00
+ Mission temporarily delayed because timer's too big: 2020-05-20 13:10:00
+ Mission temporarily delayed because timer's too big: 2020-06-20 13:10:00
+ Mission temporarily delayed because timer's too big: 2020-07-20 13:10:00
+ Mission temporarily delayed because timer's too big: 2020-08-20 13:10:00
+ Mission temporarily delayed because timer's too big: 2020-09-20 13:10:00
+ Mission temporarily delayed because timer's too big: 2020-10-20 13:10:00
+ Mission temporarily delayed because timer's too big: 2020-11-20 13:10:00
+ Mission temporarily delayed because timer's too big: 2020-12-20 13:10:00
+ Task name: weekly
+ Task time: 08:35
+ Task type: WEEKLY => WED, THU, FRI, SAT, SUN, MON, TUE
+----------------------------------------------
+08:33:08 885 Clear process to renew.
+ Load Tasks.
+ Load for user: TanySmile
+ Task name: dfsdf
+ Task time: 11:58
+ Task type: DAILY => 
+ Task name: month
+ Task time: 13:10
+ Task type: MONTHLY => FEB, MAR, APR, MAY, JUN, JUL, AUG, SEP, OCT, NOV, DEC, JAN
+ Mission temporarily delayed because timer's too big: 2020-03-20 13:10:00
+ Mission temporarily delayed because timer's too big: 2020-04-20 13:10:00
+ Mission temporarily delayed because timer's too big: 2020-05-20 13:10:00
+ Mission temporarily delayed because timer's too big: 2020-06-20 13:10:00
+ Mission temporarily delayed because timer's too big: 2020-07-20 13:10:00
+ Mission temporarily delayed because timer's too big: 2020-08-20 13:10:00
+ Mission temporarily delayed because timer's too big: 2020-09-20 13:10:00
+ Mission temporarily delayed because timer's too big: 2020-10-20 13:10:00
+ Mission temporarily delayed because timer's too big: 2020-11-20 13:10:00
+ Mission temporarily delayed because timer's too big: 2020-12-20 13:10:00
+ Task name: weekly
+ Task time: 08:35
+ Task type: WEEKLY => WED, THU, FRI, SAT, SUN, MON, TUE
+ Init Service Finished.
+----------------------------------------------
+
+----------------------------------------------
+08:34:09 048 Clear process to renew.
+ Load Tasks.
+ Load for user: TanySmile
+ Task name: dfsdf
+ Task time: 11:58
+ Task type: DAILY => 
+ Task name: month
+ Task time: 13:10
+ Task type: MONTHLY => FEB, MAR, APR, MAY, JUN, JUL, AUG, SEP, OCT, NOV, DEC, JAN
+ Mission temporarily delayed because timer's too big: 2020-03-20 13:10:00
+ Mission temporarily delayed because timer's too big: 2020-04-20 13:10:00
+ Mission temporarily delayed because timer's too big: 2020-05-20 13:10:00
+ Mission temporarily delayed because timer's too big: 2020-06-20 13:10:00
+ Mission temporarily delayed because timer's too big: 2020-07-20 13:10:00
+ Mission temporarily delayed because timer's too big: 2020-08-20 13:10:00
+ Mission temporarily delayed because timer's too big: 2020-09-20 13:10:00
+ Mission temporarily delayed because timer's too big: 2020-10-20 13:10:00
+ Mission temporarily delayed because timer's too big: 2020-11-20 13:10:00
+ Mission temporarily delayed because timer's too big: 2020-12-20 13:10:00
+ Task name: weekly
+ Task time: 08:35
+ Task type: WEEKLY => WED, THU, FRI, SAT, SUN, MON, TUE
+ Init Service Finished.
+----------------------------------------------
+
+----------------------------------------------
+08:34:59 947 Start Task: weekly for user: TanySmile
+----------------------------------------------
+ StartInfo -> FileName -> D:\05-TEMP\Source\GitHub\ToolTCB\Transaction Statistical\bin\Debug\Transaction Statistical.exe
+----------------------------------------------
+ StartInfo -> Arguments -> "TanySmile" "weekly"
+----------------------------------------------
+08:35:09 115 Clear process to renew.
+----------------------------------------------
+08:35:15 017 End Task
+----------------------------------------------
+08:49:16 050 Stop service.
+----------------------------------------------
+08:49:16 058 Class: TransactionStatisticalScheduler
+Method: ClearTimer
+System.Threading.ThreadAbortException: Thread was being aborted.
+   at System.Threading.Thread.SleepInternal(Int32 millisecondsTimeout)
+   at System.Threading.Thread.Sleep(Int32 millisecondsTimeout)
+   at System.Threading.Thread.Sleep(TimeSpan timeout)
+   at Transaction_Statistical_Scheduler.TransactionStatisticalScheduler.ClearTimer() in D:\05-TEMP\Source\GitHub\ToolTCB\Transaction Statistical Scheduler\Service1.cs:line 83
+----------------------------------------------
+
+----------------------------------------------
+08:49:16 065 Class: TransactionStatisticalScheduler
+Method: Startup
+System.Threading.ThreadAbortException: Thread was being aborted.
+   at Transaction_Statistical_Scheduler.TransactionStatisticalScheduler.ClearTimer() in D:\05-TEMP\Source\GitHub\ToolTCB\Transaction Statistical Scheduler\Service1.cs:line 92
+   at Transaction_Statistical_Scheduler.TransactionStatisticalScheduler.Startup() in D:\05-TEMP\Source\GitHub\ToolTCB\Transaction Statistical Scheduler\Service1.cs:line 56
+----------------------------------------------
+
+----------------------------------------------
+09:07:11 399  On Start Service.
+ Load Tasks.
+ Load for user: TanySmile
+ Task name: dfsdf
+     Task time: 11:58
+     Task type: DAILY => 
+ Task name: month
+     Task time: 13:10
+     Task type: MONTHLY => FEB, MAR, APR, MAY, JUN, JUL, AUG, SEP, OCT, NOV, DEC, JAN
+     Mission temporarily delayed because timer's too big: 2020-03-20 13:10:00
+     Mission temporarily delayed because timer's too big: 2020-04-20 13:10:00
+     Mission temporarily delayed because timer's too big: 2020-05-20 13:10:00
+     Mission temporarily delayed because timer's too big: 2020-06-20 13:10:00
+     Mission temporarily delayed because timer's too big: 2020-07-20 13:10:00
+     Mission temporarily delayed because timer's too big: 2020-08-20 13:10:00
+     Mission temporarily delayed because timer's too big: 2020-09-20 13:10:00
+     Mission temporarily delayed because timer's too big: 2020-10-20 13:10:00
+     Mission temporarily delayed because timer's too big: 2020-11-20 13:10:00
+     Mission temporarily delayed because timer's too big: 2020-12-20 13:10:00
+ Task name: weekly
+     Task time: 08:35
+     Task type: WEEKLY => WED, THU, FRI, SAT, SUN, MON, TUE
+ Init Service Finished.
+----------------------------------------------
+
+----------------------------------------------
+09:07:20 459  On Start Service.
+ Load Tasks.
+ Load for user: TanySmile
+ Task name: dfsdf
+     Task time: 11:58
+     Task type: DAILY => 
+ Task name: month
+     Task time: 13:10
+     Task type: MONTHLY => FEB, MAR, APR, MAY, JUN, JUL, AUG, SEP, OCT, NOV, DEC, JAN
+     Mission temporarily delayed because timer's too big: 2020-03-20 13:10:00
+     Mission temporarily delayed because timer's too big: 2020-04-20 13:10:00
+     Mission temporarily delayed because timer's too big: 2020-05-20 13:10:00
+     Mission temporarily delayed because timer's too big: 2020-06-20 13:10:00
+     Mission temporarily delayed because timer's too big: 2020-07-20 13:10:00
+     Mission temporarily delayed because timer's too big: 2020-08-20 13:10:00
+     Mission temporarily delayed because timer's too big: 2020-09-20 13:10:00
+     Mission temporarily delayed because timer's too big: 2020-10-20 13:10:00
+     Mission temporarily delayed because timer's too big: 2020-11-20 13:10:00
+     Mission temporarily delayed because timer's too big: 2020-12-20 13:10:00
+ Task name: weekly
+     Task time: 08:35
+     Task type: WEEKLY => WED, THU, FRI, SAT, SUN, MON, TUE
+ Init Service Finished.
+----------------------------------------------
+
+----------------------------------------------
+09:28:05 434 Stop service.
+----------------------------------------------
+09:28:05 617 Class: TransactionStatisticalScheduler
+Method: Startup
+System.Threading.ThreadAbortException: Thread was being aborted.
+   at System.Threading.Thread.SleepInternal(Int32 millisecondsTimeout)
+   at System.Threading.Thread.Sleep(Int32 millisecondsTimeout)
+   at System.Threading.Thread.Sleep(TimeSpan timeout)
+   at Transaction_Statistical_Scheduler.TransactionStatisticalScheduler.Startup() in D:\05-TEMP\Source\GitHub\ToolTCB\Transaction Statistical Scheduler\Service1.cs:line 54
+----------------------------------------------
+
+----------------------------------------------
+09:28:14 398  On Start Service.
+ Load Tasks.
+ Load for user: TanySmile
+ Task name: dfsdf
+     Task time: 11:58
+     Task type: DAILY => 
+ Task name: month
+     Task time: 13:10
+     Task type: MONTHLY => FEB, MAR, APR, MAY, JUN, JUL, AUG, SEP, OCT, NOV, DEC, JAN
+     Mission temporarily delayed because timer's too big: 2020-03-20 13:10:00
+     Mission temporarily delayed because timer's too big: 2020-04-20 13:10:00
+     Mission temporarily delayed because timer's too big: 2020-05-20 13:10:00
+     Mission temporarily delayed because timer's too big: 2020-06-20 13:10:00
+     Mission temporarily delayed because timer's too big: 2020-07-20 13:10:00
+     Mission temporarily delayed because timer's too big: 2020-08-20 13:10:00
+     Mission temporarily delayed because timer's too big: 2020-09-20 13:10:00
+     Mission temporarily delayed because timer's too big: 2020-10-20 13:10:00
+     Mission temporarily delayed because timer's too big: 2020-11-20 13:10:00
+     Mission temporarily delayed because timer's too big: 2020-12-20 13:10:00
+ Task name: weekly
+     Task time: 08:35
+     Task type: WEEKLY => WED, THU, FRI, SAT, SUN, MON, TUE
+ Init Service Finished.
+----------------------------------------------
+
+----------------------------------------------
+09:28:46 355  On Start Service.
+ Load Tasks.
+ Load for user: TanySmile
+ Task name: dfsdf
+     Task time: 11:58
+     Task type: DAILY => 
+ Task name: month
+     Task time: 13:10
+     Task type: MONTHLY => FEB, MAR, APR, MAY, JUN, JUL, AUG, SEP, OCT, NOV, DEC, JAN
+     Mission temporarily delayed because timer's too big: 2020-03-20 13:10:00
+     Mission temporarily delayed because timer's too big: 2020-04-20 13:10:00
+     Mission temporarily delayed because timer's too big: 2020-05-20 13:10:00
+     Mission temporarily delayed because timer's too big: 2020-06-20 13:10:00
+     Mission temporarily delayed because timer's too big: 2020-07-20 13:10:00
+     Mission temporarily delayed because timer's too big: 2020-08-20 13:10:00
+     Mission temporarily delayed because timer's too big: 2020-09-20 13:10:00
+     Mission temporarily delayed because timer's too big: 2020-10-20 13:10:00
+     Mission temporarily delayed because timer's too big: 2020-11-20 13:10:00
+     Mission temporarily delayed because timer's too big: 2020-12-20 13:10:00
+ Task name: weekly
+     Task time: 08:35
+     Task type: WEEKLY => WED, THU, FRI, SAT, SUN, MON, TUE
+ Init Service Finished.
+----------------------------------------------
+
+----------------------------------------------
+09:29:25 600 Stop service.
+----------------------------------------------
+09:29:25 670 Class: TransactionStatisticalScheduler
+Method: Startup
+System.Threading.ThreadAbortException: Thread was being aborted.
+   at System.Threading.Thread.SleepInternal(Int32 millisecondsTimeout)
+   at System.Threading.Thread.Sleep(Int32 millisecondsTimeout)
+   at System.Threading.Thread.Sleep(TimeSpan timeout)
+   at Transaction_Statistical_Scheduler.TransactionStatisticalScheduler.Startup() in D:\05-TEMP\Source\GitHub\ToolTCB\Transaction Statistical Scheduler\Service1.cs:line 54
+----------------------------------------------
+
+----------------------------------------------
+09:29:30 609  On Start Service.
+ Load Tasks.
+ Load for user: TanySmile
+ Task name: dfsdf
+     Task time: 11:58
+     Task type: DAILY => 
+ Task name: month
+     Task time: 13:10
+     Task type: MONTHLY => FEB, MAR, APR, MAY, JUN, JUL, AUG, SEP, OCT, NOV, DEC, JAN
+     Mission temporarily delayed because timer's too big: 2020-03-20 13:10:00
+     Mission temporarily delayed because timer's too big: 2020-04-20 13:10:00
+     Mission temporarily delayed because timer's too big: 2020-05-20 13:10:00
+     Mission temporarily delayed because timer's too big: 2020-06-20 13:10:00
+     Mission temporarily delayed because timer's too big: 2020-07-20 13:10:00
+     Mission temporarily delayed because timer's too big: 2020-08-20 13:10:00
+     Mission temporarily delayed because timer's too big: 2020-09-20 13:10:00
+     Mission temporarily delayed because timer's too big: 2020-10-20 13:10:00
+     Mission temporarily delayed because timer's too big: 2020-11-20 13:10:00
+     Mission temporarily delayed because timer's too big: 2020-12-20 13:10:00
+ Task name: weekly
+     Task time: 08:35
+     Task type: WEEKLY => WED, THU, FRI, SAT, SUN, MON, TUE
+ Init Service Finished.
+----------------------------------------------
+
+----------------------------------------------
+09:29:36 589  On Start Service.
+ Load Tasks.
+ Load for user: TanySmile
+ Task name: dfsdf
+     Task time: 11:58
+     Task type: DAILY => 
+ Task name: month
+     Task time: 13:10
+     Task type: MONTHLY => FEB, MAR, APR, MAY, JUN, JUL, AUG, SEP, OCT, NOV, DEC, JAN
+     Mission temporarily delayed because timer's too big: 2020-03-20 13:10:00
+     Mission temporarily delayed because timer's too big: 2020-04-20 13:10:00
+     Mission temporarily delayed because timer's too big: 2020-05-20 13:10:00
+     Mission temporarily delayed because timer's too big: 2020-06-20 13:10:00
+     Mission temporarily delayed because timer's too big: 2020-07-20 13:10:00
+     Mission temporarily delayed because timer's too big: 2020-08-20 13:10:00
+     Mission temporarily delayed because timer's too big: 2020-09-20 13:10:00
+     Mission temporarily delayed because timer's too big: 2020-10-20 13:10:00
+     Mission temporarily delayed because timer's too big: 2020-11-20 13:10:00
+     Mission temporarily delayed because timer's too big: 2020-12-20 13:10:00
+ Task name: weekly
+     Task time: 08:35
+     Task type: WEEKLY => WED, THU, FRI, SAT, SUN, MON, TUE
+ Init Service Finished.
+----------------------------------------------
+
+----------------------------------------------
+09:29:42 496  On Start Service.
+ Load Tasks.
+ Load for user: TanySmile
+ Task name: dfsdf
+     Task time: 11:58
+     Task type: DAILY => 
+ Task name: month
+     Task time: 13:10
+     Task type: MONTHLY => FEB, MAR, APR, MAY, JUN, JUL, AUG, SEP, OCT, NOV, DEC, JAN
+     Mission temporarily delayed because timer's too big: 2020-03-20 13:10:00
+     Mission temporarily delayed because timer's too big: 2020-04-20 13:10:00
+     Mission temporarily delayed because timer's too big: 2020-05-20 13:10:00
+     Mission temporarily delayed because timer's too big: 2020-06-20 13:10:00
+     Mission temporarily delayed because timer's too big: 2020-07-20 13:10:00
+     Mission temporarily delayed because timer's too big: 2020-08-20 13:10:00
+     Mission temporarily delayed because timer's too big: 2020-09-20 13:10:00
+     Mission temporarily delayed because timer's too big: 2020-10-20 13:10:00
+     Mission temporarily delayed because timer's too big: 2020-11-20 13:10:00
+     Mission temporarily delayed because timer's too big: 2020-12-20 13:10:00
+ Task name: weekly
+     Task time: 08:35
+     Task type: WEEKLY => WED, THU, FRI, SAT, SUN, MON, TUE
+ Init Service Finished.
+----------------------------------------------
+
+----------------------------------------------
+09:30:52 913 Class: TransactionStatisticalScheduler
+Method: OnChanged
+System.IO.IOException: The process cannot access the file 'D:\05-TEMP\Source\GitHub\ToolTCB\Transaction Statistical\bin\Debug\command.txt' because it is being used by another process.
+   at System.IO.__Error.WinIOError(Int32 errorCode, String maybeFullPath)
+   at System.IO.FileStream.Init(String path, FileMode mode, FileAccess access, Int32 rights, Boolean useRights, FileShare share, Int32 bufferSize, FileOptions options, SECURITY_ATTRIBUTES secAttrs, String msgPath, Boolean bFromProxy, Boolean useLongPath, Boolean checkHost)
+   at System.IO.FileStream..ctor(String path, FileMode mode, FileAccess access, FileShare share, Int32 bufferSize, FileOptions options, String msgPath, Boolean bFromProxy, Boolean useLongPath, Boolean checkHost)
+   at System.IO.StreamReader..ctor(String path, Encoding encoding, Boolean detectEncodingFromByteOrderMarks, Int32 bufferSize, Boolean checkHost)
+   at System.IO.StreamReader..ctor(String path, Encoding encoding)
+   at System.IO.File.InternalReadAllLines(String path, Encoding encoding)
+   at System.IO.File.ReadAllLines(String path)
+   at Transaction_Statistical_Scheduler.TransactionStatisticalScheduler.OnChanged(Object source, FileSystemEventArgs e) in D:\05-TEMP\Source\GitHub\ToolTCB\Transaction Statistical Scheduler\Service1.cs:line 181
+----------------------------------------------
+
+----------------------------------------------
+09:30:52 923 Get command from tool.
+----------------------------------------------
+ Command: [2020-02-21 09:30:52 [WFA] RunTask TanySmile/weekly]
+----------------------------------------------
+09:30:52 944 Start Task: weekly for user: TanySmile
+----------------------------------------------
+ StartInfo -> FileName -> D:\05-TEMP\Source\GitHub\ToolTCB\Transaction Statistical\bin\Debug\Transaction Statistical.exe
+----------------------------------------------
+ StartInfo -> Arguments -> "TanySmile" "weekly"
+----------------------------------------------
+09:31:06 411 End Task
+----------------------------------------------
+09:31:06 422 Class: TransactionStatisticalScheduler
+Method: WriteCommand
+System.IO.DirectoryNotFoundException: Could not find a part of the path 'D:\05-TEMP\Source\GitHub\ToolTCB\Transaction Statistical\bin\Debug\Transaction Statistical.exe\command.txt'.
+   at System.IO.__Error.WinIOError(Int32 errorCode, String maybeFullPath)
+   at System.IO.FileStream.Init(String path, FileMode mode, FileAccess access, Int32 rights, Boolean useRights, FileShare share, Int32 bufferSize, FileOptions options, SECURITY_ATTRIBUTES secAttrs, String msgPath, Boolean bFromProxy, Boolean useLongPath, Boolean checkHost)
+   at System.IO.FileStream..ctor(String path, FileMode mode, FileAccess access, FileShare share, Int32 bufferSize, FileOptions options, String msgPath, Boolean bFromProxy, Boolean useLongPath, Boolean checkHost)
+   at System.IO.StreamWriter.CreateFile(String path, Boolean append, Boolean checkHost)
+   at System.IO.StreamWriter..ctor(String path, Boolean append, Encoding encoding, Int32 bufferSize, Boolean checkHost)
+   at System.IO.File.InternalWriteAllText(String path, String contents, Encoding encoding, Boolean checkHost)
+   at System.IO.File.WriteAllText(String path, String contents)
+   at Transaction_Statistical_Scheduler.TransactionStatisticalScheduler.WriteCommand(String cmd) in D:\05-TEMP\Source\GitHub\ToolTCB\Transaction Statistical Scheduler\Service1.cs:line 229
+----------------------------------------------
+
+----------------------------------------------
+09:32:14 063 Stop service.
+----------------------------------------------
+09:32:14 072 Class: TransactionStatisticalScheduler
+Method: Startup
+System.Threading.ThreadAbortException: Thread was being aborted.
+   at System.Threading.Thread.SleepInternal(Int32 millisecondsTimeout)
+   at System.Threading.Thread.Sleep(Int32 millisecondsTimeout)
+   at System.Threading.Thread.Sleep(TimeSpan timeout)
+   at Transaction_Statistical_Scheduler.TransactionStatisticalScheduler.Startup() in D:\05-TEMP\Source\GitHub\ToolTCB\Transaction Statistical Scheduler\Service1.cs:line 54
+----------------------------------------------
+
+----------------------------------------------
+09:32:22 832  On Start Service.
+ Load Tasks.
+ Load for user: TanySmile
+ Task name: dfsdf
+     Task time: 11:58
+     Task type: DAILY => 
+ Task name: month
+     Task time: 13:10
+     Task type: MONTHLY => FEB, MAR, APR, MAY, JUN, JUL, AUG, SEP, OCT, NOV, DEC, JAN
+     Mission temporarily delayed because timer's too big: 2020-03-20 13:10:00
+     Mission temporarily delayed because timer's too big: 2020-04-20 13:10:00
+     Mission temporarily delayed because timer's too big: 2020-05-20 13:10:00
+     Mission temporarily delayed because timer's too big: 2020-06-20 13:10:00
+     Mission temporarily delayed because timer's too big: 2020-07-20 13:10:00
+     Mission temporarily delayed because timer's too big: 2020-08-20 13:10:00
+     Mission temporarily delayed because timer's too big: 2020-09-20 13:10:00
+     Mission temporarily delayed because timer's too big: 2020-10-20 13:10:00
+     Mission temporarily delayed because timer's too big: 2020-11-20 13:10:00
+     Mission temporarily delayed because timer's too big: 2020-12-20 13:10:00
+ Task name: weekly
+     Task time: 08:35
+     Task type: WEEKLY => WED, THU, FRI, SAT, SUN, MON, TUE
+ Init Service Finished.
+----------------------------------------------
+
+----------------------------------------------
+09:32:32 432  On Start Service.
+ Load Tasks.
+ Load for user: TanySmile
+ Task name: dfsdf
+     Task time: 11:58
+     Task type: DAILY => 
+ Task name: month
+     Task time: 13:10
+     Task type: MONTHLY => FEB, MAR, APR, MAY, JUN, JUL, AUG, SEP, OCT, NOV, DEC, JAN
+     Mission temporarily delayed because timer's too big: 2020-03-20 13:10:00
+     Mission temporarily delayed because timer's too big: 2020-04-20 13:10:00
+     Mission temporarily delayed because timer's too big: 2020-05-20 13:10:00
+     Mission temporarily delayed because timer's too big: 2020-06-20 13:10:00
+     Mission temporarily delayed because timer's too big: 2020-07-20 13:10:00
+     Mission temporarily delayed because timer's too big: 2020-08-20 13:10:00
+     Mission temporarily delayed because timer's too big: 2020-09-20 13:10:00
+     Mission temporarily delayed because timer's too big: 2020-10-20 13:10:00
+     Mission temporarily delayed because timer's too big: 2020-11-20 13:10:00
+     Mission temporarily delayed because timer's too big: 2020-12-20 13:10:00
+ Task name: weekly
+     Task time: 08:35
+     Task type: WEEKLY => WED, THU, FRI, SAT, SUN, MON, TUE
+ Init Service Finished.
+----------------------------------------------
+
+----------------------------------------------
+09:33:42 746  On Start Service.
+ Load Tasks.
+ Load for user: TanySmile
+ Task name: dfsdf
+     Task time: 11:58
+     Task type: DAILY => 
+ Task name: month
+     Task time: 13:10
+     Task type: MONTHLY => FEB, MAR, APR, MAY, JUN, JUL, AUG, SEP, OCT, NOV, DEC, JAN
+     Mission temporarily delayed because timer's too big: 2020-03-20 13:10:00
+     Mission temporarily delayed because timer's too big: 2020-04-20 13:10:00
+     Mission temporarily delayed because timer's too big: 2020-05-20 13:10:00
+     Mission temporarily delayed because timer's too big: 2020-06-20 13:10:00
+     Mission temporarily delayed because timer's too big: 2020-07-20 13:10:00
+     Mission temporarily delayed because timer's too big: 2020-08-20 13:10:00
+     Mission temporarily delayed because timer's too big: 2020-09-20 13:10:00
+     Mission temporarily delayed because timer's too big: 2020-10-20 13:10:00
+     Mission temporarily delayed because timer's too big: 2020-11-20 13:10:00
+     Mission temporarily delayed because timer's too big: 2020-12-20 13:10:00
+ Task name: weekly
+     Task time: 08:35
+     Task type: WEEKLY => WED, THU, FRI, SAT, SUN, MON, TUE
+ Init Service Finished.
+----------------------------------------------
+
+----------------------------------------------
+09:35:38 758 Class: TransactionStatisticalScheduler
+Method: OnChanged
+System.IO.IOException: The process cannot access the file 'D:\05-TEMP\Source\GitHub\ToolTCB\Transaction Statistical\bin\Debug\command.txt' because it is being used by another process.
+   at System.IO.__Error.WinIOError(Int32 errorCode, String maybeFullPath)
+   at System.IO.FileStream.Init(String path, FileMode mode, FileAccess access, Int32 rights, Boolean useRights, FileShare share, Int32 bufferSize, FileOptions options, SECURITY_ATTRIBUTES secAttrs, String msgPath, Boolean bFromProxy, Boolean useLongPath, Boolean checkHost)
+   at System.IO.FileStream..ctor(String path, FileMode mode, FileAccess access, FileShare share, Int32 bufferSize, FileOptions options, String msgPath, Boolean bFromProxy, Boolean useLongPath, Boolean checkHost)
+   at System.IO.StreamReader..ctor(String path, Encoding encoding, Boolean detectEncodingFromByteOrderMarks, Int32 bufferSize, Boolean checkHost)
+   at System.IO.StreamReader..ctor(String path, Encoding encoding)
+   at System.IO.File.InternalReadAllLines(String path, Encoding encoding)
+   at System.IO.File.ReadAllLines(String path)
+   at Transaction_Statistical_Scheduler.TransactionStatisticalScheduler.OnChanged(Object source, FileSystemEventArgs e) in D:\05-TEMP\Source\GitHub\ToolTCB\Transaction Statistical Scheduler\Service1.cs:line 181
+----------------------------------------------
+
+----------------------------------------------
+09:35:38 764 Get command from tool.
+----------------------------------------------
+ Command: [2020-02-21 09:35:38 [WFA] RunTask TanySmile/weekly]
+----------------------------------------------
+09:35:38 776 Start Task: weekly for user: TanySmile
+----------------------------------------------
+ StartInfo -> FileName -> D:\05-TEMP\Source\GitHub\ToolTCB\Transaction Statistical\bin\Debug\Transaction Statistical.exe
+----------------------------------------------
+ StartInfo -> Arguments -> "TanySmile" "weekly"
+----------------------------------------------
+09:35:51 722 End Task
+----------------------------------------------
+09:37:53 922 Stop service.
+----------------------------------------------
+09:37:53 941 Class: TransactionStatisticalScheduler
+Method: Startup
+System.Threading.ThreadAbortException: Thread was being aborted.
+   at System.Threading.Thread.SleepInternal(Int32 millisecondsTimeout)
+   at System.Threading.Thread.Sleep(Int32 millisecondsTimeout)
+   at System.Threading.Thread.Sleep(TimeSpan timeout)
+   at Transaction_Statistical_Scheduler.TransactionStatisticalScheduler.Startup() in D:\05-TEMP\Source\GitHub\ToolTCB\Transaction Statistical Scheduler\Service1.cs:line 54
+----------------------------------------------
+
+----------------------------------------------
+09:37:57 619  On Start Service.
+ Load Tasks.
+ Load for user: TanySmile
+ Task name: dfsdf
+     Task time: 11:58
+     Task type: DAILY => 
+ Task name: month
+     Task time: 13:10
+     Task type: MONTHLY => FEB, MAR, APR, MAY, JUN, JUL, AUG, SEP, OCT, NOV, DEC, JAN
+     Mission temporarily delayed because timer's too big: 2020-03-20 13:10:00
+     Mission temporarily delayed because timer's too big: 2020-04-20 13:10:00
+     Mission temporarily delayed because timer's too big: 2020-05-20 13:10:00
+     Mission temporarily delayed because timer's too big: 2020-06-20 13:10:00
+     Mission temporarily delayed because timer's too big: 2020-07-20 13:10:00
+     Mission temporarily delayed because timer's too big: 2020-08-20 13:10:00
+     Mission temporarily delayed because timer's too big: 2020-09-20 13:10:00
+     Mission temporarily delayed because timer's too big: 2020-10-20 13:10:00
+     Mission temporarily delayed because timer's too big: 2020-11-20 13:10:00
+     Mission temporarily delayed because timer's too big: 2020-12-20 13:10:00
+ Task name: weekly
+     Task time: 08:35
+     Task type: WEEKLY => WED, THU, FRI, SAT, SUN, MON, TUE
+ Init Service Finished.
+----------------------------------------------
+
+----------------------------------------------
+09:38:02 419  On Start Service.
+ Load Tasks.
+ Load for user: TanySmile
+ Task name: dfsdf
+     Task time: 11:58
+     Task type: DAILY => 
+ Task name: month
+     Task time: 13:10
+     Task type: MONTHLY => FEB, MAR, APR, MAY, JUN, JUL, AUG, SEP, OCT, NOV, DEC, JAN
+     Mission temporarily delayed because timer's too big: 2020-03-20 13:10:00
+     Mission temporarily delayed because timer's too big: 2020-04-20 13:10:00
+     Mission temporarily delayed because timer's too big: 2020-05-20 13:10:00
+     Mission temporarily delayed because timer's too big: 2020-06-20 13:10:00
+     Mission temporarily delayed because timer's too big: 2020-07-20 13:10:00
+     Mission temporarily delayed because timer's too big: 2020-08-20 13:10:00
+     Mission temporarily delayed because timer's too big: 2020-09-20 13:10:00
+     Mission temporarily delayed because timer's too big: 2020-10-20 13:10:00
+     Mission temporarily delayed because timer's too big: 2020-11-20 13:10:00
+     Mission temporarily delayed because timer's too big: 2020-12-20 13:10:00
+ Task name: weekly
+     Task time: 08:35
+     Task type: WEEKLY => WED, THU, FRI, SAT, SUN, MON, TUE
+ Init Service Finished.
+----------------------------------------------
+
+----------------------------------------------
+09:38:30 505 Class: TransactionStatisticalScheduler
+Method: OnChanged
+System.IO.IOException: The process cannot access the file 'D:\05-TEMP\Source\GitHub\ToolTCB\Transaction Statistical\bin\Debug\command.txt' because it is being used by another process.
+   at System.IO.__Error.WinIOError(Int32 errorCode, String maybeFullPath)
+   at System.IO.FileStream.Init(String path, FileMode mode, FileAccess access, Int32 rights, Boolean useRights, FileShare share, Int32 bufferSize, FileOptions options, SECURITY_ATTRIBUTES secAttrs, String msgPath, Boolean bFromProxy, Boolean useLongPath, Boolean checkHost)
+   at System.IO.FileStream..ctor(String path, FileMode mode, FileAccess access, FileShare share, Int32 bufferSize, FileOptions options, String msgPath, Boolean bFromProxy, Boolean useLongPath, Boolean checkHost)
+   at System.IO.StreamReader..ctor(String path, Encoding encoding, Boolean detectEncodingFromByteOrderMarks, Int32 bufferSize, Boolean checkHost)
+   at System.IO.StreamReader..ctor(String path, Encoding encoding)
+   at System.IO.File.InternalReadAllLines(String path, Encoding encoding)
+   at System.IO.File.ReadAllLines(String path)
+   at Transaction_Statistical_Scheduler.TransactionStatisticalScheduler.OnChanged(Object source, FileSystemEventArgs e) in D:\05-TEMP\Source\GitHub\ToolTCB\Transaction Statistical Scheduler\Service1.cs:line 181
+----------------------------------------------
+
+----------------------------------------------
+09:38:30 513 Get command from tool.
+----------------------------------------------
+ Command: [2020-02-21 09:38:30 [WFA] RunTask TanySmile/dfsdf]
+----------------------------------------------
+09:38:30 525 Start Task: dfsdf for user: TanySmile
+----------------------------------------------
+ StartInfo -> FileName -> D:\05-TEMP\Source\GitHub\ToolTCB\Transaction Statistical\bin\Debug\Transaction Statistical.exe
+----------------------------------------------
+ StartInfo -> Arguments -> "TanySmile" "dfsdf"
+----------------------------------------------
+09:38:31 001 End Task
+----------------------------------------------
+09:38:40 583 Class: TransactionStatisticalScheduler
+Method: OnChanged
+System.IO.IOException: The process cannot access the file 'D:\05-TEMP\Source\GitHub\ToolTCB\Transaction Statistical\bin\Debug\command.txt' because it is being used by another process.
+   at System.IO.__Error.WinIOError(Int32 errorCode, String maybeFullPath)
+   at System.IO.FileStream.Init(String path, FileMode mode, FileAccess access, Int32 rights, Boolean useRights, FileShare share, Int32 bufferSize, FileOptions options, SECURITY_ATTRIBUTES secAttrs, String msgPath, Boolean bFromProxy, Boolean useLongPath, Boolean checkHost)
+   at System.IO.FileStream..ctor(String path, FileMode mode, FileAccess access, FileShare share, Int32 bufferSize, FileOptions options, String msgPath, Boolean bFromProxy, Boolean useLongPath, Boolean checkHost)
+   at System.IO.StreamReader..ctor(String path, Encoding encoding, Boolean detectEncodingFromByteOrderMarks, Int32 bufferSize, Boolean checkHost)
+   at System.IO.StreamReader..ctor(String path, Encoding encoding)
+   at System.IO.File.InternalReadAllLines(String path, Encoding encoding)
+   at System.IO.File.ReadAllLines(String path)
+   at Transaction_Statistical_Scheduler.TransactionStatisticalScheduler.OnChanged(Object source, FileSystemEventArgs e) in D:\05-TEMP\Source\GitHub\ToolTCB\Transaction Statistical Scheduler\Service1.cs:line 181
+----------------------------------------------
+
+----------------------------------------------
+09:38:40 598 Get command from tool.
+----------------------------------------------
+ Command: [2020-02-21 09:38:40 [WFA] RunTask TanySmile/month]
+----------------------------------------------
+09:38:40 611 Start Task: month for user: TanySmile
+----------------------------------------------
+ StartInfo -> FileName -> D:\05-TEMP\Source\GitHub\ToolTCB\Transaction Statistical\bin\Debug\Transaction Statistical.exe
+----------------------------------------------
+ StartInfo -> Arguments -> "TanySmile" "month"
+----------------------------------------------
+09:38:56 262 End Task
+----------------------------------------------
+09:39:34 551 Class: TransactionStatisticalScheduler
+Method: OnChanged
+System.IO.IOException: The process cannot access the file 'D:\05-TEMP\Source\GitHub\ToolTCB\Transaction Statistical\bin\Debug\command.txt' because it is being used by another process.
+   at System.IO.__Error.WinIOError(Int32 errorCode, String maybeFullPath)
+   at System.IO.FileStream.Init(String path, FileMode mode, FileAccess access, Int32 rights, Boolean useRights, FileShare share, Int32 bufferSize, FileOptions options, SECURITY_ATTRIBUTES secAttrs, String msgPath, Boolean bFromProxy, Boolean useLongPath, Boolean checkHost)
+   at System.IO.FileStream..ctor(String path, FileMode mode, FileAccess access, FileShare share, Int32 bufferSize, FileOptions options, String msgPath, Boolean bFromProxy, Boolean useLongPath, Boolean checkHost)
+   at System.IO.StreamReader..ctor(String path, Encoding encoding, Boolean detectEncodingFromByteOrderMarks, Int32 bufferSize, Boolean checkHost)
+   at System.IO.StreamReader..ctor(String path, Encoding encoding)
+   at System.IO.File.InternalReadAllLines(String path, Encoding encoding)
+   at System.IO.File.ReadAllLines(String path)
+   at Transaction_Statistical_Scheduler.TransactionStatisticalScheduler.OnChanged(Object source, FileSystemEventArgs e) in D:\05-TEMP\Source\GitHub\ToolTCB\Transaction Statistical Scheduler\Service1.cs:line 181
+----------------------------------------------
+
+----------------------------------------------
+09:39:34 561 Get command from tool.
+----------------------------------------------
+ Command: [2020-02-21 09:39:34 [WFA] RunTask TanySmile/weekly]
+----------------------------------------------
+09:39:34 573 Start Task: weekly for user: TanySmile
+----------------------------------------------
+ StartInfo -> FileName -> D:\05-TEMP\Source\GitHub\ToolTCB\Transaction Statistical\bin\Debug\Transaction Statistical.exe
+----------------------------------------------
+ StartInfo -> Arguments -> "TanySmile" "weekly"
+----------------------------------------------
+09:39:48 348 End Task
+----------------------------------------------
+09:41:55 472 Class: TransactionStatisticalScheduler
+Method: OnChanged
+System.IO.IOException: The process cannot access the file 'D:\05-TEMP\Source\GitHub\ToolTCB\Transaction Statistical\bin\Debug\command.txt' because it is being used by another process.
+   at System.IO.__Error.WinIOError(Int32 errorCode, String maybeFullPath)
+   at System.IO.FileStream.Init(String path, FileMode mode, FileAccess access, Int32 rights, Boolean useRights, FileShare share, Int32 bufferSize, FileOptions options, SECURITY_ATTRIBUTES secAttrs, String msgPath, Boolean bFromProxy, Boolean useLongPath, Boolean checkHost)
+   at System.IO.FileStream..ctor(String path, FileMode mode, FileAccess access, FileShare share, Int32 bufferSize, FileOptions options, String msgPath, Boolean bFromProxy, Boolean useLongPath, Boolean checkHost)
+   at System.IO.StreamReader..ctor(String path, Encoding encoding, Boolean detectEncodingFromByteOrderMarks, Int32 bufferSize, Boolean checkHost)
+   at System.IO.StreamReader..ctor(String path, Encoding encoding)
+   at System.IO.File.InternalReadAllLines(String path, Encoding encoding)
+   at System.IO.File.ReadAllLines(String path)
+   at Transaction_Statistical_Scheduler.TransactionStatisticalScheduler.OnChanged(Object source, FileSystemEventArgs e) in D:\05-TEMP\Source\GitHub\ToolTCB\Transaction Statistical Scheduler\Service1.cs:line 181
+----------------------------------------------
+
+----------------------------------------------
+09:41:55 483 Get command from tool.
+----------------------------------------------
+ Command: [2020-02-21 09:41:55 [WFA] RunTask TanySmile/month]
+----------------------------------------------
+09:41:55 496 Start Task: month for user: TanySmile
+----------------------------------------------
+ StartInfo -> FileName -> D:\05-TEMP\Source\GitHub\ToolTCB\Transaction Statistical\bin\Debug\Transaction Statistical.exe
+----------------------------------------------
+ StartInfo -> Arguments -> "TanySmile" "month"
+----------------------------------------------
+09:42:10 664 End Task

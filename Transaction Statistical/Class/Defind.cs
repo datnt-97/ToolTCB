@@ -19,6 +19,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using FastColoredTextBoxNS;
+using Microsoft.Win32;
 using OfficeOpenXml;
 using Transaction_Statistical.Class;
 
@@ -61,6 +62,7 @@ namespace Transaction_Statistical
         public static bool WriteApplication = true;
         public static bool AutoRunMode;
         //License
+        public static string CurrentUser;
         public static bool Admin_Key = false;
         public static bool Admin_USB = false;
         public static string Version = Assembly.GetExecutingAssembly().GetName().Version.ToString();
@@ -71,16 +73,20 @@ namespace Transaction_Statistical
         public static License.StatusS StatusLicense = License.StatusS.Invalid;
         public static DateTime DateMaximum = DateTime.Now;
         public static DateTime DateCurrent = DateTime.Now;
-
+        public static string SubkeyApp;
+        public static string SubkeyTaskCurrentUser; 
 
         public static void Init()
         {
             try
             {
-                //Init directory and file config
-                PathDirectoryTempUsr = (Path.GetTempPath() + "\\Analyze").Replace(@"\\", @"\"); if (!Directory.Exists(PathDirectoryTempUsr)) Directory.CreateDirectory(PathDirectoryTempUsr);
+                //Init directory and file config    
+                SubkeyApp = @"HKEY_LOCAL_MACHINE\SOFTWARE\NPSS\TransactionStatistical";
+                SubkeyTaskCurrentUser = SubkeyApp + @"\Tasks\" + CurrentUser;
+                PathDirectoryTempUsr = string.Format(@"C:\Users\{0}\AppData\Local\Temp\TransactionStatistical", CurrentUser); if (!Directory.Exists(PathDirectoryTempUsr)) Directory.CreateDirectory(PathDirectoryTempUsr);
                 PathDirectoryCurrentApp = Path.GetDirectoryName(Application.ExecutablePath);
-                PathDirectoryCurrentUserConfigData = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + @"\Transaction Statistical"; if (!Directory.Exists(PathDirectoryCurrentUserConfigData)) Directory.CreateDirectory(PathDirectoryCurrentUserConfigData);
+
+                PathDirectoryCurrentUserConfigData =string.Format(@"c:\users\{0}\Documents\Transaction Statistical", CurrentUser); if (!Directory.Exists(PathDirectoryCurrentUserConfigData)) Directory.CreateDirectory(PathDirectoryCurrentUserConfigData);
                 PathFileConfig = InitParametar.PathDirectoryCurrentUserConfigData + "\\AppConfig.dat";
                 PathDirectoryUtilities = (PathDirectoryCurrentApp + "\\Utilities").Replace(@"\\", @"\"); if (!Directory.Exists(PathDirectoryUtilities)) Directory.CreateDirectory(PathDirectoryUtilities);
                 FolderSystemTrace = (PathDirectoryCurrentUserConfigData + "\\Trace").Replace(@"\\", @"\"); if (!Directory.Exists(FolderSystemTrace)) Directory.CreateDirectory(FolderSystemTrace);
@@ -90,13 +96,14 @@ namespace Transaction_Statistical
                 LicenseFile = PathDirectoryCurrentUserConfigData + "\\TransactionStatistical.lic";
                 License_ReadInfo();
                 ReadTrans = new ReadTransaction();
+                RegistryCus.WriteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\NPSS\TransactionStatistical", "Path", Application.ExecutablePath);
             }
             catch (Exception ex)
             {
                 InitParametar.Send_Error(ex.ToString(), MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name); ;
             }
         }
-        public static void AutoStart(string taskName)
+        public static void AutoStart( string taskName)
         {
             try
             {
@@ -104,11 +111,14 @@ namespace Transaction_Statistical
                 if (!InitParametar.License_CheckModule(License.Modules.Read)) return;
 
                 WriteLogApplication(string.Format("{0:HH:mm:ss fff} Class: Auto Task", DateTime.Now), true, false);
-                WriteLogApplication("   => Task name: " + taskName, false, false);
+                WriteLogApplication("   => Task name: " + taskName + " - User: " + InitParametar.CurrentUser, false, false);
 
-                DataRow rowTask = sqlite.GetRowDataWith2ColumnName("CfgData", "Field", taskName, "Type_ID", "511");
-                string[] data = rowTask["Data"].ToString().Split('|');
-                WriteLogApplication("   => Task data: " + rowTask["Data"].ToString(), false, false);
+                // DataRow rowTask = sqlite.GetRowDataWith2ColumnName("CfgData", "Field", taskName, "Type_ID", "511");
+
+                // string[] data = rowTask["Data"].ToString().Split('|');
+                string d = RegistryCus.GetValue(InitParametar.SubkeyTaskCurrentUser, taskName);
+                string[] data = d.Split('|');
+                WriteLogApplication("   => Task data: " + d, false, false);
                 ReadTrans.TemplateTransactionID = data[1];
                 WriteLogApplication("   => Template id: " + data[1], false, false);
                 if (!ReadTrans.LoadTemplateInfo())
@@ -155,7 +165,7 @@ namespace Transaction_Statistical
                 watch.Start();
                 WriteLogApplication(string.Format("   => Export begin: {0:HH:mm:ss fff} ", DateTime.Now), false, false);
                 WriteLogApplication("   => Export destination: " + data[3], false, false);
-                WriteLogApplication("   => Export forms: " + TemplateChoosen.Values.ToList().ToString(), false, false);
+                WriteLogApplication("   => Export forms: " + String.Join(",", TemplateChoosen.Values.ToList()), false, false);
                 if (TemplateChoosen.Count == 0)
                 {
                     WriteLogApplication("   ==> Auto end, result => Unsuccessfully", false, true); return;
@@ -2538,5 +2548,150 @@ namespace Transaction_Statistical
         public int DayRemaing;
         public DateTime DateBegin;
         public DateTime DateEnd;
+    }
+    public static class RegistryCus
+    {
+        private static RegistryHive StringToRegistryHive(ref string _subKey)
+        {
+                if (_subKey.ToUpper().StartsWith(Registry.ClassesRoot.Name.ToUpper()))
+                {
+                    _subKey = _subKey.ToUpper().Replace(Registry.ClassesRoot.Name.ToUpper(), string.Empty).TrimStart('\\');
+                    return RegistryHive.ClassesRoot;
+                }
+            if (_subKey.ToUpper().StartsWith(Registry.CurrentConfig.Name.ToUpper()))
+            {
+                _subKey = _subKey.ToUpper().Replace(Registry.CurrentConfig.Name.ToUpper(), string.Empty).TrimStart('\\');
+                return RegistryHive.CurrentConfig;
+            }
+            if (_subKey.ToUpper().StartsWith(Registry.CurrentUser.Name.ToUpper()))
+            {
+                _subKey = _subKey.ToUpper().Replace(Registry.CurrentUser.Name.ToUpper(), string.Empty).TrimStart('\\');
+                return RegistryHive.CurrentUser;
+            }
+            if (_subKey.ToUpper().StartsWith(Registry.LocalMachine.Name.ToUpper()))
+            {
+                _subKey = _subKey.ToUpper().Replace(Registry.LocalMachine.Name.ToUpper(), string.Empty).TrimStart('\\');
+                return RegistryHive.LocalMachine;
+            }
+            if (_subKey.ToUpper().StartsWith(Registry.Users.Name.ToUpper()))
+            {
+                _subKey = _subKey.ToUpper().Replace(Registry.Users.Name.ToUpper(), string.Empty).TrimStart('\\');
+                return RegistryHive.Users;
+            }
+            return   RegistryHive.LocalMachine;
+        }
+        public static string GetValue(string _subKey, string _value)
+        {
+            try
+            {
+                using (RegistryKey key = RegistryKey.OpenBaseKey(StringToRegistryHive(ref _subKey), RegistryView.Registry32).OpenSubKey(_subKey))
+                {
+                    if (key != null)
+                    {
+                        Object o = key.GetValue(_value);
+                        if (o != null)
+                            return o.ToString();
+                    }
+                }
+            }
+            catch (Exception ex) 
+            {
+                //react appropriately
+            }
+            return string.Empty;
+        }
+        public static bool WriteValue(string _subKey, string _name, string _newValue)
+        {
+            RegistryKey key;
+            try
+            {
+                using (key = RegistryKey.OpenBaseKey(StringToRegistryHive(ref _subKey), RegistryView.Registry32).OpenSubKey(_subKey,true))
+                {
+                    if (key != null)
+                    {
+                        key.SetValue(_name, _newValue);
+                        Object o = key.GetValue(_name);
+                        if (o != null && o.ToString() == _newValue)
+                        {
+                            key.Close();
+                            return true;
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                //  UtilityFile.WriteLogApplication(ex.ToString(), ConsoleColor.Red, true);
+            }
+            return false;
+        }
+        public static bool CreateSubKey(string _primaryKey, string _subkey)
+        {
+            try
+            {
+                RegistryKey key = RegistryKey.OpenBaseKey(StringToRegistryHive(ref _primaryKey), RegistryView.Registry32);
+                if (RegistryKey.OpenBaseKey(StringToRegistryHive(ref _primaryKey), RegistryView.Registry32).OpenSubKey(_primaryKey + @"\" + _subkey) != null) return true;
+                key.CreateSubKey(_primaryKey + @"\" + _subkey); key.Close();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                //  UtilityFile.WriteLogApplication(ex.ToString(), ConsoleColor.Red, true);
+            }
+            return false;
+        }
+        public static string[] GetValues(string _subkey)
+        {
+            string[] values = null;
+
+            using (var key = RegistryKey.OpenBaseKey(StringToRegistryHive(ref _subkey), RegistryView.Registry32).OpenSubKey(_subkey))
+            {
+                values = key.GetValueNames();
+                key.Close();
+            }
+            return values;
+        }
+        public static bool DeleteValue(string _subKey, string _name)
+        {
+            try
+            {
+                using (var key = RegistryKey.OpenBaseKey(StringToRegistryHive(ref _subKey), RegistryView.Registry32).OpenSubKey(_subKey))
+                {
+                    key.DeleteValue(_name);
+                    key.Close();
+                    return true;
+                }
+            }
+            catch(Exception ex)
+            { }
+            return false;
+        }
+        public static bool ExistValue(string _subKey, string _name)
+        {
+            try
+            {
+                using (var key = RegistryKey.OpenBaseKey(StringToRegistryHive(ref _subKey), RegistryView.Registry32).OpenSubKey(_subKey))
+                {
+                    string s=key.GetValue(_name).ToString();
+                    key.Close();
+                    return string.IsNullOrEmpty(s) ? false : true;
+                }
+            }
+            catch (Exception ex)
+            { }
+            return false;
+        }
+        public static string[] GetSubkeys(string path)
+        {
+            string[] values = null;
+
+
+            using (var key = RegistryKey.OpenBaseKey(StringToRegistryHive(ref path), RegistryView.Registry32).OpenSubKey(path))
+            {
+                values = key.GetSubKeyNames();
+                key.Close();
+            }
+            return values;
+        }
     }
 }

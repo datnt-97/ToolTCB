@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FastColoredTextBox", "Trans
 EndProject
 Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "Transaction Statistical Setup", "Transaction Statistical Setup\Transaction Statistical Setup.vdproj", "{3B1E1B6F-4EC4-43E2-BF8B-9242E2B32655}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Transaction Statistical Scheduler", "Transaction Statistical Scheduler\Transaction Statistical Scheduler.csproj", "{D49B9CA9-BC8E-41FC-82F2-727F97252D38}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -25,6 +27,10 @@ Global
 		{6DD14A85-CCFC-4774-BD26-0F5772512319}.Release|Any CPU.Build.0 = Release|Any CPU
 		{3B1E1B6F-4EC4-43E2-BF8B-9242E2B32655}.Debug|Any CPU.ActiveCfg = Debug
 		{3B1E1B6F-4EC4-43E2-BF8B-9242E2B32655}.Release|Any CPU.ActiveCfg = Release
+		{D49B9CA9-BC8E-41FC-82F2-727F97252D38}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D49B9CA9-BC8E-41FC-82F2-727F97252D38}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D49B9CA9-BC8E-41FC-82F2-727F97252D38}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D49B9CA9-BC8E-41FC-82F2-727F97252D38}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

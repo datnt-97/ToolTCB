@@ -461,7 +461,8 @@
             this.dataGridViewCheckBoxColumn7});
             dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
             dataGridViewCellStyle2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-
+            dataGridViewCellStyle2.ForeColor = InitGUI.Custom.Menu_Text.DisplayColor;
+            dataGridViewCellStyle2.BackColor = InitGUI.Custom.Menu_RightBckgd.DisplayColor;
             dataGridViewCellStyle2.SelectionBackColor = System.Drawing.SystemColors.Highlight;
             dataGridViewCellStyle2.SelectionForeColor = System.Drawing.Color.Lime;
             dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
@@ -709,7 +710,9 @@
             // dataGridView_lsPermissions
             // 
             this.dataGridView_lsPermissions.BackgroundColor= InitGUI.Custom.Menu_RightBckgd.DisplayColor;
-            this.dataGridView_lsPermissions.ForeColor= InitGUI.Custom.Menu_Text.DisplayColor;          
+            this.dataGridView_lsPermissions.ForeColor= InitGUI.Custom.Menu_Text.DisplayColor;
+            this.dataGridView_lsPermissions.DefaultCellStyle.BackColor= InitGUI.Custom.Menu_RightBckgd.DisplayColor;
+            this.dataGridView_lsPermissions.DefaultCellStyle.ForeColor = InitGUI.Custom.Menu_Text.DisplayColor;
             // 
             // UC_Menu_Startup
             //           

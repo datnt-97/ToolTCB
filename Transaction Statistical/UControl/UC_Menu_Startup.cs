@@ -12,6 +12,7 @@ using System.IO;
 using System.Text.RegularExpressions;
 using System.Reflection;
 using Transaction_Statistical.Class;
+using System.Threading;
 
 namespace Transaction_Statistical
 {
@@ -27,8 +28,8 @@ namespace Transaction_Statistical
             {(int)TemplateHelper.TEMPLATE.BaoCaoHoatDongBatThuongTheoChuKy,"BC HD Bất Thường Theo Chu Kỳ" },
         };
         string[] TypeStart = { "DAILY", "ONCE", "WEEKLY", "MONTHLY" };
-        string[] Months = { "JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC", "*" };
-        string[] Days = { "MON", "TUE", "WED", "THU", "FRI", "SAT", "SUN" };
+        // string[] Months = { "JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC", "*" };
+        //  string[] Days = { "MON", "TUE", "WED", "THU", "FRI", "SAT", "SUN" };
 
         string TaskName = "AutoRunTransaction_";
         UC_Explorer uc_Explorer;
@@ -51,8 +52,11 @@ namespace Transaction_Statistical
             try
             {
                 cbo_TypeStart.Items.AddRange(TypeStart);
-                cbo_Week.Items.AddRange(Days);
-                cbo_Month.Items.AddRange(Months);
+                for (int i = 0; i < 7; i++)
+                    cbo_Week.Items.Add(DateTime.Now.AddDays(i).ToString("ddd").ToUpper());
+                for (int i = 0; i < 12; i++)
+                    cbo_Month.Items.Add(DateTime.Now.AddMonths(i).ToString("MMM").ToUpper());
+
                 DataTable cfg_vendor = InitParametar.sqlite.GetTableDataWith2ColumnName("CfgData", "Type_ID", "60", "Parent_ID", "54");
                 foreach (DataRow R in cfg_vendor.Rows)
                 {
@@ -78,18 +82,35 @@ namespace Transaction_Statistical
             DataTable cfg_data = sqlite.GetTableDataWithColumnName("CfgData", "Type_ID", "511");
             int n = 0;
             dataGridView_lsPermissions.Rows.Clear();
-            foreach (DataRow rowData in cfg_data.Rows)
+            //foreach (DataRow rowData in cfg_data.Rows)
+            //{
+            //    DataGridViewRow row = new DataGridViewRow();
+            //    string[] description = rowData["Data"].ToString().Split('|');
+            //    row.CreateCells(dataGridView_lsPermissions);
+            //    row.Cells[0].Value = n; n++;
+            //    row.Cells[1].Value = rowData["Field"];
+            //    row.Cells[2].Value = CheckTaskExist(rowData["Field"].ToString());
+            //    row.Cells[3].Value = description[0].Split(';')[0];
+            //    row.Cells[5].Value = string.Format("Template: {0}, source: {1}, destination: {2}, forms: {3} ", description[1], description[2], description[3], description[4]);
+            //    row.Tag = rowData;
+            //    dataGridView_lsPermissions.Rows.Add(row);
+            //}
+            foreach (string task in RegistryCus.GetValues(InitParametar.SubkeyTaskCurrentUser))
             {
-                DataGridViewRow row = new DataGridViewRow();
-                string[] description = rowData["Data"].ToString().Split('|');
-                row.CreateCells(dataGridView_lsPermissions);
-                row.Cells[0].Value = n; n++;
-                row.Cells[1].Value = rowData["Field"];
-                row.Cells[2].Value = CheckTaskExist(rowData["Field"].ToString());
-                row.Cells[3].Value = description[0].Split(';')[0];
-                row.Cells[5].Value = string.Format("Template: {0}, source: {1}, destination: {2}, forms: {3} ", description[1], description[2], description[3], description[4]);
-                row.Tag = rowData;
-                dataGridView_lsPermissions.Rows.Add(row);
+                string value = RegistryCus.GetValue(InitParametar.SubkeyTaskCurrentUser, task);
+                string[] description = value.Split('|');
+                if (description.Length == 6)
+                {
+                    DataGridViewRow row = new DataGridViewRow();
+                    row.CreateCells(dataGridView_lsPermissions);
+                    row.Cells[0].Value = n; n++;
+                    row.Cells[1].Value = task;
+                    row.Cells[2].Value = bool.Parse(description[5]);// CheckTaskExist(task);
+                    row.Cells[3].Value = description[0].Split(';')[0];
+                    row.Cells[5].Value = string.Format("Template: {0}, source: {1}, destination: {2}, forms: {3} ", description[1], description[2], description[3], description[4]);
+                    row.Tag = value;
+                    dataGridView_lsPermissions.Rows.Add(row);
+                }
             }
         }
         private void txt_MouseDown(object sender, MouseEventArgs e)
@@ -125,28 +146,17 @@ namespace Transaction_Statistical
             if (output.Contains(taskName) || err.Contains(taskName)) return true;
             return false;
         }
-        private bool CreateTask(string taskName)
+        private bool EnableTask(string taskName)
         {
             try
             {
-                string fileExe = "\'" + Process.GetCurrentProcess().MainModule.FileName + "\' \\\"" + taskName + "\"";
-                if (cbo_TypeStart.SelectedItem.Equals(TypeStart[0]) || cbo_TypeStart.SelectedItem.Equals(TypeStart[1]))
-                    process.StartInfo.Arguments = string.Format("/Create /SC {0} /TN \"{1}\" /TR \"{2}\" /ST {3} /F", cbo_TypeStart.Text, TaskName + taskName, fileExe, txt_HH.Text);
-                else if (cbo_TypeStart.SelectedItem.Equals(TypeStart[2]))
-                    process.StartInfo.Arguments = string.Format("/Create /SC {0} /TN \"{1}\" /TR \"{2}\" /ST {3} /D \"{4}\" /F", cbo_TypeStart.Text, TaskName + taskName, fileExe, txt_HH.Text, cbo_Week.Text.Replace(",", " "));
-                else
-                    process.StartInfo.Arguments = string.Format("/Create /SC {0} /TN \"{1}\" /TR \"{2}\" /ST {3} /M \"{4}\" /D {5} /F", cbo_TypeStart.Text, TaskName + taskName, fileExe, txt_HH.Text, cbo_Month.Text.Replace(",", " "), Nud_Day.Value);
-
-                process.StartInfo.UseShellExecute = false;
-                process.StartInfo.RedirectStandardOutput = true;
-                process.StartInfo.RedirectStandardError = true;
-                process.Start();
-                //* Read the output (or the error)
-                string output = process.StandardOutput.ReadToEnd();
-                if (output.Contains("successfully been created")) return true;
-                string err = process.StandardError.ReadToEnd();
-                MessageBox.Show(output + Environment.NewLine + err, "Creates scheduled task", MessageBoxButtons.OK, MessageBoxIcon.Error);
-
+                string value = RegistryCus.GetValue(InitParametar.SubkeyTaskCurrentUser, taskName);
+                string[] values = value.Split('|');
+                if (values.Length == 6)
+                {
+                    values[5] = true.ToString();
+                    return RegistryCus.WriteValue(InitParametar.SubkeyTaskCurrentUser, taskName, string.Join("|", values));
+                }
             }
             catch (Exception ex)
             {
@@ -154,19 +164,21 @@ namespace Transaction_Statistical
             }
             return false;
         }
-        private bool RemoveTask(string taskName)
+        private bool DisableTask(string taskName)
         {
-            process.StartInfo.Arguments = string.Format("/Delete /TN \"{0}\" /F", TaskName + taskName);
-            process.StartInfo.UseShellExecute = false;
-            process.StartInfo.RedirectStandardOutput = true;
-            process.StartInfo.RedirectStandardError = true;
-            process.Start();
-            //* Read the output (or the error)
-            string output = process.StandardOutput.ReadToEnd();
-            string err = process.StandardError.ReadToEnd();
-            if (output.Contains("ERROR:") || err.Contains("ERROR:"))
-                return false;
-            return true;
+            try
+            {
+                string value = RegistryCus.GetValue(InitParametar.SubkeyTaskCurrentUser, taskName);
+                string[] values = value.Split('|');
+                if (values.Length == 6)
+                {
+                    values[5] = false.ToString();
+                    return RegistryCus.WriteValue(InitParametar.SubkeyTaskCurrentUser, taskName, string.Join("|", values));
+                }
+            }
+            catch (Exception ex)
+            { }
+            return false;
         }
         private void btn_Remove_Click(object sender, EventArgs e)
         {
@@ -176,11 +188,18 @@ namespace Transaction_Statistical
                 return;
             }
             DataRow row = dataGridView_lsPermissions.SelectedRows[0].Tag as DataRow;
-            RemoveTask(row["Field"].ToString());
-            if (sqlite.DeleteEntry("CfgData", "ID", row["ID"].ToString()))
+            DisableTask(row["Field"].ToString());
+            //if (sqlite.DeleteEntry("CfgData", "ID", row["ID"].ToString()))
+            //{
+            //    MessageBox.Show("Remove task successful", "Remove Task", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            //    LoadTask();
+            //    return;
+            //}
+            if (RegistryCus.DeleteValue(InitParametar.SubkeyTaskCurrentUser + @"\" + Environment.UserName, row["Field"].ToString()))
             {
                 MessageBox.Show("Remove task successful", "Remove Task", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 LoadTask();
+                CommandRestartServiceScheduler();
                 return;
             }
             MessageBox.Show("Remmove task unsuccessful", "Remove Task", MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -188,49 +207,58 @@ namespace Transaction_Statistical
 
         private void btn_Add_Click(object sender, EventArgs e)
         {
-            EntryList entr = new EntryList();
-            entr.ColumnName.Add("Field");
-            entr.Content.Add(txt_TaskName.Text);
+            //EntryList entr = new EntryList();
+            //entr.ColumnName.Add("Field");
+            //entr.Content.Add(txt_TaskName.Text);
             if (string.IsNullOrEmpty(txt_TaskName.Text) || string.IsNullOrEmpty(txt_Source.Text) || string.IsNullOrEmpty(txt_Destination.Text) || string.IsNullOrEmpty(cbo_LstTemplate.Text))
             {
                 MessageBox.Show("Fields not empty.", "Add data", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
-            if (sqlite.CheckExistEntry("CfgData", entr))
+            //if (sqlite.CheckExistEntry("CfgData", entr))
+            //{
+            //    MessageBox.Show("Task name existed.", "Add data", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            //    return;
+            //}
+            if (RegistryCus.ExistValue(InitParametar.SubkeyTaskCurrentUser, txt_TaskName.Text.Trim()))
             {
                 MessageBox.Show("Task name existed.", "Add data", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
-            if (CreateTask(txt_TaskName.Text))
-            {
-                string data = string.Format("{0};{1};{2};{3}", txt_HH.Text, cbo_TypeStart.Text, cbo_TypeStart.SelectedItem.Equals(TypeStart[2]) ? cbo_Week.Text : cbo_Month.Text, Nud_Day.Value);
-                data += "|" + (cbo_LstTemplate.SelectedItem as ComboBoxItem).Value + "|" + txt_Source.Text + "|" + txt_Destination.Text + "|" + forms;
-                //foreach (var item in ckbl_Forms.CheckedItems) data += item.ToString() + ";"; data = data.TrimEnd(';');
+            string data = string.Format("{0};{1};{2};{3}", txt_HH.Text, cbo_TypeStart.Text, cbo_TypeStart.SelectedItem.Equals(TypeStart[2]) ? cbo_Week.Text : cbo_Month.Text, Nud_Day.Value);
+            data += "|" + (cbo_LstTemplate.SelectedItem as ComboBoxItem).Value + "|" + txt_Source.Text + "|" + txt_Destination.Text + "|" + forms;
+            //foreach (var item in ckbl_Forms.CheckedItems) data += item.ToString() + ";"; data = data.TrimEnd(';');
 
-                Dictionary<int, string> TemplateChoosen = new Dictionary<int, string>();
-                foreach (var item in ckbl_Forms.CheckedItems)
-                {
-                    var row = (KeyValuePair<int, string>)(item);
-                    TemplateChoosen.Add(row.Key, row.Value);
-                }
-                data += string.Join(";", TemplateChoosen);
-                entr.ColumnName.Add("Type_ID");
-                entr.Content.Add("511");
-                entr.ColumnName.Add("Data");
-                entr.Content.Add(data);
-                if (sqlite.CreateEntry("CfgData", entr))
-                {
-                    MessageBox.Show("Add Task successful", "Add Task", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                    LoadTask();
-                    return;
-                }
+            Dictionary<int, string> TemplateChoosen = new Dictionary<int, string>();
+            foreach (var item in ckbl_Forms.CheckedItems)
+            {
+                var row = (KeyValuePair<int, string>)(item);
+                TemplateChoosen.Add(row.Key, row.Value);
             }
-            MessageBox.Show("Add Task unsuccessful", "Add Task", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            data += string.Join(";", TemplateChoosen) + "|" + true.ToString();
+            //entr.ColumnName.Add("Type_ID");
+            //entr.Content.Add("511");
+            //entr.ColumnName.Add("Data");
+            //entr.Content.Add(data);
+            //if (sqlite.CreateEntry("CfgData", entr))
+            //{
+            //    MessageBox.Show("Add Task successful", "Add Task", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            //    LoadTask();
+            //    return;
+            //}
+            if (RegistryCus.WriteValue(InitParametar.SubkeyTaskCurrentUser, txt_TaskName.Text.Trim(), data))
+            {
+                MessageBox.Show("Add Task successful", "Add Task", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                LoadTask();
+                CommandRestartServiceScheduler();
+                return;
+            }
+
         }
         private void btn_Save_Click(object sender, EventArgs e)
         {
-            DataRow row = dataGridView_lsPermissions.SelectedRows[0].Tag as DataRow;
-            string data = txt_HH.Text + "|" + (cbo_LstTemplate.SelectedItem as ComboBoxItem).Value + "|" + txt_Source.Text + "|" + txt_Destination.Text + "|" + forms;
+            //  DataRow row = dataGridView_lsPermissions.SelectedRows[0].Tag as DataRow;
+            string data = string.Format("{0};{1};{2};{3}", txt_HH.Text, cbo_TypeStart.Text, cbo_TypeStart.SelectedItem.Equals(TypeStart[2]) ? cbo_Week.Text : cbo_Month.Text, Nud_Day.Value) + "|" + (cbo_LstTemplate.SelectedItem as ComboBoxItem).Value + "|" + txt_Source.Text + "|" + txt_Destination.Text + "|" + forms;
             //foreach (var item in ckbl_Forms.CheckedItems) data += item.ToString() + ";"; data = data.TrimEnd(';');
 
             Dictionary<int, string> TemplateChoosen = new Dictionary<int, string>();
@@ -239,11 +267,21 @@ namespace Transaction_Statistical
                 var rows = (KeyValuePair<int, string>)(item);
                 TemplateChoosen.Add(rows.Key, rows.Value);
             }
-            data += string.Join(";", TemplateChoosen);
-            if (sqlite.Update1Entry("CfgData", "Data", data, "ID", row["ID"].ToString()))
+            data += string.Join(";", TemplateChoosen) + "|" + true.ToString();
+            //if (sqlite.Update1Entry("CfgData", "Data", data, "ID", row["ID"].ToString()))
+            //{
+            //    RegistryCus.CreateSubKey(InitParametar.Subkey, Environment.UserName);
+            //    RegistryCus.SetValueKey(InitParametar.Subkey + "\\" + Environment.UserName, row["Field"].ToString(), data);
+            //    MessageBox.Show("Save Task  successful", "Save Task", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            //    LoadTask();
+            //    return;
+            //}
+            if (RegistryCus.WriteValue(InitParametar.SubkeyTaskCurrentUser, txt_TaskName.Text.Trim(), data))
             {
+                RegistryCus.CreateSubKey(InitParametar.SubkeyTaskCurrentUser, Environment.UserName);
                 MessageBox.Show("Save Task  successful", "Save Task", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 LoadTask();
+                CommandRestartServiceScheduler();
                 return;
             }
             MessageBox.Show("Save task unsuccessful", "Save Task", MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -260,12 +298,12 @@ namespace Transaction_Statistical
             try
             {
                 if (dataGridView_lsPermissions.SelectedRows.Count == 0) return;
-                txt_TaskName.Text = (dataGridView_lsPermissions.SelectedRows[0].Tag as DataRow)["Field"].ToString();
-                string[] field = (dataGridView_lsPermissions.SelectedRows[0].Tag as DataRow)["Data"].ToString().Split('|');
-                if (field.Length != 0)
+                txt_TaskName.Text = dataGridView_lsPermissions.SelectedRows[0].Cells[1].Value.ToString();
+                string[] field = dataGridView_lsPermissions.SelectedRows[0].Tag.ToString().Split('|');
+                if (field.Length == 6)
                 {
                     txt_HH.Text = field[0].Split(';')[0];
-                    cbo_TypeStart.SelectedItem = field[0].Split(';')[1];
+                    cbo_TypeStart.SelectedItem = field[0].Split(';').Length >= 2 ? field[0].Split(';')[1] : cbo_TypeStart.Items[0];
                     if (cbo_TypeStart.SelectedItem.Equals(TypeStart[2])) cbo_Week.Text = field[0].Split(';')[2];
                     else if (cbo_TypeStart.SelectedItem.Equals(TypeStart[3])) { cbo_Month.Text = field[0].Split(';')[2]; Nud_Day.Value = (decimal)int.Parse(field[0].Split(';')[3]); }
 
@@ -286,30 +324,57 @@ namespace Transaction_Statistical
 
         private void dataGridView_lsPermissions_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
+            Cursor = Cursors.WaitCursor;
             if (dataGridView_lsPermissions.Rows[e.RowIndex].Cells[e.ColumnIndex] is DataGridViewCheckBoxCell)
             {
                 if ((bool)dataGridView_lsPermissions.Rows[e.RowIndex].Cells[e.ColumnIndex].EditedFormattedValue)
-                    CreateTask(dataGridView_lsPermissions.Rows[e.RowIndex].Cells[1].Value.ToString());
+                {
+                    EnableTask(dataGridView_lsPermissions.Rows[e.RowIndex].Cells[1].Value.ToString());
+                }
                 else
-                    RemoveTask(dataGridView_lsPermissions.Rows[e.RowIndex].Cells[1].Value.ToString());
+                {
+                    DisableTask(dataGridView_lsPermissions.Rows[e.RowIndex].Cells[1].Value.ToString());
+                }
             }
             else if (dataGridView_lsPermissions.Rows[e.RowIndex].Cells[e.ColumnIndex] is DataGridViewButtonCell)
             {
                 if ((bool)dataGridView_lsPermissions.Rows[e.RowIndex].Cells[2].EditedFormattedValue)
                 {
                     //run
-                    process.StartInfo.Arguments = string.Format(" /Run /TN \"{0}\"", TaskName + dataGridView_lsPermissions.Rows[e.RowIndex].Cells[1].Value);
-                    process.StartInfo.UseShellExecute = false;
-                    process.StartInfo.RedirectStandardOutput = true;
-                    process.StartInfo.RedirectStandardError = true;
-                    process.Start();
-                    string output = process.StandardOutput.ReadToEnd();
-                    string err = process.StandardError.ReadToEnd();
-                    MessageBox.Show(output + Environment.NewLine + err, "Run Task");
+                    try
+                    {
+                        File.WriteAllText(InitParametar.PathDirectoryCurrentApp + @"\command.txt", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") + " [WFA] RunTask " + InitParametar.CurrentUser + "/" + dataGridView_lsPermissions.Rows[e.RowIndex].Cells[1].Value);
+                    }
+                    catch { }
+                    //process.StartInfo.Arguments = string.Format(" /Run /TN \"{0}\"", TaskName + dataGridView_lsPermissions.Rows[e.RowIndex].Cells[1].Value);
+                    //process.StartInfo.UseShellExecute = false;
+                    //process.StartInfo.RedirectStandardOutput = true;
+                    //process.StartInfo.RedirectStandardError = true;
+                    //process.Start();
+                    //string output = process.StandardOutput.ReadToEnd();
+                    //string err = process.StandardError.ReadToEnd();
+                    int n = 100;
+                    while(n<5000)
+                    {
+                        try
+                        {
+                            Thread.Sleep(n);
+                            string rel = File.ReadAllText(InitParametar.PathDirectoryCurrentApp + @"\command.txt");
+                            if (rel.Contains("[SRV]"))
+                            {
+                                MessageBox.Show(rel, "Run Task");
+                                break;
+                            }
+                        }
+                        catch { }
+                        n += 100;
+                    }
+                   
                 }
                 else
                     MessageBox.Show("Task not Active", "Run Task");
             }
+            Cursor = Cursors.Default;
         }
 
         private void UC_Menu_Startup_Load(object sender, EventArgs e)
@@ -334,6 +399,14 @@ namespace Transaction_Statistical
                 pnl_Week.Visible = false;
                 pnl_Month.Visible = true;
             }
+        }
+        private void CommandRestartServiceScheduler()
+        {
+            try
+            {
+                File.WriteAllText(InitParametar.PathDirectoryCurrentApp + @"\command.txt", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") + " [WFA] ReloadTask");
+            }
+            catch { }
         }
     }
 }

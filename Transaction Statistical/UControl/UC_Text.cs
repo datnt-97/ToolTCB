@@ -28,12 +28,23 @@ namespace Transaction_Statistical.UControl
         public string TabName = string.Empty;
         public UC_Text(string tabName, string _session, string _path)
         {
-            InitializeComponent();
-            pl_Menu.Location = new Point(this.Width, pl_Menu.Location.Y);
-
             Session = _session;
             PathFile = _path;
             TabName = tabName;
+            InitUI();
+        }
+        public UC_Text()
+        {
+            Session = String.Format("{0:yyyyMMddHHmmssffff}", DateTime.Now);
+            TabName = "New " + Session;
+            InitUI();
+        }
+        private void InitUI()
+        {
+            InitializeComponent();
+            pl_Menu.Location = new Point(this.Width, pl_Menu.Location.Y);
+
+           
             inifile = new UtilityIniFile();
             pathFileTmp = inifile.GetEntryValue(Session, "PathFileTemp");
 
@@ -89,7 +100,7 @@ namespace Transaction_Statistical.UControl
                 inifile.Write("Type", type, session);
                 inifile.Write("Status", "Opening", session);
 
-                if (type.Equals("Text")) if (path != null)
+                if (type.Equals("Text")) if (!string.IsNullOrEmpty(path))
                     {
                         DateTime dt = File.GetLastWriteTime(path);
                         inifile.Write("LastWriteTime", String.Format("{0:yyyyMMddHHmmssffff}", dt), session);
@@ -433,16 +444,16 @@ namespace Transaction_Statistical.UControl
         private void fctb1_MouseHover(object sender, EventArgs e)
         {
             ExpandedAllPanel();
-            if (fctb1.Text != string.Empty)
-                return; disabletxtchange = true;
-            string wc = "Welcome Anlyze :) ";
+            //if (fctb1.Text != string.Empty)
+            //    return; disabletxtchange = true;
+            //string wc = "Welcome Anlyze :) ";
 
-            foreach (char c in wc)
-            {
-                Thread.Sleep(50);
-                fctb1.Text += c;//(c.ToString(),SameWordsStyle);               
-            }
-            disabletxtchange = false;
+            //foreach (char c in wc)
+            //{
+            //    Thread.Sleep(50);
+            //    fctb1.Text += c;//(c.ToString(),SameWordsStyle);               
+            //}
+            //disabletxtchange = false;
         }
 
         private void fctb1_PaintLine(object sender, PaintLineEventArgs e)

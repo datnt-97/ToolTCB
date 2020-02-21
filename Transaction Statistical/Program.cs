@@ -15,9 +15,10 @@ namespace Transaction_Statistical
         [STAThread]
         static void Main(string[] args)
         {            
-            //  args = new string[] { "aotoooooooo" };
+          //    args = new string[] { "TanySmile", "weekly" };
             if (args.Length == 0)
             {
+                InitParametar.CurrentUser = Environment.UserName;
                 InitParametar.Init();              
                 Application.EnableVisualStyles();
                 InitGUI.Mode = InitGUI_Mode.Light;
@@ -29,8 +30,10 @@ namespace Transaction_Statistical
             {
                 //Auto start - not GUI    
                 InitParametar.AutoRunMode = true;
+                InitParametar.CurrentUser = args[0];
                 InitParametar.Init();
-                InitParametar.AutoStart(args[0]);
+                if (args.Length == 2)
+                    InitParametar.AutoStart(args[1]);
             }
         }
     }

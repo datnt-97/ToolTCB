@@ -16,7 +16,8 @@ namespace Transaction_Statistical.AddOn
         {
             InitializeComponent();
         }
-
+        public bool ShowButtonNewTab = true;
+        ButtonX btAddNew;
         int selected_index = -1;
         private List<ButtonX> buttonlist = new List<ButtonX> { };
         public List<TabPanelControl> TabPanelCtrlList = new List<TabPanelControl> { };
@@ -147,8 +148,7 @@ namespace Transaction_Statistical.AddOn
 
 
         void createAndAddButton(string tabtext,string tooltip, TabPanelControl tpcontrol, Point loc, bool showCloseButton)
-        {
-            
+        {            
             ButtonX bx = new ButtonX();
             bx.DisplayText = tabtext;
             bx.Text = tabtext;
@@ -181,7 +181,30 @@ namespace Transaction_Statistical.AddOn
 
             UpdateButtons();
         }
+        void createButtonNew( Point loc)
+        {
+             btAddNew = new ButtonX();
+            btAddNew.DisplayText = "New";
+            btAddNew.Text = "New";
+            toolTip1.SetToolTip(btAddNew, "Create new");
+            //  bx.Size = tab_size;  
+            int width = TextRenderer.MeasureText(btAddNew.Text, this.Font).Width;
+            btAddNew.Size = new Size(width, tab_size.Height-5);
 
+            btAddNew.Location = loc;
+            btAddNew.ForeColor = unsel_tab_forecolor;
+            btAddNew.BXBackColor = un_sel_tab_backcolor;
+            btAddNew.MouseHoverColor = sel_tab_backcolor;
+            btAddNew.MouseClickColor1 = un_sel_tab_backcolor;
+            btAddNew.ChangeColorMouseHC = true;
+            btAddNew.TextLocation_X = 2;
+            btAddNew.TextLocation_Y = 2;
+            btAddNew.Font = this.Font;
+            btAddNew.Click += button_AddTab;
+            btAddNew.ShowCloseButton = false;
+            TabButtonPanel.Controls.Add(btAddNew);
+            UpdateButtons();
+        }
         private void Close_Button(object sender, EventArgs e)
         {
             RemoveTab((sender as ButtonX).TabIndex);
@@ -203,8 +226,17 @@ namespace Transaction_Statistical.AddOn
             selected_index = ((ButtonX)sender).TabIndex;
             UpdateButtons();
         }
-
-      public TabPanelControl GetTabPanel(int indexTab)
+        void button_AddTab(object sender, EventArgs e)
+        {
+            btAddNew.BXBackColor = un_sel_tab_backcolor;
+            TabPanelControl tpc = new TabPanelControl();
+            tpc.Dock = DockStyle.Fill;
+            UControl.UC_Text uc_Text = new UControl.UC_Text();
+            uc_Text.Dock = DockStyle.Fill;
+            tpc.Controls.Add(uc_Text);
+            this.AddTab(uc_Text.TabName, uc_Text.TabName, tpc, true);
+        }
+        public TabPanelControl GetTabPanel(int indexTab)
         {
             return TabPanelCtrlList[indexTab];           
         }
@@ -223,13 +255,17 @@ namespace Transaction_Statistical.AddOn
 
         public void AddTab(string tabtext,string tooltip, TabPanelControl tpcontrol, bool showClose)
         {
-            if (!buttonlist.Any())
+            Point pt = new Point(0, 0);
+            if (buttonlist.Any())          
+                pt = new Point(buttonlist[buttonlist.Count - 1].Size.Width + buttonlist[buttonlist.Count - 1].Location.X, 0);
+            createAndAddButton(tabtext, tooltip, tpcontrol, pt, showClose);
+            if (ShowButtonNewTab)
             {
-                createAndAddButton(tabtext, tooltip, tpcontrol, new Point(0, 0), showClose);
-            }
-            else
-            {
-                createAndAddButton(tabtext, tooltip, tpcontrol, new Point(buttonlist[buttonlist.Count - 1].Size.Width + buttonlist[buttonlist.Count - 1].Location.X, 0),showClose);
+                pt = new Point(buttonlist[buttonlist.Count - 1].Size.Width + buttonlist[buttonlist.Count - 1].Location.X, 5);
+                if (btAddNew == null)
+                    createButtonNew(pt);
+                else
+                    btAddNew.Location = pt;
             }
         }
 
@@ -297,7 +333,7 @@ namespace Transaction_Statistical.AddOn
             buttonlist.Clear();
 
             for (int j = 0; j < btstrlist.Count; j++)
-            {
+            {               
                 if (j == 0)
                 {
                     ButtonX bx = new ButtonX();
@@ -345,6 +381,7 @@ namespace Transaction_Statistical.AddOn
                 }
             }
             TabPanel.Controls.Clear();
+            
         }
 
         void tbr_Click(object sender, EventArgs e)
