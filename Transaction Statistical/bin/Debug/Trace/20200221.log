@@ -753,3 +753,218 @@ System.IO.IOException: The process cannot access the file 'D:\05-TEMP\Source\Git
  StartInfo -> Arguments -> "TanySmile" "month"
 ----------------------------------------------
 09:42:10 664 End Task
+----------------------------------------------
+10:15:02 675 Class: TransactionStatisticalScheduler
+Method: OnChanged
+System.IO.IOException: The process cannot access the file 'D:\05-TEMP\Source\GitHub\ToolTCB\Transaction Statistical\bin\Debug\command.txt' because it is being used by another process.
+   at System.IO.__Error.WinIOError(Int32 errorCode, String maybeFullPath)
+   at System.IO.FileStream.Init(String path, FileMode mode, FileAccess access, Int32 rights, Boolean useRights, FileShare share, Int32 bufferSize, FileOptions options, SECURITY_ATTRIBUTES secAttrs, String msgPath, Boolean bFromProxy, Boolean useLongPath, Boolean checkHost)
+   at System.IO.FileStream..ctor(String path, FileMode mode, FileAccess access, FileShare share, Int32 bufferSize, FileOptions options, String msgPath, Boolean bFromProxy, Boolean useLongPath, Boolean checkHost)
+   at System.IO.StreamReader..ctor(String path, Encoding encoding, Boolean detectEncodingFromByteOrderMarks, Int32 bufferSize, Boolean checkHost)
+   at System.IO.StreamReader..ctor(String path, Encoding encoding)
+   at System.IO.File.InternalReadAllLines(String path, Encoding encoding)
+   at System.IO.File.ReadAllLines(String path)
+   at Transaction_Statistical_Scheduler.TransactionStatisticalScheduler.OnChanged(Object source, FileSystemEventArgs e) in D:\05-TEMP\Source\GitHub\ToolTCB\Transaction Statistical Scheduler\Service1.cs:line 181
+----------------------------------------------
+
+----------------------------------------------
+10:15:02 686 Get command from tool.
+----------------------------------------------
+ Command: [2020-02-21 10:15:02 [WFA] ReloadTask]
+ Load Tasks.
+ Load for user: TanySmile
+ Task name: dfsdf
+     Task time: 11:58
+     Task type: DAILY => 
+ Task name: month
+     Task time: 13:10
+     Task type: MONTHLY => FEB, MAR, APR, MAY, JUN, JUL, AUG, SEP, OCT, NOV, DEC, JAN
+     Mission temporarily delayed because timer's too big: 2020-03-20 13:10:00
+     Mission temporarily delayed because timer's too big: 2020-04-20 13:10:00
+     Mission temporarily delayed because timer's too big: 2020-05-20 13:10:00
+     Mission temporarily delayed because timer's too big: 2020-06-20 13:10:00
+     Mission temporarily delayed because timer's too big: 2020-07-20 13:10:00
+     Mission temporarily delayed because timer's too big: 2020-08-20 13:10:00
+     Mission temporarily delayed because timer's too big: 2020-09-20 13:10:00
+     Mission temporarily delayed because timer's too big: 2020-10-20 13:10:00
+     Mission temporarily delayed because timer's too big: 2020-11-20 13:10:00
+     Mission temporarily delayed because timer's too big: 2020-12-20 13:10:00
+ Task name: weekly
+     Task time: 10:20
+     Task type: WEEKLY => WED, THU, FRI, SAT, SUN, MON, TUE
+----------------------------------------------
+10:20:00 003 Start Task: weekly for user: TanySmile
+----------------------------------------------
+ StartInfo -> FileName -> D:\05-TEMP\Source\GitHub\ToolTCB\Transaction Statistical\bin\Debug\Transaction Statistical.exe
+----------------------------------------------
+ StartInfo -> Arguments -> "TanySmile" "weekly"
+----------------------------------------------
+10:31:46 095 End Task
+----------------------------------------------
+10:32:21 212 Class: TransactionStatisticalScheduler
+Method: OnChanged
+System.IO.IOException: The process cannot access the file 'D:\05-TEMP\Source\GitHub\ToolTCB\Transaction Statistical\bin\Debug\command.txt' because it is being used by another process.
+   at System.IO.__Error.WinIOError(Int32 errorCode, String maybeFullPath)
+   at System.IO.FileStream.Init(String path, FileMode mode, FileAccess access, Int32 rights, Boolean useRights, FileShare share, Int32 bufferSize, FileOptions options, SECURITY_ATTRIBUTES secAttrs, String msgPath, Boolean bFromProxy, Boolean useLongPath, Boolean checkHost)
+   at System.IO.FileStream..ctor(String path, FileMode mode, FileAccess access, FileShare share, Int32 bufferSize, FileOptions options, String msgPath, Boolean bFromProxy, Boolean useLongPath, Boolean checkHost)
+   at System.IO.StreamReader..ctor(String path, Encoding encoding, Boolean detectEncodingFromByteOrderMarks, Int32 bufferSize, Boolean checkHost)
+   at System.IO.StreamReader..ctor(String path, Encoding encoding)
+   at System.IO.File.InternalReadAllLines(String path, Encoding encoding)
+   at System.IO.File.ReadAllLines(String path)
+   at Transaction_Statistical_Scheduler.TransactionStatisticalScheduler.OnChanged(Object source, FileSystemEventArgs e) in D:\05-TEMP\Source\GitHub\ToolTCB\Transaction Statistical Scheduler\Service1.cs:line 181
+----------------------------------------------
+
+----------------------------------------------
+10:32:21 212 Get command from tool.
+----------------------------------------------
+ Command: [2020-02-21 10:32:21 [WFA] RunTask TanySmile/weekly]
+----------------------------------------------
+10:32:21 227 Start Task: weekly for user: TanySmile
+----------------------------------------------
+ StartInfo -> FileName -> D:\05-TEMP\Source\GitHub\ToolTCB\Transaction Statistical\bin\Debug\Transaction Statistical.exe
+----------------------------------------------
+ StartInfo -> Arguments -> "TanySmile" "weekly"
+----------------------------------------------
+10:32:35 642 End Task
+----------------------------------------------
+10:34:13 389 Class: TransactionStatisticalScheduler
+Method: OnChanged
+System.IO.IOException: The process cannot access the file 'D:\05-TEMP\Source\GitHub\ToolTCB\Transaction Statistical\bin\Debug\command.txt' because it is being used by another process.
+   at System.IO.__Error.WinIOError(Int32 errorCode, String maybeFullPath)
+   at System.IO.FileStream.Init(String path, FileMode mode, FileAccess access, Int32 rights, Boolean useRights, FileShare share, Int32 bufferSize, FileOptions options, SECURITY_ATTRIBUTES secAttrs, String msgPath, Boolean bFromProxy, Boolean useLongPath, Boolean checkHost)
+   at System.IO.FileStream..ctor(String path, FileMode mode, FileAccess access, FileShare share, Int32 bufferSize, FileOptions options, String msgPath, Boolean bFromProxy, Boolean useLongPath, Boolean checkHost)
+   at System.IO.StreamReader..ctor(String path, Encoding encoding, Boolean detectEncodingFromByteOrderMarks, Int32 bufferSize, Boolean checkHost)
+   at System.IO.StreamReader..ctor(String path, Encoding encoding)
+   at System.IO.File.InternalReadAllLines(String path, Encoding encoding)
+   at System.IO.File.ReadAllLines(String path)
+   at Transaction_Statistical_Scheduler.TransactionStatisticalScheduler.OnChanged(Object source, FileSystemEventArgs e) in D:\05-TEMP\Source\GitHub\ToolTCB\Transaction Statistical Scheduler\Service1.cs:line 181
+----------------------------------------------
+
+----------------------------------------------
+10:34:13 389 Get command from tool.
+----------------------------------------------
+ Command: [2020-02-21 10:34:13 [WFA] RunTask TanySmile/dfsdf]
+----------------------------------------------
+10:34:13 404 Start Task: dfsdf for user: TanySmile
+----------------------------------------------
+ StartInfo -> FileName -> D:\05-TEMP\Source\GitHub\ToolTCB\Transaction Statistical\bin\Debug\Transaction Statistical.exe
+----------------------------------------------
+ StartInfo -> Arguments -> "TanySmile" "dfsdf"
+----------------------------------------------
+10:34:13 874 End Task
+----------------------------------------------
+10:34:49 093 Class: TransactionStatisticalScheduler
+Method: OnChanged
+System.IO.IOException: The process cannot access the file 'D:\05-TEMP\Source\GitHub\ToolTCB\Transaction Statistical\bin\Debug\command.txt' because it is being used by another process.
+   at System.IO.__Error.WinIOError(Int32 errorCode, String maybeFullPath)
+   at System.IO.FileStream.Init(String path, FileMode mode, FileAccess access, Int32 rights, Boolean useRights, FileShare share, Int32 bufferSize, FileOptions options, SECURITY_ATTRIBUTES secAttrs, String msgPath, Boolean bFromProxy, Boolean useLongPath, Boolean checkHost)
+   at System.IO.FileStream..ctor(String path, FileMode mode, FileAccess access, FileShare share, Int32 bufferSize, FileOptions options, String msgPath, Boolean bFromProxy, Boolean useLongPath, Boolean checkHost)
+   at System.IO.StreamReader..ctor(String path, Encoding encoding, Boolean detectEncodingFromByteOrderMarks, Int32 bufferSize, Boolean checkHost)
+   at System.IO.StreamReader..ctor(String path, Encoding encoding)
+   at System.IO.File.InternalReadAllLines(String path, Encoding encoding)
+   at System.IO.File.ReadAllLines(String path)
+   at Transaction_Statistical_Scheduler.TransactionStatisticalScheduler.OnChanged(Object source, FileSystemEventArgs e) in D:\05-TEMP\Source\GitHub\ToolTCB\Transaction Statistical Scheduler\Service1.cs:line 181
+----------------------------------------------
+
+----------------------------------------------
+10:34:49 104 Get command from tool.
+----------------------------------------------
+ Command: [2020-02-21 10:34:49 [WFA] ReloadTask]
+ Load Tasks.
+ Load for user: TanySmile
+ Task name: dfsdf
+     Task time: 11:58
+     Task type: DAILY => 
+ Task name: month
+     Task time: 13:10
+     Task type: MONTHLY => FEB, MAR, APR, MAY, JUN, JUL, AUG, SEP, OCT, NOV, DEC, JAN
+     Mission temporarily delayed because timer's too big: 2020-03-20 13:10:00
+     Mission temporarily delayed because timer's too big: 2020-04-20 13:10:00
+     Mission temporarily delayed because timer's too big: 2020-05-20 13:10:00
+     Mission temporarily delayed because timer's too big: 2020-06-20 13:10:00
+     Mission temporarily delayed because timer's too big: 2020-07-20 13:10:00
+     Mission temporarily delayed because timer's too big: 2020-08-20 13:10:00
+     Mission temporarily delayed because timer's too big: 2020-09-20 13:10:00
+     Mission temporarily delayed because timer's too big: 2020-10-20 13:10:00
+     Mission temporarily delayed because timer's too big: 2020-11-20 13:10:00
+     Mission temporarily delayed because timer's too big: 2020-12-20 13:10:00
+ Task name: weekly
+     Task time: 10:36
+     Task type: WEEKLY => WED, THU, FRI, SAT, SUN, MON, TUE
+----------------------------------------------
+10:36:00 003 Start Task: weekly for user: TanySmile
+----------------------------------------------
+ StartInfo -> FileName -> D:\05-TEMP\Source\GitHub\ToolTCB\Transaction Statistical\bin\Debug\Transaction Statistical.exe
+----------------------------------------------
+ StartInfo -> Arguments -> "TanySmile" "weekly"
+----------------------------------------------
+10:36:11 293 End Task
+----------------------------------------------
+11:11:00 035 Start Task: dfsdf for user: TanySmile
+----------------------------------------------
+ StartInfo -> FileName -> D:\05-TEMP\Source\GitHub\ToolTCB\Transaction Statistical\bin\Debug\Transaction Statistical.exe
+----------------------------------------------
+ StartInfo -> Arguments -> "TanySmile" "dfsdf"
+----------------------------------------------
+11:11:01 655 End Task
+----------------------------------------------
+11:27:23 456 Stop service.
+----------------------------------------------
+11:27:23 658 Class: TransactionStatisticalScheduler
+Method: Startup
+System.Threading.ThreadAbortException: Thread was being aborted.
+   at System.Threading.Thread.SleepInternal(Int32 millisecondsTimeout)
+   at System.Threading.Thread.Sleep(Int32 millisecondsTimeout)
+   at System.Threading.Thread.Sleep(TimeSpan timeout)
+   at Transaction_Statistical_Scheduler.TransactionStatisticalScheduler.Startup() in D:\05-TEMP\Source\GitHub\ToolTCB\Transaction Statistical Scheduler\Service1.cs:line 54
+----------------------------------------------
+
+----------------------------------------------
+11:49:44 629  On Start Service.
+ Load Tasks.
+ Load for user: TanySmile
+ Task name: dfsdf
+     Task time: 11:58
+     Task type: DAILY => 
+ Task name: month
+     Task time: 13:10
+     Task type: MONTHLY => FEB, MAR, APR, MAY, JUN, JUL, AUG, SEP, OCT, NOV, DEC, JAN
+     Mission temporarily delayed because timer's too big: 2020-03-20 13:10:00
+     Mission temporarily delayed because timer's too big: 2020-04-20 13:10:00
+     Mission temporarily delayed because timer's too big: 2020-05-20 13:10:00
+     Mission temporarily delayed because timer's too big: 2020-06-20 13:10:00
+     Mission temporarily delayed because timer's too big: 2020-07-20 13:10:00
+     Mission temporarily delayed because timer's too big: 2020-08-20 13:10:00
+     Mission temporarily delayed because timer's too big: 2020-09-20 13:10:00
+     Mission temporarily delayed because timer's too big: 2020-10-20 13:10:00
+     Mission temporarily delayed because timer's too big: 2020-11-20 13:10:00
+     Mission temporarily delayed because timer's too big: 2020-12-20 13:10:00
+ Task name: weekly
+     Task time: 10:36
+     Task type: WEEKLY => WED, THU, FRI, SAT, SUN, MON, TUE
+ Init Service Finished.
+----------------------------------------------
+
+----------------------------------------------
+13:13:24 875 Class: TransactionStatisticalScheduler
+Method: OnChanged
+System.IO.IOException: The process cannot access the file 'D:\05-TEMP\Source\GitHub\ToolTCB\Transaction Statistical\bin\Debug\command.txt' because it is being used by another process.
+   at System.IO.__Error.WinIOError(Int32 errorCode, String maybeFullPath)
+   at System.IO.FileStream.Init(String path, FileMode mode, FileAccess access, Int32 rights, Boolean useRights, FileShare share, Int32 bufferSize, FileOptions options, SECURITY_ATTRIBUTES secAttrs, String msgPath, Boolean bFromProxy, Boolean useLongPath, Boolean checkHost)
+   at System.IO.FileStream..ctor(String path, FileMode mode, FileAccess access, FileShare share, Int32 bufferSize, FileOptions options, String msgPath, Boolean bFromProxy, Boolean useLongPath, Boolean checkHost)
+   at System.IO.StreamReader..ctor(String path, Encoding encoding, Boolean detectEncodingFromByteOrderMarks, Int32 bufferSize, Boolean checkHost)
+   at System.IO.StreamReader..ctor(String path, Encoding encoding)
+   at System.IO.File.InternalReadAllLines(String path, Encoding encoding)
+   at System.IO.File.ReadAllLines(String path)
+   at Transaction_Statistical_Scheduler.TransactionStatisticalScheduler.OnChanged(Object source, FileSystemEventArgs e)
+----------------------------------------------
+
+----------------------------------------------
+13:13:24 881 Get command from tool.
+----------------------------------------------
+ Command: [2020-02-21 13:13:23 [WFA] ReloadTask]
+ Load Tasks.
+ Load for user: TanySmile
+ Task name: sdfsd
+     Task time: 02:00
+     Task type: ONCE => 

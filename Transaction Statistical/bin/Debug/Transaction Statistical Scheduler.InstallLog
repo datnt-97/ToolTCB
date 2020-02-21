@@ -1,0 +1,13 @@
+﻿Installing assembly 'D:\05-TEMP\Source\GitHub\ToolTCB\Transaction Statistical\bin\Debug\Transaction Statistical Scheduler.exe'.
+Affected parameters are:
+   logtoconsole = 
+   logfile = D:\05-TEMP\Source\GitHub\ToolTCB\Transaction Statistical\bin\Debug\Transaction Statistical Scheduler.InstallLog
+   assemblypath = D:\05-TEMP\Source\GitHub\ToolTCB\Transaction Statistical\bin\Debug\Transaction Statistical Scheduler.exe
+Installing service Transaction Statistical Scheduler...
+Service Transaction Statistical Scheduler has been successfully installed.
+Creating EventLog source Transaction Statistical Scheduler in log Application...
+Committing assembly 'D:\05-TEMP\Source\GitHub\ToolTCB\Transaction Statistical\bin\Debug\Transaction Statistical Scheduler.exe'.
+Affected parameters are:
+   logtoconsole = 
+   logfile = D:\05-TEMP\Source\GitHub\ToolTCB\Transaction Statistical\bin\Debug\Transaction Statistical Scheduler.InstallLog
+   assemblypath = D:\05-TEMP\Source\GitHub\ToolTCB\Transaction Statistical\bin\Debug\Transaction Statistical Scheduler.exe

@@ -1,28 +1,23 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
-using System.DirectoryServices;
+using System.Diagnostics;
 using System.Drawing;
-using System.Drawing.Design;
 using System.Globalization;
 using System.IO;
 using System.Linq;
-using System.Net.NetworkInformation;
 using System.Reflection;
 using System.Security.Cryptography;
-using System.Security.Principal;
+using System.ServiceProcess;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using FastColoredTextBoxNS;
 using Microsoft.Win32;
 using OfficeOpenXml;
 using Transaction_Statistical.Class;
-
 
 
 namespace Transaction_Statistical
@@ -74,7 +69,8 @@ namespace Transaction_Statistical
         public static DateTime DateMaximum = DateTime.Now;
         public static DateTime DateCurrent = DateTime.Now;
         public static string SubkeyApp;
-        public static string SubkeyTaskCurrentUser; 
+        public static string SubkeyTask;
+        public static string SubkeyTaskCurrentUser;
 
         public static void Init()
         {
@@ -82,11 +78,12 @@ namespace Transaction_Statistical
             {
                 //Init directory and file config    
                 SubkeyApp = @"HKEY_LOCAL_MACHINE\SOFTWARE\NPSS\TransactionStatistical";
+                SubkeyTask = SubkeyApp + @"\Tasks\";
                 SubkeyTaskCurrentUser = SubkeyApp + @"\Tasks\" + CurrentUser;
                 PathDirectoryTempUsr = string.Format(@"C:\Users\{0}\AppData\Local\Temp\TransactionStatistical", CurrentUser); if (!Directory.Exists(PathDirectoryTempUsr)) Directory.CreateDirectory(PathDirectoryTempUsr);
                 PathDirectoryCurrentApp = Path.GetDirectoryName(Application.ExecutablePath);
 
-                PathDirectoryCurrentUserConfigData =string.Format(@"c:\users\{0}\Documents\Transaction Statistical", CurrentUser); if (!Directory.Exists(PathDirectoryCurrentUserConfigData)) Directory.CreateDirectory(PathDirectoryCurrentUserConfigData);
+                PathDirectoryCurrentUserConfigData = string.Format(@"c:\users\{0}\Documents\Transaction Statistical", CurrentUser); if (!Directory.Exists(PathDirectoryCurrentUserConfigData)) Directory.CreateDirectory(PathDirectoryCurrentUserConfigData);
                 PathFileConfig = InitParametar.PathDirectoryCurrentUserConfigData + "\\AppConfig.dat";
                 PathDirectoryUtilities = (PathDirectoryCurrentApp + "\\Utilities").Replace(@"\\", @"\"); if (!Directory.Exists(PathDirectoryUtilities)) Directory.CreateDirectory(PathDirectoryUtilities);
                 FolderSystemTrace = (PathDirectoryCurrentUserConfigData + "\\Trace").Replace(@"\\", @"\"); if (!Directory.Exists(FolderSystemTrace)) Directory.CreateDirectory(FolderSystemTrace);
@@ -96,13 +93,71 @@ namespace Transaction_Statistical
                 LicenseFile = PathDirectoryCurrentUserConfigData + "\\TransactionStatistical.lic";
                 License_ReadInfo();
                 ReadTrans = new ReadTransaction();
-                RegistryCus.WriteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\NPSS\TransactionStatistical", "Path", Application.ExecutablePath);
+                CheckServiceScheduler();                
+                
             }
             catch (Exception ex)
             {
                 InitParametar.Send_Error(ex.ToString(), MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name); ;
             }
         }
+        private static void CheckServiceScheduler()
+        {
+            try
+            {
+
+                //   string output = process.StandardOutput.ReadToEnd();
+                //   string err = process.StandardError.ReadToEnd();
+                RegistryCus.CreateSubKey(SubkeyApp, "Tasks");
+                RegistryCus.CreateSubKey(SubkeyTask, CurrentUser);
+                RegistryCus.WriteValue(SubkeyApp, "Path", Application.ExecutablePath);
+                using (ServiceController sc = new ServiceController("Transaction Statistical Scheduler"))
+                {
+                    try
+                    {
+                        if (sc.Status != ServiceControllerStatus.Running)
+                        {
+                            sc.Start();
+                            sc.WaitForStatus(ServiceControllerStatus.Running, new TimeSpan(0, 0, 10));
+                            //service is now Started        
+                        }
+
+                    }
+                    catch (System.ServiceProcess.TimeoutException)
+                    {
+                        //Service was stopped but could not restart (10 second timeout)
+                    }
+                    catch (InvalidOperationException)
+                    {
+                        //This Service does not exist    => install service
+                        if (File.Exists(PathDirectoryCurrentApp + @"\Transaction Statistical Scheduler.InstallLog"))
+                            File.Delete(PathDirectoryCurrentApp + @"\Transaction Statistical Scheduler.InstallLog");
+                        Process process = new Process();
+                        process.StartInfo.FileName = @"C:\Windows\Microsoft.NET\Framework\v4.0.30319\installutil.exe";
+                        process.StartInfo.Arguments = "\"" + PathDirectoryCurrentApp + "\\Transaction Statistical Scheduler.exe\"";
+                        process.StartInfo.UseShellExecute = false;
+                        process.StartInfo.RedirectStandardOutput = true;
+                        process.StartInfo.RedirectStandardError = true;
+                        process.Start();
+                        string output = process.StandardOutput.ReadToEnd();
+                        process.WaitForExit();
+
+                        string s = File.ReadAllText(PathDirectoryCurrentApp + @"\Transaction Statistical Scheduler.InstallLog");
+                        if (!output.Contains("The Commit phase completed successfully."))
+                            MessageBox.Show("Can't install Transaction Statistical Scheduler.\n Please, run tool by runas administrator to fix.\n" + output, "Install Transaction Statistical Scheduler ", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        else
+                            CheckServiceScheduler();
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                InitParametar.Send_Error(ex.ToString(), MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name); WriteLogApplication(ex.Message, false, true);
+
+            }
+
+        }
+    
         public static void AutoStart( string taskName)
         {
             try
@@ -2128,7 +2183,7 @@ namespace Transaction_Statistical
                 }
             }
 
-            catch (TimeoutException)
+            catch (System.TimeoutException)
             { }
             catch (Exception ex)
             {
@@ -2162,7 +2217,7 @@ namespace Transaction_Statistical
                 }
             }
 
-            catch (TimeoutException)
+            catch (System.TimeoutException)
             { }
             catch (Exception ex)
             {
@@ -2204,7 +2259,7 @@ namespace Transaction_Statistical
                 }
             }
 
-            catch (TimeoutException)
+            catch (System.TimeoutException)
             { }
             catch (Exception ex)
             {
@@ -2643,12 +2698,16 @@ namespace Transaction_Statistical
         public static string[] GetValues(string _subkey)
         {
             string[] values = null;
-
-            using (var key = RegistryKey.OpenBaseKey(StringToRegistryHive(ref _subkey), RegistryView.Registry32).OpenSubKey(_subkey))
+            try
             {
-                values = key.GetValueNames();
-                key.Close();
+                using (var key = RegistryKey.OpenBaseKey(StringToRegistryHive(ref _subkey), RegistryView.Registry32).OpenSubKey(_subkey))
+                {
+                    values = key.GetValueNames();
+                    key.Close();
+                }
             }
+            catch (Exception ex)
+            { }
             return values;
         }
         public static bool DeleteValue(string _subKey, string _name)
