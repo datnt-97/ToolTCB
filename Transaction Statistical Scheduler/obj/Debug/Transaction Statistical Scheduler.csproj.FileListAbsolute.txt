@@ -6,3 +6,11 @@ D:\05-TEMP\Source\GitHub\ToolTCB\Transaction Statistical Scheduler\obj\Debug\Tra
 D:\05-TEMP\Source\GitHub\ToolTCB\Transaction Statistical Scheduler\obj\Debug\Transaction Statistical Scheduler.pdb
 D:\05-TEMP\Source\GitHub\ToolTCB\Transaction Statistical Scheduler\obj\Debug\Transaction_Statistical_Scheduler.Installer1.resources
 D:\05-TEMP\Source\GitHub\ToolTCB\Transaction Statistical Scheduler\obj\Debug\Transaction Statistical Scheduler.csproj.GenerateResource.cache
+E:\Project\NPS\TCB\ToolTCB\Transaction Statistical Scheduler\bin\Debug\Transaction Statistical Scheduler.exe.config
+E:\Project\NPS\TCB\ToolTCB\Transaction Statistical Scheduler\bin\Debug\Transaction Statistical Scheduler.exe
+E:\Project\NPS\TCB\ToolTCB\Transaction Statistical Scheduler\bin\Debug\Transaction Statistical Scheduler.pdb
+E:\Project\NPS\TCB\ToolTCB\Transaction Statistical Scheduler\obj\Debug\Transaction Statistical Scheduler.csprojAssemblyReference.cache
+E:\Project\NPS\TCB\ToolTCB\Transaction Statistical Scheduler\obj\Debug\Transaction_Statistical_Scheduler.Installer1.resources
+E:\Project\NPS\TCB\ToolTCB\Transaction Statistical Scheduler\obj\Debug\Transaction Statistical Scheduler.csproj.GenerateResource.cache
+E:\Project\NPS\TCB\ToolTCB\Transaction Statistical Scheduler\obj\Debug\Transaction Statistical Scheduler.exe
+E:\Project\NPS\TCB\ToolTCB\Transaction Statistical Scheduler\obj\Debug\Transaction Statistical Scheduler.pdb
