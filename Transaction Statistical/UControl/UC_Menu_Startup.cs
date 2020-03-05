@@ -13,11 +13,13 @@ using System.Text.RegularExpressions;
 using System.Reflection;
 using Transaction_Statistical.Class;
 using System.Threading;
+using Microsoft.Win32;
 
 namespace Transaction_Statistical
 {
     public partial class UC_Menu_Startup : UserControl
     {
+        RegistryWatcher watcherReg;
         public static Dictionary<int, string> Template = new Dictionary<int, string>()
         {
             {(int)TemplateHelper.TEMPLATE.CanQuyTheoCouterTrenMay,"Cân Quỹ Theo Counter Trên Máy" },
@@ -47,6 +49,7 @@ namespace Transaction_Statistical
             LoadTemplate();
             LoadTask();
         }
+        
         public void LoadTemplate()
         {
             try
@@ -127,7 +130,7 @@ namespace Transaction_Statistical
         private void txt_HH_Validating(object sender, CancelEventArgs e)
         {
             TextBox box = sender as TextBox;
-            string pattern = "[0-1][0-9]:[0-6][0-9]";
+            string pattern = @"^(?:[01]?[0-9]|2[0-3]):[0-5][0-9]$";
 
             if (box != null)
             {
@@ -184,7 +187,7 @@ namespace Transaction_Statistical
                 }
             }
             catch (Exception ex)
-            { }
+            { InitParametar.Send_Error(ex.ToString(), MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name);  }
             return false;
         }
         private void btn_Remove_Click(object sender, EventArgs e)
@@ -196,19 +199,19 @@ namespace Transaction_Statistical
                     MessageBox.Show("Please, select Task name to remove!", "Remove Task", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     return;
                 }
-                DataRow row = dataGridView_lsPermissions.SelectedRows[0].Tag as DataRow;
-                DisableTask(row["Field"].ToString());
+              //  DataRow row = dataGridView_lsPermissions.SelectedRows[0].Tag as DataRow;
+              //  DisableTask(row["Field"].ToString());
                 //if (sqlite.DeleteEntry("CfgData", "ID", row["ID"].ToString()))
                 //{
                 //    MessageBox.Show("Remove task successful", "Remove Task", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 //    LoadTask();
                 //    return;
                 //}
-                if (RegistryCus.DeleteValue(InitParametar.SubkeyTaskCurrentUser + @"\" + Environment.UserName, row["Field"].ToString()))
+                if (RegistryCus.DeleteValue(InitParametar.SubkeyTaskCurrentUser , dataGridView_lsPermissions.SelectedRows[0].Cells[1].Value.ToString()))
                 {
                     MessageBox.Show("Remove task successful", "Remove Task", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     LoadTask();
-                    CommandRestartServiceScheduler();
+                    SendCommandService ("ReloadTask");
                     return;
                 }
                 MessageBox.Show("Remmove task unsuccessful", "Remove Task", MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -266,7 +269,7 @@ namespace Transaction_Statistical
                 {
                     MessageBox.Show("Add Task successful", "Add Task", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     LoadTask();
-                    CommandRestartServiceScheduler();
+                    SendCommandService("ReloadTask"); 
                     return;
                 }
                 else
@@ -302,10 +305,10 @@ namespace Transaction_Statistical
                 //}
                 if (RegistryCus.WriteValue(InitParametar.SubkeyTaskCurrentUser, txt_TaskName.Text.Trim(), data))
                 {
-                    RegistryCus.CreateSubKey(InitParametar.SubkeyTaskCurrentUser, Environment.UserName);
+                   // RegistryCus.CreateSubKey(InitParametar.SubkeyTaskCurrentUser, Environment.UserName);
                     MessageBox.Show("Save Task  successful", "Save Task", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     LoadTask();
-                    CommandRestartServiceScheduler();
+                    SendCommandService("ReloadTask");
                     return;
                 }
                 MessageBox.Show("Save task unsuccessful", "Save Task", MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -348,7 +351,7 @@ namespace Transaction_Statistical
             }
             catch (Exception ex)
             {
-                InitParametar.Send_Error(ex.ToString(), MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name); ;
+                InitParametar.Send_Error(ex.ToString(), MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name); 
             }
         }
 
@@ -370,36 +373,8 @@ namespace Transaction_Statistical
             {
                 if ((bool)dataGridView_lsPermissions.Rows[e.RowIndex].Cells[2].EditedFormattedValue)
                 {
-                    //run
-                    try
-                    {
-                        File.WriteAllText(InitParametar.PathDirectoryCurrentApp + @"\command.txt", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") + " [WFA] RunTask " + InitParametar.CurrentUser + "/" + dataGridView_lsPermissions.Rows[e.RowIndex].Cells[1].Value);
-                    }
-                    catch { }
-                    //process.StartInfo.Arguments = string.Format(" /Run /TN \"{0}\"", TaskName + dataGridView_lsPermissions.Rows[e.RowIndex].Cells[1].Value);
-                    //process.StartInfo.UseShellExecute = false;
-                    //process.StartInfo.RedirectStandardOutput = true;
-                    //process.StartInfo.RedirectStandardError = true;
-                    //process.Start();
-                    //string output = process.StandardOutput.ReadToEnd();
-                    //string err = process.StandardError.ReadToEnd();
-                    int n = 100;
-                    while (n < 5000)
-                    {
-                        try
-                        {
-                            Thread.Sleep(n);
-                            string rel = File.ReadAllText(InitParametar.PathDirectoryCurrentApp + @"\command.txt");
-                            if (rel.Contains("[SRV]"))
-                            {
-                                MessageBox.Show(rel, "Run Task");
-                                break;
-                            }
-                        }
-                        catch { }
-                        n += 100;
-                    }
-
+                    SendCommandService(DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") + " [WFA] RunTask " + InitParametar.CurrentUser + "/" + dataGridView_lsPermissions.Rows[e.RowIndex].Cells[1].Value);
+                    MessageBox.Show("Sent the command successfully.", "Run Task");
                 }
                 else
                     MessageBox.Show("Task not Active", "Run Task");
@@ -430,13 +405,38 @@ namespace Transaction_Statistical
                 pnl_Month.Visible = true;
             }
         }
-        private void CommandRestartServiceScheduler()
+        
+        private void SendCommandService(string cmd)
         {
             try
             {
-                File.WriteAllText(InitParametar.PathDirectoryCurrentApp + @"\command.txt", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") + " [WFA] ReloadTask");
+                RegistryCus.WriteValue(InitParametar.SubkeyApp, "WFA", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") + " [WFA] " + cmd);
+                if (watcherReg == null)
+                {
+                    watcherReg = new RegistryWatcher(new Tuple<string, string>(InitParametar.SubkeyApp, "SRV"));
+                    watcherReg.RegistryChange += RegistryChanged;
+                }
             }
-            catch { }
+            catch(Exception ex)
+            {
+                InitParametar.Send_Error(ex.ToString(), MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name); ;
+            }
+        }
+        private void RegistryChanged(object sender, RegistryWatcher.RegistryChangeEventArgs args)
+        {
+            try
+            {
+                if (!string.IsNullOrEmpty(args.Value.ToString()))
+                {
+                    MessageBox.Show(args.Value.ToString(), "Info from Service Scheduler");
+                    Registry.SetValue(args.KeyName, args.ValueName, string.Empty);
+
+                }
+            }
+            catch(Exception ex)
+            {
+                InitParametar.Send_Error(ex.ToString(), MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name); ;
+            }
         }
     }
 }

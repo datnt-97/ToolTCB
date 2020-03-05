@@ -360,6 +360,7 @@
             this.btn_Save.Size = new System.Drawing.Size(105, 42);
             this.btn_Save.TabIndex = 22;
             this.btn_Save.Text = "Save";
+            this.btn_Save.Enabled = false;
             this.btn_Save.Click += new System.EventHandler(this.btn_Save_Click);
             // 
             // label5
@@ -428,6 +429,7 @@
             this.btn_Remove.Size = new System.Drawing.Size(105, 42);
             this.btn_Remove.TabIndex = 15;
             this.btn_Remove.Text = "Remove";
+            this.btn_Remove.Enabled = false;
             this.btn_Remove.Click += new System.EventHandler(this.btn_Remove_Click);
             // 
             // groupBox3
@@ -577,6 +579,7 @@
             InitGUI.Custom.Editor_Border.OnColorHandler += InitializeComponent_Refresh;
             InitGUI.Custom.Editor_ForeColor.OnColorHandler += InitializeComponent_Refresh;
         }
+     
         private void InitializeComponent_Refresh(object sender, System.Drawing.Color e)
         {
 

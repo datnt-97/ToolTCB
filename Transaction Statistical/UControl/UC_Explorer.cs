@@ -193,12 +193,44 @@ namespace Transaction_Statistical
         private void init()
         {
             //image-icon extention
-            FolderImage = IconHelper.ShellIcon.GetSmallFolderIcon().ToBitmap();
-            HardDiskImage = IconHelper.ShellIcon.GetSmallIconFromExtension(@".").ToBitmap();
+            FolderImage = GetImageHistory("folder", true);// (IconHelper.ShellIcon.GetSmallFolderIcon() ?? Properties.Resources.NewFile).ToBitmap();
+            HardDiskImage = GetImageHistory(@".",false); //(IconHelper.ShellIcon.GetSmallIconFromExtension(@".") ?? Properties.Resources.NewFile).ToBitmap();
             MyComputerImage = Properties.Resources.Computer.ToBitmap();
             InternetImage = Properties.Resources.Internet.ToBitmap();
             LoadFullDiskDirectory();
             tre_Explorer.Nodes.Add(Node_DisksDirectories);
+        }
+        private Image GetImageHistory(string extensionFile, bool isFolder)
+        {
+            Bitmap img = null;
+            try
+            {
+                string file = InitParametar.PathDirectoryCurrentApp + @"\bin\" + extensionFile + ".bm";
+                if (File.Exists(file))
+                {
+                    img = new Bitmap(file);
+                }
+                else
+                {
+                    Icon ico;
+                    if (isFolder) 
+                        ico = IconHelper.ShellIcon.GetSmallFolderIcon();                       
+                    else
+                        ico = IconHelper.ShellIcon.GetSmallIconFromExtension(extensionFile);
+                    if (ico != null)
+                    {
+                        if (!Directory.Exists(InitParametar.PathDirectoryCurrentApp + @"\bin\"))
+                            Directory.CreateDirectory(InitParametar.PathDirectoryCurrentApp + @"\bin\");
+                        ico.ToBitmap().Save(file);
+                    }
+                    else
+                        ico = Properties.Resources.NewFile;
+                    img = ico.ToBitmap();
+                }
+            }
+            catch
+            { }
+            return img;
         }
         public void LoadFullDiskDirectory()
         {
@@ -233,6 +265,7 @@ namespace Transaction_Statistical
         }
         public bool GetAllDirectoriesFilesOfDirectoryToNode(DirectoryInfo rootPath, TreeNode NodeRoot, int nloop)
         {
+            
             if (nloop > 0)
             {
                 string imgFile;
@@ -269,7 +302,7 @@ namespace Transaction_Statistical
                         else
                             if (!imageList.Images.ContainsKey(imgFile))
                         {
-                            imageList.Images.Add(imgFile, IconHelper.ShellIcon.GetSmallIconFromExtension(file.Extension).ToBitmap());
+                            imageList.Images.Add(imgFile, GetImageHistory(file.Extension, false));
 
                         }
                         aNode.ImageKey = aNode.SelectedImageKey = IconHelper.ImageUltility.CreateBitmapAttributes(file.Attributes, imgFile, ref imageList);

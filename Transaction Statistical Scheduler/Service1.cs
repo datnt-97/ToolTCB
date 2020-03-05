@@ -1,8 +1,10 @@
-﻿using System;
+﻿using Microsoft.Win32;
+using System;
 using System.Collections.Generic;
 
 using System.Diagnostics;
 using System.IO;
+using System.Management;
 using System.Reflection;
 using System.ServiceProcess;
 
@@ -16,6 +18,7 @@ namespace Transaction_Statistical_Scheduler
         bool Stop;
         List<SchedulerService> Tasks;
         string LastComnand = string.Empty;
+        RegistryWatcher watcherReg;
         public TransactionStatisticalScheduler()
         {
             InitializeComponent();
@@ -26,7 +29,6 @@ namespace Transaction_Statistical_Scheduler
 
         protected override void OnStart(string[] args)
         {
-
             try
             {
                 InitParametar.Init();
@@ -36,6 +38,9 @@ namespace Transaction_Statistical_Scheduler
 
                 thread = new Thread(() => Startup());
                 thread.Start();
+
+                watcherReg = new RegistryWatcher(new Tuple<string, string>(InitParametar.SubkeyApp, "WFA"));
+                watcherReg.RegistryChange += RegistryChanged;
             }
             catch (Exception ex)
             {
@@ -227,14 +232,65 @@ namespace Transaction_Statistical_Scheduler
             try
             {
                 watcher.EnableRaisingEvents = false;
-                File.WriteAllText(InitParametar.PathCurrentApp + @"\command.txt", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") + "[SRV] " + cmd);
-               
+               // File.WriteAllText(InitParametar.PathCurrentApp + @"\command.txt", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") + "[SRV] " + cmd);
+                RegistryCus.WriteValue(InitParametar.SubkeyApp, "SRV", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss ") + cmd);
              }
             catch (Exception ex)
             {
                 InitParametar.Send_Error(ex.ToString(), MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name);
             }
             watcher.EnableRaisingEvents = true;
+        }
+
+        private void RegistryChanged(object sender, RegistryWatcher.RegistryChangeEventArgs args)
+        {
+            if (!string.IsNullOrEmpty(args.Value.ToString()))
+            {
+                Registry.SetValue(args.KeyName, args.ValueName, string.Empty);
+
+              string  cmd = args.Value.ToString();
+                InitParametar.WriteLogApplication(string.Format("{0:HH:mm:ss fff}", DateTime.Now) + " Get command from tool.", true, false);
+                if (!cmd.Equals(LastComnand))
+                {
+                    LastComnand = cmd;                   
+                    InitParametar.WriteLogApplication(" Command: [" + LastComnand + "]", true, false);
+                    if (LastComnand.EndsWith("Restart"))
+                    {
+                        OnStop();
+                        OnStart(null);
+                        WriteCommand("Called Restart successful.");
+                    }
+                    else if (LastComnand.EndsWith("OnStop"))
+                    {
+                        OnStop();
+                        WriteCommand("Called Stop successful.");
+                    }
+                    else if (LastComnand.EndsWith("OnStart"))
+                    {
+                        OnStart(null);
+                        WriteCommand("Called Start successful.");
+                    }
+                    else if (LastComnand.EndsWith("ReloadTask"))
+                    {
+                        ClearTimer();
+                        LoadTask();
+                        WriteCommand("Called ReloadTask successful.");
+                    }
+                    else if (LastComnand.Contains("RunTask"))
+                    {
+                        SchedulerService task = new SchedulerService();
+                        task.User = LastComnand.Substring(LastComnand.IndexOf("RunTask") + 8).Split('/')[0].Trim();
+                        task.Name = LastComnand.Substring(LastComnand.IndexOf("RunTask") + 8).Split('/')[1].Trim();
+                        task.ProcessTask();
+                        WriteCommand("Called task [" + task.Name + "] for user [" + task.User + "] successful.");
+                    }
+                    else
+                    {
+                        WriteCommand("Command invalid");
+                        InitParametar.WriteLogApplication(" Command invalid.", false, true);
+                    }
+                }
+            }
         }
     }
     public class SchedulerService
@@ -266,11 +322,10 @@ namespace Transaction_Statistical_Scheduler
             {
                 if (Type.Equals(TypeStart.DAILY))
                 {
-                    ScheduleTaskDay(new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, int.Parse(Time.Split(':')[0]), int.Parse(Time.Split(':')[0]), 0, 0), 12, () => ProcessTask());
+                    ScheduleTaskDay(new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, int.Parse(Time.Split(':')[0]), int.Parse(Time.Split(':')[1]), 0, 0), 12, () => ProcessTask());
                 }
                 else if (Type.Equals(TypeStart.MONTHLY))
                 {
-
                     foreach (string month in Month)
                     {
                         int m = 0;

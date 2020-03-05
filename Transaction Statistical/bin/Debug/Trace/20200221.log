@@ -1032,3 +1032,29 @@ System.Threading.ThreadAbortException: Thread was being aborted.
    at Transaction_Statistical_Scheduler.TransactionStatisticalScheduler.Startup()
 ----------------------------------------------
 
+----------------------------------------------
+14:14:42 817  On Start Service.
+ Load Tasks.
+ Load for user: TanySmile
+ Task name: dfsdf
+     Task time: 11:58
+     Task type: DAILY => 
+ Task name: month
+     Task time: 13:10
+     Task type: MONTHLY => FEB, MAR, APR, MAY, JUN, JUL, AUG, SEP, OCT, NOV, DEC, JAN
+     Mission temporarily delayed because timer's too big: 2020-03-20 13:10:00
+     Mission temporarily delayed because timer's too big: 2020-04-20 13:10:00
+     Mission temporarily delayed because timer's too big: 2020-05-20 13:10:00
+     Mission temporarily delayed because timer's too big: 2020-06-20 13:10:00
+     Mission temporarily delayed because timer's too big: 2020-07-20 13:10:00
+     Mission temporarily delayed because timer's too big: 2020-08-20 13:10:00
+     Mission temporarily delayed because timer's too big: 2020-09-20 13:10:00
+     Mission temporarily delayed because timer's too big: 2020-10-20 13:10:00
+     Mission temporarily delayed because timer's too big: 2020-11-20 13:10:00
+     Mission temporarily delayed because timer's too big: 2020-12-20 13:10:00
+ Task name: weekly
+     Task time: 10:36
+     Task type: WEEKLY => WED, THU, FRI, SAT, SUN, MON, TUE
+ Init Service Finished.
+----------------------------------------------
+
