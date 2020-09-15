@@ -86,6 +86,7 @@ namespace Transaction_Statistical
 
                 PathDirectoryCurrentUserConfigData = string.Format(@"c:\users\{0}\Documents\Transaction Statistical", CurrentUser); if (!Directory.Exists(PathDirectoryCurrentUserConfigData)) Directory.CreateDirectory(PathDirectoryCurrentUserConfigData);
                 PathFileConfig = InitParametar.PathDirectoryCurrentUserConfigData + "\\AppConfig.dat";
+                if (!File.Exists(PathFileConfig) && File.Exists(PathDirectoryCurrentApp + "\\AppConfig.dat")) File.Copy(PathDirectoryCurrentApp + "\\AppConfig.dat", PathFileConfig, true);
                 PathDirectoryUtilities = (PathDirectoryCurrentApp + "\\Utilities").Replace(@"\\", @"\"); if (!Directory.Exists(PathDirectoryUtilities)) Directory.CreateDirectory(PathDirectoryUtilities);
                 FolderSystemTrace = (PathDirectoryCurrentUserConfigData + "\\Trace").Replace(@"\\", @"\"); if (!Directory.Exists(FolderSystemTrace)) Directory.CreateDirectory(FolderSystemTrace);
                 DatabaseFile = PathDirectoryCurrentUserConfigData + "\\DB.s3db";
@@ -125,7 +126,7 @@ namespace Transaction_Statistical
                             }
                             catch(Exception ex) 
                             {
-                                MessageBox.Show("Can't start service Scheduler.\nPlease, run tool by runas administrator to fix.\n" + ex.Message, "Start service scheduler ", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                                MessageBox.Show("Can't start service Scheduler.\nPlease, run tool by runas administrator to fix.\n\n\n" + ex.Message, "Start service scheduler ", MessageBoxButtons.OK, MessageBoxIcon.Error);
                             }
                         }
 
@@ -149,7 +150,7 @@ namespace Transaction_Statistical
                         process.WaitForExit();
 
                         if (!output.Contains("The Commit phase completed successfully."))
-                            MessageBox.Show("Can't install Transaction Statistical Scheduler.\nPlease, run tool by runas administrator to fix.\n" + output, "Install Transaction Statistical Scheduler ", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            MessageBox.Show("Can't install Transaction Statistical Scheduler.\nPlease, run tool by runas administrator to fix.\n\n\n" + output, "Install Transaction Statistical Scheduler ", MessageBoxButtons.OK, MessageBoxIcon.Error);
                         else
                             CheckServiceScheduler();
                     }
@@ -484,6 +485,7 @@ namespace Transaction_Statistical
         public Dictionary<string, string> Template_EventReceive;
         public Dictionary<string, string> Template_SplitTransactions;
         public Dictionary<string, string> Template_EventCounterChanged;
+        public Dictionary<string, string> Template_FileFilter;
         public Dictionary<string, string> Template_EventCashOutIn;
         public Dictionary<string, TransactionType> Template_TransType;
         public Dictionary<string, TransactionType> Template_TransType_Select;
@@ -514,7 +516,8 @@ namespace Transaction_Statistical
                 if (Template_EventCashOutIn == null) Template_EventCashOutIn = new Dictionary<string, string>();
                 if (Template_SplitTransactions == null) Template_SplitTransactions = new Dictionary<string, string>();
                 if (Template_EventCounterChanged == null) Template_EventCounterChanged = new Dictionary<string, string>();
-
+                if (Template_FileFilter == null) Template_FileFilter = new Dictionary<string, string>();
+               
                 if (Template_TransType == null) Template_TransType = new Dictionary<string, TransactionType>(); else Template_TransType.Clear();
 
                 DataTable cfg_data = sqlite.GetTableDataWith2ColumnName("CfgData", "Type_ID", "456", "Parent_ID", TemplateTransactionID);
@@ -551,6 +554,9 @@ namespace Transaction_Statistical
                 foreach (DataRow r in cfg_data.Rows)
                     Template_EventCounterChanged[r["Field"].ToString()] = r["Data"].ToString();
 
+                cfg_data = sqlite.GetTableDataWith2ColumnName("CfgData", "Type_ID", "1052", "Parent_ID", TemplateTransactionID);
+                foreach (DataRow r in cfg_data.Rows)
+                    Template_FileFilter[r["Field"].ToString()] = r["Data"].ToString();
 
                 Template_TransType = new Dictionary<string, TransactionType>();
                 Template_TransType_Select = new Dictionary<string, TransactionType>();
@@ -685,13 +691,14 @@ namespace Transaction_Statistical
             return false;
         }
 
+        
 
         public async Task<bool> Reads(List<string> files, TextProgressBar process = null)
         {
 
             try
             {
-                if (!InitParametar.License_CheckModule(License.Modules.Read)) return false;
+                if (!InitParametar.License_CheckModule(License.Modules.Read) || files.Count==0) return false;
                 DateTime currentDate = DateTime.MinValue;
 
                 ListTransaction = new Dictionary<string, Dictionary<DateTime, object>>();
@@ -878,6 +885,11 @@ namespace Transaction_Statistical
                                         if (key.Value.value.ContainsKey("DateBegin"))
                                         {
                                             DateTime.TryParseExact(key.Value.value["DateBegin"], "MM-dd-yyyy HH:mm:ss", CultureInfo.InvariantCulture, DateTimeStyles.None, out trans.DateBegin);
+                                            if (DateTime.Compare(trans.DateBegin, StartDate) < 0 || DateTime.Compare(trans.DateBegin, EndDate) > 0) return sString;
+                                        }
+                                        else if (key.Value.value.ContainsKey("TimeBegin"))
+                                        {
+                                            DateTime.TryParseExact(dateFile.ToString("yyyyMMdd") + key.Value.value["TimeBegin"], "yyyyMMddHH:mm:ss", CultureInfo.InvariantCulture, DateTimeStyles.None, out trans.DateBegin);
                                             if (DateTime.Compare(trans.DateBegin, StartDate) < 0 || DateTime.Compare(trans.DateBegin, EndDate) > 0) return sString;
                                         }
                                         else
@@ -1563,8 +1575,6 @@ namespace Transaction_Statistical
             return trans;
         }
         #endregion
-
-
 
         private bool FindCounterChangedAsync(string sString)
         {
@@ -2743,10 +2753,7 @@ namespace Transaction_Statistical
                     return string.IsNullOrEmpty(s) ? false : true;
                 }
             }
-            catch (Exception ex)
-            {
-                InitParametar.Send_Error(ex.ToString(), MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name); ;
-            }
+            catch { }
             return false;
         }
         public static string[] GetSubkeys(string path)

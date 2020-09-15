@@ -110,6 +110,7 @@
             this.mode_Label7.MouseEnter += new System.EventHandler(this.mode_Label_MouseEnter);
             this.mode_Label7.MouseLeave += new System.EventHandler(this.mode_Label_Leave);
             this.mode_Label7.MouseHover += new System.EventHandler(this.mode_Label_MouseHover);
+            this.mode_Label7.Visible = false;
             // 
             // mode_Label8
             // 
@@ -125,6 +126,7 @@
             this.mode_Label8.MouseEnter += new System.EventHandler(this.mode_Label_MouseEnter);
             this.mode_Label8.MouseLeave += new System.EventHandler(this.mode_Label_Leave);
             this.mode_Label8.MouseHover += new System.EventHandler(this.mode_Label_MouseHover);
+            this.mode_Label8.Visible = false;
             // 
             // mode_Label3
             // 

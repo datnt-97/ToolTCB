@@ -1,0 +1,7 @@
+[Directory]
+FolderTemp=D:\04-BSI\02-SUPPORTS\TCB\103091\103091
+FolderTemp_Export=D:\
+FolderTempExport=D:\Export
+[OpenFile]
+FileText=*.txt;*.log;*.prn;*.jrn
+FileExtract=*.rar;*.zip;*.z;*.gzip

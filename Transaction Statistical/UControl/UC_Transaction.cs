@@ -119,8 +119,10 @@ namespace Transaction_Statistical.UControl
                     await JournalAnalyze(new List<string> { txt_Path.Text });
                 else if (Directory.Exists(txt_Path.Text))
                 {
-                    FileInfo[] files = df.GetAllFilePath(txt_Path.Text, InitParametar.ReadTrans.ExtensionFile);
-                    await JournalAnalyze(files.Select(f => f.FullName).ToList());
+                    // FileInfo[] files = df.GetAllFilePath(txt_Path.Text, InitParametar.ReadTrans.ExtensionFile);
+                    FileInfo[] files = df.GetAllFilePath(txt_Path.Text, InitParametar.ReadTrans.Template_FileFilter.Values.ToArray());
+                    if (files == null || files.Length == 0) MessageBox.Show("Not files found.", "Error File/Directory", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    else await JournalAnalyze(files.Select(f => f.FullName).ToList());
                 }
                 else
                     MessageBox.Show("File/Drectory not exist.", "Error File/Directory", MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -138,8 +140,6 @@ namespace Transaction_Statistical.UControl
         }
         private async Task<bool> JournalAnalyze(List<string> lsFile_Journal)
         {
-
-
             try
             {
                 prb_Process.CustomText = string.Format("Found: {0} files.", lsFile_Journal.Count);
@@ -541,7 +541,7 @@ namespace Transaction_Statistical.UControl
         {
             try
             {
-                if(e.KeyChar== '\u0006')
+                if (e.KeyChar == '\u0006')
                 {
                     uc_Search.Icon_Search_Click(null, null);
                 }
@@ -552,7 +552,7 @@ namespace Transaction_Statistical.UControl
                 InitParametar.Send_Error(ex.ToString(), MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name);
             }
         }
-    private void selectedProper(object sender, SelectedGridItemChangedEventArgs e)
+        private void selectedProper(object sender, SelectedGridItemChangedEventArgs e)
         {
             var item = e.NewSelection;
             var trans = e.NewSelection.Value;

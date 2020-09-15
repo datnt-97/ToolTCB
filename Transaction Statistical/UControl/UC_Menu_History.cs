@@ -14,7 +14,6 @@ namespace Transaction_Statistical.UControl
     public partial class UC_Menu_History : UserControl
     {
         int step;
-        List<string> lstFile; 
         public UC_Menu_History()
         {
             InitializeComponent();

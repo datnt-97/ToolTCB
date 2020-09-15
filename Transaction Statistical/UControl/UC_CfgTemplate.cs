@@ -41,6 +41,8 @@ namespace Transaction_Statistical
                     cbo_Keyword_Typelog.Items.Add(cb);
                 }
                 if (cbo_Keyword_Typelog.Items.Count != 0) cbo_Keyword_Typelog.SelectedIndex = 0;
+
+
             }
             catch { }
         }
@@ -118,7 +120,7 @@ namespace Transaction_Statistical
             try
             {
 
-                if (sqlite.CheckExistValue("Transactions", "Name", cbo_Transactions.Text))
+                if (sqlite.CheckExist2Value("Transactions", "Name", cbo_Transactions.Text,"TemplateID",template_ID))
                 {
                     MessageBox.Show("Transaction [" + cbo_Transactions.Text + "] already exists", "Add transaction info", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     return;

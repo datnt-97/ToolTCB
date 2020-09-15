@@ -93,7 +93,8 @@ namespace Transaction_Statistical.UControl
             else
                 bt_Custom.Visible = false;
             if (InitParametar.sqlite.Update1Entry("CfgData", "Field", (sender as Mode_RadioButton).Text, "ID", "52"))
-                MessageBox.Show("Update successfuly.\n You need restart application.", "Update style");
+            {//MessageBox.Show("Update successfuly.\n You need restart application.", "Update style");
+            }
             else
                 MessageBox.Show("Update unsuccessfuly", "Update style", MessageBoxButtons.OK, MessageBoxIcon.Error);
             InitGUI.Init();

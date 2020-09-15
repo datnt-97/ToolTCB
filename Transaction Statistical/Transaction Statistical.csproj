@@ -30,6 +30,7 @@
     <UseApplicationTrust>false</UseApplicationTrust>
     <PublishWizardCompleted>true</PublishWizardCompleted>
     <BootstrapperEnabled>true</BootstrapperEnabled>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -96,6 +97,10 @@
     </Reference>
     <Reference Include="EPPlus, Version=4.1.0.0, Culture=neutral, PublicKeyToken=ea159fdaa78159a1, processorArchitecture=MSIL">
       <HintPath>..\packages\EPPlus.4.1.0\lib\net40\EPPlus.dll</HintPath>
+    </Reference>
+    <Reference Include="FastColoredTextBox, Version=2.16.11.0, Culture=neutral, PublicKeyToken=fb8aa12b994ef61b, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>FastColoredTextBox\bin\Debug\FastColoredTextBox.dll</HintPath>
     </Reference>
     <Reference Include="Interop.MSHTML">
       <HintPath>..\..\..\FDM_Console\FDMS - 12-05-2018 - Copy\TextControl\TextControl\obj\Debug\Interop.MSHTML.dll</HintPath>
@@ -177,6 +182,9 @@
       <DependentUpon>EditorHTML.cs</DependentUpon>
     </Compile>
     <Compile Include="AddOn\InitGUI.cs" />
+    <Compile Include="AddOn\ButtonIcon.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="AddOn\TextProcessBar.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -229,12 +237,6 @@
     </Compile>
     <Compile Include="Frm\Frm_LoadingApp.Designer.cs">
       <DependentUpon>Frm_LoadingApp.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Frm\test.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Frm\test.Designer.cs">
-      <DependentUpon>test.cs</DependentUpon>
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -379,9 +381,6 @@
     <EmbeddedResource Include="Frm\Frm_LoadingApp.resx">
       <DependentUpon>Frm_LoadingApp.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Frm\test.resx">
-      <DependentUpon>test.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
@@ -397,6 +396,7 @@
     </EmbeddedResource>
     <EmbeddedResource Include="UControl\UC_CfgTemplate.resx">
       <DependentUpon>UC_CfgTemplate.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="UControl\UC_CustomTemplate.resx">
       <DependentUpon>UC_CustomTemplate.cs</DependentUpon>
@@ -421,6 +421,7 @@
     </EmbeddedResource>
     <EmbeddedResource Include="UControl\UC_Info.resx">
       <DependentUpon>UC_Info.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="UControl\UC_Menu.resx">
       <DependentUpon>UC_Menu.cs</DependentUpon>
@@ -445,6 +446,7 @@
     </EmbeddedResource>
     <EmbeddedResource Include="UControl\UC_Text.resx">
       <DependentUpon>UC_Text.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="UControl\UC_Transaction.resx">
       <DependentUpon>UC_Transaction.cs</DependentUpon>
@@ -470,12 +472,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\favticon.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="FastColoredTextBox\FastColoredTextBox.csproj">
-      <Project>{6DD14A85-CCFC-4774-BD26-0F5772512319}</Project>
-      <Name>FastColoredTextBox</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\Menu1.png" />

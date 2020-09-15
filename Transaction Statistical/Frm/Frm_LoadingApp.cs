@@ -91,5 +91,19 @@ namespace Transaction_Statistical
                 Program.isMinimize = false;
             }
         }
+
+        private void InitializeComponent()
+        {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Frm_LoadingApp));
+            this.SuspendLayout();
+            // 
+            // Frm_LoadingApp
+            // 
+            this.ClientSize = new System.Drawing.Size(282, 253);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.Name = "Frm_LoadingApp";
+            this.ResumeLayout(false);
+
+        }
     }
 }

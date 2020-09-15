@@ -171,14 +171,16 @@ namespace Transaction_Statistical.AddOn
             bx.ShowCloseButton = showCloseButton;
             bx.OnClickCloseHandler += Close_Button;
             TabButtonPanel.Controls.Add(bx);
-            
+            bx.TabIndex = buttonlist.Count;
+            tpcontrol.TabIndex = buttonlist.Count;
             buttonlist.Add(bx);
-            selected_index++;
+            selected_index = bx.TabIndex;
 
             TabPanelCtrlList.Add(tpcontrol);
             TabPanel.Controls.Clear();
             TabPanel.Controls.Add(tpcontrol);
-
+            if(showCloseButton)          
+                bx.ContextMenuStrip = cMS_Tab;
             UpdateButtons();
         }
         void createButtonNew( Point loc)
@@ -202,6 +204,7 @@ namespace Transaction_Statistical.AddOn
             btAddNew.Font = this.Font;
             btAddNew.Click += button_AddTab;
             btAddNew.ShowCloseButton = false;
+            btAddNew.TabIndex = 100;
             TabButtonPanel.Controls.Add(btAddNew);
             UpdateButtons();
         }
@@ -211,20 +214,33 @@ namespace Transaction_Statistical.AddOn
         }
         void button_Click(object sender, EventArgs e)
         {
-           
-            string btext = ((ButtonX)sender).Text;
-            int index = 0, i;
-            for (i = 0; i < buttonlist.Count; i++)
+
+            //  string btext = ((ButtonX)sender).Text;
+            //int index = 0, i;
+            //for (i = 0; i < buttonlist.Count; i++)
+            //{
+            //    if (buttonlist[i] == (sender as ButtonX))
+            //    {
+            //        index = i;
+            //    }
+            //}
+            //if (selected_index != index)
+            //{
+            //    TabPanel.Controls.Clear();
+            //    TabPanel.Controls.Add(TabPanelCtrlList[index]);
+            //    selected_index = ((ButtonX)sender).TabIndex;
+            //    UpdateButtons();
+            //}
+            selected_index = (sender as ButtonX).TabIndex;
+            foreach (TabPanelControl tpc in TabPanelCtrlList)
             {
-                if (buttonlist[i].Text == btext)
+                if(tpc.TabIndex== selected_index)
                 {
-                    index = i;
+                    TabPanel.Controls.Clear();
+                    TabPanel.Controls.Add(tpc);
+                    UpdateButtons();
                 }
             }
-            TabPanel.Controls.Clear();
-            TabPanel.Controls.Add(TabPanelCtrlList[index]);
-            selected_index = ((ButtonX)sender).TabIndex;
-            UpdateButtons();
         }
         void button_AddTab(object sender, EventArgs e)
         {
@@ -232,9 +248,9 @@ namespace Transaction_Statistical.AddOn
             TabPanelControl tpc = new TabPanelControl();
             tpc.Dock = DockStyle.Fill;
             UControl.UC_Text uc_Text = new UControl.UC_Text();
-            uc_Text.Dock = DockStyle.Fill;
+            uc_Text.Dock = DockStyle.Fill;  
             tpc.Controls.Add(uc_Text);
-            this.AddTab(uc_Text.TabName, uc_Text.TabName, tpc, true);
+            AddTab(uc_Text.TabName, uc_Text.TabName, tpc, true);
         }
         public TabPanelControl GetTabPanel(int indexTab)
         {
@@ -265,7 +281,9 @@ namespace Transaction_Statistical.AddOn
                 if (btAddNew == null)
                     createButtonNew(pt);
                 else
-                    btAddNew.Location = pt;
+                {
+                    btAddNew.Location = pt;                 
+                }
             }
         }
 
@@ -295,6 +313,9 @@ namespace Transaction_Statistical.AddOn
                 }
 
             }
+            cMS_Tab.BackColor = tabCtrlPanel_backcolor;
+            
+            cMS_Tab.ForeColor = sel_tab_forecolor;
         }
 
         private void toolStripButton1_DropDownOpening(object sender, EventArgs e)
@@ -321,67 +342,38 @@ namespace Transaction_Statistical.AddOn
         List<string> btstrlist = new List<string> { };
         void BackToFront_SelButton()
         {
-            int i = 0;
-
-            TabButtonPanel.Controls.Clear();
-            btstrlist.Clear();
-            for (i = 0; i < buttonlist.Count; i++)
+            int x=0;
+            int n = 0;
+            //   TabButtonPanel.Controls.Clear();
+            foreach (ButtonX bt in buttonlist.OrderBy(b => b.TabIndex).ToList())
             {
-                btstrlist.Add(buttonlist[i].Text);
-            }
-
-            buttonlist.Clear();
-
-            for (int j = 0; j < btstrlist.Count; j++)
-            {               
-                if (j == 0)
+                foreach (Control ctr in TabButtonPanel.Controls)
                 {
-                    ButtonX bx = new ButtonX();
-                    bx.DisplayText = btstrlist[j];
-                    bx.Text = btstrlist[j];
-                    bx.Size = tab_size;
-                    bx.Location = new Point(0, 0);
-                    bx.ForeColor = sel_tab_forecolor;
-                    bx.BXBackColor = sel_tab_backcolor;
-                    bx.MouseHoverColor = sel_tab_backcolor;
-                    bx.MouseClickColor1 = sel_tab_backcolor;
-                    bx.ChangeColorMouseHC = false;
-                    bx.TextLocation_X = txt_x_loc;
-                    bx.TextLocation_Y = txt_y_loc;
-                    bx.Font = this.Font;
-                    bx.Click += button_Click;
-                    bx.OnClickCloseHandler += Close_Button;
-                    TabButtonPanel.Controls.Add(bx);
-                    buttonlist.Add(bx);
-                    selected_index++;
-                                       
-                }
-                else if (j > 0)
-                {
-                    ButtonX bx = new ButtonX();
-                    bx.DisplayText = btstrlist[j];
-                    bx.Text = btstrlist[j];
-                    bx.Size = tab_size;
-                    bx.ForeColor = sel_tab_forecolor;
-                    bx.BXBackColor = sel_tab_backcolor;
-                    bx.MouseHoverColor = sel_tab_backcolor;
-                    bx.MouseClickColor1 = sel_tab_backcolor;
-                    bx.ChangeColorMouseHC = false;
-                    bx.TextLocation_X = txt_x_loc;
-                    bx.TextLocation_Y = txt_y_loc;
-                    bx.Font = this.Font;
-                    bx.Click += button_Click;
-                    bx.OnClickCloseHandler += Close_Button;
-                    bx.Location = new Point(buttonlist[j - 1].Size.Width + buttonlist[j - 1].Location.X, 0);
-                    TabButtonPanel.Controls.Add(bx);
-                    buttonlist.Add(bx);
-                    selected_index++;
-
-                   
+                    if (ctr.Equals(bt))
+                    {
+                        bt.Location = new Point(x, bt.Location.Y);
+                        x += bt.Width;
+                        //  TabButtonPanel.Controls.Add(bt);
+                        bt.TabIndex = n; 
+                        ctr.Location = bt.Location;
+                        ctr.TabIndex = n;n++;
+                        continue;
+                    }
                 }
             }
-            TabPanel.Controls.Clear();
-            
+            if (ShowButtonNewTab)
+            {
+                Point pt = new Point(x, 5);
+                if (btAddNew == null)
+                    createButtonNew(pt);
+                else
+                { 
+                    btAddNew.Location = pt;
+                  
+                    if (!TabButtonPanel.Controls.Contains(btAddNew))
+                        TabButtonPanel.Controls.Add(btAddNew);
+                }
+            }           
         }
 
         void tbr_Click(object sender, EventArgs e)
@@ -407,6 +399,7 @@ namespace Transaction_Statistical.AddOn
             string btext = ((ToolStripMenuItem)sender).Text;
             BackToFront_SelButton();
             selected_index = 0;
+            TabPanel.Controls.Clear();
             TabPanel.Controls.Add(TabPanelCtrlList[buttonlist[0].TabIndex]);
             UpdateButtons();
         }
@@ -416,17 +409,21 @@ namespace Transaction_Statistical.AddOn
         {
             if (index >= 0 && buttonlist.Count > 0 && index < buttonlist.Count)
             {
+                TabButtonPanel.Controls.Remove(buttonlist[index]);
                 buttonlist.RemoveAt(index);
                 TabPanelCtrlList.RemoveAt(index);
                 BackToFront_SelButton();
+                
                 if (buttonlist.Count > 1)
                 {
                     if (index - 1 >= 0)
                     {
+                        TabPanel.Controls.Clear();
                         TabPanel.Controls.Add(TabPanelCtrlList[index - 1]);
                     }
                     else
                     {
+                        TabPanel.Controls.Clear();
                         TabPanel.Controls.Add(TabPanelCtrlList[(index - 1) + 1]);
                         selected_index = (index - 1) + 1;
                     }
@@ -435,6 +432,7 @@ namespace Transaction_Statistical.AddOn
 
                 if (buttonlist.Count == 1)
                 {
+                    TabPanel.Controls.Clear();
                     TabPanel.Controls.Add(TabPanelCtrlList[0]);
                     selected_index = 0;
                 }
@@ -442,5 +440,89 @@ namespace Transaction_Statistical.AddOn
             UpdateButtons();
         }
 
+        private void closeToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            RemoveTab(cMS_Tab.SourceControl.TabIndex);
+        }
+
+        private void closeAllButThisToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+
+            List<int> lst = buttonlist.Select(x=>x.TabIndex).ToList();
+            foreach (int bt in lst)
+            {
+                if (bt != 0 && bt != 100 && bt != cMS_Tab.SourceControl.TabIndex)
+                    RemoveTab(bt);
+            }
+        }
+
+        private void closeAllToTheLeftToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            List<int> lst = buttonlist.Select(x => x.TabIndex).ToList();
+            foreach (int bt in lst)
+            {
+                if (bt == cMS_Tab.SourceControl.TabIndex) break;
+                if (bt != 0 && bt != 100 )
+                    RemoveTab(bt);                
+            }
+        }
+
+        private void closeAllToTheRightToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            List<int> lst = buttonlist.Select(x => x.TabIndex).ToList();
+            bool enable = false;
+            foreach (int bt in lst)
+            {
+                if (bt == cMS_Tab.SourceControl.TabIndex) enable =true;
+                if (bt != 0 && bt != 100 && enable)
+                    RemoveTab(bt);
+            }
+        }
+
+        private void saveToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            foreach(TabPanelControl tpc in TabPanelCtrlList)
+            {
+                if(tpc.TabIndex== cMS_Tab.SourceControl.TabIndex && tpc.Controls[0] is UControl.UC_Text)
+                {
+                    (tpc.Controls[0] as UControl.UC_Text).bt_Save_Click(null, null);
+                }
+            }
+        }
+
+        private void saveAsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            foreach (TabPanelControl tpc in TabPanelCtrlList)
+            {
+                if (tpc.TabIndex == cMS_Tab.SourceControl.TabIndex && tpc.Controls[0] is UControl.UC_Text)
+                {
+                    (tpc.Controls[0] as UControl.UC_Text).bt_SaveAs_Click(null, null);
+                }
+            }
+        }
+
+        private void openConteningToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        public void UpdateTilte(int tabIndex, string tilte, string tooltip)
+        {
+            try
+            {
+              buttonlist.Clear();
+                foreach (ButtonX bt in TabButtonPanel.Controls)
+                {
+                    if(bt.TabIndex!=100)
+                    buttonlist.Add(bt);
+                    if (bt.TabIndex == tabIndex)
+                    {
+                        bt.Text = tilte;
+                        toolTip1.SetToolTip(bt, tooltip);                       
+                    }
+                }
+            }
+            catch { }
+        }
     }
 }

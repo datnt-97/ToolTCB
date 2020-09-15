@@ -83,7 +83,7 @@ namespace Transaction_Statistical.UControl
                 web.DocumentText = document;
                 Frm_TemplateDefault frm = new Frm_TemplateDefault(web, "Help");
                 frm.Size = new Size(1000, 700);
-                frm.ShowDialog();
+                frm.Show();
             }
         }
         private void mode_Label6_Click(object sender, EventArgs e)

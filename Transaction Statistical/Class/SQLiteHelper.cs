@@ -134,7 +134,7 @@ namespace Transaction_Statistical
             try
             {
                 DatabaseFile = InitParametar.DatabaseFile;
-                Password = "rt345@1$-*";
+                Password =  "rt345@1$-*";
                 if (DataBaseConnnection.State == System.Data.ConnectionState.Open)
                 {
                     return;
@@ -142,7 +142,8 @@ namespace Transaction_Statistical
                 if (Password != null)
                 {
                     DataBaseConnnection.ConnectionString = @"Data Source=" + DatabaseFile + "; Password=" + Password + ";";
-                    DataBaseConnnection.Open(); 
+                    DataBaseConnnection.Open();
+                  //  DataBaseConnnection.ChangePassword("");
                 }
                 if (Password == null)
                 {

@@ -10,6 +10,7 @@ using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Security.Principal;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -22,18 +23,22 @@ namespace Transaction_Statistical
         {
             DirectoryInfo rootDirectory = new DirectoryInfo(FolderPath);
             FileInfo[] lstFileTotal = null;
+            FileInfo[] total = rootDirectory.GetFiles("*", SearchOption.AllDirectories);
             foreach (string sFormat in FileFormat)
             {
-                FileInfo[] lstFileRoot = rootDirectory.GetFiles(sFormat);
-                if (lstFileTotal == null) lstFileTotal = lstFileRoot; else lstFileTotal = lstFileTotal.Concat(lstFileRoot).ToArray();
+                Regex reg = new Regex(sFormat);
+                lstFileTotal = total.Where(path => reg.IsMatch(path.Name)).ToArray();
+
+              //  FileInfo[] lstFileRoot = rootDirectory.GetFiles(sFormat,SearchOption.AllDirectories);               
+                //if (lstFileTotal == null) lstFileTotal = lstFileRoot; else lstFileTotal = lstFileTotal.Concat(lstFileRoot).ToArray();
 
             }
-            DirectoryInfo[] subDirectory = rootDirectory.GetDirectories();
-            foreach (DirectoryInfo sub in subDirectory)
-            {
-                FileInfo[] listFileSub = GetAllFilePath(sub.FullName, FileFormat);
-                if (lstFileTotal != null) lstFileTotal = lstFileTotal.Concat(listFileSub).ToArray(); else lstFileTotal = listFileSub;
-            }
+            //DirectoryInfo[] subDirectory = rootDirectory.GetDirectories();
+            //foreach (DirectoryInfo sub in subDirectory)
+            //{
+            //    FileInfo[] listFileSub = GetAllFilePath(sub.FullName, FileFormat);
+            //    if (lstFileTotal != null) lstFileTotal = lstFileTotal.Concat(listFileSub).ToArray(); else lstFileTotal = listFileSub;
+            //}
             return lstFileTotal;
         }
 

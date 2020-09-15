@@ -658,7 +658,7 @@
             // 
             this.gr_Admin.BackColor = System.Drawing.Color.Transparent;
             this.gr_Admin.Controls.Add(this.flp_Admin);
-            this.gr_Admin.ForeColor = System.Drawing.Color.White;
+            this.gr_Admin.ForeColor = InitGUI.Custom.Menu_Text.DisplayColor;
             this.gr_Admin.Location = new System.Drawing.Point(22, 480);
             this.gr_Admin.Name = "gr_Admin";
             this.gr_Admin.Size = new System.Drawing.Size(850, 71);
@@ -990,7 +990,10 @@
             // UC_Menu_Overview
             //             
             this.BackColor = InitGUI.Custom.Menu_RightBckgd.DisplayColor;
-
+            //
+            //gr_Admin
+            //
+            gr_Admin.ForeColor = InitGUI.Custom.Menu_Text.DisplayColor;
         }
         #endregion
         private Mode_RadioButton rd_Mode_Dark;

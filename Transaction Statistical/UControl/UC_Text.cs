@@ -41,7 +41,7 @@ namespace Transaction_Statistical.UControl
         }
         private void InitUI()
         {
-            InitializeComponent();
+            InitializeComponent2();
             pl_Menu.Location = new Point(this.Width, pl_Menu.Location.Y);
 
            
@@ -124,6 +124,7 @@ namespace Transaction_Statistical.UControl
         public void ReLoadFile()
         {
             disabletxtchange = true;
+            bt_Save.Enabled = false;
             if (File.Exists(PathFile)) fctb1.OpenFile(PathFile);
             DateTime dt = File.GetLastWriteTime(PathFile);
             inifile.Write("LastWriteTime", String.Format("{0:yyyyMMddHHmmssffff}", dt), Session);
@@ -235,9 +236,15 @@ namespace Transaction_Statistical.UControl
         private void bt_Flip_Click(object sender, EventArgs e)
         {
             if (spl_Main.Orientation.Equals(Orientation.Horizontal))
+            {
                 spl_Main.Orientation = Orientation.Vertical;
+                this.toolTip1.SetToolTip(this.bt_Flip, "Horizontal");
+            }
             else
+            {
                 spl_Main.Orientation = Orientation.Horizontal;
+                this.toolTip1.SetToolTip(this.bt_Flip, "Vertical");
+            }
         }
 
         private void bt_Switch_Click(object sender, EventArgs e)
@@ -526,6 +533,7 @@ namespace Transaction_Statistical.UControl
             {
                 string pathtemp = inifile.GetEntryValue(Session, "PathFileTemp");
                 File.WriteAllText(pathtemp, fctb1.Text);
+                bt_Save.Enabled = true;
             }
             catch
             { }
@@ -786,7 +794,7 @@ namespace Transaction_Statistical.UControl
                 System.IO.StreamReader file = new System.IO.StreamReader(InitParametar.PathDirectoryTempUsr + "\\" + Session);
                 System.IO.StreamWriter filenew = new System.IO.StreamWriter(pathnew);
                 string from = string.Empty;
-                bool newline = true;
+               // bool newline = true;
                 bool endline = true;
                 while ((line = file.ReadLine()) != null)
                 {
@@ -797,14 +805,14 @@ namespace Transaction_Statistical.UControl
                     }
                     if (line.StartsWith("RECV:"))
                     {
-                        newline = true;
+                       // newline = true;
                         filenew.WriteLine("");
                         filenew.WriteLine(line.Replace(@"RECV:", "").Replace(@"TIME", "").Replace(@"=", "").Trim());
                         from = @"< ";
                     }
                     if (line.StartsWith("MSG_OUT:"))
                     {
-                        newline = true;
+                      //  newline = true;
                         filenew.WriteLine("");
                         filenew.WriteLine(line.Replace(@"MSG_OUT:", "").Replace(@"TIME", "").Replace(@"=", "").Trim());
                         from = @"> ";
@@ -814,7 +822,7 @@ namespace Transaction_Statistical.UControl
                         string sb = string.Empty;
                         if (line.Contains(@"DATA = [")) sb = line.Substring(line.IndexOf(@"DATA = [") + 8);
                         if (line.Contains(@"TDATA: [")) sb = line.Substring(line.IndexOf(@"TDATA: [") + 8);
-                        newline = false;
+                        //newline = false;
                         endline = false;
                         if (sb.EndsWith(@"]")) endline = true;
                         filenew.Write(from + sb.TrimEnd(']'));
@@ -1195,6 +1203,90 @@ namespace Transaction_Statistical.UControl
             }
         }
 
-       
+        private void UpdateTilte()
+        {
+            try
+            {
+               int n = 0;
+                Control ct = this.Parent;
+                int tabindex = ct.TabIndex;
+                while(n<100)
+                {
+                    n++;
+                    if (ct is AddOn.TabControlX)
+                    {
+                        TabName = Path.GetFileName(PathFile);
+                        (ct as AddOn.TabControlX).UpdateTilte(tabindex, TabName, PathFile);
+                    }
+                    else
+                        ct = ct.Parent;
+
+                }
+            }
+            catch { }
+        }
+        private void bt_Open_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                using (OpenFileDialog openFileDialog = new OpenFileDialog())
+                {
+                    openFileDialog.InitialDirectory = "c:\\";
+                    openFileDialog.Filter = "txt files (*.txt)|*.txt|All files (*.*)|*.*";
+                    openFileDialog.FilterIndex = 2;
+                    openFileDialog.RestoreDirectory = true;
+
+                    if (openFileDialog.ShowDialog() == DialogResult.OK)
+                    {
+                        PathFile = openFileDialog.FileName;                       
+                        ReLoadFile();
+                        UpdateTilte();
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                InitParametar.Send_Error(ex.ToString(), MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name);
+            }
+        }
+
+        public void bt_Save_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                if (string.IsNullOrEmpty(PathFile)) bt_SaveAs_Click(sender, e);
+                else
+                File.WriteAllText(PathFile, fctb1.Text);
+                bt_Save.Enabled = false;
+            }
+            catch (Exception ex)
+            {
+                InitParametar.Send_Error(ex.ToString(), MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name);
+            }
+        }
+
+        public void bt_SaveAs_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                SaveFileDialog saveFileDialog1 = new SaveFileDialog();
+                saveFileDialog1.Filter = "txt files (*.txt)|*.txt|All files (*.*)|*.*";
+                saveFileDialog1.FilterIndex = 2;
+                saveFileDialog1.RestoreDirectory = true;
+
+                if (saveFileDialog1.ShowDialog() == DialogResult.OK)
+                {
+                    PathFile = saveFileDialog1.FileName;                 
+                    File.WriteAllText(PathFile, fctb1.Text);
+                    UpdateTilte();
+                    bt_Save.Enabled = false;
+                }
+               
+            }
+            catch (Exception ex)
+            {
+                InitParametar.Send_Error(ex.ToString(), MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name);
+            }
+        }
     }
 }

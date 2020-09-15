@@ -1,8 +1,9 @@
-D:\05-TEMP\Source\GitHub\ToolTCB\Transaction Statistical Scheduler\obj\Debug\Transaction Statistical Scheduler.csprojAssemblyReference.cache
 D:\05-TEMP\Source\GitHub\ToolTCB\Transaction Statistical Scheduler\bin\Debug\Transaction Statistical Scheduler.exe.config
 D:\05-TEMP\Source\GitHub\ToolTCB\Transaction Statistical Scheduler\bin\Debug\Transaction Statistical Scheduler.exe
 D:\05-TEMP\Source\GitHub\ToolTCB\Transaction Statistical Scheduler\bin\Debug\Transaction Statistical Scheduler.pdb
-D:\05-TEMP\Source\GitHub\ToolTCB\Transaction Statistical Scheduler\obj\Debug\Transaction Statistical Scheduler.exe
-D:\05-TEMP\Source\GitHub\ToolTCB\Transaction Statistical Scheduler\obj\Debug\Transaction Statistical Scheduler.pdb
+D:\05-TEMP\Source\GitHub\ToolTCB\Transaction Statistical Scheduler\obj\Debug\Transaction Statistical Scheduler.csprojAssemblyReference.cache
 D:\05-TEMP\Source\GitHub\ToolTCB\Transaction Statistical Scheduler\obj\Debug\Transaction_Statistical_Scheduler.Installer1.resources
 D:\05-TEMP\Source\GitHub\ToolTCB\Transaction Statistical Scheduler\obj\Debug\Transaction Statistical Scheduler.csproj.GenerateResource.cache
+D:\05-TEMP\Source\GitHub\ToolTCB\Transaction Statistical Scheduler\obj\Debug\Transaction Statistical Scheduler.csproj.CoreCompileInputs.cache
+D:\05-TEMP\Source\GitHub\ToolTCB\Transaction Statistical Scheduler\obj\Debug\Transaction Statistical Scheduler.exe
+D:\05-TEMP\Source\GitHub\ToolTCB\Transaction Statistical Scheduler\obj\Debug\Transaction Statistical Scheduler.pdb
