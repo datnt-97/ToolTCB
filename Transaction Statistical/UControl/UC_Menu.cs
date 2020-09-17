@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Reflection;
+using System.IO;
 
 namespace Transaction_Statistical.UControl
 {
@@ -59,7 +60,7 @@ namespace Transaction_Statistical.UControl
 
         private void addUserCfg()
         {
-            lv_Version.Text = "Version " + InitParametar.Version + string.Format("\n{0}, {1}", InfoAssembly.copyright.Copyright, InfoAssembly.descriptionAttribute.Description);
+            lv_Version.Text = "Version " + InitParametar.Version + " build " + File.GetLastWriteTime(System.Reflection.Assembly.GetEntryAssembly().Location).ToString("hhmm ddMMyyyy")+ string.Format("\n{0}, {1}", InfoAssembly.copyright.Copyright, InfoAssembly.descriptionAttribute.Description);
 
             ucOVerview = new UC_Menu_Overview();
             ucOVerview.Width = this.Width - 1 - pnl_Menu.Width;
@@ -142,6 +143,10 @@ namespace Transaction_Statistical.UControl
         private void mode_Label8_MouseEnter(object sender, EventArgs e)
         {
             (sender as Mode_Label).ForeColor = Color.GreenYellow;
+        }
+        private void lv_Version_Click(object sender, EventArgs e)
+        {
+            System.Diagnostics.Process.Start("http://www.npss.vn");
         }
     }
 }

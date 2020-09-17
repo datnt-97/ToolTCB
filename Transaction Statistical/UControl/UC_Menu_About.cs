@@ -17,8 +17,7 @@ namespace Transaction_Statistical.UControl
         public UC_Menu_About()
         {
             InitializeComponent2();
-            lv_Version.Text = String.Format("Version: {0}, build: {1:yyyy MMM dd}", Assembly.GetExecutingAssembly().GetName().Version.ToString(),
-               InfoAssembly.fileVersion.CreationTime); 
+            lv_Version.Text = String.Format("Version: {0}, build: {1}", Assembly.GetExecutingAssembly().GetName().Version.ToString(), File.GetLastWriteTime(System.Reflection.Assembly.GetEntryAssembly().Location).ToString("hhmm ddMMyyyy")); 
             mode_Label9.Text = "License: " + InitParametar.TypeLicense.ToString();
             if (InitParametar.TypeLicense.Equals(License.Types.Unknow))
             {
@@ -112,6 +111,10 @@ namespace Transaction_Statistical.UControl
         private void mode_Label_MouseEnter(object sender, EventArgs e)
         {
             (sender as Mode_Label).ForeColor = Color.GreenYellow;
+        }
+        private void lv_Version_Click(object sender, EventArgs e)
+        {
+            System.Diagnostics.Process.Start("http://www.npss.vn");
         }
     }
 }

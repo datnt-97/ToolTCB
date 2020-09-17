@@ -200,6 +200,10 @@
             this.lv_Version.TabIndex = 3;
             this.lv_Version.Text = "Version: ";
             this.lv_Version.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.lv_Version.MouseEnter += new System.EventHandler(this.mode_Label_MouseEnter);
+            this.lv_Version.MouseLeave += new System.EventHandler(this.mode_Label_Leave);
+            this.lv_Version.MouseHover += new System.EventHandler(this.mode_Label_MouseHover);
+            this.lv_Version.Click += new System.EventHandler(lv_Version_Click);
             // 
             // mode_Label2
             // 

@@ -657,7 +657,6 @@ namespace Transaction_Statistical
                     milis++;
                 }
                 ls[Date.AddMilliseconds(milis)] = b;
-
             }
             else ls[Date] = b;
         }

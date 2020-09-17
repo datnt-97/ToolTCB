@@ -9,6 +9,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Security.Cryptography;
+using System.Security.Principal;
 using System.ServiceProcess;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -76,7 +77,7 @@ namespace Transaction_Statistical
         public static void Init()
         {
             try
-            {
+            {                
                 //Init directory and file config    
                 SubkeyApp = @"HKEY_LOCAL_MACHINE\SOFTWARE\NPSS\TransactionStatistical";
                 SubkeyTask = SubkeyApp + @"\Tasks\";
@@ -252,6 +253,8 @@ namespace Transaction_Statistical
                 {
                     WriteLogApplication(string.Format("{0:HH:mm:ss fff} Class: {1}\nMethod: {2}\n{3}", DateTime.Now, ClassName, MethodName, MsgError), true, true);
                 }
+                if (MsgError.Contains("access deny") || MsgError.Contains("access is not allowed"))
+                    Administrator.IsAdministrator();
                 if (AutoRunMode) return;
                 UC_Info msg = new UC_Info();
 
@@ -712,21 +715,35 @@ namespace Transaction_Statistical
                 ListCycle = new Dictionary<DateTime, Cycle>();
                 var w = System.Diagnostics.Stopwatch.StartNew();
                 w.Start();
+
                 foreach (string file in files)
                 {
+                    string day = DateTime.Now.ToString("yyyyMMdd");
+                    string Terminal = day;
 
                     ListRequest = new Dictionary<DateTime, TransactionRequest>();
                     ListEvent = new Dictionary<DateTime, TransactionEvent>();
-                    string day = file.Substring(file.Length - 12, 8);
-                    string Terminal = Path.GetFileName(file).Substring(0, 8);
-                    string contenFile = File.ReadAllText(file);
+                    foreach (string s in Template_FileFilter.Values)
+                    {
+                        foreach (RegesValue v in Regexs.RunPatternRegular(file, s).Values)
+                        {
+                            if (v.value.Keys.Contains("TeminalID"))
+                                Terminal = v.value["TerminalID"];
+                            if (v.value.Keys.Contains("Day"))
+                                day = v.value["Day"];
+                        }
+                    }
+                    //   day = file.Substring(file.Length - 12, 8);
+                    // Terminal = Path.GetFileName(file).Substring(0, 8);
+                    ContentFile contenFile = new ContentFile();
+                    contenFile.Content = File.ReadAllText(file);
                     DateTime.TryParseExact(day, "yyyyMMdd", CultureInfo.InvariantCulture, DateTimeStyles.None, out currentDate);
                     if (int.Parse(currentDate.ToString("yyyyMMdd")) >= int.Parse(StartDate.ToString("yyyyMMdd")) && int.Parse(currentDate.ToString("yyyyMMdd")) <= int.Parse(EndDate.ToString("yyyyMMdd")))
                     {
                         //   contenFile = await SplitTransactionEJ(Terminal, currentDate, contenFile);
-                        contenFile = await SplitTransactionEJ_ReadByRow(Terminal, currentDate, contenFile);
-                        contenFile = await FindEventDevice2Async(currentDate, Terminal, contenFile);
-                        FindCounterChangedAsync(contenFile);
+                         contenFile = await SplitTransactionEJ_ReadByRow(Terminal, currentDate, contenFile.Content);
+                     contenFile.Content = await FindEventDevice2Async(currentDate, Terminal, contenFile.Content);
+                        FindCounterChangedAsync(contenFile.Content);
                         if (process != null)
                         {
                             process.CustomText = string.Format("Reading.. [{0}]", Path.GetFileName(file));
@@ -841,9 +858,10 @@ namespace Transaction_Statistical
             }
             return sString;
         }
-        private async Task<string> SplitTransactionEJ_ReadByRow(string TerminalFile, DateTime dateFile, string sString)
+        private async Task<ContentFile> SplitTransactionEJ_ReadByRow(string TerminalFile, DateTime dateFile, string sString)
         {
-            string remaining = string.Empty;
+            ContentFile contentFile = new ContentFile();
+            contentFile.Content = string.Empty;
             try
             {
                 Transaction trans = new Transaction();
@@ -873,24 +891,36 @@ namespace Transaction_Statistical
                                             if (key.Value.value.ContainsKey("DateBegin"))
                                             {
                                                 DateTime.TryParseExact(key.Value.value["DateBegin"], "MM-dd-yyyy HH:mm:ss", CultureInfo.InvariantCulture, DateTimeStyles.None, out trans.DateEnd);
-                                                if (DateTime.Compare(trans.DateBegin, StartDate) < 0 || DateTime.Compare(trans.DateBegin, EndDate) > 0) return sString;
+                                                if (DateTime.Compare(trans.DateBegin, StartDate) < 0 || DateTime.Compare(trans.DateBegin, EndDate) > 0)
+                                                {
+                                                    contentFile.Content = sString;
+                                                    return contentFile;
+                                                }
                                             }
                                             else
                                                 trans.DateEnd = dateFile;
                                             tasks.Add(SplitTransactionEJ_InfoAsync(trans, dateFile, TerminalFile));
-                                            remaining += trans.DateEnd.ToString(FormatTime) + Environment.NewLine;
+                                         contentFile.Content += trans.DateEnd.ToString(FormatTime) + Environment.NewLine;
                                         }
 
                                         trans = new Transaction();
                                         if (key.Value.value.ContainsKey("DateBegin"))
                                         {
                                             DateTime.TryParseExact(key.Value.value["DateBegin"], "MM-dd-yyyy HH:mm:ss", CultureInfo.InvariantCulture, DateTimeStyles.None, out trans.DateBegin);
-                                            if (DateTime.Compare(trans.DateBegin, StartDate) < 0 || DateTime.Compare(trans.DateBegin, EndDate) > 0) return sString;
+                                            if (DateTime.Compare(trans.DateBegin, StartDate) < 0 || DateTime.Compare(trans.DateBegin, EndDate) > 0)
+                                            {
+                                                contentFile.Content = sString;
+                                                return contentFile;
+                                            }
                                         }
                                         else if (key.Value.value.ContainsKey("TimeBegin"))
                                         {
                                             DateTime.TryParseExact(dateFile.ToString("yyyyMMdd") + key.Value.value["TimeBegin"], "yyyyMMddHH:mm:ss", CultureInfo.InvariantCulture, DateTimeStyles.None, out trans.DateBegin);
-                                            if (DateTime.Compare(trans.DateBegin, StartDate) < 0 || DateTime.Compare(trans.DateBegin, EndDate) > 0) return sString;
+                                            if (DateTime.Compare(trans.DateBegin, StartDate) < 0 || DateTime.Compare(trans.DateBegin, EndDate) > 0)
+                                            {
+                                                contentFile.Content = sString;
+                                                return contentFile;
+                                            }
                                         }
                                         else
                                             trans.DateBegin = dateFile;
@@ -919,8 +949,8 @@ namespace Transaction_Statistical
                                         {
                                             //case miss tran start
                                             trans.DateBegin = dateFile;
-                                            trans.TraceJournalFull += remaining;
-                                            remaining = string.Empty;
+                                            trans.TraceJournalFull += contentFile.Content;
+                                            contentFile.Content = string.Empty;
                                         }
 
                                         if (!hasadd) trans.TraceJournalFull += myString + Environment.NewLine; hasadd = true;
@@ -932,6 +962,8 @@ namespace Transaction_Statistical
                                             trans.DateEnd.AddDays(trans.DateBegin.Day);
                                             trans.DateEnd.AddMonths(trans.DateBegin.Month);
                                             trans.DateEnd.AddYears(trans.DateBegin.Year);
+                                            contentFile.TerminalID = trans.Terminal;
+                                            contentFile.Day = trans.DateEnd;
                                         }
                                         else
                                         {
@@ -943,7 +975,7 @@ namespace Transaction_Statistical
                                         evEnd.TContent = key.Value.value["SEnd"];
                                         trans.ListEvent[evEnd.DateBegin] = evEnd;
                                         tasks.Add(SplitTransactionEJ_InfoAsync(trans, dateFile, TerminalFile));
-                                        remaining += trans.DateEnd.ToString(FormatTime) + Environment.NewLine;
+                                        contentFile.Content += trans.DateEnd.ToString(FormatTime) + Environment.NewLine;
                                         trans = new Transaction();
                                     }
                                 }
@@ -956,7 +988,7 @@ namespace Transaction_Statistical
                         }
                         if (!hasadd)
                         {
-                            remaining += myString + Environment.NewLine; hasadd = true;
+                            contentFile.Content += myString + Environment.NewLine; hasadd = true;
                         }
 
                     }
@@ -967,7 +999,7 @@ namespace Transaction_Statistical
                 {
                     trans.DateEnd = trans.DateBegin;
                     tasks.Add(SplitTransactionEJ_InfoAsync(trans, dateFile, TerminalFile));
-                    remaining += trans.DateEnd.ToString(FormatTime) + Environment.NewLine;
+                    contentFile.Content += trans.DateEnd.ToString(FormatTime) + Environment.NewLine;
                 }
                 await Task.WhenAll(tasks);
             }
@@ -975,7 +1007,8 @@ namespace Transaction_Statistical
             {
                 InitParametar.Send_Error(ex.ToString(), MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name);
             }
-            return remaining;
+
+            return contentFile;
         }
         #region Dat
         private async Task<Transaction> FindEventTransaction(Transaction transaction, DateTime DateCurrent)
@@ -2039,7 +2072,12 @@ namespace Transaction_Statistical
             return String.Format("{0:HH:mm:ss }", DateBegin) + (CardType == Transaction.CardTypes.CardLess ? "Cardless: " + (DataInput.Count == 0 ? string.Empty : DataInput[0]) : "Card: " + CardNumber);
         }
     }
-
+    public class ContentFile
+    {
+     public   string Content { get; set; }
+     public   string TerminalID { get; set; }
+     public   DateTime Day { get; set; }
+    }
     public class TransactionEvent
     {
 
@@ -2691,10 +2729,12 @@ namespace Transaction_Statistical
             }
             catch (Exception ex)
             {
-                InitParametar.Send_Error(ex.ToString(), MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name); ;
+                InitParametar.Send_Error(ex.ToString(), MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name);
+               
             }
             return false;
         }
+
         public static bool CreateSubKey(string _primaryKey, string _subkey)
         {
             try
@@ -2769,6 +2809,31 @@ namespace Transaction_Statistical
             return values;
         }
     }
+    public class Administrator
+    {
+        public static bool IsAdministrator()
+        {
+            var identity = WindowsIdentity.GetCurrent();
+            var principal = new WindowsPrincipal(identity);
+            if (!principal.IsInRole(WindowsBuiltInRole.Administrator))
+            {
+                if (MessageBox.Show(@"Application does not have permission to write data to regedit."+Environment.NewLine+ " Do you want Runas admin to fix?", "Do you want Runas admin ?", MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.Yes)
+                    RunAs();
+                return false;
+            }
+            return true;
+        }
+        static void RunAs()
+        {            
+                // Restart and run as admin
+                var exeName = Process.GetCurrentProcess().MainModule.FileName;
+                ProcessStartInfo startInfo = new ProcessStartInfo(exeName);
+                startInfo.Verb = "runas";
+                startInfo.WorkingDirectory = Path.GetDirectoryName(exeName);
+                Process.Start(startInfo);
+            System.Diagnostics.Process.GetCurrentProcess().Kill();
+        }
+}
     public class RegistryWatcher : IDisposable
     {
         /// <summary>
