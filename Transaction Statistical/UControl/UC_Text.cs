@@ -40,12 +40,12 @@ namespace Transaction_Statistical.UControl
             InitUI();
         }
         private void InitUI()
-        {
+        { inifile = new UtilityIniFile();
             InitializeComponent2();
             pl_Menu.Location = new Point(this.Width, pl_Menu.Location.Y);
 
            
-            inifile = new UtilityIniFile();
+           
             pathFileTmp = inifile.GetEntryValue(Session, "PathFileTemp");
 
             ComboBoxItem cb_WN = new ComboBoxItem();

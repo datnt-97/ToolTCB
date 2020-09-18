@@ -19,6 +19,7 @@ using System.Timers;
 using System.Windows.Forms;
 using Microsoft.Win32;
 using OfficeOpenXml;
+using OfficeOpenXml.Style.XmlAccess;
 using Transaction_Statistical.Class;
 
 
@@ -719,7 +720,7 @@ namespace Transaction_Statistical
                 foreach (string file in files)
                 {
                     string day = DateTime.Now.ToString("yyyyMMdd");
-                    string Terminal = day;
+                    string Terminal = "Unknow";
 
                     ListRequest = new Dictionary<DateTime, TransactionRequest>();
                     ListEvent = new Dictionary<DateTime, TransactionEvent>();
@@ -742,7 +743,7 @@ namespace Transaction_Statistical
                     {
                         //   contenFile = await SplitTransactionEJ(Terminal, currentDate, contenFile);
                          contenFile = await SplitTransactionEJ_ReadByRow(Terminal, currentDate, contenFile.Content);
-                     contenFile.Content = await FindEventDevice2Async(currentDate, Terminal, contenFile.Content);
+                     contenFile.Content = await FindEventDevice2Async(currentDate, contenFile.TerminalID, contenFile.Content);
                         FindCounterChangedAsync(contenFile.Content);
                         if (process != null)
                         {
@@ -1073,15 +1074,18 @@ namespace Transaction_Statistical
                                             bills.Type = type;
                                         }
                                     }
-                                    bills.Terminal = string.IsNullOrEmpty(regx.value["Terminal"]) ? string.Empty : regx.value["Terminal"];
-                                    bills.CardNo = string.IsNullOrEmpty(regx.value["CardNo"]) ? string.Empty : regx.value["CardNo"];
-                                    bills.TranNo = string.IsNullOrEmpty(regx.value["TranNo"]) ? string.Empty : regx.value["TranNo"];
-                                    bills.Code = string.IsNullOrEmpty(regx.value["Code"]) ? string.Empty : regx.value["Code"];
-                                    bills.Text = string.IsNullOrEmpty(regx.value["Text"]) ? string.Empty : regx.value["Text"];
-                                    if (regx.value.ContainsKey("RequireAmount"))
-                                    {
-                                        bills.RequireAmount = string.IsNullOrEmpty(regx.value["RequireAmount"]) ? string.Empty : regx.value["RequireAmount"];
-                                    }
+                                    bills.Terminal = regx.value.Keys.Contains("Terminal") ? regx.value["Terminal"] : string.Empty;
+                                    bills.CardNo = regx.value.Keys.Contains("CardNo") ? regx.value["CardNo"] : string.Empty;
+                                    bills.TranNo = regx.value.Keys.Contains("TranNo") ? regx.value["TranNo"] : string.Empty;
+                                    bills.Code = regx.value.Keys.Contains("Code") ? regx.value["Code"] : string.Empty;
+                                    bills.Text = regx.value.Keys.Contains("Text") ? regx.value["Text"] : string.Empty;
+                                    if (!string.IsNullOrEmpty(bills.Text))
+                                    {                                      
+                                        evt.Data = bills.Text;
+                                        evt.Type = TransactionEvent.Events.ErrorEvent;
+                                    } 
+                                   
+                                    bills.RequireAmount = regx.value.Values.Contains("RequireAmount") ? regx.value["RequireAmount"] : string.Empty;
                                     long tmps = 0;
                                     if (long.TryParse(bills.TranNo, out tmps))
                                     {
@@ -1831,7 +1835,7 @@ namespace Transaction_Statistical
                             req_New.Request = req.Request;
                             transaction.ListRequest[req_New.DateBegin] = req_New;
                         }
-                        if (transaction.ListRequest.Count != 0 && (evt.Type.Equals(TransactionEvent.Events.Transaction) || evt.Type.Equals(TransactionEvent.Events.CashIn) || evt.Type.Equals(TransactionEvent.Events.CashOut)))
+                        if (transaction.ListRequest.Count != 0 && (evt.Type.Equals(TransactionEvent.Events.Transaction) ||evt.Type is TransactionEvent.Events.ErrorEvent|| evt.Type.Equals(TransactionEvent.Events.CashIn) || evt.Type.Equals(TransactionEvent.Events.CashOut)))
                         {
                             string name = transaction.ListRequest.LastOrDefault().Value.Request;
 
@@ -1914,7 +1918,7 @@ namespace Transaction_Statistical
         {
             foreach (TransactionType type in Template_TransType_Select.Values)
                 if (type.Identification.Split(',').Contains(name)) { transactionType = type.Name; return true; }
-            // transactionType = @"N/A: [" + operationCode + "]";
+             transactionType = @"N/A: [" + name + "]";
             return false;
         }
     }
