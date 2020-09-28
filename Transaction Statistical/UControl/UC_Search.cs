@@ -282,7 +282,6 @@ namespace Transaction_Statistical.UControl
         private void ShowLabelBack_Enter(object sender, EventArgs e)
         {
             (sender as Mode_Label).ForeColor = Color.Blue;
-
         }
         private void BackListOgrinal(object sender, EventArgs e)
         {

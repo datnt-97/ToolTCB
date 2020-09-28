@@ -29,8 +29,13 @@ namespace Transaction_Statistical.UControl
                     cb.Text = R["Field"].ToString();
                     cb.Value = R["ID"].ToString();
                     cbo_Template.Items.Add(cb);
+                    cbo_Template.SelectedIndex = 0;
                 }
-
+               foreach(DataRow row in InitParametar.sqlite.GetTableDataWithColumnName("CfgData", "Parent_ID", InitParametar.GetParent_Bank()).Rows)
+                {
+                    cb_Bank.Items.Add(row["Field"].ToString());
+                    cb_Bank.SelectedIndex = 0;
+                }
             }
             catch (Exception ex)
             {
@@ -54,7 +59,10 @@ namespace Transaction_Statistical.UControl
                 entr.ColumnName.Add("Parent_ID");
                 entr.Content.Add("54");
 
-              if( InitParametar.sqlite.CreateEntry("CfgData",entr))
+                entr.ColumnName.Add("Data");
+                entr.Content.Add(cb_Bank.Text);
+
+                if ( InitParametar.sqlite.CreateEntry("CfgData",entr))
                 {
                     string id = InitParametar.sqlite.GetColumnDataWithColumnName("CfgData", "Field", txt_Name.Text, "ID");
                     if (cbo_Template.SelectedItem != null)

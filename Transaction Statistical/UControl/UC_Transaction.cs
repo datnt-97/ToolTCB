@@ -16,6 +16,8 @@ using System.Threading;
 using Transaction_Statistical.AddOn;
 using Transaction_Statistical.IconHelper;
 using FastColoredTextBoxNS;
+using System.Data.OleDb;
+using System.Data.Entity.Core.Common.CommandTrees.ExpressionBuilder;
 
 namespace Transaction_Statistical.UControl
 {
@@ -68,7 +70,6 @@ namespace Transaction_Statistical.UControl
                 cbo_Trans_Status.Items.Add(s, true);
                 cbo_Event_Status.Items.Add(s, true);
             }
-
             LoadPathTemp(true);
         }
         private void LoadPathTemp(bool isLoad)
@@ -108,6 +109,7 @@ namespace Transaction_Statistical.UControl
         {
             try
             {
+                pn_Bank.Enabled = false;
                 prb_Process.Size = btn_Read.Size;
                 prb_Process.Value = 10;
                 prb_Process.Update();
@@ -137,6 +139,7 @@ namespace Transaction_Statistical.UControl
             }
             prb_Process.Size = new Size(0, 0);
             LoadPathTemp(false);
+            pn_Bank.Enabled = true;
         }
         private async Task<bool> JournalAnalyze(List<string> lsFile_Journal)
         {
@@ -170,8 +173,8 @@ namespace Transaction_Statistical.UControl
                         int countCycle = kTerminal.Value.Where(x => (x.Value is Cycle)).ToList().Count;
                         int countTransaction = kTerminal.Value.Where(x => (x.Value is Transaction)).ToList().Count;
                         int countTransactionEvent = kTerminal.Value.Where(x => (x.Value is TransactionEvent)).ToList().Count;
-                        TreeNode ndTerminal = tre_LstTrans.Nodes.Add(kTerminal.Key, String.Format("Terminal ID: [{0}] - Total: {1} transactions", kTerminal.Key, kTerminal.Value.Count), "Terminal", "Terminal");
-                        ndTerminal.Tag = kTerminal.Value.Where(x => (x.Value is Cycle)).ToDictionary(x => x.Key, x => (Cycle)x.Value);
+                        TreeNode ndTerminal =tre_LstTrans.Nodes.Add(kTerminal.Key, String.Format("Terminal ID: [{0}] - Total: {1} transactions", kTerminal.Key, kTerminal.Value.Count), "Terminal", "Terminal");
+                         ndTerminal.Tag =new Custom_NodeTag( kTerminal.Value.Where(x => (x.Value is Cycle)).ToDictionary(x => x.Key, x => (Cycle)x.Value),Custom_NodeTag.NodeTypes.Terminal, kTerminal.Key);
 
                         foreach (KeyValuePair<DateTime, object> kTransaction in kTerminal.Value.OrderBy(x => x.Key))
                         {
@@ -187,11 +190,13 @@ namespace Transaction_Statistical.UControl
                             }
 
                             if (countDisplay == ndDay.Nodes.Count) continue;
-                            ndDay.Tag = kTransaction.Key;
+                            ndDay.Tag =new Custom_NodeTag( kTransaction.Key,Custom_NodeTag.NodeTypes.DateTime);
                             AddTransactionToNode(ndDay, kTransaction.Key, kTerminal.Key, kTransaction.Value);
 
                         }
+                        tre_LstTrans.Update();
                     }
+                    ImportHistory();
                 }
                 return true;
             }
@@ -201,42 +206,54 @@ namespace Transaction_Statistical.UControl
             }
             return false;
         }
+        private void ImportHistory()
+        {
+            try
+            {
+                if (!cb_AutoHistory.Checked)
+                    return;
+            }
+            catch (Exception ex)
+            {
+                InitParametar.Send_Error(ex.ToString(), MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name);
+            }
+        }
         private void AddTransactionToNode(TreeNode ndDay, DateTime date, string terminal, object obj)
         {
             try
             {
-                DateTime dNode = (DateTime)ndDay.Tag;
+                DateTime dNode = (DateTime)((Custom_NodeTag)ndDay.Tag).Data;
                 if (!date.ToString(InitParametar.ReadTrans.FormatDate).Equals(dNode.ToString(InitParametar.ReadTrans.FormatDate))) return;
                 string textDisplay = obj.ToString();
                 if (ndDay.Nodes.ContainsKey(textDisplay))
                 {
                     return;
                 }
-                ndDay.Tag = date;
+                ndDay.Tag =new Custom_NodeTag( date, Custom_NodeTag.NodeTypes.DateTime);
 
                 if (obj is Transaction)
                 {
                     //if (!FilterDisplayTransaction((obj as Transaction).ListRequest.Values.ToList())) return;
                     TreeNode ndTransaction = ndDay.Nodes.Add(textDisplay, textDisplay);
-                    ndTransaction.Tag = obj;
+                    ndTransaction.Tag =new Custom_NodeTag( obj, Custom_NodeTag.NodeTypes.Transaction);
                     ndTransaction.ImageKey = "Flag_" + (obj as Transaction).Status;
                     ndTransaction.SelectedImageKey = "Select";
                 }
                 else if (obj is TransactionEvent)
                 {
                     TreeNode ndTransaction = ndDay.Nodes.Add(textDisplay, textDisplay);
-                    ndTransaction.Tag = obj;
+                    ndTransaction.Tag =new Custom_NodeTag( obj, Custom_NodeTag.NodeTypes.EventDevice);
                     ndTransaction.ImageKey = "Device";
                     ndTransaction.SelectedImageKey = "Device";
-                    ndDay.Tag = (obj as TransactionEvent).DateBegin;
+                    ndDay.Tag =new Custom_NodeTag( (obj as TransactionEvent).DateBegin, Custom_NodeTag.NodeTypes.DateTime);
                 }
                 else
                 {
                     TreeNode ndTransaction = ndDay.Nodes.Add(textDisplay, textDisplay);
-                    ndTransaction.Tag = obj;
+                    ndTransaction.Tag =new Custom_NodeTag( obj,Custom_NodeTag.NodeTypes.Cycles);
                     ndTransaction.ImageKey = "Cycle";
                     ndTransaction.SelectedImageKey = "Cycle";
-                    ndDay.Tag = (obj as Cycle).DateBegin;
+                    ndDay.Tag =new Custom_NodeTag( (obj as Cycle).DateBegin, Custom_NodeTag.NodeTypes.DateTime);
                 }
             }
             catch (Exception ex)
@@ -285,11 +302,14 @@ namespace Transaction_Statistical.UControl
         {
             try
             {
-                if (e.Node != null && e.Node.Tag != null && e.Node.Tag is Transaction)
+                if (e.Node == null || e.Node.Tag == null) return;
+                Custom_NodeTag nodeTag = e.Node.Tag as Custom_NodeTag;
+
+                if (nodeTag.Type is Custom_NodeTag.NodeTypes.Transaction)
                 {
 
-                    fctxt_FullLog.Text = (e.Node.Tag as Transaction).TraceJournalFull;
-                    var trans = (Transaction)e.Node.Tag;
+                    fctxt_FullLog.Text = (nodeTag.Data as Transaction).TraceJournalFull;
+                    var trans = (Transaction)nodeTag.Data;
                     trans.Properties = new List<CustomProperty>();
 
                     CultureInfo cultureInfo = new CultureInfo("vn-VN");
@@ -457,7 +477,7 @@ namespace Transaction_Statistical.UControl
                     }
                     #endregion
                     cCount = 1;
-                    foreach (var req in (e.Node.Tag as Transaction).ListEvent.Values)
+                    foreach (var req in (nodeTag.Data as Transaction).ListEvent.Values)
                     {
                         trans.Properties.Add(new CustomProperty
                         {
@@ -470,7 +490,7 @@ namespace Transaction_Statistical.UControl
                         cCount++;
                     }
                     cCount = 1;
-                    foreach (var req in (e.Node.Tag as Transaction).ListRequest.Values)
+                    foreach (var req in (nodeTag.Data as Transaction).ListRequest.Values)
                     {
                         trans.Properties.Add(new CustomProperty
                         {
@@ -487,20 +507,20 @@ namespace Transaction_Statistical.UControl
                     propertyGrid1.SelectedGridItemChanged += selectedProper;
 
                 }
-                else if (e.Node != null && e.Node.Tag != null && e.Node.Tag is TransactionEvent)
+                else if (nodeTag.Type is Custom_NodeTag.NodeTypes.EventDevice)
                 {
-                    propertyGrid1.SelectedObject = (TransactionEvent)e.Node.Tag;
-                    fctxt_FullLog.Text = (e.Node.Tag as TransactionEvent).TContent;
+                    propertyGrid1.SelectedObject = (TransactionEvent)nodeTag.Data;
+                    fctxt_FullLog.Text = (nodeTag.Data as TransactionEvent).TContent;
                 }
-                else if (e.Node != null && e.Node.Tag != null && e.Node.Tag is Cycle)
+                else if (nodeTag.Data is Custom_NodeTag.NodeTypes.Cycles)
                 {
-                    var cycle = (Cycle)e.Node.Tag;
+                    var cycle = (Cycle)nodeTag.Data;
                     showCycle(cycle);
                 }
-                else if (e.Node != null && e.Node.Tag != null && e.Node.Tag is Dictionary<DateTime, Cycle>)
+                else if (nodeTag.Type is Custom_NodeTag.NodeTypes.Terminal)
                 {
                     resetView();
-                    var tagValue = ((Dictionary<DateTime, Cycle>)e.Node.Tag).ToList();
+                    var tagValue = ((Dictionary<DateTime, Cycle>)nodeTag.Data).ToList();
                     tvListCycle.Nodes.Clear();
                     tvListCycle.Scrollable = true;
                     string textDisplay = "Terminal ID : " + e.Node.Name + " - Total Cycle : " + tagValue.Count;
@@ -519,14 +539,14 @@ namespace Transaction_Statistical.UControl
                     }
                     if (tvListCycle.Nodes[0].Nodes.Count != 0) tvListCycle.SelectedNode = tvListCycle.Nodes[0].Nodes[0];
                 }
-                else if (e.Node != null && e.Node.Tag != null && e.Node.Tag is DateTime)
+                else if (nodeTag.Type is Custom_NodeTag.NodeTypes.DateTime)
                 {
                     TreeNode ndRoot = e.Node;
                     while (ndRoot.Parent != null)
                         ndRoot = ndRoot.Parent;
                     string terminal = ndRoot.Text.Substring(ndRoot.Text.IndexOf('[') + 1, ndRoot.Text.IndexOf(']') - ndRoot.Text.IndexOf('[') - 1);
 
-                    DateTime dNode = (DateTime)e.Node.Tag;
+                    DateTime dNode = (DateTime)nodeTag.Data;
                     foreach (KeyValuePair<DateTime, object> kTransaction in InitParametar.ReadTrans.ListTransaction[terminal].OrderBy(x => x.Key))
                         AddTransactionToNode(e.Node, kTransaction.Key, terminal, kTransaction.Value);
                 }
@@ -730,6 +750,112 @@ namespace Transaction_Statistical.UControl
         {
             uc_Explorer.ShowUp2DownFromControl(this, sender as Control);
         }
-    }
 
+		private void OpenSource_Click(object sender, EventArgs e)
+		{
+
+		}
+        private void cMS_LstTrans_Opening(object sender, System.ComponentModel.CancelEventArgs e)
+        {            
+            if(tre_LstTrans.SelectedNode!=null)
+            {
+                if (tre_LstTrans.SelectedNode.Tag is DateTime || tre_LstTrans.SelectedNode.Tag is TransactionEvent || tre_LstTrans.SelectedNode.Tag is Transaction)
+                {
+                    this.OpenSource.Visible = true;
+                }
+                else
+                {
+                    this.OpenSource.Visible = false;
+                }
+                cMS_LstTrans.Update();
+            }
+        }
+        private void cb_AutoHistory_CheckedChanged(object sender, EventArgs e)
+        {
+            if (cb_AutoHistory.Checked)
+                bt_ManualHistory.Visible = false;
+            else
+                bt_ManualHistory.Visible = true;
+        }
+
+        private void bt_ManualHistory_Click(object sender, EventArgs e)
+		{
+            UC_ImportTransaction uc_import = new UC_ImportTransaction(tre_LstTrans);
+            uc_import.Dock = DockStyle.Fill;
+            Frm_TemplateDefault frm = new Frm_TemplateDefault(uc_import, @"Import transactions to Database");
+            frm.Width = uc_import.Width + 5;
+            frm.Height = uc_import.Height + 30;
+            frm.Show();
+        }
+        
+        private void bt_history_Click(object sender, EventArgs e)
+		{
+
+		}
+
+        private void bt_Banks_Click(object sender, EventArgs e)
+        {
+            AddOn.TabControlX tabControlX1 = new TabControlX();
+            tabControlX1.Dock = DockStyle.Fill;
+
+            TabPanelControl tpc_Terminals = new TabPanelControl();
+            tpc_Terminals.Dock = DockStyle.Fill;
+            UControl.UC_Terminals uc_Terminals = new UC_Terminals();
+            uc_Terminals.Dock = DockStyle.Fill;
+            tpc_Terminals.Controls.Add(uc_Terminals);
+            tabControlX1.AddTab("Terminals", "Terminals", tpc_Terminals, false);
+
+            TabPanelControl tpc_Banks = new TabPanelControl();
+            tpc_Banks.Dock = DockStyle.Fill;
+            UControl.UC_Banks Banks = new UC_Banks();
+            Banks.Dock = DockStyle.Fill;
+            tpc_Banks.Controls.Add(Banks);
+            tabControlX1.AddTab("Banks", "Banks", tpc_Banks, false);
+
+
+            Frm_TemplateDefault frm = new Frm_TemplateDefault(tabControlX1, @"Banks && Terminals");
+            frm.Width = uc_Menu.Width + 5;
+            frm.Height = uc_Menu.Height + 30;
+            frm.Show();
+
+        }
+	}
+	public class Custom_NodeTag
+    {
+       public enum NodeTypes
+        { Bank, Terminal, DateTime, Transaction, EventDevice, Cycles }
+        public string Text { get; set; }
+        public NodeTypes Type;
+        public string PathFile { get; set; }
+        public object Data { get; set; }
+        public string Terminal { get; set; }
+        public Custom_NodeTag()
+        { }
+        public Custom_NodeTag(object data,NodeTypes type)
+        {
+            Data = data;
+            Type = type;
+        }
+        public Custom_NodeTag(object data, NodeTypes type,string terminal)
+        {
+            Data = data;
+            Type = type;
+            Terminal = terminal;
+        }
+        public Custom_NodeTag(object data, NodeTypes type,string terminal, string pathFile)
+        {
+            Data = data;
+            Type = type;
+            Terminal = terminal;
+            PathFile = pathFile;
+        }
+        public Custom_NodeTag(object data)
+        {
+            Data = data;
+        }
+        public override string ToString()
+		{
+            return Text;
+		}
+	}
 }

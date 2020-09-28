@@ -396,6 +396,7 @@ namespace Transaction_Statistical
             base.BackColor = InitGUI.Custom.Frm_Background.DisplayColor;
             base.ForeColor = InitGUI.Custom.Frm_ForeColor.DisplayColor;
         }
+        
         public void CloneFrom(Mode_TreeView treeviewNew)
         {
             try
@@ -429,7 +430,7 @@ namespace Transaction_Statistical
                 if (tn.IsExpanded) newTn.Expand();
             }
         }
-    }
+    }   
     public class Mode_ComboBox : ComboBox
     {
         private const int WM_PAINT = 0xF;
@@ -465,6 +466,7 @@ namespace Transaction_Statistical
             base.BackColor = InitGUI.Custom.Frm_Background.DisplayColor;
             base.ForeColor = InitGUI.Custom.Frm_ForeColor.DisplayColor;
         }
+
     }
     public class Mode_DateTimePicker :  DateTimePicker
     {

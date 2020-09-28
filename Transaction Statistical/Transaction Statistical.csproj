@@ -15,6 +15,7 @@
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
     <IsWebBootstrapper>false</IsWebBootstrapper>
+    <TargetFrameworkProfile />
     <PublishUrl>D:\Export\</PublishUrl>
     <Install>true</Install>
     <InstallFrom>Disk</InstallFrom>
@@ -30,7 +31,6 @@
     <UseApplicationTrust>false</UseApplicationTrust>
     <PublishWizardCompleted>true</PublishWizardCompleted>
     <BootstrapperEnabled>true</BootstrapperEnabled>
-    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -246,6 +246,12 @@
     <Compile Include="UControl\UC_Access.Designer.cs">
       <DependentUpon>UC_Access.cs</DependentUpon>
     </Compile>
+    <Compile Include="UControl\UC_Banks.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UControl\UC_Banks.Designer.cs">
+      <DependentUpon>UC_Banks.cs</DependentUpon>
+    </Compile>
     <Compile Include="UControl\UC_CfgTemplate.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -275,6 +281,12 @@
     </Compile>
     <Compile Include="UControl\UC_Feedback.Designer.cs">
       <DependentUpon>UC_Feedback.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UControl\UC_ImportTransaction.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UControl\UC_ImportTransaction.Designer.cs">
+      <DependentUpon>UC_ImportTransaction.cs</DependentUpon>
     </Compile>
     <Compile Include="UControl\UC_Licensing.cs">
       <SubType>UserControl</SubType>
@@ -342,6 +354,18 @@
     <Compile Include="UControl\UC_Search.Designer.cs">
       <DependentUpon>UC_Search.cs</DependentUpon>
     </Compile>
+    <Compile Include="UControl\UC_Terminals.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UControl\UC_Terminals.Designer.cs">
+      <DependentUpon>UC_Terminals.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UControl\UC_Terminal_Update.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UControl\UC_Terminal_Update.Designer.cs">
+      <DependentUpon>UC_Terminal_Update.cs</DependentUpon>
+    </Compile>
     <Compile Include="UControl\UC_Text.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -394,6 +418,9 @@
     <EmbeddedResource Include="UControl\UC_Access.resx">
       <DependentUpon>UC_Access.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="UControl\UC_Banks.resx">
+      <DependentUpon>UC_Banks.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="UControl\UC_CfgTemplate.resx">
       <DependentUpon>UC_CfgTemplate.cs</DependentUpon>
       <SubType>Designer</SubType>
@@ -409,6 +436,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="UControl\UC_Feedback.resx">
       <DependentUpon>UC_Feedback.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UControl\UC_ImportTransaction.resx">
+      <DependentUpon>UC_ImportTransaction.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UControl\UC_Licensing.resx">
       <DependentUpon>UC_Licensing.cs</DependentUpon>
@@ -443,6 +473,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="UControl\UC_Search.resx">
       <DependentUpon>UC_Search.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UControl\UC_Terminals.resx">
+      <DependentUpon>UC_Terminals.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UControl\UC_Terminal_Update.resx">
+      <DependentUpon>UC_Terminal_Update.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UControl\UC_Text.resx">
       <DependentUpon>UC_Text.cs</DependentUpon>

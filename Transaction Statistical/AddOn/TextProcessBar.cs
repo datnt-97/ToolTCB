@@ -14,12 +14,13 @@ namespace Transaction_Statistical
         TextAndPercentage,
         TextAndCurrProgress
     }
-
+    
     public class TextProgressBar : ProgressBar
     {
+        public float ValueF { get; set; }
         [Description("Font of the text on ProgressBar"), Category("Additional Options")]
         public Font TextFont { get; set; } = new Font(new FontFamily("Microsoft Sans Serif"), 8);
-
+       
         private SolidBrush _textColourBrush = (SolidBrush)Brushes.Black;
         [Category("Additional Options")]
         public Color TextColor
@@ -87,7 +88,7 @@ namespace Transaction_Statistical
             get
             {
                 string text = CustomText;
-
+             
                 switch (VisualMode)
                 {
                     case (ProgressBarDisplayMode.Percentage):
@@ -109,19 +110,26 @@ namespace Transaction_Statistical
             set { }
         }
 
-        private string _percentageStr { get { return $"{(int)((float)Value - Minimum) / ((float)Maximum - Minimum) * 100 } %"; } }
+        private string _percentageStr
+        {
+            get
+            {
+                ValueF = (float)Value != 0 ? Value : ValueF;
+                return $"{(float)(ValueF - Minimum) / ((float)Maximum - Minimum) * 100 } %"; 
+            }
+        }
 
         private string _currProgressStr
         {
             get
-            {
-                return $"{Value}/{Maximum}";
+            {              
+                return $"{ValueF}/{Maximum}";
             }
         }
 
         public TextProgressBar()
         {
-            Value = Minimum;
+            ValueF = Value = Minimum;
             FixComponentBlinking();
         }
 
@@ -132,6 +140,7 @@ namespace Transaction_Statistical
 
         protected override void OnPaint(PaintEventArgs e)
         {
+            ValueF = (float)Value != 0 ? Value : ValueF;
             Graphics g = e.Graphics;
 
             DrawProgressBar(g);
@@ -155,9 +164,9 @@ namespace Transaction_Statistical
                 g.FillRectangle(fadeBrush, rect);
             }
 
-            if (Value > 0)
+            if (ValueF > 0)
             {
-                Rectangle clip = new Rectangle(rect.X, rect.Y, (int)Math.Round(((float)Value / Maximum) * rect.Width), rect.Height);
+                Rectangle clip = new Rectangle(rect.X, rect.Y, (int)Math.Round(((float)ValueF / Maximum) * rect.Width), rect.Height);
 
                 g.FillRectangle(_progressColourBrush, clip);
             }

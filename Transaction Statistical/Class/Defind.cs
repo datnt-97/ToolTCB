@@ -245,16 +245,148 @@ namespace Transaction_Statistical
                 WriteLogApplication("   ==> Auto end, result => Unsuccessfully", false, true);
             }
         }
+        public static string GetParent_ModelMachine()
+        {
+            string ParentID = string.Empty;
+            try
+            {
+                ParentID = sqlite.GetColumnDataWith2ColumnName("CfgData", "Field", "ModelMachine", "Parent_ID", "0", "ID");
+                if (string.IsNullOrEmpty(ParentID))
+                {
+                    EntryList entr = new EntryList();
+                    entr.ColumnName.Add("Field");
+                    entr.Content.Add("ModelMachine");
+                    entr.ColumnName.Add("Type_ID");
+                    entr.Content.Add("0");
+                    entr.ColumnName.Add("Parent_ID");
+                    entr.Content.Add("0");
+                    entr.ColumnName.Add("Data");
+                    entr.Content.Add("ModelMachine");
+                    sqlite.CreateEntry("CfgData", entr);
+                    ParentID = sqlite.GetColumnDataWith2ColumnName("CfgData", "Field", "ModelMachine", "Parent_ID", "0", "ID");
+                }
+            }
+            catch (Exception ex)
+            { }
+            return ParentID;
+        }
+        public static string GetParent_NPSBranch()
+        {
+            string ParentID = string.Empty;
+            try
+            {
+                ParentID = sqlite.GetColumnDataWith2ColumnName("CfgData", "Field", "NPSBranch", "Parent_ID", "0", "ID");
+                if (string.IsNullOrEmpty(ParentID))
+                {
+                    EntryList entr = new EntryList();
+                    entr.ColumnName.Add("Field");
+                    entr.Content.Add("NPSBranch");
+                    entr.ColumnName.Add("Type_ID");
+                    entr.Content.Add("0");
+                    entr.ColumnName.Add("Parent_ID");
+                    entr.Content.Add("0");
+                    entr.ColumnName.Add("Data");
+                    entr.Content.Add("NPSBranch");
+                    sqlite.CreateEntry("CfgData", entr);
+                    ParentID = sqlite.GetColumnDataWith2ColumnName("CfgData", "Field", "NPSBranch", "Parent_ID", "0", "ID");
+                }
+            }
+            catch (Exception ex)
+            { }
+            return ParentID;
+        }
+        public static string GetParent_Province()
+        {
+            string ParentID_Province = string.Empty;
+            try
+            {
+                ParentID_Province = sqlite.GetColumnDataWith2ColumnName("CfgData", "Field", "Province", "Parent_ID", "0", "ID");
+                if (string.IsNullOrEmpty(ParentID_Province))
+                {
+                    EntryList entr = new EntryList();
+                    entr.ColumnName.Add("Field");
+                    entr.Content.Add("Province");
+                    entr.ColumnName.Add("Type_ID");
+                    entr.Content.Add("0");
+                    entr.ColumnName.Add("Parent_ID");
+                    entr.Content.Add("0");
+                    entr.ColumnName.Add("Data");
+                    entr.Content.Add("Province");
+                    sqlite.CreateEntry("CfgData", entr);
+                    ParentID_Province = sqlite.GetColumnDataWith2ColumnName("CfgData", "Field", "Province", "Parent_ID", "0", "ID");
+                }
+            }
+            catch (Exception ex)
+            { }
+            return ParentID_Province;
+        }
+        public static string GetParent_AreaService()
+        {
+            string ParentID = string.Empty;
+            try
+            {
+                ParentID = sqlite.GetColumnDataWith2ColumnName("CfgData", "Field", "AreaService", "Parent_ID", "0", "ID");
+                if (string.IsNullOrEmpty(ParentID))
+                {
+                    EntryList entr = new EntryList();
+                    entr.ColumnName.Add("Field");
+                    entr.Content.Add("AreaService");
+                    entr.ColumnName.Add("Type_ID");
+                    entr.Content.Add("0");
+                    entr.ColumnName.Add("Parent_ID");
+                    entr.Content.Add("0");
+                    entr.ColumnName.Add("Data");
+                    entr.Content.Add("AreaService");
+                    sqlite.CreateEntry("CfgData", entr);
+                    ParentID = sqlite.GetColumnDataWith2ColumnName("CfgData", "Field", "AreaService", "Parent_ID", "0", "ID");
+                }
+            }
+            catch (Exception ex)
+            { }
+            return ParentID;
+        }
+        public static string GetParent_Bank()
+        {
+            string ParentID_Banks = string.Empty;
+            try
+            {
+                ParentID_Banks = sqlite.GetColumnDataWith2ColumnName("CfgData", "Field", "Banks", "Parent_ID", "0", "ID");
+                if (string.IsNullOrEmpty(ParentID_Banks))
+                {
+                    EntryList entr = new EntryList();
+                    entr.ColumnName.Add("Field");
+                    entr.Content.Add("Banks");
+                    entr.ColumnName.Add("Type_ID");
+                    entr.Content.Add("0");
+                    entr.ColumnName.Add("Parent_ID");
+                    entr.Content.Add("0");
+                    entr.ColumnName.Add("Data");
+                    entr.Content.Add("Banks");
+                    sqlite.CreateEntry("CfgData", entr);
+                    ParentID_Banks = sqlite.GetColumnDataWith2ColumnName("CfgData", "Field", "Banks", "Parent_ID", "0", "ID");
+                }
+            }
+            catch (Exception ex)
+            { }
+            return ParentID_Banks;
+        }
 
-        public static void Send_Error(string MsgError, string ClassName, string MethodName)
+     
+
+        public static void Send_Error(object MsgError, string ClassName, string MethodName)
         {
             try
             {
+                string s = string.Empty;
+                if (MsgError is string)
+                    s = MsgError.ToString();
+                else
+                    s = (MsgError as Exception).Message;
                 if (WriteApplication)
                 {
-                    WriteLogApplication(string.Format("{0:HH:mm:ss fff} Class: {1}\nMethod: {2}\n{3}", DateTime.Now, ClassName, MethodName, MsgError), true, true);
+                    WriteLogApplication(string.Format("{0:HH:mm:ss fff} Class: {1}\nMethod: {2}\n{3}", DateTime.Now, ClassName, MethodName, MsgError.ToString()), true, true);
                 }
-                if (MsgError.Contains("access deny") || MsgError.Contains("access is not allowed"))
+                if (s.Contains("access deny") || s.Contains("access is not allowed"))
                     Administrator.IsAdministrator();
                 if (AutoRunMode) return;
                 UC_Info msg = new UC_Info();
@@ -278,7 +410,7 @@ namespace Transaction_Statistical
                 msg.TextCustom.Font = new System.Drawing.Font("Times New Roman", 12, FontStyle.Italic);
                 msg.TextCustom.SelectionColor = Color.Black;
 
-                msg.TextCustom.AppendText(Environment.NewLine + MsgError);
+                msg.TextCustom.AppendText(Environment.NewLine + s);
                 msg.TextCustom.Update();
                 msg.Dock = DockStyle.Fill;
             }
@@ -1008,7 +1140,7 @@ namespace Transaction_Statistical
             {
                 InitParametar.Send_Error(ex.ToString(), MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name);
             }
-
+            contentFile.TerminalID = contentFile.TerminalID == null ? "Not terminal" : contentFile.TerminalID;
             return contentFile;
         }
         #region Dat

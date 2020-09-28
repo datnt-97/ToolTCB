@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Reflection;
 using FastColoredTextBoxNS;
+using System.IO;
 
 namespace Transaction_Statistical
 {
@@ -403,7 +404,37 @@ namespace Transaction_Statistical
 
         private void btn_Keyword_Import_Click(object sender, EventArgs e)
         {
+            OpenFileDialog openFileDialog1 = new OpenFileDialog
+            {
+                InitialDirectory = @"D:\",
+                Title = "Browse Text Files",
 
+                CheckFileExists = true,
+                CheckPathExists = true,
+
+                DefaultExt = "txt",
+                Filter = "txt files (*.txt)|*.txt",
+                FilterIndex = 2,
+                RestoreDirectory = true,
+
+                ReadOnlyChecked = true,
+                ShowReadOnly = true,
+                Multiselect=true
+            };
+            if (openFileDialog1.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+            {
+                foreach (String file in openFileDialog1.FileNames)
+                {
+                    try
+                    {
+                        fctxt_Test.Text += File.ReadAllText(file);
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show("Error: " + ex.Message);
+                    }
+                }
+            }
         }
 
 

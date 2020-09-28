@@ -27,6 +27,12 @@ namespace Transaction_Statistical.UControl
             bgwDriveDetector.WorkerReportsProgress = true;
             bgwDriveDetector.WorkerSupportsCancellation = true;
             CheckUSBKey();
+#if DEBUG
+            InitParametar.Admin_USB = true;
+#else
+    Console.WriteLine("Mode=Release"); 
+#endif
+
             SetControlAdmin();
         }
         public void LoadInfo()

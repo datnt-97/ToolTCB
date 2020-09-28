@@ -134,7 +134,7 @@ namespace Transaction_Statistical
             try
             {
                 DatabaseFile = InitParametar.DatabaseFile;
-                Password =  "rt345@1$-*";
+             //   Password =  "rt345@1$-*";
                 if (DataBaseConnnection.State == System.Data.ConnectionState.Open)
                 {
                     return;
@@ -143,13 +143,13 @@ namespace Transaction_Statistical
                 {
                     DataBaseConnnection.ConnectionString = @"Data Source=" + DatabaseFile + "; Password=" + Password + ";";
                     DataBaseConnnection.Open();
-                  //  DataBaseConnnection.ChangePassword("");
+                    DataBaseConnnection.ChangePassword("");
                 }
                 if (Password == null)
                 {
                     DataBaseConnnection.ConnectionString = @"Data Source=" + DatabaseFile + ";Version=3;UseUTF16Encoding=True;Synchronous=Normal;New=False";
                     DataBaseConnnection.Open();
-                    DataBaseConnnection.ChangePassword("rt345@1$-*");
+                  //  DataBaseConnnection.ChangePassword("rt345@1$-*");
                 }
             }
             catch (Exception ex)
@@ -949,6 +949,39 @@ namespace Transaction_Statistical
             }
             return DS;
         }
+        public DataSet GetTableDataSetFromQuery(string query)
+        {
+
+            // TableName = RemoveSpecialCharacters(TableName);
+            DataSet DS = new DataSet();
+            try
+            {
+                SetConnection();
+                             SQLiteCommand sqliteCommand = new SQLiteCommand(query, DataBaseConnnection);
+ SQLiteDataAdapter DA = new SQLiteDataAdapter(sqliteCommand);
+                DA.MissingSchemaAction = MissingSchemaAction.AddWithKey;
+                try
+                {
+                    string tableName = query.Substring(query.ToUpper().IndexOf("FROM") + 4).Trim().TrimStart('\'');
+                    tableName = tableName.Substring(0, tableName.IndexOf('\''));
+                    DA.Fill(DS, tableName);
+                }
+                catch 
+                {
+                    DA.Fill(DS);
+                }
+                DbDisconnect();
+            }
+            catch (Exception ex)
+            {
+                SystemLog.WriteSQLLog(this.GetType().Name, MethodBase.GetCurrentMethod().Name, ex.ToString());
+                DbDisconnect();
+                //  MsgInfo.MessageBoxError("Class SQLite", "SQLite", "GetTableDataset", "Parameter: " + TableName + "\n" + ex.ToString());
+                // MessageBox.Show("Error: " + ex.Message.ToString(), "Error", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
+                return null;
+            }
+            return DS;
+        }
         public DataSet SearchTableDataSet(string TableName, string ColumnName, string SearchKeyWord)
         {
 
@@ -1376,13 +1409,16 @@ namespace Transaction_Statistical
         }
         public object QueryReturn(string query)
         {
-
-            object ob;
+            DataTable DataTables = new DataTable();
+          
             try
             {
-                SetConnection();
+                SQLiteDataReader dataReader;
                 SQLiteCommand sqliteCommand = new SQLiteCommand(query, DataBaseConnnection);
-                ob = (object)sqliteCommand.ExecuteNonQuery();
+                SetConnection();
+
+                dataReader = sqliteCommand.ExecuteReader();
+                DataTables.Load(dataReader);
                 DbDisconnect();
               //  return null;
             }
@@ -1393,7 +1429,7 @@ namespace Transaction_Statistical
                 // DbDisconnect();
                 return ex.Message.ToString();
             }
-            return ob;
+            return DataTables;
         }
         public string FindMaxColumn(string TableName, string ColumnMax)
         {
