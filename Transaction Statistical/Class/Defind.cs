@@ -1,6 +1,7 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Configuration;
 using System.Data;
 using System.Diagnostics;
 using System.Drawing;
@@ -75,10 +76,13 @@ namespace Transaction_Statistical
         public static string SubkeyTask;
         public static string SubkeyTaskCurrentUser;
 
+        public static string FormatDateTimeConfig = ConfigurationManager.AppSettings["FormatDateTimeConfig"];
+        public static string FormatDateTimeDefault = ConfigurationManager.AppSettings["FormatDateTimeDefault"];
+
         public static void Init()
         {
             try
-            {                
+            {
                 //Init directory and file config    
                 SubkeyApp = @"HKEY_LOCAL_MACHINE\SOFTWARE\NPSS\TransactionStatistical";
                 SubkeyTask = SubkeyApp + @"\Tasks\";
@@ -97,8 +101,8 @@ namespace Transaction_Statistical
                 LicenseFile = PathDirectoryCurrentUserConfigData + "\\TransactionStatistical.lic";
                 License_ReadInfo();
                 ReadTrans = new ReadTransaction();
-                CheckServiceScheduler();                
-                
+                CheckServiceScheduler();
+
             }
             catch (Exception ex)
             {
@@ -126,7 +130,7 @@ namespace Transaction_Statistical
                                 sc.WaitForStatus(ServiceControllerStatus.Running, new TimeSpan(0, 0, 10));
                                 //service is now Started      
                             }
-                            catch(Exception ex) 
+                            catch (Exception ex)
                             {
                                 MessageBox.Show("Can't start service Scheduler.\nPlease, run tool by runas administrator to fix.\n\n\n" + ex.Message, "Start service scheduler ", MessageBoxButtons.OK, MessageBoxIcon.Error);
                             }
@@ -140,7 +144,7 @@ namespace Transaction_Statistical
                     catch (InvalidOperationException)
                     {
                         //This Service does not exist    => install service
-                        
+
                         Process process = new Process();
                         process.StartInfo.FileName = @"C:\Windows\Microsoft.NET\Framework\v4.0.30319\installutil.exe";
                         process.StartInfo.Arguments = "\"" + PathDirectoryCurrentApp + "\\Transaction Statistical Scheduler.exe\"";
@@ -165,8 +169,8 @@ namespace Transaction_Statistical
             }
 
         }
-    
-        public static void AutoStart( string taskName)
+
+        public static void AutoStart(string taskName)
         {
             try
             {
@@ -371,7 +375,7 @@ namespace Transaction_Statistical
             return ParentID_Banks;
         }
 
-     
+
 
         public static void Send_Error(object MsgError, string ClassName, string MethodName)
         {
@@ -604,7 +608,7 @@ namespace Transaction_Statistical
         public string FormatTime = "HH:mm:ss";
         public string FormatDate = "yyyy-MM-dd";
         public string FormatDateTime = "MM - dd - yyyy HH:mm:ss";
-        public string FormatDateTime_2 = "MM-dd-yyyy HH:mm:ss";
+        public string FormatDateTime_2 = InitParametar.FormatDateTimeConfig;
 
         public string TemplateTransactionID;
         public Dictionary<TransactionEvent.Events, string> transactionTemplate;
@@ -653,7 +657,7 @@ namespace Transaction_Statistical
                 if (Template_SplitTransactions == null) Template_SplitTransactions = new Dictionary<string, string>();
                 if (Template_EventCounterChanged == null) Template_EventCounterChanged = new Dictionary<string, string>();
                 if (Template_FileFilter == null) Template_FileFilter = new Dictionary<string, string>();
-               
+
                 if (Template_TransType == null) Template_TransType = new Dictionary<string, TransactionType>(); else Template_TransType.Clear();
 
                 DataTable cfg_data = sqlite.GetTableDataWith2ColumnName("CfgData", "Type_ID", "456", "Parent_ID", TemplateTransactionID);
@@ -827,14 +831,14 @@ namespace Transaction_Statistical
             return false;
         }
 
-        
+
 
         public async Task<bool> Reads(List<string> files, TextProgressBar process = null)
         {
 
             try
             {
-                if (!InitParametar.License_CheckModule(License.Modules.Read) || files.Count==0) return false;
+                if (!InitParametar.License_CheckModule(License.Modules.Read) || files.Count == 0) return false;
                 DateTime currentDate = DateTime.MinValue;
 
                 ListTransaction = new Dictionary<string, Dictionary<DateTime, object>>();
@@ -874,8 +878,8 @@ namespace Transaction_Statistical
                     if (int.Parse(currentDate.ToString("yyyyMMdd")) >= int.Parse(StartDate.ToString("yyyyMMdd")) && int.Parse(currentDate.ToString("yyyyMMdd")) <= int.Parse(EndDate.ToString("yyyyMMdd")))
                     {
                         //   contenFile = await SplitTransactionEJ(Terminal, currentDate, contenFile);
-                         contenFile = await SplitTransactionEJ_ReadByRow(Terminal, currentDate, contenFile.Content);
-                     contenFile.Content = await FindEventDevice2Async(currentDate, contenFile.TerminalID, contenFile.Content);
+                        contenFile = await SplitTransactionEJ_ReadByRow(Terminal, currentDate, contenFile.Content);
+                        contenFile.Content = await FindEventDevice2Async(currentDate, contenFile.TerminalID, contenFile.Content);
                         FindCounterChangedAsync(contenFile.Content);
                         if (process != null)
                         {
@@ -1033,13 +1037,13 @@ namespace Transaction_Statistical
                                             else
                                                 trans.DateEnd = dateFile;
                                             tasks.Add(SplitTransactionEJ_InfoAsync(trans, dateFile, TerminalFile));
-                                         contentFile.Content += trans.DateEnd.ToString(FormatTime) + Environment.NewLine;
+                                            contentFile.Content += trans.DateEnd.ToString(FormatTime) + Environment.NewLine;
                                         }
 
                                         trans = new Transaction();
                                         if (key.Value.value.ContainsKey("DateBegin"))
                                         {
-                                            DateTime.TryParseExact(key.Value.value["DateBegin"], "MM-dd-yyyy HH:mm:ss", CultureInfo.InvariantCulture, DateTimeStyles.None, out trans.DateBegin);
+                                            DateTime.TryParseExact(key.Value.value["DateBegin"], InitParametar.FormatDateTimeDefault, CultureInfo.InvariantCulture, DateTimeStyles.None, out trans.DateBegin);
                                             if (DateTime.Compare(trans.DateBegin, StartDate) < 0 || DateTime.Compare(trans.DateBegin, EndDate) > 0)
                                             {
                                                 contentFile.Content = sString;
@@ -1212,11 +1216,11 @@ namespace Transaction_Statistical
                                     bills.Code = regx.value.Keys.Contains("Code") ? regx.value["Code"] : string.Empty;
                                     bills.Text = regx.value.Keys.Contains("Text") ? regx.value["Text"] : string.Empty;
                                     if (!string.IsNullOrEmpty(bills.Text))
-                                    {                                      
+                                    {
                                         evt.Data = bills.Text;
                                         evt.Type = TransactionEvent.Events.ErrorEvent;
-                                    } 
-                                   
+                                    }
+
                                     bills.RequireAmount = regx.value.Values.Contains("RequireAmount") ? regx.value["RequireAmount"] : string.Empty;
                                     long tmps = 0;
                                     if (long.TryParse(bills.TranNo, out tmps))
@@ -1772,10 +1776,21 @@ namespace Transaction_Statistical
                                 evt.TDate = date;
                                 var settlementPeriodDateBegin = key.Value.value["Start"].FirstOrDefault().Value;
                                 var settlementPeriodDateEnd = key.Value.value["End"].FirstOrDefault().Value;
-                                var startSettlement = DateTime.ParseExact(date, FormatDateTime_2, CultureInfo.InvariantCulture);
+
+                                DateTime startSettlement;
+                                DateTime periodDateBegin;
+                                DateTime periodDateEnd;
+                                var checkDate = DateTime.TryParseExact(date, InitParametar.FormatDateTimeDefault, CultureInfo.InvariantCulture, DateTimeStyles.None, out startSettlement);
+                                DateTime.TryParseExact(settlementPeriodDateBegin, InitParametar.FormatDateTimeDefault, CultureInfo.InvariantCulture, DateTimeStyles.None, out periodDateBegin);
+                                DateTime.TryParseExact(settlementPeriodDateEnd, InitParametar.FormatDateTimeDefault, CultureInfo.InvariantCulture, DateTimeStyles.None, out periodDateEnd);
+                                if (!checkDate)
+                                {
+                                    DateTime.TryParseExact(date, InitParametar.FormatDateTimeConfig, CultureInfo.InvariantCulture, DateTimeStyles.None, out startSettlement);
+                                    periodDateBegin = DateTime.ParseExact(settlementPeriodDateBegin, InitParametar.FormatDateTimeConfig, CultureInfo.InvariantCulture);
+                                    periodDateEnd = DateTime.ParseExact(settlementPeriodDateEnd, InitParametar.FormatDateTimeConfig, CultureInfo.InvariantCulture);
+                                }
                                 if (DateTime.Compare(startSettlement, StartDate) < 0 || DateTime.Compare(startSettlement, EndDate) > 0) continue;
-                                var periodDateBegin = DateTime.ParseExact(settlementPeriodDateBegin, FormatDateTime_2, CultureInfo.InvariantCulture);
-                                var periodDateEnd = DateTime.ParseExact(settlementPeriodDateEnd, FormatDateTime_2, CultureInfo.InvariantCulture);
+
                                 cycleItem.SettlementPeriodDateBegin = periodDateBegin;
                                 cycleItem.SettlementPeriodDateEnd = periodDateEnd;
                                 cycleItem.DateBegin = startSettlement;
@@ -1967,7 +1982,7 @@ namespace Transaction_Statistical
                             req_New.Request = req.Request;
                             transaction.ListRequest[req_New.DateBegin] = req_New;
                         }
-                        if (transaction.ListRequest.Count != 0 && (evt.Type.Equals(TransactionEvent.Events.Transaction) ||evt.Type is TransactionEvent.Events.ErrorEvent|| evt.Type.Equals(TransactionEvent.Events.CashIn) || evt.Type.Equals(TransactionEvent.Events.CashOut)))
+                        if (transaction.ListRequest.Count != 0 && (evt.Type.Equals(TransactionEvent.Events.Transaction) || evt.Type is TransactionEvent.Events.ErrorEvent || evt.Type.Equals(TransactionEvent.Events.CashIn) || evt.Type.Equals(TransactionEvent.Events.CashOut)))
                         {
                             string name = transaction.ListRequest.LastOrDefault().Value.Request;
 
@@ -1999,7 +2014,10 @@ namespace Transaction_Statistical
                        && x.Value.Date <= requ.Value.DateEnd && x.Value.Type != Bills.Types.Bill_Nomal &&
                        x.Value.Type != Bills.Types.Bill_CheckPin).LastOrDefault();
                         int check = 0;
-
+                        if (evts.Value != null)
+                        {
+                            requ.Value.TranNo = evts.Value.TranNo;
+                        }
                         foreach (var evtInReq in transaction.ListEvent.Where(x => x.Value.DateBegin >= requ.Value.DateBegin
                         && x.Value.DateBegin <= requ.Value.DateEnd).ToDictionary(x => x.Key, x => x.Value))
                         {
@@ -2011,30 +2029,38 @@ namespace Transaction_Statistical
                         }
                         if (transaction.CardType == Transaction.CardTypes.CardLess)
                         {
-                            if (evts.Value != null && int.TryParse(evts.Value.TranNo.Trim(), out check))
+                            if (requ.Value.TranNo == null)
                             {
-                                requ.Value.TranNo = evts.Value.TranNo;
-                            }
-                            else if (billCheckPin.Value != null)
-                            {
-                                requ.Value.TranNo = billCheckPin.Value != null ? billCheckPin.Value.TranNo : "-";
-                            }
-                            else
-                            {
-                                requ.Value.TranNo = billNomal.Value != null ? billNomal.Value.TranNo : "-";
+                                if (evts.Value != null && int.TryParse(evts.Value.TranNo.Trim(), out check))
+                                {
+                                    requ.Value.TranNo = evts.Value.TranNo;
+                                }
+                                else if (billCheckPin.Value != null)
+                                {
+                                    requ.Value.TranNo = billCheckPin.Value != null ? billCheckPin.Value.TranNo : "-";
+                                }
+                                else
+                                {
+                                    requ.Value.TranNo = billNomal.Value != null ? billNomal.Value.TranNo : "-";
 
+                                }
                             }
+
                         }
                         else
                         {
-                            if (evts.Value != null && int.TryParse(evts.Value.TranNo.Trim(), out check))
+                            if (requ.Value.TranNo == null)
                             {
-                                requ.Value.TranNo = evts.Value.TranNo;
+                                if (evts.Value != null && int.TryParse(evts.Value.TranNo.Trim(), out check))
+                                {
+                                    requ.Value.TranNo = evts.Value.TranNo;
+                                }
+                                else if (billCheckPin.Value != null)
+                                {
+                                    requ.Value.TranNo = billCheckPin.Value != null ? billCheckPin.Value.TranNo : "-";
+                                }
                             }
-                            else if (billCheckPin.Value != null)
-                            {
-                                requ.Value.TranNo = billCheckPin.Value != null ? billCheckPin.Value.TranNo : "-";
-                            }
+
                         }
                     });
                 }
@@ -2050,7 +2076,7 @@ namespace Transaction_Statistical
         {
             foreach (TransactionType type in Template_TransType_Select.Values)
                 if (type.Identification.Split(',').Contains(name)) { transactionType = type.Name; return true; }
-             transactionType = @"N/A: [" + name + "]";
+            transactionType = @"N/A: [" + name + "]";
             return false;
         }
     }
@@ -2210,9 +2236,9 @@ namespace Transaction_Statistical
     }
     public class ContentFile
     {
-     public   string Content { get; set; }
-     public   string TerminalID { get; set; }
-     public   DateTime Day { get; set; }
+        public string Content { get; set; }
+        public string TerminalID { get; set; }
+        public DateTime Day { get; set; }
     }
     public class TransactionEvent
     {
@@ -2797,11 +2823,11 @@ namespace Transaction_Statistical
     {
         private static RegistryHive StringToRegistryHive(ref string _subKey)
         {
-                if (_subKey.ToUpper().StartsWith(Registry.ClassesRoot.Name.ToUpper()))
-                {
-                    _subKey = _subKey.ToUpper().Replace(Registry.ClassesRoot.Name.ToUpper(), string.Empty).TrimStart('\\');
-                    return RegistryHive.ClassesRoot;
-                }
+            if (_subKey.ToUpper().StartsWith(Registry.ClassesRoot.Name.ToUpper()))
+            {
+                _subKey = _subKey.ToUpper().Replace(Registry.ClassesRoot.Name.ToUpper(), string.Empty).TrimStart('\\');
+                return RegistryHive.ClassesRoot;
+            }
             if (_subKey.ToUpper().StartsWith(Registry.CurrentConfig.Name.ToUpper()))
             {
                 _subKey = _subKey.ToUpper().Replace(Registry.CurrentConfig.Name.ToUpper(), string.Empty).TrimStart('\\');
@@ -2822,7 +2848,7 @@ namespace Transaction_Statistical
                 _subKey = _subKey.ToUpper().Replace(Registry.Users.Name.ToUpper(), string.Empty).TrimStart('\\');
                 return RegistryHive.Users;
             }
-            return   RegistryHive.LocalMachine;
+            return RegistryHive.LocalMachine;
         }
         public static string GetValue(string _subKey, string _value)
         {
@@ -2838,7 +2864,7 @@ namespace Transaction_Statistical
                     }
                 }
             }
-            catch (Exception ex) 
+            catch (Exception ex)
             {
                 InitParametar.Send_Error(ex.ToString(), MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name); ;
             }
@@ -2849,7 +2875,7 @@ namespace Transaction_Statistical
             RegistryKey key;
             try
             {
-                using (key = RegistryKey.OpenBaseKey(StringToRegistryHive(ref _subKey), RegistryView.Registry32).OpenSubKey(_subKey,true))
+                using (key = RegistryKey.OpenBaseKey(StringToRegistryHive(ref _subKey), RegistryView.Registry32).OpenSubKey(_subKey, true))
                 {
                     if (key != null)
                     {
@@ -2866,7 +2892,7 @@ namespace Transaction_Statistical
             catch (Exception ex)
             {
                 InitParametar.Send_Error(ex.ToString(), MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name);
-               
+
             }
             return false;
         }
@@ -2898,23 +2924,23 @@ namespace Transaction_Statistical
                 }
             }
             catch (Exception ex)
-            { InitParametar.Send_Error(ex.ToString(), MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name);  }
+            { InitParametar.Send_Error(ex.ToString(), MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name); }
             return values;
         }
         public static bool DeleteValue(string _subKey, string _name)
         {
             try
             {
-                using (var key = RegistryKey.OpenBaseKey(StringToRegistryHive(ref _subKey), RegistryView.Registry32).OpenSubKey(_subKey,true))
+                using (var key = RegistryKey.OpenBaseKey(StringToRegistryHive(ref _subKey), RegistryView.Registry32).OpenSubKey(_subKey, true))
                 {
                     key.DeleteValue(_name);
                     key.Close();
                     return true;
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
-                InitParametar.Send_Error(ex.ToString(), MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name); 
+                InitParametar.Send_Error(ex.ToString(), MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name);
             }
             return false;
         }
@@ -2924,7 +2950,7 @@ namespace Transaction_Statistical
             {
                 using (var key = RegistryKey.OpenBaseKey(StringToRegistryHive(ref _subKey), RegistryView.Registry32).OpenSubKey(_subKey))
                 {
-                    string s=key.GetValue(_name).ToString();
+                    string s = key.GetValue(_name).ToString();
                     key.Close();
                     return string.IsNullOrEmpty(s) ? false : true;
                 }
@@ -2953,23 +2979,23 @@ namespace Transaction_Statistical
             var principal = new WindowsPrincipal(identity);
             if (!principal.IsInRole(WindowsBuiltInRole.Administrator))
             {
-                if (MessageBox.Show(@"Application does not have permission to write data to regedit."+Environment.NewLine+ " Do you want Runas admin to fix?", "Do you want Runas admin ?", MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.Yes)
+                if (MessageBox.Show(@"Application does not have permission to write data to regedit." + Environment.NewLine + " Do you want Runas admin to fix?", "Do you want Runas admin ?", MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.Yes)
                     RunAs();
                 return false;
             }
             return true;
         }
         static void RunAs()
-        {            
-                // Restart and run as admin
-                var exeName = Process.GetCurrentProcess().MainModule.FileName;
-                ProcessStartInfo startInfo = new ProcessStartInfo(exeName);
-                startInfo.Verb = "runas";
-                startInfo.WorkingDirectory = Path.GetDirectoryName(exeName);
-                Process.Start(startInfo);
+        {
+            // Restart and run as admin
+            var exeName = Process.GetCurrentProcess().MainModule.FileName;
+            ProcessStartInfo startInfo = new ProcessStartInfo(exeName);
+            startInfo.Verb = "runas";
+            startInfo.WorkingDirectory = Path.GetDirectoryName(exeName);
+            Process.Start(startInfo);
             System.Diagnostics.Process.GetCurrentProcess().Kill();
         }
-}
+    }
     public class RegistryWatcher : IDisposable
     {
         /// <summary>

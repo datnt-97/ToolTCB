@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SQLite;
@@ -125,7 +125,7 @@ namespace Transaction_Statistical
     public class SQLiteHelper
     {
         SQLiteDataReader DataReader;
-        public string DatabaseFile { set ; get ; }
+        public string DatabaseFile { set; get; }
         public string Password { set; get; }
         public SQLiteConnection DataBaseConnnection = new SQLiteConnection();
 
@@ -134,7 +134,7 @@ namespace Transaction_Statistical
             try
             {
                 DatabaseFile = InitParametar.DatabaseFile;
-             //   Password =  "rt345@1$-*";
+                //Password = "rt345@1$-*";
                 if (DataBaseConnnection.State == System.Data.ConnectionState.Open)
                 {
                     return;
@@ -149,7 +149,7 @@ namespace Transaction_Statistical
                 {
                     DataBaseConnnection.ConnectionString = @"Data Source=" + DatabaseFile + ";Version=3;UseUTF16Encoding=True;Synchronous=Normal;New=False";
                     DataBaseConnnection.Open();
-                  //  DataBaseConnnection.ChangePassword("rt345@1$-*");
+                    //  DataBaseConnnection.ChangePassword("rt345@1$-*");
                 }
             }
             catch (Exception ex)
@@ -318,7 +318,7 @@ namespace Transaction_Statistical
                 sqliteCommand.ExecuteNonQuery();
                 SQLiteCommand VacuumCommand = new SQLiteCommand("vacuum;", DataBaseConnnection);
                 VacuumCommand.ExecuteNonQuery();
-                DbDisconnect();              
+                DbDisconnect();
             }
             catch (Exception ex)
             {
@@ -346,7 +346,7 @@ namespace Transaction_Statistical
                 sqliteCommand.ExecuteNonQuery();
                 SQLiteCommand VacuumCommand = new SQLiteCommand("vacuum;", DataBaseConnnection);
                 VacuumCommand.ExecuteNonQuery();
-                DbDisconnect();              
+                DbDisconnect();
             }
             catch (Exception ex)
             {
@@ -374,13 +374,13 @@ namespace Transaction_Statistical
                 sqliteCommand.ExecuteNonQuery();
                 SQLiteCommand VacuumCommand = new SQLiteCommand("vacuum;", DataBaseConnnection);
                 VacuumCommand.ExecuteNonQuery();
-                DbDisconnect();               
+                DbDisconnect();
             }
             catch (Exception ex)
             {
                 SystemLog.WriteSQLLog(this.GetType().Name, MethodBase.GetCurrentMethod().Name, ex.ToString());
                 return false;
-               // DbDisconnect();
+                // DbDisconnect();
                 // MsgInfo.MessageBoxError("Class SQLite", "SQLite", "CopyTableToNew", "Parameter1: " + TableSource + "\n Parameter2: " + TableNew + "\n Parameter3: " + Structure.ToString() + "\n" + ex.ToString());
                 //MessageBox.Show("Error: " + ex.Message.ToString(), "Error", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
                 //   frmPassword fp = new frmPassword();
@@ -957,8 +957,8 @@ namespace Transaction_Statistical
             try
             {
                 SetConnection();
-                             SQLiteCommand sqliteCommand = new SQLiteCommand(query, DataBaseConnnection);
- SQLiteDataAdapter DA = new SQLiteDataAdapter(sqliteCommand);
+                SQLiteCommand sqliteCommand = new SQLiteCommand(query, DataBaseConnnection);
+                SQLiteDataAdapter DA = new SQLiteDataAdapter(sqliteCommand);
                 DA.MissingSchemaAction = MissingSchemaAction.AddWithKey;
                 try
                 {
@@ -966,7 +966,7 @@ namespace Transaction_Statistical
                     tableName = tableName.Substring(0, tableName.IndexOf('\''));
                     DA.Fill(DS, tableName);
                 }
-                catch 
+                catch
                 {
                     DA.Fill(DS);
                 }
@@ -1291,7 +1291,7 @@ namespace Transaction_Statistical
             {
                 SystemLog.WriteSQLLog(this.GetType().Name, MethodBase.GetCurrentMethod().Name, ex.ToString());
                 DbDisconnect();
-               
+
                 // MsgInfo.MessageBoxError("Class SQLite", "SQLite", "GetTableDataWith2ColumnName", "Parameter1: " + TableName + "\n Parameter2: " + ColumnName1 + "\n Parameter3: " + Equals1 + "\n Parameter4: " + ColumnName2 + "\n Parameter5: " + Equals2 + "\n" +ex.ToString());
                 //MessageBox.Show("Error: " + ex.Message.ToString(), "Error", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
             }
@@ -1410,7 +1410,7 @@ namespace Transaction_Statistical
         public object QueryReturn(string query)
         {
             DataTable DataTables = new DataTable();
-          
+
             try
             {
                 SQLiteDataReader dataReader;
@@ -1420,7 +1420,7 @@ namespace Transaction_Statistical
                 dataReader = sqliteCommand.ExecuteReader();
                 DataTables.Load(dataReader);
                 DbDisconnect();
-              //  return null;
+                //  return null;
             }
             catch (Exception ex)
             {
