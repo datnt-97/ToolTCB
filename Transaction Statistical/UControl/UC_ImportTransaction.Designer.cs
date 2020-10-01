@@ -30,15 +30,15 @@
 		{
 			this.components = new System.ComponentModel.Container();
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(UC_ImportTransaction));
-			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
-			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
-			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
+			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
+			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle5 = new System.Windows.Forms.DataGridViewCellStyle();
+			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle6 = new System.Windows.Forms.DataGridViewCellStyle();
 			this.propertyGrid1 = new System.Windows.Forms.PropertyGrid();
 			this.splitContainer1 = new System.Windows.Forms.SplitContainer();
 			this.bt_CloseInfo = new Transaction_Statistical.Mode_Label();
 			this.bt_WriteChange = new Transaction_Statistical.AddOn.ButtonZ();
 			this.fc_Query = new Transaction_Statistical.Mode_FastColoredTextBox();
-			this.bt_Delete = new Transaction_Statistical.AddOn.ButtonZ();
+			this.bt_Export = new Transaction_Statistical.AddOn.ButtonZ();
 			this.bt_Refresh = new Transaction_Statistical.AddOn.ButtonZ();
 			this.gridView = new Transaction_Statistical.Mode_DataGridView();
 			this.prb_Process = new Transaction_Statistical.TextProgressBar();
@@ -89,7 +89,7 @@
 			// 
 			this.splitContainer1.Panel2.Controls.Add(this.bt_WriteChange);
 			this.splitContainer1.Panel2.Controls.Add(this.fc_Query);
-			this.splitContainer1.Panel2.Controls.Add(this.bt_Delete);
+			this.splitContainer1.Panel2.Controls.Add(this.bt_Export);
 			this.splitContainer1.Panel2.Controls.Add(this.bt_Refresh);
 			this.splitContainer1.Panel2.Controls.Add(this.gridView);
 			this.splitContainer1.Panel2.Controls.Add(this.prb_Process);
@@ -178,27 +178,27 @@
 			this.fc_Query.Text = "Select * from \'HistoryTransaction\'";
 			this.fc_Query.Zoom = 100;
 			// 
-			// bt_Delete
+			// bt_Export
 			// 
-			this.bt_Delete.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-			this.bt_Delete.BorderLeft = false;
-			this.bt_Delete.BZBackColor = System.Drawing.Color.Teal;
-			this.bt_Delete.DisplayText = "Delete Rows Select";
-			this.bt_Delete.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-			this.bt_Delete.Font = new System.Drawing.Font("Microsoft YaHei UI", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.bt_Delete.ForeColor = System.Drawing.Color.White;
-			this.bt_Delete.Location = new System.Drawing.Point(508, 178);
-			this.bt_Delete.MouseClickColor1 = System.Drawing.Color.FromArgb(((int)(((byte)(160)))), ((int)(((byte)(180)))), ((int)(((byte)(200)))));
-			this.bt_Delete.MouseHoverColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(140)))));
-			this.bt_Delete.Name = "bt_Delete";
-			this.bt_Delete.NotchangeAfterMouseUP = false;
-			this.bt_Delete.Size = new System.Drawing.Size(148, 24);
-			this.bt_Delete.TabIndex = 35;
-			this.bt_Delete.Text = "Delete Rows Select";
-			this.bt_Delete.TextLocation_X = 15;
-			this.bt_Delete.TextLocation_Y = 2;
-			this.bt_Delete.UseVisualStyleBackColor = true;
-			this.bt_Delete.Click += new System.EventHandler(this.bt_Delete_Click);
+			this.bt_Export.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+			this.bt_Export.BorderLeft = false;
+			this.bt_Export.BZBackColor = System.Drawing.Color.Teal;
+			this.bt_Export.DisplayText = "Export Option";
+			this.bt_Export.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+			this.bt_Export.Font = new System.Drawing.Font("Microsoft YaHei UI", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.bt_Export.ForeColor = System.Drawing.Color.White;
+			this.bt_Export.Location = new System.Drawing.Point(508, 178);
+			this.bt_Export.MouseClickColor1 = System.Drawing.Color.FromArgb(((int)(((byte)(160)))), ((int)(((byte)(180)))), ((int)(((byte)(200)))));
+			this.bt_Export.MouseHoverColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(140)))));
+			this.bt_Export.Name = "bt_Export";
+			this.bt_Export.NotchangeAfterMouseUP = false;
+			this.bt_Export.Size = new System.Drawing.Size(148, 24);
+			this.bt_Export.TabIndex = 35;
+			this.bt_Export.Text = "Export Option";
+			this.bt_Export.TextLocation_X = 15;
+			this.bt_Export.TextLocation_Y = 2;
+			this.bt_Export.UseVisualStyleBackColor = true;
+			this.bt_Export.Click += new System.EventHandler(this.bt_Delete_Click);
 			// 
 			// bt_Refresh
 			// 
@@ -224,34 +224,34 @@
 			// 
 			// gridView
 			// 
-			dataGridViewCellStyle1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(40)))), ((int)(((byte)(40)))));
-			dataGridViewCellStyle1.ForeColor = System.Drawing.Color.White;
-			dataGridViewCellStyle1.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(128)))), ((int)(((byte)(255)))));
-			dataGridViewCellStyle1.SelectionForeColor = System.Drawing.Color.White;
-			this.gridView.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle1;
+			dataGridViewCellStyle4.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(40)))), ((int)(((byte)(40)))));
+			dataGridViewCellStyle4.ForeColor = System.Drawing.Color.White;
+			dataGridViewCellStyle4.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(128)))), ((int)(((byte)(255)))));
+			dataGridViewCellStyle4.SelectionForeColor = System.Drawing.Color.White;
+			this.gridView.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle4;
 			this.gridView.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.gridView.BackgroundColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(40)))), ((int)(((byte)(40)))));
-			dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-			dataGridViewCellStyle2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(40)))), ((int)(((byte)(40)))));
-			dataGridViewCellStyle2.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			dataGridViewCellStyle2.ForeColor = System.Drawing.Color.White;
-			dataGridViewCellStyle2.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-			dataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-			dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-			this.gridView.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle2;
+			dataGridViewCellStyle5.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+			dataGridViewCellStyle5.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(40)))), ((int)(((byte)(40)))));
+			dataGridViewCellStyle5.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			dataGridViewCellStyle5.ForeColor = System.Drawing.Color.White;
+			dataGridViewCellStyle5.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+			dataGridViewCellStyle5.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+			dataGridViewCellStyle5.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+			this.gridView.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle5;
 			this.gridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
 			this.gridView.Location = new System.Drawing.Point(0, 218);
 			this.gridView.Name = "gridView";
-			dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-			dataGridViewCellStyle3.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(40)))), ((int)(((byte)(40)))));
-			dataGridViewCellStyle3.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			dataGridViewCellStyle3.ForeColor = System.Drawing.Color.White;
-			dataGridViewCellStyle3.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-			dataGridViewCellStyle3.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-			dataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-			this.gridView.RowHeadersDefaultCellStyle = dataGridViewCellStyle3;
+			dataGridViewCellStyle6.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+			dataGridViewCellStyle6.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(40)))), ((int)(((byte)(40)))));
+			dataGridViewCellStyle6.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			dataGridViewCellStyle6.ForeColor = System.Drawing.Color.White;
+			dataGridViewCellStyle6.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+			dataGridViewCellStyle6.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+			dataGridViewCellStyle6.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+			this.gridView.RowHeadersDefaultCellStyle = dataGridViewCellStyle6;
 			this.gridView.RowHeadersVisible = false;
 			this.gridView.RowHeadersWidth = 51;
 			this.gridView.RowTemplate.DefaultCellStyle.BackColor = System.Drawing.Color.Gray;
@@ -408,7 +408,7 @@
 		private Mode_Label bt_CloseInfo;
 		private System.Windows.Forms.SplitContainer splitContainer1;
 		private Mode_DataGridView gridView;
-		private AddOn.ButtonZ bt_Delete;
+		private AddOn.ButtonZ bt_Export;
 		private AddOn.ButtonZ bt_Refresh;
 		private Mode_FastColoredTextBox fc_Query;
 		private AddOn.ButtonZ bt_WriteChange;

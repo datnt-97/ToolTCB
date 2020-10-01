@@ -115,56 +115,36 @@ namespace Transaction_Statistical.UControl
                             if (nodeTag.Type is Custom_NodeTag.NodeTypes.Transaction)
                             {
                                 trans = nodeTag.Data as Transaction;
-                                ImportDB(trans);
-                                //foreach (TransactionRequest req in trans.ListRequest.Values)
-                                //{
-                                //    EntryList entr = new EntryList();
-                                //    entr.ColumnName.Add("TerminalID");
-                                //    entr.Content.Add(id);
-                                //    entr.ColumnName.Add("TranNumber");
-                                //    entr.Content.Add(req.TranNo);
-                                //    entr.ColumnName.Add("TranType");
-                                //    entr.Content.Add(req.Request);
-                                //    entr.ColumnName.Add("Amount");
-                                //    entr.Content.Add(req.AmountDeposit == 0 ? req.AmountRequest.ToString() : req.AmountDeposit.ToString());
-                                //    foreach (Denomination de in req.LstDenomination)
-                                //    {
-                                //        entr.ColumnName.Add(de.Value + "K");
-                                //        entr.Content.Add(de.Amount.ToString());
-                                //    }
-                                //    entr.ColumnName.Add("DateTime");
-                                //    entr.Content.Add(req.DateBegin.ToString("yyyyMMddHHmmssfff"));
-                                //    sqlite.CreateEntry("HistoryTransaction", entr);
-                                //}
+                                ImportDB(trans);                               
                             }
                             else if (nodeTag.Type is Custom_NodeTag.NodeTypes.EventDevice)
                             {
-                                var evt = nodeTag.Data as TransactionEvent;
-                                EntryList entr = new EntryList();
-                                entr.ColumnName.Add("TerminalID");
-                                entr.Content.Add(id);
+                                //var evt = nodeTag.Data as TransactionEvent;
+                                //EntryList entr = new EntryList();
+                                //entr.ColumnName.Add("TerminalID");
+                                //entr.Content.Add(id);
 
-                                entr.ColumnName.Add("TranType");
-                                entr.Content.Add(evt.Type.ToString());
-                                entr.ColumnName.Add("Amount");
-                                entr.Content.Add(evt.AmountCounter.ToString());
+                                //entr.ColumnName.Add("TranType");
+                                //entr.Content.Add(evt.Type.ToString());
+                                //entr.ColumnName.Add("Amount");
+                                //entr.Content.Add(evt.AmountCounter.ToString());
 
-                                entr.ColumnName.Add("K500");
-                                entr.Content.Add(evt.Value_500K.ToString());
-                                entr.ColumnName.Add("K200");
-                                entr.Content.Add(evt.Value_200K.ToString());
-                                entr.ColumnName.Add("K100");
-                                entr.Content.Add(evt.Value_100K.ToString());
-                                entr.ColumnName.Add("K50");
-                                entr.Content.Add(evt.Value_50K.ToString());
-                                entr.ColumnName.Add("K20");
-                                entr.Content.Add(evt.Value_20K.ToString());
-                                entr.ColumnName.Add("K10");
-                                entr.Content.Add(evt.Value_10K.ToString());
+                                //entr.ColumnName.Add("K500");
+                                //entr.Content.Add(evt.Value_500K.ToString());
+                                //entr.ColumnName.Add("K200");
+                                //entr.Content.Add(evt.Value_200K.ToString());
+                                //entr.ColumnName.Add("K100");
+                                //entr.Content.Add(evt.Value_100K.ToString());
+                                //entr.ColumnName.Add("K50");
+                                //entr.Content.Add(evt.Value_50K.ToString());
+                                //entr.ColumnName.Add("K20");
+                                //entr.Content.Add(evt.Value_20K.ToString());
+                                //entr.ColumnName.Add("K10");
+                                //entr.Content.Add(evt.Value_10K.ToString());
 
-                                entr.ColumnName.Add("DateTime");
-                                entr.Content.Add(evt.DateBegin.ToString("yyyyMMddHHmmssfff"));
-                                sqlite.CreateEntry("HistoryTransaction", entr);
+                                //entr.ColumnName.Add("DateTime");
+                                //entr.Content.Add(evt.DateBegin.ToString("yyyyMMddHHmmssfff"));
+                                //sqlite.CreateEntry("HistoryTransaction", entr);
 
                             }
                             else if (nodeTag.Type is Custom_NodeTag.NodeTypes.Cycles)
@@ -222,6 +202,8 @@ namespace Transaction_Statistical.UControl
                         var evtCounter = evts.OrderBy(x => x.Key).Where(x => x.Value.hasCouter).ToList();
 
                         EntryList entr = new EntryList();
+                        entr.ColumnName.Add("Bank");
+                        entr.Content.Add(cb_Bank.Text);
                         entr.ColumnName.Add("TerminalID");
                         entr.Content.Add(trans.Terminal);
                         entr.ColumnName.Add("TranNumber");
@@ -385,6 +367,7 @@ namespace Transaction_Statistical.UControl
         {
             try
             {
+                Cursor = Cursors.WaitCursor;
                 string query = fc_Query.Text;
                 if (fc_Query.SelectedText.Length > 5) query = fc_Query.SelectedText;
                 query = query.Replace("500K", "K500").Replace("200K", "K200").Replace("100K", "K100").Replace("50K", "50").Replace("20K", "K20").Replace("10K", "K10");
@@ -403,14 +386,21 @@ namespace Transaction_Statistical.UControl
             {
                 MessageBox.Show(exceptionObj.Message.ToString());
             }
+            Cursor = Cursors.Default;
         }
     
 		private void bt_Delete_Click(object sender, EventArgs e)
 		{
             try
             {
-                gridView.Rows.RemoveAt(gridView.CurrentRow.Index);
-                DA.Update(dataTable);
+                //gridView.Rows.RemoveAt(gridView.CurrentRow.Index);
+                //DA.Update(dataTable);
+
+                UC_ExportOption uc_export = new UC_ExportOption();
+                uc_export.Dock = DockStyle.Fill;
+                Frm_TemplateDefault frm = new Frm_TemplateDefault(uc_export, "Export Options");
+                frm.Show();
+
             }
             catch (Exception exceptionObj)
             {
