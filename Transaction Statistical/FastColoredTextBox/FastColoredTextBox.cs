@@ -2371,17 +2371,17 @@ namespace FastColoredTextBoxNS
         public void ShowFindDialog(string findText)
         {
             if (findForm == null)
-            {    findForm = new FindForm(this);            
-                //int xParent = this.Location.X;
-                //int yParent = this.Location.Y;
-                //int hParent = this.Size.Height;
-                //int wParent = this.Size.Width;
+            {    findForm = new FindForm(this);
+				int xParent = this.Location.X;
+				int yParent = this.Location.Y;
+				int hParent = this.Size.Height;
+				int wParent = this.Size.Width;
 
-                //int hfindForm = findForm.Size.Height;
-                //int wfindForm = findForm.Size.Width;
+				int hfindForm = findForm.Size.Height;
+				int wfindForm = findForm.Size.Width;
 
-                //findForm.Location = new Point(wParent - wfindForm + xParent, hParent - hfindForm + yParent);
-            }
+				findForm.Location = new Point(wParent - wfindForm + xParent, hParent - hfindForm + yParent);
+			}
 
             if (findText != null)
                 findForm.tbFind.Text = findText;

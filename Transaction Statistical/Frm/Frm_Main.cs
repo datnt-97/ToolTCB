@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Drawing;
+using System.Threading;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 using Transaction_Statistical.AddOn;
 
@@ -7,30 +9,24 @@ namespace Transaction_Statistical
 {
     public partial class Frm_Main : Form
     {
+        Thread th_loadForm;
         public Frm_Main()
         {
-            InitializeComponent();
-
-            //uc_cfgtemplate uc_templatecfg = new uc_cfgtemplate("65");
-            //uc_templatecfg.dock = dockstyle.fill;
-            //frm_templatedefault frm_templatecfg = new frm_templatedefault(uc_templatecfg);
-            //frm_templatecfg.titlecustom.text = "template config";
-            //frm_templatecfg.show();
-
-            //UC_Menu_Startup uc_MenuStartup = new UC_Menu_Startup();
-            //uc_MenuStartup.Dock = DockStyle.Fill;
-            //Frm_TemplateDefault frm_Startup = new Frm_TemplateDefault(uc_MenuStartup);
-            //frm_Startup.titleCustom.Text = "Startup";
-            //frm_Startup.ShowDialog();
-
+            th_loadForm = new Thread(() => LoadingApp());
+            th_loadForm.Start();
+            InitializeComponent2();
 
             TabPanelControl tpc = new TabPanelControl();
             tpc.Dock = DockStyle.Fill;
             UControl.UC_Transaction uc_Transaction = new UControl.UC_Transaction();
             uc_Transaction.Dock = DockStyle.Fill;
             tpc.Controls.Add(uc_Transaction);
-            tabControlX1.AddTab("Transaction Statistical", tpc, false);
-
+            tabControlX1.AddTab("Transaction Statistical", "Transaction Statistical", tpc, false);
+        }
+        private void LoadingApp()
+        {
+            Frm_LoadingApp frm_LoadingApp = new Frm_LoadingApp();
+            frm_LoadingApp.ShowDialog();           
         }
         #region Design GUI
         bool isTopPanelDragged = false;
@@ -44,6 +40,7 @@ namespace Transaction_Statistical
         Point _normalWindowLocation = Point.Empty;
         //**********************************************************************
         //top border panel
+
         private void TopBorderPanel_MouseDown(object sender, MouseEventArgs e)
         {
             if (e.Button == MouseButtons.Left)
@@ -302,6 +299,25 @@ namespace Transaction_Statistical
 
         private void tabControlX1_Load(object sender, EventArgs e)
         {
+
+        }
+        protected override void OnShown(EventArgs e)
+        { th_loadForm.Abort();     
+            base.OnShown(e);
+           // this.WindowState = FormWindowState.Normal;
+        }
+
+        private void InitializeComponent()
+        {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Frm_Main));
+            this.SuspendLayout();
+            // 
+            // Frm_Main
+            // 
+            this.ClientSize = new System.Drawing.Size(282, 253);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.Name = "Frm_Main";
+            this.ResumeLayout(false);
 
         }
     }

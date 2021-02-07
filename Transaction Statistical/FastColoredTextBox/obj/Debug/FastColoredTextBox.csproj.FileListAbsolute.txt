@@ -34,6 +34,29 @@ D:\05-TEMP\Source\SwitchDemo\Analyze\Analyze\FastColoredTextBox\obj\Debug\FastCo
 D:\05-TEMP\Source\SwitchDemo\Analyze\Analyze\FastColoredTextBox\obj\Debug\FastColoredTextBox.csproj.GenerateResource.Cache
 D:\05-TEMP\Source\SwitchDemo\Analyze\Analyze\FastColoredTextBox\obj\Debug\FastColoredTextBox.dll
 D:\05-TEMP\Source\SwitchDemo\Analyze\Analyze\FastColoredTextBox\obj\Debug\FastColoredTextBox.pdb
+D:\ToolTCB_Git\ToolTCB\Transaction Statistical\FastColoredTextBox\bin\Debug\FastColoredTextBox.XML
+D:\ToolTCB_Git\ToolTCB\Transaction Statistical\FastColoredTextBox\bin\Debug\FastColoredTextBox.dll
+D:\ToolTCB_Git\ToolTCB\Transaction Statistical\FastColoredTextBox\bin\Debug\FastColoredTextBox.pdb
+D:\ToolTCB_Git\ToolTCB\Transaction Statistical\FastColoredTextBox\obj\Debug\FastColoredTextBox.csprojAssemblyReference.cache
+D:\ToolTCB_Git\ToolTCB\Transaction Statistical\FastColoredTextBox\obj\Debug\FastColoredTextBoxNS.FastColoredTextBox.resources
+D:\ToolTCB_Git\ToolTCB\Transaction Statistical\FastColoredTextBox\obj\Debug\FastColoredTextBoxNS.FindForm.resources
+D:\ToolTCB_Git\ToolTCB\Transaction Statistical\FastColoredTextBox\obj\Debug\FastColoredTextBoxNS.GoToForm.resources
+D:\ToolTCB_Git\ToolTCB\Transaction Statistical\FastColoredTextBox\obj\Debug\FastColoredTextBoxNS.HotkeysEditorForm.resources
+D:\ToolTCB_Git\ToolTCB\Transaction Statistical\FastColoredTextBox\obj\Debug\FastColoredTextBoxNS.ReplaceForm.resources
+D:\ToolTCB_Git\ToolTCB\Transaction Statistical\FastColoredTextBox\obj\Debug\FastColoredTextBox.csproj.GenerateResource.cache
+D:\ToolTCB_Git\ToolTCB\Transaction Statistical\FastColoredTextBox\obj\Debug\FastColoredTextBox.dll
+D:\ToolTCB_Git\ToolTCB\Transaction Statistical\FastColoredTextBox\obj\Debug\FastColoredTextBox.pdb
+E:\Project\NPS\TCB\ToolTCB\Transaction Statistical\FastColoredTextBox\bin\Debug\FastColoredTextBox.XML
+E:\Project\NPS\TCB\ToolTCB\Transaction Statistical\FastColoredTextBox\bin\Debug\FastColoredTextBox.dll
+E:\Project\NPS\TCB\ToolTCB\Transaction Statistical\FastColoredTextBox\bin\Debug\FastColoredTextBox.pdb
+E:\Project\NPS\TCB\ToolTCB\Transaction Statistical\FastColoredTextBox\obj\Debug\FastColoredTextBoxNS.FastColoredTextBox.resources
+E:\Project\NPS\TCB\ToolTCB\Transaction Statistical\FastColoredTextBox\obj\Debug\FastColoredTextBoxNS.FindForm.resources
+E:\Project\NPS\TCB\ToolTCB\Transaction Statistical\FastColoredTextBox\obj\Debug\FastColoredTextBoxNS.GoToForm.resources
+E:\Project\NPS\TCB\ToolTCB\Transaction Statistical\FastColoredTextBox\obj\Debug\FastColoredTextBoxNS.HotkeysEditorForm.resources
+E:\Project\NPS\TCB\ToolTCB\Transaction Statistical\FastColoredTextBox\obj\Debug\FastColoredTextBoxNS.ReplaceForm.resources
+E:\Project\NPS\TCB\ToolTCB\Transaction Statistical\FastColoredTextBox\obj\Debug\FastColoredTextBox.csproj.GenerateResource.cache
+E:\Project\NPS\TCB\ToolTCB\Transaction Statistical\FastColoredTextBox\obj\Debug\FastColoredTextBox.dll
+E:\Project\NPS\TCB\ToolTCB\Transaction Statistical\FastColoredTextBox\obj\Debug\FastColoredTextBox.pdb
 D:\05-TEMP\Source\GitHub\ToolTCB\Transaction Statistical\FastColoredTextBox\bin\Debug\FastColoredTextBox.XML
 D:\05-TEMP\Source\GitHub\ToolTCB\Transaction Statistical\FastColoredTextBox\bin\Debug\FastColoredTextBox.dll
 D:\05-TEMP\Source\GitHub\ToolTCB\Transaction Statistical\FastColoredTextBox\bin\Debug\FastColoredTextBox.pdb
@@ -44,5 +67,6 @@ D:\05-TEMP\Source\GitHub\ToolTCB\Transaction Statistical\FastColoredTextBox\obj\
 D:\05-TEMP\Source\GitHub\ToolTCB\Transaction Statistical\FastColoredTextBox\obj\Debug\FastColoredTextBoxNS.HotkeysEditorForm.resources
 D:\05-TEMP\Source\GitHub\ToolTCB\Transaction Statistical\FastColoredTextBox\obj\Debug\FastColoredTextBoxNS.ReplaceForm.resources
 D:\05-TEMP\Source\GitHub\ToolTCB\Transaction Statistical\FastColoredTextBox\obj\Debug\FastColoredTextBox.csproj.GenerateResource.cache
+D:\05-TEMP\Source\GitHub\ToolTCB\Transaction Statistical\FastColoredTextBox\obj\Debug\FastColoredTextBox.csproj.CoreCompileInputs.cache
 D:\05-TEMP\Source\GitHub\ToolTCB\Transaction Statistical\FastColoredTextBox\obj\Debug\FastColoredTextBox.dll
 D:\05-TEMP\Source\GitHub\ToolTCB\Transaction Statistical\FastColoredTextBox\obj\Debug\FastColoredTextBox.pdb

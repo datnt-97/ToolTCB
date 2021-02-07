@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Reflection;
 using FastColoredTextBoxNS;
+using System.IO;
 
 namespace Transaction_Statistical
 {
@@ -18,10 +19,14 @@ namespace Transaction_Statistical
         string template_ID;
         public UC_CfgTemplate(string Template_ID)
         {
-            InitializeComponent();
+            InitializeComponent2();
             sqlite = new SQLiteHelper();
             template_ID = Template_ID;
             LoadTypeLog();
+        }
+        private void ChangedColor(object sender, Color e)
+        {
+           
         }
         private void LoadTypeLog()
         {
@@ -37,6 +42,8 @@ namespace Transaction_Statistical
                     cbo_Keyword_Typelog.Items.Add(cb);
                 }
                 if (cbo_Keyword_Typelog.Items.Count != 0) cbo_Keyword_Typelog.SelectedIndex = 0;
+
+
             }
             catch { }
         }
@@ -48,8 +55,7 @@ namespace Transaction_Statistical
 
                 UC_Info uc = new UC_Info("CfgData", cfg_data.Rows[0]["ID"].ToString(), "Data");
                 uc.Dock = DockStyle.Fill;
-                Frm_TemplateDefault frm = new Frm_TemplateDefault(uc);
-                frm.titleCustom.Text = "Regular Expression trong C#";
+                Frm_TemplateDefault frm = new Frm_TemplateDefault(uc, "Regular Expression trong C#");
                 frm.Show();
             }
             catch
@@ -92,11 +98,11 @@ namespace Transaction_Statistical
                     entr.ColumnName.Add("TemplateID");
                     entr.Content.Add(template_ID);
                     entr.ColumnName.Add("IdentificationTxt");
-                    entr.Content.Add(fctxt_Identification.Text);
+                    entr.Content.Add(cbo_Transaction_Identification.Text);
                     entr.ColumnName.Add("SuccessfulTxt");
-                    entr.Content.Add(fctxt_Successful.Text);
+                    entr.Content.Add(cbo_Transaction_Success.Text);
                     entr.ColumnName.Add("UnsuccessfulTxt");
-                    entr.Content.Add(fctxt_Unsuccessful.Text);
+                    entr.Content.Add(cbo_Transaction_UnSuccess.Text);
                     sqlite.UpdateEntry("Transactions", entr, "ID", item.Value.ToString());
                     MessageBox.Show("Save transaction [" + item.Text + "] info successful", "Save transaction info", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     btn_Transaction_Refresh_Click(null, null);
@@ -115,7 +121,7 @@ namespace Transaction_Statistical
             try
             {
 
-                if (sqlite.CheckExistValue("Transactions", "Name", cbo_Transactions.Text))
+                if (sqlite.CheckExist2Value("Transactions", "Name", cbo_Transactions.Text,"TemplateID",template_ID))
                 {
                     MessageBox.Show("Transaction [" + cbo_Transactions.Text + "] already exists", "Add transaction info", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     return;
@@ -128,11 +134,11 @@ namespace Transaction_Statistical
                     entr.ColumnName.Add("TemplateID");
                     entr.Content.Add(template_ID);
                     entr.ColumnName.Add("IdentificationTxt");
-                    entr.Content.Add(fctxt_Identification.Text);
+                    entr.Content.Add(cbo_Transaction_Identification.Text);
                     entr.ColumnName.Add("SuccessfulTxt");
-                    entr.Content.Add(fctxt_Successful.Text);
+                    entr.Content.Add(cbo_Transaction_Success.Text);
                     entr.ColumnName.Add("UnsuccessfulTxt");
-                    entr.Content.Add(fctxt_Unsuccessful.Text);
+                    entr.Content.Add(cbo_Transaction_UnSuccess.Text);
                     sqlite.CreateEntry("Transactions", entr);
                     MessageBox.Show("Add transaction [" + cbo_Transactions.Text + "] info successful", "Add transaction info", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     btn_Transaction_Refresh_Click(null, null);
@@ -246,8 +252,7 @@ namespace Transaction_Statistical
             {
                 UC_Info uc = new UC_Info();
                 uc.Dock = DockStyle.Fill;
-                Frm_TemplateDefault frm = new Frm_TemplateDefault(uc);
-                frm.titleCustom.Text = "Test map";
+                Frm_TemplateDefault frm = new Frm_TemplateDefault(uc, "Test map");
                 DateTime timeStart = DateTime.Now;
                 if (fctxt_Pattern.Text.Trim() == string.Empty || fctxt_Test.Text.Trim() == string.Empty)
                 {
@@ -324,9 +329,23 @@ namespace Transaction_Statistical
                 btn_Transaction_Remove.Enabled = true;
                 btn_Transaction_Save.Enabled = true;
                 btn_Transaction_Add.Enabled = false;
-                fctxt_Identification.Text = r["IdentificationTxt"].ToString();
-                fctxt_Successful.Text = r["SuccessfulTxt"].ToString();
-                fctxt_Unsuccessful.Text = r["UnsuccessfulTxt"].ToString(); ;
+                cbo_Transaction_Success.Items.Clear();
+                cbo_Transaction_UnSuccess.Items.Clear();
+                cbo_Transaction_Identification.Items.Clear();
+                cbo_Transaction_Success.Text = r["SuccessfulTxt"].ToString();
+                cbo_Transaction_UnSuccess.Text = r["UnsuccessfulTxt"].ToString();
+                cbo_Transaction_Identification.Text = r["IdentificationTxt"].ToString();
+                DataTable cfg_data = sqlite.GetTableDataWithColumnName("CfgData", "Parent_ID", template_ID);
+                foreach (DataRow row in cfg_data.Select().OrderBy(u => u["Field"]).ToArray())
+                {
+                    if (row["Type_ID"].ToString().Equals("525") || row["Type_ID"].ToString().Equals("456") || row["Type_ID"].ToString().Equals("457"))
+                    {
+                        cbo_Transaction_Identification.Items.Add(row["Field"], r["IdentificationTxt"].ToString().Split(',').Contains(row["Field"]));
+                        cbo_Transaction_Success.Items.Add(row["Field"], r["SuccessfulTxt"].ToString().Split(',').Contains(row["Field"]));
+                        cbo_Transaction_UnSuccess.Items.Add(row["Field"], r["UnsuccessfulTxt"].ToString().Split(',').Contains(row["Field"]));
+                    }
+                }
+                
             }
             else
             {
@@ -351,7 +370,7 @@ namespace Transaction_Statistical
                 cbo_Transactions.Items.Clear();
                 cbo_Transactions.Text = string.Empty;
                 DataTable tb_trans = sqlite.GetTableDataWithColumnName("Transactions", "TemplateID", template_ID);
-                foreach (DataRow r in tb_trans.Rows)
+                foreach (DataRow r in tb_trans.Select().OrderBy(u => u["Name"]).ToArray())
                 {
                     ComboBoxItem cb = new ComboBoxItem();
                     cb.Text = r["Name"].ToString();
@@ -371,7 +390,7 @@ namespace Transaction_Statistical
                 cbo_Keyword_LstKeyword.Items.Clear();
                 cbo_Keyword_LstKeyword.Text = string.Empty;
                 fctxt_Pattern.Clear();
-                foreach (DataRow R in cfg_data.Rows)
+                foreach (DataRow R in cfg_data.Select().OrderBy(u => u["Field"]).ToArray())
                 {
                     ComboBoxItem cb = new ComboBoxItem();
                     cb.Text = R["Field"].ToString();
@@ -385,7 +404,37 @@ namespace Transaction_Statistical
 
         private void btn_Keyword_Import_Click(object sender, EventArgs e)
         {
+            OpenFileDialog openFileDialog1 = new OpenFileDialog
+            {
+                InitialDirectory = @"D:\",
+                Title = "Browse Text Files",
 
+                CheckFileExists = true,
+                CheckPathExists = true,
+
+                DefaultExt = "txt",
+                Filter = "txt files (*.txt)|*.txt",
+                FilterIndex = 2,
+                RestoreDirectory = true,
+
+                ReadOnlyChecked = true,
+                ShowReadOnly = true,
+                Multiselect=true
+            };
+            if (openFileDialog1.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+            {
+                foreach (String file in openFileDialog1.FileNames)
+                {
+                    try
+                    {
+                        fctxt_Test.Text += File.ReadAllText(file);
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show("Error: " + ex.Message);
+                    }
+                }
+            }
         }
 
 
@@ -395,8 +444,7 @@ namespace Transaction_Statistical
             {
                 UC_Info uc = new UC_Info();
                 uc.Dock = DockStyle.Fill;
-                Frm_TemplateDefault frm = new Frm_TemplateDefault(uc);
-                frm.titleCustom.Text = "Test map";
+                Frm_TemplateDefault frm = new Frm_TemplateDefault(uc, "Test map");
                 DateTime timeStart = DateTime.Now;
                 if (fctxt_Pattern.Text.Trim() == string.Empty || fctxt_Test.Text.Trim() == string.Empty)
                 {

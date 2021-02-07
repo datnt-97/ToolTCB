@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -13,7 +14,20 @@ namespace Transaction_Statistical.Class
 {
     class TemplateHelper
     {
-
+        public enum TEMPLATE
+        {
+            CanQuyTheoCouterTrenMay,
+            //BaoCaoGiaoDichEmptyCassett,
+            //BaoCaoGiaoDichEmptyCassettTheoChuKy,
+            BaoCaoGiaoDichTaiChinh,
+            BaoCaoGiaoDichTaiChinhKhongThanhCong,
+            BaoCaoGiaoDichTaiChinhBatThuong,
+            BaoCaoHoatDongBatThuong,
+            BaoCaoHoatDongBatThuongTheoChuKy,
+        }
+        private Color Lightskyblue = Color.FromArgb(255, 250, 205);
+        private Color Backgroud = Color.FromArgb(248, 203, 173);
+        //private Color Lightskyblue = Color.FromArgb(135, 206, 250);
         ExcelPackage excelPackage { get; set; }
         private const string formatDate = "dd/mm/yyy h:mm";
         private const string formatNumber = "##0.0";
@@ -29,6 +43,7 @@ namespace Transaction_Statistical.Class
             this.excelPackage.Workbook.Properties.Title = Title;
             this.excelPackage.Workbook.Properties.Comments = Comments;
         }
+
         public void CanQuyTheoCouterTrenMay(string WorksheetsName, TableStyles tableStyles, Dictionary<DateTime, Cycle> ListCycle)
         {
             try
@@ -39,10 +54,122 @@ namespace Transaction_Statistical.Class
                 this.excelPackage.Save();
 
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
-                throw e;
+                InitParametar.Send_Error(ex.ToString(), MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name);
             }
+        }
+        public void BaoCaoHoatDongBatThuong(string WorksheetsName, TableStyles tableStyles, Dictionary<string, Dictionary<DateTime, object>> ListTransaction, Dictionary<string, string> Template_EventDevice, bool isCycle)
+        {
+            try
+            {
+
+
+                this.excelPackage.Workbook.Worksheets.Add(WorksheetsName);
+                var lastWS = excelPackage.Workbook.Worksheets.Last();
+                int index = 2;
+                //DRAW CHUDE
+                using (ExcelRange rng = lastWS.Cells[string.Format("A1:{0}1", isCycle ? "I" : "H")])
+                {
+                    rng.Style.Fill.PatternType = OfficeOpenXml.Style.ExcelFillStyle.Solid;
+                    rng.Style.Fill.BackgroundColor.SetColor(Backgroud);
+                    rng.Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+                    rng.Style.VerticalAlignment = ExcelVerticalAlignment.Center;
+
+                    rng.Style.Border.Top.Style = ExcelBorderStyle.Thin;
+                    rng.Style.Border.Bottom.Style = ExcelBorderStyle.Thin;
+                    rng.Style.Border.Left.Style = ExcelBorderStyle.Thin;
+                    rng.Style.Border.Right.Style = ExcelBorderStyle.Thin;
+
+
+                    rng.Style.Border.Top.Color.SetColor(Color.Black);
+                    rng.Style.Border.Bottom.Color.SetColor(Color.Black);
+                    rng.Style.Border.Left.Color.SetColor(Color.Black);
+                    rng.Style.Border.Right.Color.SetColor(Color.Black);
+                }
+                foreach (var item in ListTransaction)
+                {
+
+                    var transaction = item.Value.Where(i => i.Value is Transaction).ToDictionary(d => d.Key, d => (Transaction)d.Value);
+
+                    var cycles = item.Value.Where(x => x.Value is Cycle).ToDictionary(x => x.Key, x => (Cycle)x.Value);
+                    var events = item.Value.Where(x => x.Value is TransactionEvent).ToDictionary(x => x.Key, x => (TransactionEvent)x.Value);
+
+                    foreach (var trans in transaction)
+                    {
+                        var evs = trans.Value.ListEvent.Where(ev => (!events.ContainsKey(ev.Value.DateBegin))
+                          && (Template_EventDevice.ContainsKey(ev.Value.Name) || ev.Value.isWarning == true)).ToDictionary(d => d.Key, d => d.Value);
+                        foreach (var ev in evs)
+                        {
+                            ev.Value.TraceID = trans.Value.TransactionNumber;
+                            events.Add(ev.Key, ev.Value);
+                        }
+                    }
+
+                    if (isCycle)
+                    {
+                        lastWS.Cells["A1"].Value = "Nội dung";
+                        lastWS.Cells["B1"].Value = "ATMID";
+                        lastWS.Cells["C1"].Value = "Ngày tiếp quỹ";
+                        lastWS.Cells["D1"].Value = "Ngày kiểm quỹ";
+                        lastWS.Cells["E1"].Value = "Số lần";
+                        lastWS.Cells["F1"].Value = "Date time";
+                        lastWS.Cells["G1"].Value = "Hành động";
+                        lastWS.Cells["H1"].Value = "Trace ID";
+                        lastWS.Cells["I1"].Value = "Số tiền thu hồi của GD";
+                        foreach (var c in cycles)
+                        {
+                            lastWS = DrawHDBT(lastWS, events, c, item.Key, ref index, Template_EventDevice, isCycle);
+                        }
+
+                    }
+                    else
+                    {
+                        lastWS.Cells["A1"].Value = "Nội dung";
+                        lastWS.Cells["B1"].Value = "ATMID";
+                        lastWS.Cells["C1"].Value = "Số lần";
+                        lastWS.Cells["D1"].Value = "Date time";
+                        lastWS.Cells["E1"].Value = "Hành động";
+                        lastWS.Cells["F1"].Value = "Trace ID";
+                        lastWS.Cells["G1"].Value = "Số tiền thu hồi của GD";
+
+                        lastWS = DrawHDBT(lastWS, events, new KeyValuePair<DateTime, Cycle>(), item.Key, ref index, Template_EventDevice, false);
+                    }
+                    index++;
+                }
+                this.excelPackage.Save();
+            }
+            catch (Exception ex)
+            {
+                InitParametar.Send_Error(ex.ToString(), MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name);
+            }
+
+        }
+
+        public void BaoCaoGiaoDichTaiChinh(string WorksheetsName, TableStyles tableStyles, Dictionary<DateTime, Transaction> ListTransaction,
+            Dictionary<DateTime, Cycle> cycles,
+            Dictionary<string, string> Template_EventDevice, TemplateHelper.TEMPLATE tEMPLATE)
+        {
+            try
+            {
+                this.excelPackage.Workbook.Worksheets.Add(WorksheetsName);
+                var lastWS = excelPackage.Workbook.Worksheets.Last();
+                lastWS = DrawGDTC(lastWS, ListTransaction.OrderBy(x => x.Key).ToDictionary(d => d.Key, d => d.Value), cycles, Template_EventDevice, tEMPLATE);
+                this.excelPackage.Save();
+            }
+            catch (Exception ex)
+            {
+                InitParametar.Send_Error(ex.ToString(), MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name);
+            }
+
+        }
+
+        public void BaoCaoGiaoDichEmptyCassett(string WorksheetsName, TableStyles tableStyles, Dictionary<string, Dictionary<DateTime, object>> ListTransaction, bool isCycle)
+        {
+            this.excelPackage.Workbook.Worksheets.Add(WorksheetsName);
+            var lastWS = excelPackage.Workbook.Worksheets.Last();
+            lastWS = DrawGDEmptyCassett(lastWS);
+            this.excelPackage.Save();
         }
         private ExcelWorksheet DrawCounter(ExcelWorksheet worksheet, Dictionary<DateTime, Cycle> ListCycle)
         {
@@ -53,7 +180,7 @@ namespace Transaction_Statistical.Class
                 using (ExcelRange rng = worksheet.Cells["A1:I1"])
                 {
                     rng.Style.Fill.PatternType = OfficeOpenXml.Style.ExcelFillStyle.Solid;
-                    rng.Style.Fill.BackgroundColor.SetColor(Color.FromArgb(248, 203, 173));
+                    rng.Style.Fill.BackgroundColor.SetColor(Backgroud);
                     rng.Merge = true;
                     rng.Value = "BẢNG THỐNG KÊ COUNTER TRÊN MỖI CHU KỲ";
                 }
@@ -117,7 +244,7 @@ namespace Transaction_Statistical.Class
                     using (ExcelRange rng = worksheet.Cells[string.Format("A{0}:I{1}", indexRow, indexRow)])
                     {
                         rng.Style.Fill.PatternType = OfficeOpenXml.Style.ExcelFillStyle.Solid;
-                        rng.Style.Fill.BackgroundColor.SetColor(Color.FromArgb(255, 255, 0));
+                        rng.Style.Fill.BackgroundColor.SetColor(Backgroud);
                     }
                     var cycleItem = cycles[cycle].Value;
                     var denoList = cycles[cycle].Value.DenominationCount;
@@ -211,240 +338,191 @@ namespace Transaction_Statistical.Class
                 worksheet.Cells[worksheet.Dimension.Address].AutoFitColumns();
 
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
-                throw e;
+                InitParametar.Send_Error(ex.ToString(), MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name);
             }
             return worksheet;
         }
-
-        public void BaoCaoGiaoDichTaiChinh(string WorksheetsName, TableStyles tableStyles)
-        {
-            this.excelPackage.Workbook.Worksheets.Add(WorksheetsName);
-            var lastWS = excelPackage.Workbook.Worksheets.Last();
-            lastWS = DrawHDTC(lastWS);
-            this.excelPackage.Save();
-        }
-
-        public void BaoCaoGiaoDichBatThuong(string WorksheetsName, TableStyles tableStyles)
-        {
-            this.excelPackage.Workbook.Worksheets.Add(WorksheetsName);
-            var lastWS = excelPackage.Workbook.Worksheets.Last();
-            lastWS = DrawHDBT(lastWS);
-            this.excelPackage.Save();
-        }
-        public void BaoCaoGiaoDichTaiChinh(string WorksheetsName, TableStyles tableStyles, Dictionary<DateTime, Transaction> ListTransaction)
-        {
-            this.excelPackage.Workbook.Worksheets.Add(WorksheetsName);
-            var lastWS = excelPackage.Workbook.Worksheets.Last();
-            lastWS = DrawGDTC(lastWS, ListTransaction);
-            this.excelPackage.Save();
-        }
-
-        private ExcelWorksheet DrawHDTC(ExcelWorksheet worksheet)
+        private ExcelWorksheet DrawHDBT(ExcelWorksheet worksheet, Dictionary<DateTime, TransactionEvent> ListTransaction, KeyValuePair<DateTime, Cycle> Cycles, string atmID, ref int index, Dictionary<string, string> Template_EventDevice, bool isCycle)
         {
             try
             {
-                int index = 2;
-                int timesOpenTheCashDrawer = 5;
-                int timesOpenTechnicalChamber = 8;
-                int timesReboot = 5;
-                int timesDisconect = 5;
-                int timesMoneyWithdrawn = 5;
-                int timesWithdrawalStuck = 5;
-                int timesDepositStuck = 5;
-
-                //DRAW CHUDE
-                using (ExcelRange rng = worksheet.Cells["A1:I1"])
+                var eventGroup = ListTransaction.GroupBy(x => x.Value.Name);
+                var keyNotin = eventGroup.Where(x => !Template_EventDevice.ContainsKey(x.Key));
+                if (keyNotin.Count() > 0)
                 {
-                    rng.Style.Fill.PatternType = OfficeOpenXml.Style.ExcelFillStyle.Solid;
-                    rng.Style.Fill.BackgroundColor.SetColor(Color.FromArgb(252, 228, 214));
-                    rng.Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
-                    rng.Style.VerticalAlignment = ExcelVerticalAlignment.Center;
+                    Template_EventDevice.Add(keyNotin.First().Key, string.Empty);
                 }
-                worksheet.Cells["A1"].Value = "Nội dung";
-                worksheet.Cells["B1"].Value = "ATMID";
-                worksheet.Cells["C1"].Value = "Ngày tiếp quỹ";
-                worksheet.Cells["D1"].Value = "Ngày kiểm quỹ";
-                worksheet.Cells["E1"].Value = "Số lần";
-                worksheet.Cells["F1"].Value = "Date time";
-                worksheet.Cells["G1"].Value = "Hành động";
-                worksheet.Cells["H1"].Value = "Trace ID";
-                worksheet.Cells["I1"].Value = "Số tiền thu hồi của GD";
+                int mgr = index;
+                int mgr1 = index;
+                if (isCycle)
+                {
 
-                //DRAW DATA
-                //Bao nhiêu lần mở cửa khoang tiền?
-                worksheet = DrawLoop(worksheet, ref index, timesOpenTheCashDrawer, "Bao nhiêu lần mở cửa khoang tiền?");
+                    foreach (var dev in Template_EventDevice)
+                    {
+                        var itemEvent = ListTransaction.Where(x => x.Value.Name.Equals(dev.Key)
+                        && x.Value.DateBegin >= Cycles.Value.SettlementPeriodDateBegin && x.Value.DateBegin <= Cycles.Value.SettlementPeriodDateEnd)
+                            .ToDictionary(d => d.Key, d => d.Value);
+                        worksheet = DrawLoop(worksheet, ref index, itemEvent, dev.Key, true);
+                        mgr += itemEvent.Count() > 0 ? itemEvent.Count() : 1;
+                    }
+                    using (ExcelRange rng = worksheet.Cells[string.Format("C{0}:C{1}", mgr1, mgr - 1)])
+                    {
+                        rng.Merge = true;
+                        rng.Value = Cycles.Value.SettlementPeriodDateBegin;
+                        rng.Style.Numberformat.Format = formatDate;
 
-                //Bao nhiêu lần mở cửa khoang kỹ thuật? 
-                worksheet = DrawLoop(worksheet, ref index, timesOpenTechnicalChamber, "Bao nhiêu lần mở cửa khoang kỹ thuật?");
+                    }
+                    using (ExcelRange rng = worksheet.Cells[string.Format("D{0}:D{1}", mgr1, mgr - 1)])
+                    {
+                        rng.Merge = true;
+                        rng.Value = Cycles.Value.SettlementPeriodDateEnd;
+                        rng.Style.Numberformat.Format = formatDate;
+                    }
+                    using (ExcelRange rng = worksheet.Cells[string.Format("A{0}:I{1}", mgr1, mgr - 1)])
+                    {
+                        rng.Style.Border.Top.Style = ExcelBorderStyle.Thin;
+                        rng.Style.Border.Bottom.Style = ExcelBorderStyle.Thin;
+                        rng.Style.Border.Left.Style = ExcelBorderStyle.Thin;
+                        rng.Style.Border.Right.Style = ExcelBorderStyle.Thin;
 
-                //Bao nhiêu lần máy khởi động lại ?
-                worksheet = DrawLoop(worksheet, ref index, timesReboot, "Bao nhiêu lần máy khởi động lại ?");
+                        rng.Style.Border.Top.Color.SetColor(Color.Black);
+                        rng.Style.Border.Bottom.Color.SetColor(Color.Black);
+                        rng.Style.Border.Left.Color.SetColor(Color.Black);
+                        rng.Style.Border.Right.Color.SetColor(Color.Black);
+                    }
+                }
+                else
+                {
 
-                //Bao nhiêu lần mất mạng
-                worksheet = DrawLoop(worksheet, ref index, timesDisconect, "Bao nhiêu lần mất mạng?");
+                    foreach (var dev in Template_EventDevice)
+                    {
+                        var itemEvent = ListTransaction.Where(x => x.Value.Name.Equals(dev.Key)).ToDictionary(d => d.Key, d => d.Value);
 
-                //Bao nhiêu lần tiền bị thu hồi?
-                worksheet = DrawLoop(worksheet, ref index, timesMoneyWithdrawn, "Bao nhiêu lần tiền bị thu hồi?");
+                        worksheet = DrawLoop(worksheet, ref index, itemEvent, dev.Key, false);
 
-                //Bao nhiêu lần rút tiền bị kẹt?
-                worksheet = DrawLoop(worksheet, ref index, timesDepositStuck, "Bao nhiêu lần rút tiền bị kẹt?");
+                        mgr += itemEvent.Count() > 0 ? itemEvent.Count() : 1;
+                    }
+                    using (ExcelRange rng = worksheet.Cells[string.Format("A{0}:H{1}", mgr1, mgr - 1)])
+                    {
+                        rng.Style.Border.Top.Style = ExcelBorderStyle.Thin;
+                        rng.Style.Border.Bottom.Style = ExcelBorderStyle.Thin;
+                        rng.Style.Border.Left.Style = ExcelBorderStyle.Thin;
+                        rng.Style.Border.Right.Style = ExcelBorderStyle.Thin;
 
-                //Bao nhiêu lần nộp tiền bị kẹt?
-                worksheet = DrawLoop(worksheet, ref index, timesWithdrawalStuck, "Bao nhiêu lần nộp tiền bị kẹt?");
+                        rng.Style.Border.Top.Color.SetColor(Color.Black);
+                        rng.Style.Border.Bottom.Color.SetColor(Color.Black);
+                        rng.Style.Border.Left.Color.SetColor(Color.Black);
+                        rng.Style.Border.Right.Color.SetColor(Color.Black);
+                    }
+                }
+
+
+
+                using (ExcelRange rng = worksheet.Cells[string.Format("B{0}:B{1}", mgr1, mgr - 1)])
+                {
+                    rng.Merge = true;
+                    rng.Value = atmID;
+                }
 
                 var allCells = worksheet.Cells[1, 1, worksheet.Dimension.End.Row, worksheet.Dimension.End.Column];
                 allCells.AutoFitColumns();
-                allCells.Style.Border.Top.Style = ExcelBorderStyle.Thin;
-                allCells.Style.Border.Bottom.Style = ExcelBorderStyle.Thin;
-                allCells.Style.Border.Left.Style = ExcelBorderStyle.Thin;
-                allCells.Style.Border.Right.Style = ExcelBorderStyle.Thin;
 
-                allCells.Style.Border.Top.Color.SetColor(Color.Black);
-                allCells.Style.Border.Bottom.Color.SetColor(Color.Black);
-                allCells.Style.Border.Left.Color.SetColor(Color.Black);
-                allCells.Style.Border.Right.Color.SetColor(Color.Black);
                 allCells.Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
                 allCells.Style.VerticalAlignment = ExcelVerticalAlignment.Center;
-
                 allCells.Style.WrapText = true;
-            }
-            catch (Exception e)
-            {
-                throw e;
-            }
-            return worksheet;
-        }
-        private ExcelWorksheet DrawHDBT(ExcelWorksheet worksheet)
-        {
-            try
-            {
-                int index = 2;
-                int timesOpenTheCashDrawer = 5;
-                int timesOpenTechnicalChamber = 8;
-                int timesReboot = 5;
-                int timesDisconect = 5;
-                int timesMoneyWithdrawn = 5;
-                int timesWithdrawalStuck = 5;
-                int timesDepositStuck = 5;
-
-                //DRAW CHUDE
-                using (ExcelRange rng = worksheet.Cells["A1:I1"])
-                {
-                    rng.Style.Fill.PatternType = OfficeOpenXml.Style.ExcelFillStyle.Solid;
-                    rng.Style.Fill.BackgroundColor.SetColor(Color.FromArgb(252, 228, 214));
-                    rng.Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
-                    rng.Style.VerticalAlignment = ExcelVerticalAlignment.Center;
-                }
-                worksheet.Cells["A1"].Value = "Nội dung";
-                worksheet.Cells["B1"].Value = "ATMID";
-                worksheet.Cells["C1"].Value = "Ngày tiếp quỹ";
-                worksheet.Cells["D1"].Value = "Ngày kiểm quỹ";
-                worksheet.Cells["E1"].Value = "Số lần";
-                worksheet.Cells["F1"].Value = "Date time";
-                worksheet.Cells["G1"].Value = "Hành động";
-                worksheet.Cells["H1"].Value = "Trace ID";
-                worksheet.Cells["I1"].Value = "Số tiền thu hồi của GD";
-
-                //DRAW DATA
-                //Bao nhiêu lần mở cửa khoang tiền?
-                worksheet = DrawLoop(worksheet, ref index, timesOpenTheCashDrawer, "Bao nhiêu lần mở cửa khoang tiền?");
-
-                //Bao nhiêu lần mở cửa khoang kỹ thuật? 
-                worksheet = DrawLoop(worksheet, ref index, timesOpenTechnicalChamber, "Bao nhiêu lần mở cửa khoang kỹ thuật?");
-
-                //Bao nhiêu lần máy khởi động lại ?
-                worksheet = DrawLoop(worksheet, ref index, timesReboot, "Bao nhiêu lần máy khởi động lại ?");
-
-                //Bao nhiêu lần mất mạng
-                worksheet = DrawLoop(worksheet, ref index, timesDisconect, "Bao nhiêu lần mất mạng?");
-
-                //Bao nhiêu lần tiền bị thu hồi?
-                worksheet = DrawLoop(worksheet, ref index, timesMoneyWithdrawn, "Bao nhiêu lần tiền bị thu hồi?");
-
-                //Bao nhiêu lần rút tiền bị kẹt?
-                worksheet = DrawLoop(worksheet, ref index, timesDepositStuck, "Bao nhiêu lần rút tiền bị kẹt?");
-
-                //Bao nhiêu lần nộp tiền bị kẹt?
-                worksheet = DrawLoop(worksheet, ref index, timesWithdrawalStuck, "Bao nhiêu lần nộp tiền bị kẹt?");
-
-                var allCells = worksheet.Cells[1, 1, worksheet.Dimension.End.Row, worksheet.Dimension.End.Column];
-                allCells.AutoFitColumns();
-                allCells.Style.Border.Top.Style = ExcelBorderStyle.Thin;
-                allCells.Style.Border.Bottom.Style = ExcelBorderStyle.Thin;
-                allCells.Style.Border.Left.Style = ExcelBorderStyle.Thin;
-                allCells.Style.Border.Right.Style = ExcelBorderStyle.Thin;
-
-                allCells.Style.Border.Top.Color.SetColor(Color.Black);
-                allCells.Style.Border.Bottom.Color.SetColor(Color.Black);
-                allCells.Style.Border.Left.Color.SetColor(Color.Black);
-                allCells.Style.Border.Right.Color.SetColor(Color.Black);
-                allCells.Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
-                allCells.Style.VerticalAlignment = ExcelVerticalAlignment.Center;
-
-                allCells.Style.WrapText = true;
-            }
-            catch (Exception e)
-            {
-                throw e;
-            }
-            return worksheet;
-        }
-        private ExcelWorksheet DrawLoop(ExcelWorksheet worksheet, ref int index, int times, string title)
-        {
-            try
-            {
-                int indexATMID = index + times - 1;
-                using (ExcelRange rng = worksheet.Cells[string.Format("A{0}:A{1}", index, times == 0 ? index : indexATMID + 1)])
-                {
-                    rng.Merge = true;
-                    rng.Value = title;
-
-                }
-                using (ExcelRange rng = worksheet.Cells[string.Format("E{0}:E{1}", index, times == 0 ? index : indexATMID + 1)])
-                {
-                    rng.Merge = true;
-                    rng.Value = times;
-
-                }
-                for (int i = index; i <= indexATMID; i++)
-                {
-                    worksheet.Cells[i, 2].Value = "99100001";
-
-                    worksheet.Cells[i, 3].Style.Numberformat.Format = formatDate;
-                    worksheet.Cells[i, 3].Value = "01/24/2019  10:19:26 SA";
-
-                    worksheet.Cells[i, 4].Style.Numberformat.Format = formatDate;
-                    worksheet.Cells[i, 4].Value = "01/26/2019  9:19:16 SA";
-
-                    worksheet.Cells[i, 6].Style.Numberformat.Format = formatDate;
-                    worksheet.Cells[i, 6].Value = "01/26/2019  9:19:16 SA";
-
-                    worksheet.Cells[i, 7].Value = "Safe Door : Opened";
-                    worksheet.Cells[i, 8].Value = "1099339359";
-                    worksheet.Cells[i, 9].Value = "5000000";
-                }
-                index += times + 1;
             }
             catch (Exception ex)
             {
-                throw ex;
+                InitParametar.Send_Error(ex.ToString(), MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name);
+            }
+            return worksheet;
+        }
+
+        private ExcelWorksheet DrawLoop(ExcelWorksheet worksheet, ref int index,
+            Dictionary<DateTime, TransactionEvent> transactionEvent, string title, bool isCycle)
+        {
+            try
+            {
+                int indexOrigin = index;
+                int times = transactionEvent.Count();
+                int indexATMID = index + times;
+                using (ExcelRange rng = worksheet.Cells[string.Format("A{0}:A{1}", index, times <= 1 ? index : indexATMID - 1)])
+                {
+                    rng.Merge = true;
+                    rng.Value = title;
+                }
+                if (isCycle)
+                {
+                    using (ExcelRange rng = worksheet.Cells[string.Format("E{0}:E{1}", index, times <= 1 ? index : indexATMID - 1)])
+                    {
+                        rng.Merge = true;
+                        rng.Value = times;
+
+                    }
+                }
+                else
+                {
+                    using (ExcelRange rng = worksheet.Cells[string.Format("C{0}:C{1}", index, times <= 1 ? index : indexATMID - 1)])
+                    {
+                        rng.Merge = true;
+                        rng.Value = times;
+
+                    }
+                }
+                int i = 0;
+                foreach (var evt in transactionEvent.Values)
+                {
+                    if (isCycle)
+                    {
+                        worksheet.Cells[index + i, 6].Style.Numberformat.Format = formatDate;
+                        worksheet.Cells[index + i, 6].Value = evt.DateBegin;
+                        worksheet.Cells[index + i, 7].Value = evt.TContent;
+                        worksheet.Cells[index + i, 8].Value = evt.TraceID;
+                        worksheet.Cells[index + i, 9].Value = Math.Abs(evt.Amount);
+                        worksheet.Cells[index + i, 9].Style.Numberformat.Format = "###,###,##0.0";
+                    }
+                    else
+                    {
+
+                        worksheet.Cells[index + i, 4].Style.Numberformat.Format = formatDate;
+                        worksheet.Cells[index + i, 4].Value = transactionEvent.ToArray()[i].Value.DateBegin;
+                        worksheet.Cells[index + i, 5].Value = transactionEvent.ToArray()[i].Value.TContent;
+                        //worksheet.Cells[index + i, 5].Value = "";
+                        worksheet.Cells[index + i, 6].Value = evt.TraceID;
+
+                        worksheet.Cells[index + i, 7].Value = Math.Abs(evt.Amount);
+                        worksheet.Cells[index + i, 7].Style.Numberformat.Format = "###,###,##0.0";
+                    }
+                    i++;
+                }
+
+                index = times <= 1 ? index + 1 : indexATMID;
+
+            }
+            catch (Exception ex)
+            {
+                InitParametar.Send_Error(ex.ToString(), MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name);
             }
 
             return worksheet;
         }
-        private ExcelWorksheet DrawGDTC(ExcelWorksheet worksheet, Dictionary<DateTime, Transaction> ListTransaction)
+
+        private ExcelWorksheet DrawGDTC(ExcelWorksheet worksheet,
+            Dictionary<DateTime, Transaction> ListTransaction, Dictionary<DateTime, Cycle> cycles,
+            Dictionary<string, string> Template_EventDevice, TemplateHelper.TEMPLATE tEMPLATE)
         {
             try
             {
+                cycles = cycles.OrderBy(x => x.Value.DateBegin).ToDictionary(d => d.Key, d => d.Value);
                 int index = 1;
 
                 //DRAW CHUDE
                 using (ExcelRange rng = worksheet.Cells["A1:Z2"])
                 {
                     rng.Style.Fill.PatternType = OfficeOpenXml.Style.ExcelFillStyle.Solid;
-                    rng.Style.Fill.BackgroundColor.SetColor(Color.FromArgb(252, 228, 214));
+                    rng.Style.Fill.BackgroundColor.SetColor(Backgroud);
                     rng.Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
                     rng.Style.VerticalAlignment = ExcelVerticalAlignment.Center;
                     rng.Style.Font.Bold = true;
@@ -460,6 +538,7 @@ namespace Transaction_Statistical.Class
                 {
                     rng.Merge = true;
                     rng.Value = "TRANTYPE";
+
                 }
                 using (ExcelRange rng = worksheet.Cells[string.Format("C{0}:C{1}", index, index + 1)])
                 {
@@ -552,46 +631,225 @@ namespace Transaction_Statistical.Class
                     rng.Value = "LOG JNT (chỉ lấy log với các GD không thành công)";
                 }
                 //DRAW DATA
-                var trans = ListTransaction.ToArray();
                 int indexData = index + 2;
-                for (int j = 0; j < trans.Count(); j++)
+
+                foreach (var trans in ListTransaction)
                 {
-                    var itemTrans = trans[j].Value;
-                    var detail = "";
+                    var itemTrans = trans.Value;
 
-                    worksheet.Cells[indexData, index].Value = "";
-                    worksheet.Cells[indexData, index + 1].Value = itemTrans.Type;
-                    worksheet.Cells[indexData, index + 2].Value = itemTrans.Status;
-                    worksheet.Cells[indexData, index + 3].Value = itemTrans.Terminal;
-                    worksheet.Cells[indexData, index + 4].Value = "";
-                    worksheet.Cells[indexData, index + 5].Value = "";
-                    worksheet.Cells[indexData, index + 6].Value = itemTrans.CardType == Transaction.CardTypes.CardLess ? "CardLess" : itemTrans.CardNumber;
-                    worksheet.Cells[indexData, index + 7].Value = itemTrans.DataInput;
-                    worksheet.Cells[indexData, index + 8].Value = itemTrans.DateBegin;
-                    worksheet.Cells[indexData, index + 8].Style.Numberformat.Format = "mm/dd/yyyy hh:mm:ss AM/PM";
+                    Dictionary<DateTime, TransactionRequest> TransactionRequest = trans.Value.ListRequest;
+                    if (tEMPLATE == TEMPLATE.BaoCaoGiaoDichTaiChinhKhongThanhCong)
+                    {
+                        TransactionRequest = TransactionRequest.Where(x => x.Value.Status == Status.Types.UnSucceeded).ToDictionary(x => x.Key, x => x.Value);
+                    }
+                    else if (tEMPLATE == TEMPLATE.BaoCaoGiaoDichTaiChinhBatThuong)
+                    {
+                        TransactionRequest = TransactionRequest.Where(x => x.Value.Status != Status.Types.Succeeded).ToDictionary(x => x.Key, x => x.Value);
+                    }
+                    //var tranNoTemp = "-";
+                    if (TransactionRequest.Count > 0)
+                    {
+                        foreach (var requestLast in TransactionRequest.Values)
+                        {
+                            var evts = itemTrans.ListEvent.Where(x => (requestLast.DateBegin != null && requestLast.DateEnd != null) && (x.Value.DateBegin >= requestLast.DateBegin
+                                && x.Value.DateBegin <= requestLast.DateEnd)).ToDictionary(x => x.Key, x => x.Value);
+                            int countEvts = evts.Values.Where(x => x.isWarning).Count();
+                            int indexTo = countEvts > 1 ? indexData + countEvts - 1 : indexData;
+                            var cycleOfTransction = cycles.Where(x => (!string.IsNullOrEmpty(itemTrans.Terminal) && itemTrans.DateBegin != null) && (x.Value.SettlementPeriodDateBegin <= itemTrans.DateBegin
+                            && x.Value.SettlementPeriodDateEnd >= itemTrans.DateBegin
+                            && itemTrans.Terminal.Contains(x.Value.TerminalID))).OrderBy(x => x.Value.SettlementPeriodDateBegin).LastOrDefault().Value;
+                            var evtCounter = evts.OrderBy(x => x.Key).Where(x => x.Value.hasCouter).ToList();
 
-                    worksheet.Cells[indexData, index + 9].Value = itemTrans.Amount;
-                    worksheet.Cells[indexData, index + 10].Value = "";
-                    worksheet.Cells[indexData, index + 11].Value = "";
-                    worksheet.Cells[indexData, index + 12].Value = "";
-                    worksheet.Cells[indexData, index + 13].Value = "";
-                    worksheet.Cells[indexData, index + 14].Value = "";
-                    worksheet.Cells[indexData, index + 15].Value = "";
-                    worksheet.Cells[indexData, index + 16].Value = "";
-                    worksheet.Cells[indexData, index + 17].Value = "";
-                    worksheet.Cells[indexData, index + 18].Value = "";
-                    worksheet.Cells[indexData, index + 19].Value = "";
-                    worksheet.Cells[indexData, index + 20].Value = "";
-                    worksheet.Cells[indexData, index + 21].Value = "";
-                    worksheet.Cells[indexData, index + 22].Value = "";
-                    worksheet.Cells[indexData, index + 23].Value = "";
-                    //worksheet.Cells[indexData, index + 24].Value = string.Join("->", terminal.transactions[i].work_flow);
-                    //worksheet.Cells[indexData, index + 25].Value = "";
-                    indexData++;
+                            // var lastBill = itemTrans.ListBills.OrderBy(x => x.Key).LastOrDefault();
+                            //var billCheckPin = itemTrans.ListBills.Where(x => x.Value.Type == Bills.Types.Bill_CheckPin).LastOrDefault().Value;
+                            //var bills = itemTrans.ListBills.OrderBy(x => x.Value.Date).Where(x => (requestLast.DateBegin != null && requestLast.DateEnd != null)
+                            //&& (x.Value.Type != Bills.Types.Bill_CheckPin
+                            //&& x.Value.TranNo != tranNoTemp && x.Value.Date >= requestLast.DateBegin && x.Value.Date <= requestLast.DateEnd)).LastOrDefault().Value;
+
+                            using (ExcelRange rng = worksheet.Cells[string.Format("A{0}:A{1}", indexData, indexTo)])
+                            {
+                                rng.Merge = true;
+                                rng.Value = !string.IsNullOrEmpty(requestLast.TranNo) ? requestLast.TranNo : "-";
+                                //rng.Value = bills != null ? bills.TranNo : (billCheckPin != null ? billCheckPin.TranNo : "-");
+                                //tranNoTemp = bills != null ? bills.TranNo : (billCheckPin != null ? billCheckPin.TranNo : "-");
+
+                            }
+                            using (ExcelRange rng = worksheet.Cells[string.Format("B{0}:B{1}", indexData, indexTo)])
+                            {
+                                rng.Merge = true;
+                                rng.Value = string.IsNullOrEmpty(requestLast.Request) ? "N/A" : requestLast.Request;
+                            }
+
+
+                            if (countEvts > 0 && evts.Values.Where(x => x.isWarning).Count() > 0)
+                            {
+                                int count = indexData;
+                                foreach (var e in evts.Where(x => x.Value.isWarning).ToDictionary(x => x.Key, x => x.Value))
+                                {
+                                    worksheet.Cells[count, index + 2].Value = !string.IsNullOrEmpty(e.Value.Name) ? e.Value.Name : string.Empty;
+                                    worksheet.Cells[string.Format("X{0}", count)].Value = !string.IsNullOrEmpty(e.Value.Data) ? e.Value.Data : string.Empty;
+                                    count++;
+                                }
+                            }
+                            else
+                            {
+                                using (ExcelRange rng = worksheet.Cells[string.Format("C{0}:C{1}", indexData, indexTo)])
+                                {
+                                    rng.Merge = true;
+                                    rng.Value = !string.IsNullOrEmpty(requestLast.Status.ToString()) ? requestLast.Status.ToString() : string.Empty;
+                                }
+                            }
+
+
+                            using (ExcelRange rng = worksheet.Cells[string.Format("D{0}:D{1}", indexData, indexTo)])
+                            {
+                                rng.Merge = true;
+                                rng.Value = !string.IsNullOrEmpty(itemTrans.Terminal) ? itemTrans.Terminal : string.Empty;
+                            }
+                            using (ExcelRange rng = worksheet.Cells[string.Format("E{0}:E{1}", indexData, indexTo)])
+                            {
+                                rng.Merge = true;
+                                rng.Value = cycleOfTransction != null ? cycleOfTransction.SettlementPeriodDateBegin.ToString("MM-dd-yyyy HH:mm:ss") : "";
+                                rng.Style.Numberformat.Format = "MM-dd-yyyy HH:mm:ss";
+
+                            }
+                            using (ExcelRange rng = worksheet.Cells[string.Format("F{0}:F{1}", indexData, indexTo)])
+                            {
+                                rng.Merge = true;
+                                rng.Value = cycleOfTransction != null ? cycleOfTransction.SettlementPeriodDateEnd.ToString("MM-dd-yyyy HH:mm:ss") : "";
+                                rng.Style.Numberformat.Format = "MM-dd-yyyy HH:mm:ss";
+                            }
+                            using (ExcelRange rng = worksheet.Cells[string.Format("G{0}:G{1}", indexData, indexTo)])
+                            {
+                                rng.Merge = true;
+                                rng.Value = itemTrans.CardType == Transaction.CardTypes.CardLess ? "CardLess" : itemTrans.CardNumber;
+                            }
+                            using (ExcelRange rng = worksheet.Cells[string.Format("H{0}:H{1}", indexData, indexTo)])
+                            {
+                                rng.Merge = true;
+                                rng.Value = itemTrans.DataInput.Count > 0 ? string.Join(Environment.NewLine, itemTrans.DataInput) : string.Empty;
+                            }
+                            using (ExcelRange rng = worksheet.Cells[string.Format("I{0}:I{1}", indexData, indexTo)])
+                            {
+                                rng.Merge = true;
+                                rng.Value = itemTrans.DateBegin != null ? itemTrans.DateBegin.ToString("MM-dd-yyyy HH:mm:ss") : string.Empty;
+                                rng.Style.Numberformat.Format = "MM-dd-yyyy HH:mm:ss";
+                            }
+                            using (ExcelRange rng = worksheet.Cells[string.Format("J{0}:J{1}", indexData, indexTo)])
+                            {
+                                rng.Merge = true;
+                                //if (requestLast.Status == Status.Types.UnSucceeded)
+                                //{
+                                //    rng.Value = Math.Abs(evtCounter.Sum(x => x.Value.AmountCounterRetracted));
+                                //}
+                                //else
+                                //{
+                                rng.Value = evtCounter.Sum(x => x.Value.AmountCounter) != 0 ? Math.Abs(evtCounter.Sum(x => x.Value.AmountCounter)) : Math.Abs(evtCounter.Sum(x => x.Value.AmountCounterRetracted));
+                                //}
+                                rng.Style.Numberformat.Format = "###,###,##0.0";
+
+                            }
+
+                            if (evts.Values.Where(e => e.isWarning).Count() > 0)
+                            {
+                                using (ExcelRange rng = worksheet.Cells[string.Format("A{0}:Z{1}", indexData, indexTo)])
+                                {
+                                    rng.Style.Fill.PatternType = OfficeOpenXml.Style.ExcelFillStyle.Solid;
+                                    rng.Style.Fill.BackgroundColor.SetColor(Lightskyblue);
+                                }
+                            }
+                            using (ExcelRange rng = worksheet.Cells[string.Format("K{0}:K{1}", indexData, indexTo)])
+                            {
+                                rng.Merge = true;
+                                rng.Value = Math.Abs(evtCounter.Sum(x => x.Value.Value_500K));
+                            }
+                            using (ExcelRange rng = worksheet.Cells[string.Format("L{0}:L{1}", indexData, indexTo)])
+                            {
+                                rng.Merge = true;
+                                rng.Value = Math.Abs(evtCounter.Sum(x => x.Value.Value_500K_Retracted));
+                            }
+
+                            using (ExcelRange rng = worksheet.Cells[string.Format("M{0}:M{1}", indexData, indexTo)])
+                            {
+                                rng.Merge = true;
+                                rng.Value = Math.Abs(evtCounter.Sum(x => x.Value.Value_200K));
+                            }
+                            using (ExcelRange rng = worksheet.Cells[string.Format("N{0}:N{1}", indexData, indexTo)])
+                            {
+                                rng.Merge = true;
+                                rng.Value = Math.Abs(evtCounter.Sum(x => x.Value.Value_200K_Retracted));
+                            }
+
+                            using (ExcelRange rng = worksheet.Cells[string.Format("O{0}:O{1}", indexData, indexTo)])
+                            {
+                                rng.Merge = true;
+                                rng.Value = Math.Abs(evtCounter.Sum(x => x.Value.Value_100K));
+                            }
+                            using (ExcelRange rng = worksheet.Cells[string.Format("P{0}:P{1}", indexData, indexTo)])
+                            {
+                                rng.Merge = true;
+                                rng.Value = Math.Abs(evtCounter.Sum(x => x.Value.Value_100K_Retracted));
+                            }
+
+                            using (ExcelRange rng = worksheet.Cells[string.Format("Q{0}:Q{1}", indexData, indexTo)])
+                            {
+                                rng.Merge = true;
+                                rng.Value = Math.Abs(evtCounter.Sum(x => x.Value.Value_50K));
+                            }
+                            using (ExcelRange rng = worksheet.Cells[string.Format("R{0}:R{1}", indexData, indexTo)])
+                            {
+                                rng.Merge = true;
+                                rng.Value = Math.Abs(evtCounter.Sum(x => x.Value.Value_50K_Retracted));
+                            }
+
+                            using (ExcelRange rng = worksheet.Cells[string.Format("S{0}:S{1}", indexData, indexTo)])
+                            {
+                                rng.Merge = true;
+                                rng.Value = Math.Abs(evtCounter.Sum(x => x.Value.Value_20K));
+                            }
+                            using (ExcelRange rng = worksheet.Cells[string.Format("T{0}:T{1}", indexData, indexTo)])
+                            {
+                                rng.Merge = true;
+                                rng.Value = Math.Abs(evtCounter.Sum(x => x.Value.Value_20K_Retracted));
+                            }
+
+                            using (ExcelRange rng = worksheet.Cells[string.Format("U{0}:U{1}", indexData, indexTo)])
+                            {
+                                rng.Merge = true;
+                                rng.Value = Math.Abs(evtCounter.Sum(x => x.Value.Value_10K));
+                            }
+                            using (ExcelRange rng = worksheet.Cells[string.Format("V{0}:V{1}", indexData, indexTo)])
+                            {
+                                rng.Merge = true;
+                                rng.Value = Math.Abs(evtCounter.Sum(x => x.Value.Value_10K_Retracted));
+                            }
+                            using (ExcelRange rng = worksheet.Cells[string.Format("W{0}:W{1}", indexData, indexTo)])
+                            {
+                                rng.Merge = true;
+                                rng.Value = Math.Abs(evtCounter.Sum(x => x.Value.Unknow));
+                            }
+                            using (ExcelRange rng = worksheet.Cells[string.Format("Y{0}:Y{1}", indexData, indexTo)])
+                            {
+                                rng.Merge = true;
+                                rng.Value = itemTrans.ListEvent.Values.Count > 0 ? string.Join("=>", itemTrans.ListEvent.Values) : string.Empty;
+                                rng.Style.HorizontalAlignment = ExcelHorizontalAlignment.Left;
+                            }
+                            if (requestLast.Status == Status.Types.UnSucceeded)
+                            {
+                                using (ExcelRange rng = worksheet.Cells[string.Format("Z{0}:Z{1}", indexData, indexTo)])
+                                {
+                                    rng.Merge = true;
+                                    rng.Value = !string.IsNullOrEmpty(itemTrans.TraceJournalFull) ? itemTrans.TraceJournalFull : string.Empty;
+                                }
+                            }
+                            indexData = indexTo + 1;
+                        }
+
+                    }
                 }
 
+
                 var allCells = worksheet.Cells[1, 1, worksheet.Dimension.End.Row, worksheet.Dimension.End.Column];
-                allCells.AutoFitColumns();
                 allCells.Style.Border.Top.Style = ExcelBorderStyle.Thin;
                 allCells.Style.Border.Bottom.Style = ExcelBorderStyle.Thin;
                 allCells.Style.Border.Left.Style = ExcelBorderStyle.Thin;
@@ -604,15 +862,77 @@ namespace Transaction_Statistical.Class
                 allCells.Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
                 allCells.Style.VerticalAlignment = ExcelVerticalAlignment.Center;
 
-                allCells.Style.WrapText = true;
+                //allCells.Style.WrapText = true;
+                for (int i = 0; i < 23; i++)
+                {
+                    worksheet.Column(i + 1).Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+                    worksheet.Column(i + 1).Style.VerticalAlignment = ExcelVerticalAlignment.Center;
+                    worksheet.Column(i + 1).Width = 20;
+                }
+                worksheet.Column(25).Style.HorizontalAlignment = ExcelHorizontalAlignment.Fill;
+                worksheet.Column(25).Width = 15;
+                worksheet.Column(26).Style.HorizontalAlignment = ExcelHorizontalAlignment.Fill;
+                worksheet.Column(26).Width = 30;
+                //allCells.AutoFitColumns();
+
+                //allCells.Style.WrapText = true;
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
-                throw e;
+                InitParametar.Send_Error(ex.ToString(), MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name);
             }
             return worksheet;
         }
 
+        private ExcelWorksheet DrawGDEmptyCassett(ExcelWorksheet worksheet)
+        {
+            //DRAW CHUDE
+            using (ExcelRange rng = worksheet.Cells["A1:N1"])
+            {
+                rng.Style.Fill.PatternType = OfficeOpenXml.Style.ExcelFillStyle.Solid;
+                rng.Style.Fill.BackgroundColor.SetColor(Backgroud);
+                rng.Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+                rng.Style.VerticalAlignment = ExcelVerticalAlignment.Center;
+                rng.Style.Font.Bold = true;
+            }
+            worksheet.Cells[1, 1].Value = "TRANNUMBER";
+            worksheet.Cells[1, 2].Value = "ATMID";
+            worksheet.Cells[1, 3].Value = "SỐ THẺ/CMT/CCCD";
+            worksheet.Cells[1, 4].Value = "SỐ TÀI KHOẢN";
+            worksheet.Cells[1, 5].Value = "DATE TIME";
+            worksheet.Cells[1, 6].Value = "SỐ TIỀN";
+            using (ExcelRange rng = worksheet.Cells["G1:J1"])
+            {
+                rng.Merge = true;
+                rng.Value = "Số tờ  GD yêu cầu đánh lên";
+            }
+            using (ExcelRange rng = worksheet.Cells["K1:N1"])
+            {
+                rng.Merge = true;
+                rng.Value = "Số tờ còn lại trong khay ở thời điểm empty cassette";
+            }
 
+            using (ExcelRange rng = worksheet.Cells["A1:N1"])
+            {
+                rng.Style.Border.Top.Style = ExcelBorderStyle.Thin;
+                rng.Style.Border.Bottom.Style = ExcelBorderStyle.Thin;
+                rng.Style.Border.Left.Style = ExcelBorderStyle.Thin;
+                rng.Style.Border.Right.Style = ExcelBorderStyle.Thin;
+
+
+                rng.Style.Border.Top.Color.SetColor(Color.Black);
+                rng.Style.Border.Bottom.Color.SetColor(Color.Black);
+                rng.Style.Border.Left.Color.SetColor(Color.Black);
+                rng.Style.Border.Right.Color.SetColor(Color.Black);
+            }
+
+            var allCells = worksheet.Cells[1, 1, worksheet.Dimension.End.Row, worksheet.Dimension.End.Column];
+            allCells.AutoFitColumns();
+
+            allCells.Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+            allCells.Style.VerticalAlignment = ExcelVerticalAlignment.Center;
+            allCells.Style.WrapText = true;
+            return worksheet;
+        }
     }
 }

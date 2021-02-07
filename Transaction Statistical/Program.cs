@@ -14,19 +14,26 @@ namespace Transaction_Statistical
         /// </summary>
         [STAThread]
         static void Main(string[] args)
-        { 
-            InitParametar.Init();
+        {            
+          //    args = new string[] { "TanySmile", "weekly" };
             if (args.Length == 0)
-            {               
+            {
+                InitParametar.CurrentUser = Environment.UserName;
+                InitParametar.Init();              
                 Application.EnableVisualStyles();
-                Application.SetCompatibleTextRenderingDefault(false);
-              //  Application.Run(new Frm_LoadingApp());
-                Application.Run(new Frm_Main());
+                InitGUI.Mode = InitGUI_Mode.Light;
+                InitGUI.Init();
+                InitGUI.frm_Main = new Frm_Main();
+                Application.Run(InitGUI.frm_Main);
             }
             else
             {
-                //Auto start - not GUI
-
+                //Auto start - not GUI    
+                InitParametar.AutoRunMode = true;
+                InitParametar.CurrentUser = args[0];
+                InitParametar.Init();
+                if (args.Length == 2)
+                    InitParametar.AutoStart(args[1]);
             }
         }
     }

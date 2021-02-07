@@ -14,7 +14,7 @@ namespace Transaction_Statistical.UControl
     {
         public UC_Menu_Dashboard()
         {
-            InitializeComponent();
+            InitializeComponent2();
         }
     }
 }

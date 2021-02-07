@@ -13,11 +13,16 @@ using System.Drawing.Imaging;
 using System.Drawing.Drawing2D;
 using System.Threading;
 using System.Diagnostics;
+using System.Timers;
+using System.Text.RegularExpressions;
+using Transaction_Statistical.AddOn;
 
 namespace Transaction_Statistical
 {
     public partial class UC_Explorer : UserControl
     {
+        public static string[] extensionOpen;
+        public static string[] extensionExtract;
         public static Image FolderImage;
         public static Image HardDiskImage;
         public static Image MyComputerImage;
@@ -32,15 +37,25 @@ namespace Transaction_Statistical
             InitializeComponent();
             init();
             textBoxShow = _textBoxShow;
+            UtilityIniFile fini = new UtilityIniFile();
+            extensionExtract = fini.GetEntryValue("OpenFile", "FileExtract").Split(';');
+            extensionOpen = fini.GetEntryValue("OpenFile", "FileText").Split(';');
         }
        
+        private void OnTimedEvent(Object source, ElapsedEventArgs e)
+        {
+            uc_Explorer_MouseLeave(null, null);
+        }
         public UC_Explorer()
         {
             InitializeComponent();
             init();
             this.tre_Explorer.MouseLeave += new System.EventHandler(uc_Explorer_MouseLeave);
+            UtilityIniFile fini = new UtilityIniFile();
+            extensionExtract = fini.GetEntryValue("OpenFile", "FileExtract").Split(';');
+            extensionOpen = fini.GetEntryValue("OpenFile", "FileText").Split(';');
         }
-        public void ShowFromControl(Control _Parent, Control _textBoxShow)
+        public void ShowUp2DownFromControl(Control _Parent, Control _textBoxShow)
         {
             if (!_Parent.Controls.Contains(this))
             {
@@ -62,11 +77,49 @@ namespace Transaction_Statistical
                 this.Size = new System.Drawing.Size(_textBoxShow.Width, 0);
                 SlideExplorerShow(null, null);
             }
-            this.SelectPath(textBoxShow.Text);
+            this.SelectPath(textBoxShow.Text);            
+        }
+        public void ShowRight2LeftFromControl(Control _Parent, Control _textBoxShow)
+        {
+            textBoxShow = _textBoxShow;
+            if (!_Parent.Controls.Contains(this))
+            {  
+                Point pt = textBoxShow.Parent.PointToScreen(textBoxShow.Location); 
+                this.Size = new Size(400, 600);
+                this.Location = new Point(_Parent.PointToClient(pt).X+1000, _Parent.PointToClient(pt).Y - this.Height + _textBoxShow.Height );
+             
+                _Parent.Controls.Add(this);
+                this.BringToFront();
+                this.SendToBack();
+                _Parent.Controls.SetChildIndex(this, 0);
+              
+            
+            }
+
+            if (showExplorer) showExplorer = false; else showExplorer = true;
+            if (runningShowExplorer) return;
+            runningShowExplorer = true;
+            while (runningShowExplorer)
+            {
+                if (showExplorer)
+                {
+                    this.Location = new Point(this.Location.X - 5, this.Location.Y);
+                    if (this.Location.X <= textBoxShow.Location.X-this.Width -5)
+                        break;
+                }
+                else
+                {
+                    this.Location = new Point(this.Location.X + 5, this.Location.Y);
+                    if (this.Location.X >= textBoxShow.Location.X + 100)
+                        break;
+                }
+                this.Update();
+            }
+            runningShowExplorer = false;
         }
         private void uc_Explorer_MouseLeave(object sender, EventArgs e)
         {
-            SlideExplorerShow(sender, e);
+            if (textBoxShow is Mode_TextBox) SlideExplorerShow(sender, e);
         }
         private void tre_Explorer_MouseHover(object sender, EventArgs e)
         {
@@ -86,17 +139,18 @@ namespace Transaction_Statistical
                 if (showExplorer)
                 {
                     this.Height += 5;
-                    if (this.Height >= 500)                  
-                        break;
+                    if (this.Height >= 500)
+                    break; 
                 }
                 else
                 {
                     this.Height -= 3;
-                    if (this.Height == 0) break;
+                    if (this.Height <= 0) break; 
                 }
                 this.Update();
             }
             runningShowExplorer = false;
+           
         }
 
         public void SelectPath(string path)
@@ -131,7 +185,7 @@ namespace Transaction_Statistical
                         }
                     }
                 }
-            }catch(Exception ex)
+            }catch
             {
 
             }
@@ -139,12 +193,44 @@ namespace Transaction_Statistical
         private void init()
         {
             //image-icon extention
-            FolderImage = IconHelper.ShellIcon.GetSmallFolderIcon().ToBitmap();
-            HardDiskImage = IconHelper.ShellIcon.GetSmallIconFromExtension(@".").ToBitmap();
+            FolderImage = GetImageHistory("folder", true);// (IconHelper.ShellIcon.GetSmallFolderIcon() ?? Properties.Resources.NewFile).ToBitmap();
+            HardDiskImage = GetImageHistory(@".",false); //(IconHelper.ShellIcon.GetSmallIconFromExtension(@".") ?? Properties.Resources.NewFile).ToBitmap();
             MyComputerImage = Properties.Resources.Computer.ToBitmap();
             InternetImage = Properties.Resources.Internet.ToBitmap();
             LoadFullDiskDirectory();
             tre_Explorer.Nodes.Add(Node_DisksDirectories);
+        }
+        private Image GetImageHistory(string extensionFile, bool isFolder)
+        {
+            Bitmap img = null;
+            try
+            {
+                string file = InitParametar.PathDirectoryCurrentApp + @"\bin\" + extensionFile + ".bm";
+                if (File.Exists(file))
+                {
+                    img = new Bitmap(file);
+                }
+                else
+                {
+                    Icon ico;
+                    if (isFolder) 
+                        ico = IconHelper.ShellIcon.GetSmallFolderIcon();                       
+                    else
+                        ico = IconHelper.ShellIcon.GetSmallIconFromExtension(extensionFile);
+                    if (ico != null)
+                    {
+                        if (!Directory.Exists(InitParametar.PathDirectoryCurrentApp + @"\bin\"))
+                            Directory.CreateDirectory(InitParametar.PathDirectoryCurrentApp + @"\bin\");
+                        ico.ToBitmap().Save(file);
+                    }
+                    else
+                        ico = Properties.Resources.NewFile;
+                    img = ico.ToBitmap();
+                }
+            }
+            catch
+            { }
+            return img;
         }
         public void LoadFullDiskDirectory()
         {
@@ -179,6 +265,7 @@ namespace Transaction_Statistical
         }
         public bool GetAllDirectoriesFilesOfDirectoryToNode(DirectoryInfo rootPath, TreeNode NodeRoot, int nloop)
         {
+            
             if (nloop > 0)
             {
                 string imgFile;
@@ -215,7 +302,7 @@ namespace Transaction_Statistical
                         else
                             if (!imageList.Images.ContainsKey(imgFile))
                         {
-                            imageList.Images.Add(imgFile, IconHelper.ShellIcon.GetSmallIconFromExtension(file.Extension).ToBitmap());
+                            imageList.Images.Add(imgFile, GetImageHistory(file.Extension, false));
 
                         }
                         aNode.ImageKey = aNode.SelectedImageKey = IconHelper.ImageUltility.CreateBitmapAttributes(file.Attributes, imgFile, ref imageList);
@@ -223,7 +310,7 @@ namespace Transaction_Statistical
                     }
                     return true;
                 }
-                catch(Exception ex)
+                catch
                 {
                     //  NodeRoot.CheckBoxVisible = false;
                     //DevComponents.DotNetBar.ElementStyle styleDeny = new DevComponents.DotNetBar.ElementStyle();
@@ -243,11 +330,13 @@ namespace Transaction_Statistical
                 {
                     GetAllDirectoriesFilesOfDirectoryToNode((tre_Explorer.SelectedNode).Tag as DirectoryInfo, tre_Explorer.SelectedNode, 1);
                 }
-                if (tre_Explorer.SelectedNode.Tag is DirectoryInfo) textBoxShow.Text = (tre_Explorer.SelectedNode.Tag as DirectoryInfo).FullName;
-                if (tre_Explorer.SelectedNode.Tag is FileInfo) textBoxShow.Text = (tre_Explorer.SelectedNode.Tag as FileInfo).FullName;
-
+                if (textBoxShow is Mode_TextBox)
+                {
+                    if (tre_Explorer.SelectedNode.Tag is DirectoryInfo) textBoxShow.Text = (tre_Explorer.SelectedNode.Tag as DirectoryInfo).FullName;
+                    if (tre_Explorer.SelectedNode.Tag is FileInfo) textBoxShow.Text = (tre_Explorer.SelectedNode.Tag as FileInfo).FullName;
+                }
             }
-            catch (Exception ex)
+            catch 
             {
             }
         }
@@ -283,21 +372,48 @@ namespace Transaction_Statistical
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.ToString(), "Open File", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(ex.Message, "Open File", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
         private void tre_Explorer_DoubleClick(object sender, EventArgs e)
         {
-            if (tre_Explorer.SelectedNode.Tag is FileInfo)
+            if (tre_Explorer.SelectedNode !=null && tre_Explorer.SelectedNode.Tag is FileInfo)
             {
-                string path = (tre_Explorer.SelectedNode.Tag as FileInfo).FullName;
-                Thread th_file = new Thread(() => OpenFile(path, false));
-                th_file.Start();
+                if (CheckExtract(extensionOpen.ToList(), (tre_Explorer.SelectedNode.Tag as FileInfo).Name))
+                {
+                    TabPanelControl tpc = new TabPanelControl();
+                    tpc.Dock = DockStyle.Fill;
+                    UControl.UC_Text uc_Text = new UControl.UC_Text((tre_Explorer.SelectedNode.Tag as FileInfo).Name, String.Format("{0:yyyyMMddHHmmssffff}", DateTime.Now),(tre_Explorer.SelectedNode.Tag as FileInfo).FullName);
+                    uc_Text.Dock = DockStyle.Fill;
+                    tpc.Controls.Add(uc_Text);
+                    InitGUI.frm_Main.tabControlX1.AddTab((tre_Explorer.SelectedNode.Tag as FileInfo).Name, (tre_Explorer.SelectedNode.Tag as FileInfo).FullName, tpc, true);
+
+                    
+                }
+                else if (CheckExtract(extensionExtract.ToList(), (tre_Explorer.SelectedNode.Tag as FileInfo).Name))
+                {
+
+                }
+                else
+                {
+                    string path = (tre_Explorer.SelectedNode.Tag as FileInfo).FullName;
+                    Thread th_file = new Thread(() => OpenFile(path, false));
+                    th_file.Start();
+                }
             }
         }
-
         
+        private bool CheckExtract(List<string> lst, string sString)
+        {
+            bool tmp = false;
+            try
+            {
+                lst.ForEach(x => { if (Regex.Match(sString, x.Replace(".", @"\.").Replace("*", @".*"), RegexOptions.IgnoreCase).Success) tmp= true; });
+            }
+            catch { }
+            return tmp;
+        }
     }  
  
 

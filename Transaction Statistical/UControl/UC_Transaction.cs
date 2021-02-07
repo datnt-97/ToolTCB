@@ -14,69 +14,81 @@ using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Threading;
 using Transaction_Statistical.AddOn;
+using Transaction_Statistical.IconHelper;
+using FastColoredTextBoxNS;
+using System.Data.OleDb;
+using System.Data.Entity.Core.Common.CommandTrees.ExpressionBuilder;
 
 namespace Transaction_Statistical.UControl
 {
     public partial class UC_Transaction : UserControl
     {
         SQLiteHelper sqlite;
-        List<Transaction> transactions = new List<Transaction>();
-        ReadTransaction readtran;
         UC_Explorer uc_Explorer;
         UC_Menu uc_Menu;
-        
+        Mode_DataGridView dataGrid;
         public UC_Transaction()
         {
             sqlite = new SQLiteHelper();
-            InitializeComponent();
+            InitializeComponent2();
             Add_GUI();
-            readtran = new ReadTransaction();
         }
-        #region design     
+        #region design             
 
         private void txt_Path_MouseEnter(object sender, EventArgs e)
         {
-            uc_Explorer.ShowFromControl(this, sender as Control);
+            uc_Explorer.ShowUp2DownFromControl(this, sender as Control);
         }
         private void btn_Export_MouseHover(object sender, EventArgs e)
         {
             btn_Export.FlatAppearance.BorderColor = Color.FromArgb(20, 120, 204);
-            btn_Export.ImageKey = "Excel_Select";
+            btn_Export.Image = ImageUltility.ChangeColor((Bitmap)this.imageListControl.Images["Excel_Select"], InitGUI.Custom.Menu_Button.DisplayColor);
         }
         private void btn_Export_MouseLeave(object sender, EventArgs e)
         {
             btn_Export.FlatAppearance.BorderColor = this.BackColor;
             btn_Export.FlatAppearance.BorderSize = 1;
-            btn_Export.ImageKey = "Excel";
+            btn_Export.Image = ImageUltility.ChangeColor((Bitmap)this.imageListControl.Images["Excel"], InitGUI.Custom.Menu_Button.DisplayColor);
         }
         #endregion
         private void Add_GUI()
         {
+            dateTimePicker_Start.Value = DateTime.Now.AddDays(-7);
+            cb_FullTime.Checked = true;
+            prb_Process.Location = btn_Read.Location;
+            prb_Process.ProgressColor = btn_Read.BZBackColor;
+
             uc_Explorer = new UC_Explorer();
             uc_Menu = new UC_Menu(this);
-            CheckBox cb1 = new CheckBox();
-            cb1.Text = "All";
-            pl_Actions.Controls.Add(cb1);
 
-            CheckBox cb2 = new CheckBox();
-            cb2.Text = "All Success";
-            pl_Actions.Controls.Add(cb2);
+            InitParametar.ReadTrans.Template_TransType.Values.OrderBy(x => x.Name).ToList().ForEach(x => cbo_Trans.Items.Add(x.Name, true));
+            //InitParametar.ReadTrans.Template_EventDevice_Select.Clear();
+            InitParametar.ReadTrans.Template_EventDevice.Keys.OrderBy(x => x).ToList().ForEach(x => cbo_Event.Items.Add(x, true));
 
-            CheckBox cb3 = new CheckBox();
-            cb3.Text = "UnSuccess";
-            pl_Actions.Controls.Add(cb3);
-
-            CheckBox cb4 = new CheckBox();
-            cb4.Text = "Withdrawal";
-            pl_Actions.Controls.Add(cb4);
-
-            CheckBox cb5 = new CheckBox();
-            cb5.Text = "Deposit";
-            pl_Actions.Controls.Add(cb5);
-
-            CheckBox cb6 = new CheckBox();
-            cb6.Text = "Safe door";
-            pl_Actions.Controls.Add(cb6);
+            foreach (string s in Enum.GetNames(typeof(Status.Types)))
+            {
+                cbo_Trans_Status.Items.Add(s, true);
+                cbo_Event_Status.Items.Add(s, true);
+            }
+            LoadPathTemp(true);
+        }
+        private void LoadPathTemp(bool isLoad)
+        {
+            try
+            {
+                UtilityIniFile fini = new UtilityIniFile();
+                if (isLoad)
+                {
+                    txt_Path.Text = fini.GetEntryValue("Directory", "FolderTemp");
+                    if (Directory.Exists(txt_Path.Text) || File.Exists(txt_Path.Text)) return;
+                    txt_Path.Text = "D:\\";
+                }
+                else
+                {
+                    fini.Write("FolderTemp", txt_Path.Text, "Directory");
+                }
+            }
+            catch { }
         }
 
         private void cb_FullTime_CheckedChanged(object sender, EventArgs e)
@@ -93,73 +105,155 @@ namespace Transaction_Statistical.UControl
             }
         }
 
-        private void bt_Read_Click(object sender, EventArgs e)
-        {
-            string[] extension = { "*.txt", "*.log" };
-            DirectoryFileUtilities df = new DirectoryFileUtilities();
-            if (File.Exists(txt_Path.Text))
-                JournalAnalyze(new List<string> { txt_Path.Text });
-            else if (Directory.Exists(txt_Path.Text))
-            {
-                FileInfo[] files = df.GetAllFilePath(txt_Path.Text, extension);
-                JournalAnalyze(files.Select(f => f.FullName).ToList());
-                tre_LstTrans.ExpandAll();
-            }
-            else
-                MessageBox.Show("File/Drectory not exist.", "Error File/Directory", MessageBoxButtons.OK, MessageBoxIcon.Error);
-        }
-        private void JournalAnalyze(List<string> lsFile_Journal)
+        private async void bt_Read_Click(object sender, EventArgs e)
         {
             try
             {
-                readtran = new ReadTransaction();
-                tre_LstTrans.Nodes.Clear();
+                pn_Bank.Enabled = false;
+                prb_Process.Size = btn_Read.Size;
+                prb_Process.Value = 10;
+                prb_Process.Update();
+                prb_Process.ProgressColor = btn_Read.BZBackColor;
+                prb_Process.ForeColor = btn_Read.ForeColor;
+                tre_LstTrans.Nodes.Clear(); tvListCycle.Nodes.Clear(); panel5.Controls.Clear(); fctxt_FullLog.Text = string.Empty; this.Update();
+                DirectoryFileUtilities df = new DirectoryFileUtilities();
+                if (File.Exists(txt_Path.Text))
+                    await JournalAnalyze(new List<string> { txt_Path.Text });
+                else if (Directory.Exists(txt_Path.Text))
+                {
+                    // FileInfo[] files = df.GetAllFilePath(txt_Path.Text, InitParametar.ReadTrans.ExtensionFile);
+                    FileInfo[] files = df.GetAllFilePath(txt_Path.Text, InitParametar.ReadTrans.Template_FileFilter.Values.ToArray());
+                    if (files == null || files.Length == 0) MessageBox.Show("Not files found.", "Error File/Directory", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    else await JournalAnalyze(files.Select(f => f.FullName).ToList());
+                }
+                else
+                    MessageBox.Show("File/Drectory not exist.", "Error File/Directory", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                if (tre_LstTrans.Nodes.Count != 0)
+                {
+                    tre_LstTrans.Nodes[0].Expand(); tre_LstTrans.SelectedNode = tre_LstTrans.Nodes[0];
+                }
+            }
+            catch (Exception ex)
+            {
+                InitParametar.Send_Error(ex.ToString(), MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name);
+            }
+            prb_Process.Size = new Size(0, 0);
+            LoadPathTemp(false);
+            pn_Bank.Enabled = true;
+        }
+        private async Task<bool> JournalAnalyze(List<string> lsFile_Journal)
+        {
+            try
+            {
+                prb_Process.CustomText = string.Format("Found: {0} files.", lsFile_Journal.Count);
+                prb_Process.Value += 10;
+
+                btn_Export.Enabled = false;
                 propertyGrid1.SelectedObject = null;
                 fctxt_FullLog.Text = string.Empty;
                 if (!cb_FullTime.Checked)
                 {
-                    readtran.StartDate = dateTimePicker_Start.Value;
-                    readtran.EndDate = dateTimePicker_End.Value;
+                    InitParametar.ReadTrans.StartDate = dateTimePicker_Start.Value;
+                    InitParametar.ReadTrans.EndDate = dateTimePicker_End.Value;
                 }
-                if (readtran.Reads(lsFile_Journal))
+                else
                 {
+                    InitParametar.ReadTrans.StartDate = DateTime.MinValue;
+                    InitParametar.ReadTrans.EndDate = InitParametar.DateMaximum;
+                }
+
+                if (await InitParametar.ReadTrans.Reads(lsFile_Journal, prb_Process))
+                {
+                    prb_Process.CustomText = "Show data";
+                    btn_Export.Enabled = true;
                     string day;
-                    foreach (KeyValuePair<string, Dictionary<DateTime, object>> kTerminal in readtran.ListTransaction)
+                    int countDisplay = 500;
+                    foreach (KeyValuePair<string, Dictionary<DateTime, object>> kTerminal in InitParametar.ReadTrans.ListTransaction)
                     {
                         int countCycle = kTerminal.Value.Where(x => (x.Value is Cycle)).ToList().Count;
                         int countTransaction = kTerminal.Value.Where(x => (x.Value is Transaction)).ToList().Count;
                         int countTransactionEvent = kTerminal.Value.Where(x => (x.Value is TransactionEvent)).ToList().Count;
-                        TreeNode ndTerminal = tre_LstTrans.Nodes.Add(kTerminal.Key, String.Format("Terminal ID: {0} - Total: {1} transactions", kTerminal.Key, kTerminal.Value.Count), "Terminal", "Terminal");
+                        TreeNode ndTerminal =tre_LstTrans.Nodes.Add(kTerminal.Key, String.Format("Terminal ID: [{0}] - Total: {1} transactions", kTerminal.Key, kTerminal.Value.Count), "Terminal", "Terminal");
+                         ndTerminal.Tag =new Custom_NodeTag( kTerminal.Value.Where(x => (x.Value is Cycle)).ToDictionary(x => x.Key, x => (Cycle)x.Value),Custom_NodeTag.NodeTypes.Terminal, kTerminal.Key);
 
                         foreach (KeyValuePair<DateTime, object> kTransaction in kTerminal.Value.OrderBy(x => x.Key))
                         {
-                            day = String.Format("{0:" + readtran.FormatDate + "}", kTransaction.Key);
+
+                            day = String.Format("{0:" + InitParametar.ReadTrans.FormatDate + "}", kTransaction.Key);
                             TreeNode ndDay = new TreeNode(day);
                             if (ndTerminal.Nodes.ContainsKey(day))
                                 ndDay = ndTerminal.Nodes[day];
                             else
+                            {
                                 ndDay = ndTerminal.Nodes.Add(day, day, "Date", "DateOpen");
-                            string textDisplay = kTransaction.Value.ToString();
-                            TreeNode ndTransaction = ndDay.Nodes.Add(textDisplay, textDisplay);
-                            ndTransaction.Tag = kTransaction.Value;
-                            if (ndTransaction.Tag is Transaction)
-                            {
-                                ndTransaction.ImageKey = "Flag";
-                                ndTransaction.SelectedImageKey = "Flag_Success";
+                                ndDay.Text = String.Format("{0} Total: {1} transactions, {2} events", day, kTerminal.Value.Where(x => (x.Value is Transaction) && x.Key.ToString(InitParametar.ReadTrans.FormatDate).Equals(day)).ToList().Count, kTerminal.Value.Where(x => (x.Value is TransactionEvent) && x.Key.ToString(InitParametar.ReadTrans.FormatDate).Equals(day)).ToList().Count);
                             }
-                            else if (ndTransaction.Tag is TransactionEvent)
-                            {
-                                ndTransaction.ImageKey = "Device";
-                                ndTransaction.SelectedImageKey = "Device";
-                            }
-                            else
-                            {
-                                ndTransaction.ImageKey = "Cycle";
-                                ndTransaction.SelectedImageKey = "Cycle";
-                            }
-                            ndDay.Text = day + " Total: " + ndDay.Nodes.Count + " transactions";
+
+                            if (countDisplay == ndDay.Nodes.Count) continue;
+                            ndDay.Tag =new Custom_NodeTag( kTransaction.Key,Custom_NodeTag.NodeTypes.DateTime);
+                            AddTransactionToNode(ndDay, kTransaction.Key, kTerminal.Key, kTransaction.Value);
+
                         }
+                        tre_LstTrans.Update();
                     }
+                    ImportHistory();
+                }
+                return true;
+            }
+            catch (Exception ex)
+            {
+                InitParametar.Send_Error(ex.ToString(), MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name);
+            }
+            return false;
+        }
+        private void ImportHistory()
+        {
+            try
+            {
+                if (!cb_AutoHistory.Checked)
+                    return;
+            }
+            catch (Exception ex)
+            {
+                InitParametar.Send_Error(ex.ToString(), MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name);
+            }
+        }
+        private void AddTransactionToNode(TreeNode ndDay, DateTime date, string terminal, object obj)
+        {
+            try
+            {
+                DateTime dNode = (DateTime)((Custom_NodeTag)ndDay.Tag).Data;
+                if (!date.ToString(InitParametar.ReadTrans.FormatDate).Equals(dNode.ToString(InitParametar.ReadTrans.FormatDate))) return;
+                string textDisplay = obj.ToString();
+                if (ndDay.Nodes.ContainsKey(textDisplay))
+                {
+                    return;
+                }
+                ndDay.Tag =new Custom_NodeTag( date, Custom_NodeTag.NodeTypes.DateTime);
+
+                if (obj is Transaction)
+                {
+                    //if (!FilterDisplayTransaction((obj as Transaction).ListRequest.Values.ToList())) return;
+                    TreeNode ndTransaction = ndDay.Nodes.Add(textDisplay, textDisplay);
+                    ndTransaction.Tag =new Custom_NodeTag( obj, Custom_NodeTag.NodeTypes.Transaction);
+                    ndTransaction.ImageKey = "Flag_" + (obj as Transaction).Status;
+                    ndTransaction.SelectedImageKey = "Select";
+                }
+                else if (obj is TransactionEvent)
+                {
+                    TreeNode ndTransaction = ndDay.Nodes.Add(textDisplay, textDisplay);
+                    ndTransaction.Tag =new Custom_NodeTag( obj, Custom_NodeTag.NodeTypes.EventDevice);
+                    ndTransaction.ImageKey = "Device";
+                    ndTransaction.SelectedImageKey = "Device";
+                    ndDay.Tag =new Custom_NodeTag( (obj as TransactionEvent).DateBegin, Custom_NodeTag.NodeTypes.DateTime);
+                }
+                else
+                {
+                    TreeNode ndTransaction = ndDay.Nodes.Add(textDisplay, textDisplay);
+                    ndTransaction.Tag =new Custom_NodeTag( obj,Custom_NodeTag.NodeTypes.Cycles);
+                    ndTransaction.ImageKey = "Cycle";
+                    ndTransaction.SelectedImageKey = "Cycle";
+                    ndDay.Tag =new Custom_NodeTag( (obj as Cycle).DateBegin, Custom_NodeTag.NodeTypes.DateTime);
                 }
             }
             catch (Exception ex)
@@ -208,32 +302,253 @@ namespace Transaction_Statistical.UControl
         {
             try
             {
-                if (e.Node != null && e.Node.Tag != null && e.Node.Tag is Transaction)
+                if (e.Node == null || e.Node.Tag == null) return;
+                Custom_NodeTag nodeTag = e.Node.Tag as Custom_NodeTag;
+
+                if (nodeTag.Type is Custom_NodeTag.NodeTypes.Transaction)
                 {
-                    propertyGrid1.SelectedObject = (Transaction)e.Node.Tag;
-                    fctxt_FullLog.Text = (e.Node.Tag as Transaction).TraceJournalFull;
-                }
-                else if (e.Node != null && e.Node.Tag != null && e.Node.Tag is TransactionEvent)
-                {
-                    propertyGrid1.SelectedObject = (TransactionEvent)e.Node.Tag;
-                    fctxt_FullLog.Text = (e.Node.Tag as TransactionEvent).TContent;
-                }
-                else if (e.Node != null && e.Node.Tag != null && e.Node.Tag is Cycle)
-                {
-                    var cycle = (Cycle)e.Node.Tag;
-                    fctxt_FullLog.Text = (e.Node.Tag as Cycle).LogTxt;
-                    AddLayoutEventCycle(cycle, panel4);
-                }
-                else if (e.Node != null && e.Node.Tag != null && e.Node.Tag is List<KeyValuePair<DateTime, Cycle>>)
-                {
-                    var tagValue = ((List<KeyValuePair<DateTime, Cycle>>)e.Node.Tag).ToList();
-                    ListBox listBox = new ListBox();
-                    listBox.Dock = DockStyle.Fill;
-                    tagValue.ForEach(x =>
+
+                    fctxt_FullLog.Text = (nodeTag.Data as Transaction).TraceJournalFull;
+                    var trans = (Transaction)nodeTag.Data;
+                    trans.Properties = new List<CustomProperty>();
+
+                    CultureInfo cultureInfo = new CultureInfo("vn-VN");
+                    trans.Properties.Add(new CustomProperty
                     {
-                        listBox.Items.Add(x.Value.ToString());
+                        Name = "Amount",
+                        Type = typeof(string),
+                        Desc = "Total amount",
+                        Cate = "3. Transaction",
+                        DefaultValue = String.Format("{0:#,###} VND", trans.AmountTotal())
                     });
-                    panel4.Controls.Add(listBox);
+
+                    int cCount = 1;
+                    if (trans.Value_10K != 0)
+                    {
+                        trans.Properties.Add(new CustomProperty
+                        {
+                            Name = cCount + ". 10,000 VND",
+                            Type = typeof(int),
+                            Desc = "Cash counter of In/Out",
+                            Cate = "5.Cash In / Out",
+                            DefaultValue = trans.Value_10K
+                        }); cCount += 1;
+                    }
+                    if (trans.Value_20K != 0)
+                    {
+                        trans.Properties.Add(new CustomProperty
+                        {
+                            Name = cCount + ". 20,000 VND",
+                            Type = typeof(int),
+                            Desc = "Cash counter of In/Out",
+                            Cate = "5.Cash In / Out",
+                            DefaultValue = trans.Value_20K
+                        });
+                        cCount += 1;
+                    }
+
+                    if (trans.Value_50K != 0)
+                    {
+                        trans.Properties.Add(new CustomProperty
+                        {
+                            Name = cCount + ". 50,000 VND",
+                            Type = typeof(int),
+                            Desc = "Cash counter of In/Out",
+                            Cate = "5.Cash In / Out",
+                            DefaultValue = trans.Value_50K
+                        });
+                        cCount += 1;
+                    }
+                    if (trans.Value_100K != 0)
+                    {
+                        trans.Properties.Add(new CustomProperty
+                        {
+                            Name = cCount + ". 100,000 VND",
+                            Type = typeof(int),
+                            Desc = "Cash counter of In/Out",
+                            Cate = "5.Cash In / Out",
+                            DefaultValue = trans.Value_100K
+                        });
+                        cCount += 1;
+                    }
+                    if (trans.Value_200K != 0)
+                    {
+                        trans.Properties.Add(new CustomProperty
+                        {
+                            Name = cCount + ". 200,000 VND",
+                            Type = typeof(int),
+                            Desc = "Cash counter of In/Out",
+                            Cate = "5.Cash In / Out",
+                            DefaultValue = trans.Value_200K
+                        });
+                        cCount += 1;
+                    }
+                    if (trans.Value_500K != 0)
+                    {
+                        trans.Properties.Add(new CustomProperty
+                        {
+                            Name = cCount + ". 500,000 VND",
+                            Type = typeof(int),
+                            Desc = "Cash counter of In/Out",
+                            Cate = "5.Cash In / Out",
+                            DefaultValue = trans.Value_500K
+                        });
+                        cCount += 1;
+                    }
+
+                    #region Retracted
+                    cCount = 1;
+                    if (trans.Value_10K_Retracted != 0)
+                    {
+                        trans.Properties.Add(new CustomProperty
+                        {
+                            Name = cCount + ". 10,000 VND",
+                            Type = typeof(int),
+                            Desc = "Cash retracted",
+                            Cate = "7.Cash Retracted",
+                            DefaultValue = trans.Value_10K_Retracted
+                        }); cCount += 1;
+                    }
+                    if (trans.Value_20K_Retracted != 0)
+                    {
+                        trans.Properties.Add(new CustomProperty
+                        {
+                            Name = cCount + ". 20,000 VND",
+                            Type = typeof(int),
+                            Desc = "Cash retracted",
+                            Cate = "7.Cash Retracted",
+                            DefaultValue = trans.Value_20K_Retracted
+                        }); cCount += 1;
+                    }
+                    if (trans.Value_50K_Retracted != 0)
+                    {
+                        trans.Properties.Add(new CustomProperty
+                        {
+                            Name = cCount + ". 50,000 VND",
+                            Type = typeof(int),
+                            Desc = "Cash retracted",
+                            Cate = "7.Cash Retracted",
+                            DefaultValue = trans.Value_50K_Retracted
+                        }); cCount += 1;
+                    }
+                    if (trans.Value_100K_Retracted != 0)
+                    {
+                        trans.Properties.Add(new CustomProperty
+                        {
+                            Name = cCount + ". 100,000 VND",
+                            Type = typeof(int),
+                            Desc = "Cash retracted",
+                            Cate = "7.Cash Retracted",
+                            DefaultValue = trans.Value_100K_Retracted
+                        }); cCount += 1;
+                    }
+                    if (trans.Value_200K_Retracted != 0)
+                    {
+                        trans.Properties.Add(new CustomProperty
+                        {
+                            Name = cCount + ". 200,000 VND",
+                            Type = typeof(int),
+                            Desc = "Cash retracted",
+                            Cate = "7.Cash Retracted",
+                            DefaultValue = trans.Value_200K_Retracted
+                        }); cCount += 1;
+                    }
+                    if (trans.Value_500K_Retracted != 0)
+                    {
+                        trans.Properties.Add(new CustomProperty
+                        {
+                            Name = cCount + ". 500,000 VND",
+                            Type = typeof(int),
+                            Desc = "Cash retracted",
+                            Cate = "7.Cash Retracted",
+                            DefaultValue = trans.Value_500K_Retracted
+                        }); cCount += 1;
+                    }
+                    if (trans.Unknow != 0)
+                    {
+                        trans.Properties.Add(new CustomProperty
+                        {
+                            Name = cCount + ". Unknown",
+                            Type = typeof(int),
+                            Desc = "Cash retracted",
+                            Cate = "7.Cash Retracted",
+                            DefaultValue = trans.Unknow
+                        }); cCount += 1;
+                    }
+                    #endregion
+                    cCount = 1;
+                    foreach (var req in (nodeTag.Data as Transaction).ListEvent.Values)
+                    {
+                        trans.Properties.Add(new CustomProperty
+                        {
+                            Name = req.TTime + "  " + req.DateBegin.Millisecond,
+                            Type = typeof(string),
+                            Desc = req.TContent,
+                            Cate = "6. Follow",
+                            DefaultValue = req.Name + " -> " + req.Status,
+                        });
+                        cCount++;
+                    }
+                    cCount = 1;
+                    foreach (var req in (nodeTag.Data as Transaction).ListRequest.Values)
+                    {
+                        trans.Properties.Add(new CustomProperty
+                        {
+                            Name = string.Format("{0:HH:mm:ss}", req.DateBegin),
+                            Type = typeof(string),
+                            Desc = req.ToString() + " -> " + req.Status,
+                            Cate = "4. Requests",
+                            DefaultValue = req.ToString() + " -> " + req.Status
+                        });
+                        cCount++;
+                    }
+                    //propertyGrid1
+                    propertyGrid1.SelectedObject = trans;
+                    propertyGrid1.SelectedGridItemChanged += selectedProper;
+
+                }
+                else if (nodeTag.Type is Custom_NodeTag.NodeTypes.EventDevice)
+                {
+                    propertyGrid1.SelectedObject = (TransactionEvent)nodeTag.Data;
+                    fctxt_FullLog.Text = (nodeTag.Data as TransactionEvent).TContent;
+                }
+                else if (nodeTag.Data is Custom_NodeTag.NodeTypes.Cycles)
+                {
+                    var cycle = (Cycle)nodeTag.Data;
+                    showCycle(cycle);
+                }
+                else if (nodeTag.Type is Custom_NodeTag.NodeTypes.Terminal)
+                {
+                    resetView();
+                    var tagValue = ((Dictionary<DateTime, Cycle>)nodeTag.Data).ToList();
+                    tvListCycle.Nodes.Clear();
+                    tvListCycle.Scrollable = true;
+                    string textDisplay = "Terminal ID : " + e.Node.Name + " - Total Cycle : " + tagValue.Count;
+                    TreeNode ndCycle = tvListCycle.Nodes.Add(textDisplay, textDisplay);
+                    if (tagValue.Count > 0)
+                    {
+
+                        tagValue.ForEach(x =>
+                        {
+                            TreeNode ndItem = ndCycle.Nodes.Add(x.Key.ToString(), x.Value.ToString());
+                            ndItem.Tag = x.Value;
+                            ndItem.ImageKey = "Cycle";
+                            ndItem.SelectedImageKey = "Cycle";
+                        });
+                        ndCycle.Expand();
+                    }
+                    if (tvListCycle.Nodes[0].Nodes.Count != 0) tvListCycle.SelectedNode = tvListCycle.Nodes[0].Nodes[0];
+                }
+                else if (nodeTag.Type is Custom_NodeTag.NodeTypes.DateTime)
+                {
+                    TreeNode ndRoot = e.Node;
+                    while (ndRoot.Parent != null)
+                        ndRoot = ndRoot.Parent;
+                    string terminal = ndRoot.Text.Substring(ndRoot.Text.IndexOf('[') + 1, ndRoot.Text.IndexOf(']') - ndRoot.Text.IndexOf('[') - 1);
+
+                    DateTime dNode = (DateTime)nodeTag.Data;
+                    foreach (KeyValuePair<DateTime, object> kTransaction in InitParametar.ReadTrans.ListTransaction[terminal].OrderBy(x => x.Key))
+                        AddTransactionToNode(e.Node, kTransaction.Key, terminal, kTransaction.Value);
                 }
             }
             catch (Exception ex)
@@ -241,79 +556,159 @@ namespace Transaction_Statistical.UControl
                 InitParametar.Send_Error(ex.ToString(), MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name);
             }
         }
-        private void AddLayoutEventCycle(Cycle cycle, Panel panel4)
+
+        private void tre_LstTrans_KeyPress(object sender, KeyPressEventArgs e)
         {
-            if (panel4.Controls.Count > 0)
+            try
             {
-                TabControl control = (TabControl)panel4.Controls[0];
-                panel4.Controls.Remove(control);
+                if (e.KeyChar == '\u0006')
+                {
+                    uc_Search.Icon_Search_Click(null, null);
+                }
             }
+
+            catch (Exception ex)
+            {
+                InitParametar.Send_Error(ex.ToString(), MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name);
+            }
+        }
+        private void selectedProper(object sender, SelectedGridItemChangedEventArgs e)
+        {
+            var item = e.NewSelection;
+            var trans = e.NewSelection.Value;
+            if (item.PropertyDescriptor.Category.Contains("6. Follow"))
+            {
+                if (fctxt_FullLog.Text.Contains(item.PropertyDescriptor.Description))
+                {
+                    var index = fctxt_FullLog.Text.IndexOf(item.PropertyDescriptor.Description, StringComparison.CurrentCultureIgnoreCase);
+                    var pointS = fctxt_FullLog.PositionToPoint(index + item.PropertyDescriptor.Description.Length);
+                    var r = fctxt_FullLog.GetRange(index, index + item.PropertyDescriptor.Description.Length);
+                    fctxt_FullLog.Selection = r;
+                    fctxt_FullLog.DoSelectionVisible();
+                    fctxt_FullLog.HighlightingRangeType = FastColoredTextBoxNS.HighlightingRangeType.AllTextRange;
+                    fctxt_FullLog.BookmarkColor = Color.Orange;
+                }
+            }
+
+        }
+
+        private void tvListCycle_AfterSelect(object sender, TreeViewEventArgs e)
+        {
+
+            if (e.Node != null && e.Node.Tag != null && e.Node.Tag is Cycle)
+            {
+                showCycle((Cycle)e.Node.Tag);
+            }
+        }
+        private void resetView()
+        {
+            if (tvListCycle.Controls.Count > 0)
+            {
+                tvListCycle.Controls.Clear();
+            }
+            if (panel5.Controls.Count > 0)
+            {
+                panel5.Controls.RemoveAt(0);
+            }
+        }
+        private void showCycle(Cycle cycle)
+        {
+            if (panel5.Controls.Count > 0)
+            {
+                panel5.Controls.RemoveAt(0);
+            }
+            dataGrid = new Mode_DataGridView();
+            dataGrid.BackgroundColor = InitGUI.Custom.Cycle_Background.DisplayColor;
+            dataGrid.ForeColor = InitGUI.Custom.Cycle_Text.DisplayColor;
+            dataGrid.DefaultCellStyle.BackColor = InitGUI.Custom.Cycle_Background.DisplayColor;
+            dataGrid.RowHeadersVisible = false;
+            dataGrid.BorderStyle = BorderStyle.None;
+            dataGrid.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+            dataGrid.AllowUserToAddRows = false;
+            dataGrid.Dock = DockStyle.Fill;
+
+            fctxt_FullLog.Text = cycle.LogTxt;
             var denoCount = cycle.DenominationCount.ToList();
             var cashCount = cycle.Cashcount_Out.ToList();
-
-            TabControl tabControlCycle = new TabControl();
-            tabControlCycle.Height = panel4.Height;
-            tabControlCycle.Width = panel4.Width;
-            tabControlCycle.Dock = DockStyle.Fill;
-            tabControlCycle.Name = "tcCycle";
-            TabPage tabPageCycle = new TabPage("Cycle Genaral");
-
-            PropertyGrid propertyGrid = new PropertyGrid();
-            propertyGrid.BrowsableAttributes = new AttributeCollection(new CategoryAttribute("1. Info"));
-            propertyGrid.Dock = DockStyle.Fill;
-            propertyGrid.SelectedObject = cycle;
-            tabPageCycle.Controls.Add(propertyGrid);
-            tabControlCycle.Controls.Add(tabPageCycle);
-
             if (denoCount != null)
             {
-                TabPage tabPageCycleDeno = new TabPage("Denomination Count");
-                DataGridView dataGrid = new DataGridView();
-                dataGrid.Dock = DockStyle.Fill;
-
                 BindingSource dtsDeno = new BindingSource();
-                dtsDeno.DataSource = typeof(Deno);
-                dataGrid.DataSource = dtsDeno;
+
+                int rowMidle = denoCount.Count / 2;
+                int rowMidleIdx = 0;
+                SortableBindingList<object> denoCountS = new SortableBindingList<object>();
                 denoCount.OrderByDescending(x => x.Value.Name).ToList().ForEach(x =>
                 {
-                    dtsDeno.Add(x.Value);
+                    object c = new
+                    {
+                        TerminalID = rowMidleIdx == rowMidle ? cycle.TerminalID : "",
+                        SettlementPeriodStart = rowMidleIdx == rowMidle ? cycle.SettlementPeriodDateBegin.ToString() : "",
+                        SettlementPeriodEnd = rowMidleIdx == rowMidle ? cycle.SettlementPeriodDateEnd.ToString() : "",
+                        Denomination = x.Value.Name,
+                        Dispensed = x.Value.Dispensed,
+                        Remaining = x.Value.Remaining,
+                        Retracted = x.Value.Retracted,
+                        Initial = x.Value.Initial,
+                    };
+                    rowMidleIdx++;
+                    denoCountS.Add(c);
                 });
-                tabPageCycleDeno.Controls.Add(dataGrid);
-                tabControlCycle.Controls.Add(tabPageCycleDeno);
+                dtsDeno.DataSource = denoCountS;
+                // dataGrid.RowTemplate.Resizable = DataGridViewTriState.True;
+                dataGrid.RowTemplate.Height = (panel5.Height - dataGrid.ColumnHeadersHeight) / denoCountS.Count;
 
-            }
-            if (cashCount != null)
-            {
-
-                TabPage tabPageCycleCash = new TabPage("Cash Count");
-                DataGridView dataGridCash = new DataGridView();
-                dataGridCash.Dock = DockStyle.Fill;
-                BindingSource dtsCash = new BindingSource();
-                dtsCash.DataSource = typeof(Cassette);
-                dataGridCash.DataSource = dtsCash;
-                cashCount.OrderByDescending(x => x.Value.Name).ToList().ForEach(x =>
+                dataGrid.DataSource = dtsDeno;
+                //dataGrid.ColumnHeaderMouseClick = gridViewClickHeader(sender,, dataGrid);
+                dataGrid.CellPainting += new DataGridViewCellPaintingEventHandler(dataGridView1_CellPainting);
+                foreach (DataGridViewColumn column in dataGrid.Columns)
                 {
-                    dtsCash.Add(x.Value);
-                });
-                tabPageCycleCash.Controls.Add(dataGridCash);
-                tabControlCycle.Controls.Add(tabPageCycleCash);
+                    column.SortMode = DataGridViewColumnSortMode.Automatic;
+                }
+                // dataGrid.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.DisplayedCells;
+                panel5.Controls.Add(dataGrid);
+            }
+        }
+        bool IsTheSameCellValue(int column, int row)
+        {
+            return column <= 2 && row < dataGrid.RowCount;
 
+        }
+        private void dataGridView1_CellPainting(object sender, DataGridViewCellPaintingEventArgs e)
+        {
+            e.AdvancedBorderStyle.Bottom = DataGridViewAdvancedCellBorderStyle.None;
+            if (e.RowIndex < 0)
+                return;
+            if (IsTheSameCellValue(e.ColumnIndex, e.RowIndex))
+            {
+                if (e.RowIndex == 0)
+                {
+                    e.AdvancedBorderStyle.Top = DataGridViewAdvancedCellBorderStyle.Single;
+                }
+                else
+                {
+                    e.AdvancedBorderStyle.Top = DataGridViewAdvancedCellBorderStyle.None;
+
+                }
+            }
+            else
+            {
+                e.AdvancedBorderStyle.Top = dataGrid.AdvancedCellBorderStyle.Top;
             }
 
-
-
-            panel4.Controls.Add(tabControlCycle);
         }
+
         private void tre_LstTrans_NodeMouseHover(object sender, TreeNodeMouseHoverEventArgs e)
         {
 
         }
-
         private void btn_Export_Click(object sender, EventArgs e)
         {
             try
             {
-                readtran.Export();
+                UC_ExportCus uc_MenuStartup = new UC_ExportCus();
+                uc_MenuStartup.Dock = DockStyle.Fill;
+                Frm_TemplateDefault frm = new Frm_TemplateDefault(uc_MenuStartup, "File Export");
+                frm.ShowDialog();
             }
             catch (Exception ex)
             {
@@ -321,7 +716,146 @@ namespace Transaction_Statistical.UControl
             }
         }
 
+        private void cbo_CheckAll_SelectedValueChanged(object sender, EventArgs e)
+        {
+            if ((sender as CheckedComboBox).CheckedItems.Count == (sender as CheckedComboBox).Items.Count)
+                (sender as CheckedComboBox).Text = "All";
+            else if ((sender as CheckedComboBox).CheckedItems.Count == 0)
+                (sender as CheckedComboBox).Text = "N/A";
+        }
 
-    }
+        private void cbo_Trans_TextChanged(object sender, EventArgs e)
+        {
+            if ((sender as CheckedComboBox).CheckedItems.Count == (sender as CheckedComboBox).Items.Count)
+                (sender as CheckedComboBox).Text = "All";
+            else if ((sender as CheckedComboBox).CheckedItems.Count == 0)
+                (sender as CheckedComboBox).Text = "N/A";
+            InitParametar.ReadTrans.Template_TransType_Select.Clear();
+            foreach (var cb in cbo_Trans.CheckedItems)
+                InitParametar.ReadTrans.Template_TransType_Select[cb.ToString()] = InitParametar.ReadTrans.Template_TransType[cb.ToString()];
+        }
 
+        private void cbo_Event_TextChanged(object sender, EventArgs e)
+        {
+            if ((sender as CheckedComboBox).CheckedItems.Count == (sender as CheckedComboBox).Items.Count)
+                (sender as CheckedComboBox).Text = "All";
+            else if ((sender as CheckedComboBox).CheckedItems.Count == 0)
+                (sender as CheckedComboBox).Text = "N/A";
+            InitParametar.ReadTrans.Template_EventDevice_Select.Clear();
+            foreach (var cb in cbo_Event.CheckedItems)
+                InitParametar.ReadTrans.Template_EventDevice_Select[cb.ToString()] = InitParametar.ReadTrans.Template_EventDevice[cb.ToString()];
+        }
+
+        private void txt_Path_MouseEnter(object sender, MouseEventArgs e)
+        {
+            uc_Explorer.ShowUp2DownFromControl(this, sender as Control);
+        }
+
+		private void OpenSource_Click(object sender, EventArgs e)
+		{
+
+		}
+        private void cMS_LstTrans_Opening(object sender, System.ComponentModel.CancelEventArgs e)
+        {            
+            if(tre_LstTrans.SelectedNode!=null)
+            {
+                if (tre_LstTrans.SelectedNode.Tag is DateTime || tre_LstTrans.SelectedNode.Tag is TransactionEvent || tre_LstTrans.SelectedNode.Tag is Transaction)
+                {
+                    this.OpenSource.Visible = true;
+                }
+                else
+                {
+                    this.OpenSource.Visible = false;
+                }
+                cMS_LstTrans.Update();
+            }
+        }
+        private void cb_AutoHistory_CheckedChanged(object sender, EventArgs e)
+        {
+            if (cb_AutoHistory.Checked)
+                bt_ManualHistory.Visible = false;
+            else
+                bt_ManualHistory.Visible = true;
+        }
+
+        private void bt_ManualHistory_Click(object sender, EventArgs e)
+		{
+            UC_ImportTransaction uc_import = new UC_ImportTransaction(tre_LstTrans);
+            uc_import.Dock = DockStyle.Fill;
+            Frm_TemplateDefault frm = new Frm_TemplateDefault(uc_import, @"Import transactions to Database");
+            frm.Width = uc_import.Width + 5;
+            frm.Height = uc_import.Height + 30;
+            frm.Show();
+        }
+        
+        private void bt_history_Click(object sender, EventArgs e)
+		{
+
+		}
+
+        private void bt_Banks_Click(object sender, EventArgs e)
+        {
+            AddOn.TabControlX tabControlX1 = new TabControlX();
+            tabControlX1.Dock = DockStyle.Fill;
+
+            TabPanelControl tpc_Terminals = new TabPanelControl();
+            tpc_Terminals.Dock = DockStyle.Fill;
+            UControl.UC_Terminals uc_Terminals = new UC_Terminals();
+            uc_Terminals.Dock = DockStyle.Fill;
+            tpc_Terminals.Controls.Add(uc_Terminals);
+            tabControlX1.AddTab("Terminals", "Terminals", tpc_Terminals, false);
+
+            TabPanelControl tpc_Banks = new TabPanelControl();
+            tpc_Banks.Dock = DockStyle.Fill;
+            UControl.UC_Banks Banks = new UC_Banks();
+            Banks.Dock = DockStyle.Fill;
+            tpc_Banks.Controls.Add(Banks);
+            tabControlX1.AddTab("Banks", "Banks", tpc_Banks, false);
+
+
+            Frm_TemplateDefault frm = new Frm_TemplateDefault(tabControlX1, @"Banks && Terminals");
+            frm.Width = uc_Menu.Width + 5;
+            frm.Height = uc_Menu.Height + 30;
+            frm.Show();
+
+        }
+	}
+	public class Custom_NodeTag
+    {
+       public enum NodeTypes
+        { Bank, Terminal, DateTime, Transaction, EventDevice, Cycles }
+        public string Text { get; set; }
+        public NodeTypes Type;
+        public string PathFile { get; set; }
+        public object Data { get; set; }
+        public string Terminal { get; set; }
+        public Custom_NodeTag()
+        { }
+        public Custom_NodeTag(object data,NodeTypes type)
+        {
+            Data = data;
+            Type = type;
+        }
+        public Custom_NodeTag(object data, NodeTypes type,string terminal)
+        {
+            Data = data;
+            Type = type;
+            Terminal = terminal;
+        }
+        public Custom_NodeTag(object data, NodeTypes type,string terminal, string pathFile)
+        {
+            Data = data;
+            Type = type;
+            Terminal = terminal;
+            PathFile = pathFile;
+        }
+        public Custom_NodeTag(object data)
+        {
+            Data = data;
+        }
+        public override string ToString()
+		{
+            return Text;
+		}
+	}
 }

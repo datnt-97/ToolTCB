@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SQLite;
@@ -134,7 +134,7 @@ namespace Transaction_Statistical
             try
             {
                 DatabaseFile = InitParametar.DatabaseFile;
-
+                //Password = "rt345@1$-*";
                 if (DataBaseConnnection.State == System.Data.ConnectionState.Open)
                 {
                     return;
@@ -143,11 +143,13 @@ namespace Transaction_Statistical
                 {
                     DataBaseConnnection.ConnectionString = @"Data Source=" + DatabaseFile + "; Password=" + Password + ";";
                     DataBaseConnnection.Open();
+                    DataBaseConnnection.ChangePassword("");
                 }
                 if (Password == null)
                 {
                     DataBaseConnnection.ConnectionString = @"Data Source=" + DatabaseFile + ";Version=3;UseUTF16Encoding=True;Synchronous=Normal;New=False";
                     DataBaseConnnection.Open();
+                    //  DataBaseConnnection.ChangePassword("rt345@1$-*");
                 }
             }
             catch (Exception ex)
@@ -158,12 +160,12 @@ namespace Transaction_Statistical
         public void DbDisconnect()
         {
             return;
-            while (true)
-            {
-                if (DataBaseConnnection.State != System.Data.ConnectionState.Executing) break;
-                Thread.Sleep(1);
-            }
-            DataBaseConnnection.Close();
+            //while (true)
+            //{
+            //    if (DataBaseConnnection.State != System.Data.ConnectionState.Executing) break;
+            //    Thread.Sleep(1);
+            //}
+            //DataBaseConnnection.Close();
         }
         public void CreateDatabase()
         {
@@ -269,7 +271,6 @@ namespace Transaction_Statistical
                 SQLiteCommand VacuumCommand = new SQLiteCommand("vacuum;", DataBaseConnnection);
                 VacuumCommand.ExecuteNonQuery();
                 DbDisconnect();
-                return true;
             }
             catch (Exception ex)
             {
@@ -290,7 +291,6 @@ namespace Transaction_Statistical
                 SQLiteCommand VacuumCommand = new SQLiteCommand("vacuum;", DataBaseConnnection);
                 VacuumCommand.ExecuteNonQuery();
                 DbDisconnect();
-                return true;
             }
             catch (Exception ex)
             {
@@ -319,7 +319,6 @@ namespace Transaction_Statistical
                 SQLiteCommand VacuumCommand = new SQLiteCommand("vacuum;", DataBaseConnnection);
                 VacuumCommand.ExecuteNonQuery();
                 DbDisconnect();
-                return true;
             }
             catch (Exception ex)
             {
@@ -348,7 +347,6 @@ namespace Transaction_Statistical
                 SQLiteCommand VacuumCommand = new SQLiteCommand("vacuum;", DataBaseConnnection);
                 VacuumCommand.ExecuteNonQuery();
                 DbDisconnect();
-                return true;
             }
             catch (Exception ex)
             {
@@ -377,13 +375,12 @@ namespace Transaction_Statistical
                 SQLiteCommand VacuumCommand = new SQLiteCommand("vacuum;", DataBaseConnnection);
                 VacuumCommand.ExecuteNonQuery();
                 DbDisconnect();
-                return true;
             }
             catch (Exception ex)
             {
                 SystemLog.WriteSQLLog(this.GetType().Name, MethodBase.GetCurrentMethod().Name, ex.ToString());
                 return false;
-                DbDisconnect();
+                // DbDisconnect();
                 // MsgInfo.MessageBoxError("Class SQLite", "SQLite", "CopyTableToNew", "Parameter1: " + TableSource + "\n Parameter2: " + TableNew + "\n Parameter3: " + Structure.ToString() + "\n" + ex.ToString());
                 //MessageBox.Show("Error: " + ex.Message.ToString(), "Error", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
                 //   frmPassword fp = new frmPassword();
@@ -952,6 +949,39 @@ namespace Transaction_Statistical
             }
             return DS;
         }
+        public DataSet GetTableDataSetFromQuery(string query)
+        {
+
+            // TableName = RemoveSpecialCharacters(TableName);
+            DataSet DS = new DataSet();
+            try
+            {
+                SetConnection();
+                SQLiteCommand sqliteCommand = new SQLiteCommand(query, DataBaseConnnection);
+                SQLiteDataAdapter DA = new SQLiteDataAdapter(sqliteCommand);
+                DA.MissingSchemaAction = MissingSchemaAction.AddWithKey;
+                try
+                {
+                    string tableName = query.Substring(query.ToUpper().IndexOf("FROM") + 4).Trim().TrimStart('\'');
+                    tableName = tableName.Substring(0, tableName.IndexOf('\''));
+                    DA.Fill(DS, tableName);
+                }
+                catch
+                {
+                    DA.Fill(DS);
+                }
+                DbDisconnect();
+            }
+            catch (Exception ex)
+            {
+                SystemLog.WriteSQLLog(this.GetType().Name, MethodBase.GetCurrentMethod().Name, ex.ToString());
+                DbDisconnect();
+                //  MsgInfo.MessageBoxError("Class SQLite", "SQLite", "GetTableDataset", "Parameter: " + TableName + "\n" + ex.ToString());
+                // MessageBox.Show("Error: " + ex.Message.ToString(), "Error", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
+                return null;
+            }
+            return DS;
+        }
         public DataSet SearchTableDataSet(string TableName, string ColumnName, string SearchKeyWord)
         {
 
@@ -1254,16 +1284,18 @@ namespace Transaction_Statistical
                 DataReader = sqliteCommand.ExecuteReader();
                 DataTables.Load(DataReader);
                 DbDisconnect();
+                if (DataTables.Rows.Count != 0)
+                    return DataTables.Rows[0][ColumnData].ToString();
             }
             catch (Exception ex)
             {
                 SystemLog.WriteSQLLog(this.GetType().Name, MethodBase.GetCurrentMethod().Name, ex.ToString());
                 DbDisconnect();
-                return null;
+
                 // MsgInfo.MessageBoxError("Class SQLite", "SQLite", "GetTableDataWith2ColumnName", "Parameter1: " + TableName + "\n Parameter2: " + ColumnName1 + "\n Parameter3: " + Equals1 + "\n Parameter4: " + ColumnName2 + "\n Parameter5: " + Equals2 + "\n" +ex.ToString());
                 //MessageBox.Show("Error: " + ex.Message.ToString(), "Error", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
             }
-            return DataTables.Rows[0][ColumnData].ToString();
+            return null;
         }
         public bool CheckExistValue(string TableName, string ColumnName, string Equals)
         {
@@ -1377,14 +1409,18 @@ namespace Transaction_Statistical
         }
         public object QueryReturn(string query)
         {
+            DataTable DataTables = new DataTable();
 
-            object ob;
             try
             {
-                SetConnection();
+                SQLiteDataReader dataReader;
                 SQLiteCommand sqliteCommand = new SQLiteCommand(query, DataBaseConnnection);
-                ob = (object)sqliteCommand.ExecuteNonQuery();
-                DbDisconnect(); return null;
+                SetConnection();
+
+                dataReader = sqliteCommand.ExecuteReader();
+                DataTables.Load(dataReader);
+                DbDisconnect();
+                //  return null;
             }
             catch (Exception ex)
             {
@@ -1393,7 +1429,7 @@ namespace Transaction_Statistical
                 // DbDisconnect();
                 return ex.Message.ToString();
             }
-            return ob;
+            return DataTables;
         }
         public string FindMaxColumn(string TableName, string ColumnMax)
         {
@@ -1466,8 +1502,8 @@ namespace Transaction_Statistical
         {
             try
             {
-                string Pathlog = InitParametar.FolderSystemLog + @"\" + string.Format("{0:yyyyMMdd}", DateTime.Now);
-                string FileLog = Pathlog + @"\SQL.log";
+                string Pathlog = InitParametar.FolderSystemTrace + @"\" + string.Format("{0:yyyyMMdd}", DateTime.Now);
+                string FileLog = Pathlog + @".log";
                 if (!Directory.Exists(Pathlog))
                 {
                     Directory.CreateDirectory(Pathlog);
@@ -1489,7 +1525,7 @@ namespace Transaction_Statistical
         {
             try
             {
-                string Pathlog = InitParametar.FolderSystemLog + @"\" + string.Format("{0:yyyyMMdd}", DateTime.Now);
+                string Pathlog = InitParametar.FolderSystemTrace + @"\" + string.Format("{0:yyyyMMdd}", DateTime.Now);
                 string FileLog = Pathlog + @"\" + TID + ".log";
                 if (!Directory.Exists(Pathlog))
                 {

@@ -26,7 +26,7 @@
         /// Required method for Designer support - do not modify 
         /// the contents of this method with the code editor.
         /// </summary>
-        private void InitializeComponent()
+        private void InitializeComponent2()
         {
             this.SuspendLayout();
             // 
@@ -34,13 +34,21 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(37)))), ((int)(((byte)(37)))), ((int)(((byte)(38)))));
+            this.BackColor = InitGUI.Custom.Menu_RightBckgd.DisplayColor;
             this.Name = "UC_Menu_Dashboard";
-            this.Size = new System.Drawing.Size(863, 552);
+            this.Size = new System.Drawing.Size(932, 568);
             this.ResumeLayout(false);
-
+            InitGUI.Custom.Menu_RightBckgd.OnColorHandler += InitializeComponent_Refresh;
+            InitGUI.Custom.Menu_Border.OnColorHandler += InitializeComponent_Refresh;
+            InitGUI.Custom.Menu_ButtonDown.OnColorHandler += InitializeComponent_Refresh;
+            InitGUI.Custom.Menu_ButtonHover.OnColorHandler += InitializeComponent_Refresh;
+            InitGUI.Custom.Menu_Text.OnColorHandler += InitializeComponent_Refresh;
+        }
+        private void InitializeComponent_Refresh(object sender, System.Drawing.Color e)
+        {
+            this.BackColor = InitGUI.Custom.Menu_RightBckgd.DisplayColor;
         }
 
-        #endregion
-    }
+            #endregion
+        }
 }

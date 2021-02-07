@@ -512,43 +512,87 @@ namespace Transaction_Statistical.IconHelper
 
         public static Icon GetSmallFolderIcon()
         {
-            return GetIcon("folder", SHGFI.SmallIcon | SHGFI.UseFileAttributes, true);
+            return GetIcon_Timer("folder", SHGFI.SmallIcon | SHGFI.UseFileAttributes, true);
         }
 
         public static Icon GetSmallIcon(string Name)
         {
-            return GetIcon(Name, SHGFI.SmallIcon | SHGFI.UseFileAttributes, true);
+            return GetIcon_Timer(Name, SHGFI.SmallIcon | SHGFI.UseFileAttributes, true);
         }
 
         public static Icon GetLargeFolderIcon()
         {
-            return GetIcon("folder", SHGFI.LargeIcon | SHGFI.UseFileAttributes, true);
+            return GetIcon_Timer("folder", SHGFI.LargeIcon | SHGFI.UseFileAttributes, true);
         }
 
         public static Icon GetLargeIcon(string fileName)
         {
-            return GetIcon(fileName, SHGFI.LargeIcon);
+            return GetIcon_Timer(fileName, SHGFI.LargeIcon);
         }
 
         public static Icon GetSmallIconFromExtension(string extension)
         {
-            return GetIcon(extension, SHGFI.SmallIcon | SHGFI.UseFileAttributes);
+             return GetIcon_Timer(extension, SHGFI.SmallIcon | SHGFI.UseFileAttributes);
+           // return RunTaskWithTimeout<Icon>((Func<Icon>)delegate { return GetIcon(extension, SHGFI.SmallIcon | SHGFI.UseFileAttributes); }, 10);
         }
 
         public static Icon GetLargeIconFromExtension(string extension)
         {
-            return GetIcon(extension, SHGFI.LargeIcon | SHGFI.UseFileAttributes);
+            return GetIcon_Timer(extension, SHGFI.LargeIcon | SHGFI.UseFileAttributes);
         }
 
+        private static Icon GetIcon_Timer(string fileName, SHGFI flags, bool isFolder = false)
+        {
+          return  RunTaskWithTimeout<Icon>((Func<Icon>)delegate { return GetIcon(fileName, flags, isFolder); }, 10);            
+         
+        }
         private static Icon GetIcon(string fileName, SHGFI flags, bool isFolder = false)
         {
-            SHFILEINFO shinfo = new SHFILEINFO();
+            Icon icon = null;
+            try
+            {
+                SHFILEINFO shinfo = new SHFILEINFO();
 
-            IntPtr hImgSmall = Win32.SHGetFileInfo(fileName, isFolder ? FILE_ATTRIBUTE_DIRECTORY : FILE_ATTRIBUTE_NORMAL, ref shinfo, (uint)Marshal.SizeOf(shinfo), (uint)(SHGFI.Icon | flags));
+                IntPtr hImgSmall = Win32.SHGetFileInfo(fileName, isFolder ? FILE_ATTRIBUTE_DIRECTORY : FILE_ATTRIBUTE_NORMAL, ref shinfo, (uint)Marshal.SizeOf(shinfo), (uint)(SHGFI.Icon | flags));
 
-            Icon icon = (Icon)System.Drawing.Icon.FromHandle(shinfo.hIcon).Clone();
-            Win32.DestroyIcon(shinfo.hIcon);
+                icon = (Icon)System.Drawing.Icon.FromHandle(shinfo.hIcon).Clone();
+                Win32.DestroyIcon(shinfo.hIcon);
+
+            }
+            catch
+            { } 
             return icon;
+        }
+        private static T RunTaskWithTimeout<T>(Func<T> TaskAction, int TimeoutSeconds)
+        {
+            System.Threading.Tasks.Task<T> backgroundTask;
+
+            try
+            {
+                backgroundTask = System.Threading.Tasks.Task.Factory.StartNew(TaskAction);
+                backgroundTask.Wait(new TimeSpan(0, 0, TimeoutSeconds));
+            }
+            catch (AggregateException ex)
+            {
+                // task failed
+                var failMessage = ex.Flatten().InnerException.Message;
+                return default(T);
+            }
+            catch (Exception ex)
+            {
+                // task failed
+                var failMessage = ex.Message;
+                return default(T);
+            }
+
+            if (!backgroundTask.IsCompleted)
+            {
+                // task timed out
+                return default(T);
+            }
+
+            // task succeeded
+            return backgroundTask.Result;
         }
     }
 

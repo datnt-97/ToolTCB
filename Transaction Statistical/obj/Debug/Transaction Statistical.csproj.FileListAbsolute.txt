@@ -17,43 +17,6 @@ D:\05-TEMP\Source\Transaction Statistical\Transaction Statistical\Transaction St
 D:\05-TEMP\Source\Transaction Statistical\Transaction Statistical\Transaction Statistical\obj\Debug\Transaction_Statistical.Frm.test.resources
 D:\05-TEMP\Source\Transaction Statistical\Transaction Statistical\Transaction Statistical\obj\Debug\Transaction_Statistical.UControl.UC_Transaction.resources
 D:\05-TEMP\Source\Transaction Statistical\Transaction Statistical\Transaction Statistical\bin\Debug\System.Data.SQLite.dll
-D:\05-TEMP\Source\GitHub\ToolTCB\Transaction Statistical\bin\Debug\Transaction Statistical.exe.config
-D:\05-TEMP\Source\GitHub\ToolTCB\Transaction Statistical\bin\Debug\Transaction Statistical.exe
-D:\05-TEMP\Source\GitHub\ToolTCB\Transaction Statistical\bin\Debug\Transaction Statistical.pdb
-D:\05-TEMP\Source\GitHub\ToolTCB\Transaction Statistical\bin\Debug\FastColoredTextBox.dll
-D:\05-TEMP\Source\GitHub\ToolTCB\Transaction Statistical\bin\Debug\MetroFramework.Design.dll
-D:\05-TEMP\Source\GitHub\ToolTCB\Transaction Statistical\bin\Debug\MetroFramework.dll
-D:\05-TEMP\Source\GitHub\ToolTCB\Transaction Statistical\bin\Debug\MetroFramework.Fonts.dll
-D:\05-TEMP\Source\GitHub\ToolTCB\Transaction Statistical\bin\Debug\FastColoredTextBox.pdb
-D:\05-TEMP\Source\GitHub\ToolTCB\Transaction Statistical\bin\Debug\FastColoredTextBox.xml
-D:\05-TEMP\Source\GitHub\ToolTCB\Transaction Statistical\obj\Debug\Transaction Statistical.csprojAssemblyReference.cache
-D:\05-TEMP\Source\GitHub\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.AddOn.ButtonMenu.resources
-D:\05-TEMP\Source\GitHub\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.AddOn.TabControlX.resources
-D:\05-TEMP\Source\GitHub\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.AddOn.TabPanelControl.resources
-D:\05-TEMP\Source\GitHub\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.Frm_TemplateDefault.resources
-D:\05-TEMP\Source\GitHub\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.Frm_Main.resources
-D:\05-TEMP\Source\GitHub\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.Frm_LoadingApp.resources
-D:\05-TEMP\Source\GitHub\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.Frm.test.resources
-D:\05-TEMP\Source\GitHub\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.Properties.Resources.resources
-D:\05-TEMP\Source\GitHub\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.UC_CfgTemplate.resources
-D:\05-TEMP\Source\GitHub\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.UC_Info.resources
-D:\05-TEMP\Source\GitHub\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.UControl.UC_Menu.resources
-D:\05-TEMP\Source\GitHub\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.UControl.UC_Menu_Dashboard.resources
-D:\05-TEMP\Source\GitHub\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.UControl.UC_Menu_Overview.resources
-D:\05-TEMP\Source\GitHub\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.UControl.UC_Transaction.resources
-D:\05-TEMP\Source\GitHub\ToolTCB\Transaction Statistical\obj\Debug\Transaction Statistical.csproj.GenerateResource.cache
-D:\05-TEMP\Source\GitHub\ToolTCB\Transaction Statistical\obj\Debug\Transaction Statistical.csproj.CopyComplete
-D:\05-TEMP\Source\GitHub\ToolTCB\Transaction Statistical\obj\Debug\Transaction Statistical.exe
-D:\05-TEMP\Source\GitHub\ToolTCB\Transaction Statistical\obj\Debug\Transaction Statistical.pdb
-D:\05-TEMP\Source\GitHub\ToolTCB\Transaction Statistical\bin\Debug\EntityFramework.dll
-D:\05-TEMP\Source\GitHub\ToolTCB\Transaction Statistical\bin\Debug\EntityFramework.SqlServer.dll
-D:\05-TEMP\Source\GitHub\ToolTCB\Transaction Statistical\bin\Debug\System.Data.SQLite.dll
-D:\05-TEMP\Source\GitHub\ToolTCB\Transaction Statistical\bin\Debug\System.Data.SQLite.EF6.dll
-D:\05-TEMP\Source\GitHub\ToolTCB\Transaction Statistical\bin\Debug\System.Data.SQLite.Linq.dll
-D:\05-TEMP\Source\GitHub\ToolTCB\Transaction Statistical\bin\Debug\EntityFramework.xml
-D:\05-TEMP\Source\GitHub\ToolTCB\Transaction Statistical\bin\Debug\EntityFramework.SqlServer.xml
-D:\05-TEMP\Source\GitHub\ToolTCB\Transaction Statistical\bin\Debug\System.Data.SQLite.xml
-D:\05-TEMP\Source\GitHub\ToolTCB\Transaction Statistical\bin\Debug\System.Data.SQLite.dll.config
 D:\05-TEMP\Source\GitHub\ToolTCB - 0612\Transaction Statistical\obj\Debug\Transaction Statistical.csprojAssemblyReference.cache
 D:\05-TEMP\Source\GitHub\ToolTCB - 0612\Transaction Statistical\obj\Debug\Transaction_Statistical.AddOn.ButtonMenu.resources
 D:\05-TEMP\Source\GitHub\ToolTCB - 0612\Transaction Statistical\obj\Debug\Transaction_Statistical.AddOn.TabControlX.resources
@@ -95,11 +58,22 @@ D:\05-TEMP\Source\GitHub\ToolTCB - 0612\Transaction Statistical\bin\Debug\System
 D:\05-TEMP\Source\GitHub\ToolTCB - 0612\Transaction Statistical\obj\Debug\Transaction Statistical.csproj.CopyComplete
 D:\05-TEMP\Source\GitHub\ToolTCB - 0612\Transaction Statistical\bin\Debug\EPPlus.dll
 D:\05-TEMP\Source\GitHub\ToolTCB - 0612\Transaction Statistical\bin\Debug\EPPlus.xml
-D:\05-TEMP\Source\GitHub\ToolTCB\Transaction Statistical\bin\Debug\EPPlus.dll
-D:\05-TEMP\Source\GitHub\ToolTCB\Transaction Statistical\bin\Debug\EPPlus.xml
-D:\05-TEMP\Source\GitHub\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.UC_Menu_Startup.resources
-D:\05-TEMP\Source\GitHub\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.UC_Explorer.resources
-E:\Project\NPS\ToolTCB\ToolTCB\Transaction Statistical\obj\Debug\Transaction Statistical.csprojAssemblyReference.cache
+E:\Project\NPS\ToolTCB\ToolTCB\Transaction Statistical\bin\Debug\Transaction Statistical.exe.config
+E:\Project\NPS\ToolTCB\ToolTCB\Transaction Statistical\bin\Debug\Transaction Statistical.exe
+E:\Project\NPS\ToolTCB\ToolTCB\Transaction Statistical\bin\Debug\Transaction Statistical.pdb
+E:\Project\NPS\ToolTCB\ToolTCB\Transaction Statistical\bin\Debug\EntityFramework.dll
+E:\Project\NPS\ToolTCB\ToolTCB\Transaction Statistical\bin\Debug\EntityFramework.SqlServer.dll
+E:\Project\NPS\ToolTCB\ToolTCB\Transaction Statistical\bin\Debug\EPPlus.dll
+E:\Project\NPS\ToolTCB\ToolTCB\Transaction Statistical\bin\Debug\FastColoredTextBox.dll
+E:\Project\NPS\ToolTCB\ToolTCB\Transaction Statistical\bin\Debug\System.Data.SQLite.dll
+E:\Project\NPS\ToolTCB\ToolTCB\Transaction Statistical\bin\Debug\System.Data.SQLite.EF6.dll
+E:\Project\NPS\ToolTCB\ToolTCB\Transaction Statistical\bin\Debug\System.Data.SQLite.Linq.dll
+E:\Project\NPS\ToolTCB\ToolTCB\Transaction Statistical\bin\Debug\FastColoredTextBox.pdb
+E:\Project\NPS\ToolTCB\ToolTCB\Transaction Statistical\bin\Debug\EntityFramework.xml
+E:\Project\NPS\ToolTCB\ToolTCB\Transaction Statistical\bin\Debug\EntityFramework.SqlServer.xml
+E:\Project\NPS\ToolTCB\ToolTCB\Transaction Statistical\bin\Debug\EPPlus.xml
+E:\Project\NPS\ToolTCB\ToolTCB\Transaction Statistical\bin\Debug\System.Data.SQLite.xml
+E:\Project\NPS\ToolTCB\ToolTCB\Transaction Statistical\bin\Debug\System.Data.SQLite.dll.config
 E:\Project\NPS\ToolTCB\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.AddOn.ButtonMenu.resources
 E:\Project\NPS\ToolTCB\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.AddOn.TabControlX.resources
 E:\Project\NPS\ToolTCB\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.AddOn.TabPanelControl.resources
@@ -110,6 +84,7 @@ E:\Project\NPS\ToolTCB\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Sta
 E:\Project\NPS\ToolTCB\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.Properties.Resources.resources
 E:\Project\NPS\ToolTCB\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.UC_CfgTemplate.resources
 E:\Project\NPS\ToolTCB\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.UC_Explorer.resources
+E:\Project\NPS\ToolTCB\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.UControl.UC_ExportCus.resources
 E:\Project\NPS\ToolTCB\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.UC_Info.resources
 E:\Project\NPS\ToolTCB\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.UControl.UC_Menu.resources
 E:\Project\NPS\ToolTCB\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.UControl.UC_Menu_Dashboard.resources
@@ -117,27 +92,607 @@ E:\Project\NPS\ToolTCB\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Sta
 E:\Project\NPS\ToolTCB\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.UC_Menu_Startup.resources
 E:\Project\NPS\ToolTCB\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.UControl.UC_Transaction.resources
 E:\Project\NPS\ToolTCB\ToolTCB\Transaction Statistical\obj\Debug\Transaction Statistical.csproj.GenerateResource.cache
-E:\Project\NPS\ToolTCB\ToolTCB\Transaction Statistical\obj\Debug\Transaction Statistical.csproj.CoreCompileInputs.cache
+E:\Project\NPS\ToolTCB\ToolTCB\Transaction Statistical\obj\Debug\Transaction Statistical.csproj.CopyComplete
 E:\Project\NPS\ToolTCB\ToolTCB\Transaction Statistical\obj\Debug\Transaction Statistical.exe
 E:\Project\NPS\ToolTCB\ToolTCB\Transaction Statistical\obj\Debug\Transaction Statistical.pdb
-E:\Project\NPS\ToolTCB\ToolTCB\Transaction Statistical\bin\Debug\Transaction Statistical.exe.config
-E:\Project\NPS\ToolTCB\ToolTCB\Transaction Statistical\bin\Debug\Transaction Statistical.exe
-E:\Project\NPS\ToolTCB\ToolTCB\Transaction Statistical\bin\Debug\Transaction Statistical.pdb
-E:\Project\NPS\ToolTCB\ToolTCB\Transaction Statistical\bin\Debug\EntityFramework.dll
-E:\Project\NPS\ToolTCB\ToolTCB\Transaction Statistical\bin\Debug\EntityFramework.SqlServer.dll
-E:\Project\NPS\ToolTCB\ToolTCB\Transaction Statistical\bin\Debug\EPPlus.dll
-E:\Project\NPS\ToolTCB\ToolTCB\Transaction Statistical\bin\Debug\FastColoredTextBox.dll
-E:\Project\NPS\ToolTCB\ToolTCB\Transaction Statistical\bin\Debug\MetroFramework.Design.dll
-E:\Project\NPS\ToolTCB\ToolTCB\Transaction Statistical\bin\Debug\MetroFramework.dll
-E:\Project\NPS\ToolTCB\ToolTCB\Transaction Statistical\bin\Debug\MetroFramework.Fonts.dll
-E:\Project\NPS\ToolTCB\ToolTCB\Transaction Statistical\bin\Debug\System.Data.SQLite.dll
-E:\Project\NPS\ToolTCB\ToolTCB\Transaction Statistical\bin\Debug\System.Data.SQLite.EF6.dll
-E:\Project\NPS\ToolTCB\ToolTCB\Transaction Statistical\bin\Debug\System.Data.SQLite.Linq.dll
-E:\Project\NPS\ToolTCB\ToolTCB\Transaction Statistical\bin\Debug\FastColoredTextBox.pdb
+E:\Project\NPS\ToolTCB\ToolTCB\Transaction Statistical\obj\Debug\Transaction Statistical.csprojAssemblyReference.cache
+D:\ToolTCB_Git\ToolTCB\Transaction Statistical\bin\Debug\Transaction Statistical.exe.config
+D:\ToolTCB_Git\ToolTCB\Transaction Statistical\bin\Debug\Transaction Statistical.exe
+D:\ToolTCB_Git\ToolTCB\Transaction Statistical\bin\Debug\Transaction Statistical.pdb
+D:\ToolTCB_Git\ToolTCB\Transaction Statistical\bin\Debug\EntityFramework.dll
+D:\ToolTCB_Git\ToolTCB\Transaction Statistical\bin\Debug\EntityFramework.SqlServer.dll
+D:\ToolTCB_Git\ToolTCB\Transaction Statistical\bin\Debug\EPPlus.dll
+D:\ToolTCB_Git\ToolTCB\Transaction Statistical\bin\Debug\FastColoredTextBox.dll
+D:\ToolTCB_Git\ToolTCB\Transaction Statistical\bin\Debug\System.Data.SQLite.dll
+D:\ToolTCB_Git\ToolTCB\Transaction Statistical\bin\Debug\System.Data.SQLite.EF6.dll
+D:\ToolTCB_Git\ToolTCB\Transaction Statistical\bin\Debug\System.Data.SQLite.Linq.dll
+D:\ToolTCB_Git\ToolTCB\Transaction Statistical\bin\Debug\FastColoredTextBox.pdb
+D:\ToolTCB_Git\ToolTCB\Transaction Statistical\bin\Debug\FastColoredTextBox.xml
+D:\ToolTCB_Git\ToolTCB\Transaction Statistical\bin\Debug\EntityFramework.xml
+D:\ToolTCB_Git\ToolTCB\Transaction Statistical\bin\Debug\EntityFramework.SqlServer.xml
+D:\ToolTCB_Git\ToolTCB\Transaction Statistical\bin\Debug\EPPlus.xml
+D:\ToolTCB_Git\ToolTCB\Transaction Statistical\bin\Debug\System.Data.SQLite.xml
+D:\ToolTCB_Git\ToolTCB\Transaction Statistical\bin\Debug\System.Data.SQLite.dll.config
+D:\ToolTCB_Git\ToolTCB\Transaction Statistical\obj\Debug\Transaction Statistical.csprojAssemblyReference.cache
+D:\ToolTCB_Git\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.AddOn.ButtonMenu.resources
+D:\ToolTCB_Git\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.AddOn.TabControlX.resources
+D:\ToolTCB_Git\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.AddOn.TabPanelControl.resources
+D:\ToolTCB_Git\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.Frm_TemplateDefault.resources
+D:\ToolTCB_Git\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.Frm_Main.resources
+D:\ToolTCB_Git\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.Frm_LoadingApp.resources
+D:\ToolTCB_Git\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.Frm.test.resources
+D:\ToolTCB_Git\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.Properties.Resources.resources
+D:\ToolTCB_Git\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.UC_CfgTemplate.resources
+D:\ToolTCB_Git\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.UC_Explorer.resources
+D:\ToolTCB_Git\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.UControl.UC_ExportCus.resources
+D:\ToolTCB_Git\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.UC_Info.resources
+D:\ToolTCB_Git\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.UControl.UC_Menu.resources
+D:\ToolTCB_Git\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.UControl.UC_Menu_Dashboard.resources
+D:\ToolTCB_Git\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.UControl.UC_Menu_Overview.resources
+D:\ToolTCB_Git\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.UC_Menu_Startup.resources
+D:\ToolTCB_Git\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.UControl.UC_Transaction.resources
+D:\ToolTCB_Git\ToolTCB\Transaction Statistical\obj\Debug\Transaction Statistical.csproj.GenerateResource.cache
+D:\ToolTCB_Git\ToolTCB\Transaction Statistical\obj\Debug\Transaction Statistical.csproj.CopyComplete
+D:\ToolTCB_Git\ToolTCB\Transaction Statistical\obj\Debug\Transaction Statistical.exe
+D:\ToolTCB_Git\ToolTCB\Transaction Statistical\obj\Debug\Transaction Statistical.pdb
 E:\Project\NPS\ToolTCB\ToolTCB\Transaction Statistical\bin\Debug\FastColoredTextBox.xml
-E:\Project\NPS\ToolTCB\ToolTCB\Transaction Statistical\bin\Debug\EntityFramework.xml
-E:\Project\NPS\ToolTCB\ToolTCB\Transaction Statistical\bin\Debug\EntityFramework.SqlServer.xml
-E:\Project\NPS\ToolTCB\ToolTCB\Transaction Statistical\bin\Debug\EPPlus.xml
-E:\Project\NPS\ToolTCB\ToolTCB\Transaction Statistical\bin\Debug\System.Data.SQLite.xml
-E:\Project\NPS\ToolTCB\ToolTCB\Transaction Statistical\bin\Debug\System.Data.SQLite.dll.config
-E:\Project\NPS\ToolTCB\ToolTCB\Transaction Statistical\obj\Debug\Transaction Statistical.csproj.CopyComplete
+D:\05-TEMP\Source\GitHub\ToolTCB 15-12\Transaction Statistical\bin\Debug\Transaction Statistical.exe.config
+D:\05-TEMP\Source\GitHub\ToolTCB 15-12\Transaction Statistical\bin\Debug\Transaction Statistical.exe
+D:\05-TEMP\Source\GitHub\ToolTCB 15-12\Transaction Statistical\bin\Debug\Transaction Statistical.pdb
+D:\05-TEMP\Source\GitHub\ToolTCB 15-12\Transaction Statistical\bin\Debug\CheckComboBox.dll
+D:\05-TEMP\Source\GitHub\ToolTCB 15-12\Transaction Statistical\bin\Debug\EntityFramework.dll
+D:\05-TEMP\Source\GitHub\ToolTCB 15-12\Transaction Statistical\bin\Debug\EntityFramework.SqlServer.dll
+D:\05-TEMP\Source\GitHub\ToolTCB 15-12\Transaction Statistical\bin\Debug\EPPlus.dll
+D:\05-TEMP\Source\GitHub\ToolTCB 15-12\Transaction Statistical\bin\Debug\FastColoredTextBox.dll
+D:\05-TEMP\Source\GitHub\ToolTCB 15-12\Transaction Statistical\bin\Debug\System.Data.SQLite.dll
+D:\05-TEMP\Source\GitHub\ToolTCB 15-12\Transaction Statistical\bin\Debug\System.Data.SQLite.EF6.dll
+D:\05-TEMP\Source\GitHub\ToolTCB 15-12\Transaction Statistical\bin\Debug\System.Data.SQLite.Linq.dll
+D:\05-TEMP\Source\GitHub\ToolTCB 15-12\Transaction Statistical\bin\Debug\FastColoredTextBox.pdb
+D:\05-TEMP\Source\GitHub\ToolTCB 15-12\Transaction Statistical\bin\Debug\FastColoredTextBox.xml
+D:\05-TEMP\Source\GitHub\ToolTCB 15-12\Transaction Statistical\bin\Debug\EntityFramework.xml
+D:\05-TEMP\Source\GitHub\ToolTCB 15-12\Transaction Statistical\bin\Debug\EntityFramework.SqlServer.xml
+D:\05-TEMP\Source\GitHub\ToolTCB 15-12\Transaction Statistical\bin\Debug\EPPlus.xml
+D:\05-TEMP\Source\GitHub\ToolTCB 15-12\Transaction Statistical\bin\Debug\System.Data.SQLite.xml
+D:\05-TEMP\Source\GitHub\ToolTCB 15-12\Transaction Statistical\bin\Debug\System.Data.SQLite.dll.config
+D:\05-TEMP\Source\GitHub\ToolTCB 15-12\Transaction Statistical\obj\Debug\Transaction Statistical.csprojAssemblyReference.cache
+D:\05-TEMP\Source\GitHub\ToolTCB 15-12\Transaction Statistical\obj\Debug\Transaction_Statistical.AddOn.ButtonMenu.resources
+D:\05-TEMP\Source\GitHub\ToolTCB 15-12\Transaction Statistical\obj\Debug\Transaction_Statistical.AddOn.TabControlX.resources
+D:\05-TEMP\Source\GitHub\ToolTCB 15-12\Transaction Statistical\obj\Debug\Transaction_Statistical.AddOn.TabPanelControl.resources
+D:\05-TEMP\Source\GitHub\ToolTCB 15-12\Transaction Statistical\obj\Debug\Transaction_Statistical.Frm_TemplateDefault.resources
+D:\05-TEMP\Source\GitHub\ToolTCB 15-12\Transaction Statistical\obj\Debug\Transaction_Statistical.Frm_Main.resources
+D:\05-TEMP\Source\GitHub\ToolTCB 15-12\Transaction Statistical\obj\Debug\Transaction_Statistical.Frm_LoadingApp.resources
+D:\05-TEMP\Source\GitHub\ToolTCB 15-12\Transaction Statistical\obj\Debug\Transaction_Statistical.Frm.test.resources
+D:\05-TEMP\Source\GitHub\ToolTCB 15-12\Transaction Statistical\obj\Debug\Transaction_Statistical.Properties.Resources.resources
+D:\05-TEMP\Source\GitHub\ToolTCB 15-12\Transaction Statistical\obj\Debug\Transaction_Statistical.UC_CfgTemplate.resources
+D:\05-TEMP\Source\GitHub\ToolTCB 15-12\Transaction Statistical\obj\Debug\Transaction_Statistical.UC_Explorer.resources
+D:\05-TEMP\Source\GitHub\ToolTCB 15-12\Transaction Statistical\obj\Debug\Transaction_Statistical.UControl.UC_ExportCus.resources
+D:\05-TEMP\Source\GitHub\ToolTCB 15-12\Transaction Statistical\obj\Debug\Transaction_Statistical.UControl.UC_Menu_History.resources
+D:\05-TEMP\Source\GitHub\ToolTCB 15-12\Transaction Statistical\obj\Debug\Transaction_Statistical.UC_Info.resources
+D:\05-TEMP\Source\GitHub\ToolTCB 15-12\Transaction Statistical\obj\Debug\Transaction_Statistical.UControl.UC_Menu.resources
+D:\05-TEMP\Source\GitHub\ToolTCB 15-12\Transaction Statistical\obj\Debug\Transaction_Statistical.UControl.UC_Menu_Dashboard.resources
+D:\05-TEMP\Source\GitHub\ToolTCB 15-12\Transaction Statistical\obj\Debug\Transaction_Statistical.UControl.UC_Menu_Overview.resources
+D:\05-TEMP\Source\GitHub\ToolTCB 15-12\Transaction Statistical\obj\Debug\Transaction_Statistical.UC_Menu_Startup.resources
+D:\05-TEMP\Source\GitHub\ToolTCB 15-12\Transaction Statistical\obj\Debug\Transaction_Statistical.UControl.UC_Transaction.resources
+D:\05-TEMP\Source\GitHub\ToolTCB 15-12\Transaction Statistical\obj\Debug\Transaction Statistical.csproj.GenerateResource.cache
+D:\05-TEMP\Source\GitHub\ToolTCB 15-12\Transaction Statistical\obj\Debug\Transaction Statistical.csproj.CopyComplete
+D:\05-TEMP\Source\GitHub\ToolTCB 15-12\Transaction Statistical\obj\Debug\Transaction Statistical.exe
+D:\05-TEMP\Source\GitHub\ToolTCB 15-12\Transaction Statistical\obj\Debug\Transaction Statistical.pdb
+D:\Project\ToolTCB\ToolTCB\Transaction Statistical\bin\Debug\Transaction Statistical.exe.config
+D:\Project\ToolTCB\ToolTCB\Transaction Statistical\bin\Debug\Transaction Statistical.exe
+D:\Project\ToolTCB\ToolTCB\Transaction Statistical\bin\Debug\Transaction Statistical.pdb
+D:\Project\ToolTCB\ToolTCB\Transaction Statistical\bin\Debug\CheckComboBox.dll
+D:\Project\ToolTCB\ToolTCB\Transaction Statistical\bin\Debug\EntityFramework.dll
+D:\Project\ToolTCB\ToolTCB\Transaction Statistical\bin\Debug\EntityFramework.SqlServer.dll
+D:\Project\ToolTCB\ToolTCB\Transaction Statistical\bin\Debug\EPPlus.dll
+D:\Project\ToolTCB\ToolTCB\Transaction Statistical\bin\Debug\FastColoredTextBox.dll
+D:\Project\ToolTCB\ToolTCB\Transaction Statistical\bin\Debug\System.Data.SQLite.dll
+D:\Project\ToolTCB\ToolTCB\Transaction Statistical\bin\Debug\System.Data.SQLite.EF6.dll
+D:\Project\ToolTCB\ToolTCB\Transaction Statistical\bin\Debug\System.Data.SQLite.Linq.dll
+D:\Project\ToolTCB\ToolTCB\Transaction Statistical\bin\Debug\FastColoredTextBox.pdb
+D:\Project\ToolTCB\ToolTCB\Transaction Statistical\bin\Debug\FastColoredTextBox.xml
+D:\Project\ToolTCB\ToolTCB\Transaction Statistical\bin\Debug\EntityFramework.xml
+D:\Project\ToolTCB\ToolTCB\Transaction Statistical\bin\Debug\EntityFramework.SqlServer.xml
+D:\Project\ToolTCB\ToolTCB\Transaction Statistical\bin\Debug\EPPlus.xml
+D:\Project\ToolTCB\ToolTCB\Transaction Statistical\bin\Debug\System.Data.SQLite.xml
+D:\Project\ToolTCB\ToolTCB\Transaction Statistical\bin\Debug\System.Data.SQLite.dll.config
+D:\Project\ToolTCB\ToolTCB\Transaction Statistical\obj\Debug\Transaction Statistical.csprojAssemblyReference.cache
+D:\Project\ToolTCB\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.AddOn.ButtonMenu.resources
+D:\Project\ToolTCB\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.AddOn.TabControlX.resources
+D:\Project\ToolTCB\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.AddOn.TabPanelControl.resources
+D:\Project\ToolTCB\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.Frm_TemplateDefault.resources
+D:\Project\ToolTCB\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.Frm_Main.resources
+D:\Project\ToolTCB\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.Frm_LoadingApp.resources
+D:\Project\ToolTCB\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.Frm.test.resources
+D:\Project\ToolTCB\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.Properties.Resources.resources
+D:\Project\ToolTCB\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.UC_CfgTemplate.resources
+D:\Project\ToolTCB\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.UC_Explorer.resources
+D:\Project\ToolTCB\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.UControl.UC_ExportCus.resources
+D:\Project\ToolTCB\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.UControl.UC_Menu_History.resources
+D:\Project\ToolTCB\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.UC_Info.resources
+D:\Project\ToolTCB\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.UControl.UC_Menu.resources
+D:\Project\ToolTCB\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.UControl.UC_Menu_Dashboard.resources
+D:\Project\ToolTCB\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.UControl.UC_Menu_Overview.resources
+D:\Project\ToolTCB\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.UC_Menu_Startup.resources
+D:\Project\ToolTCB\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.UControl.UC_Transaction.resources
+D:\Project\ToolTCB\ToolTCB\Transaction Statistical\obj\Debug\Transaction Statistical.csproj.GenerateResource.cache
+D:\Project\ToolTCB\ToolTCB\Transaction Statistical\obj\Debug\Transaction Statistical.csproj.CopyComplete
+D:\Project\ToolTCB\ToolTCB\Transaction Statistical\obj\Debug\Transaction Statistical.exe
+D:\Project\ToolTCB\ToolTCB\Transaction Statistical\obj\Debug\Transaction Statistical.pdb
+D:\ToolTCB_Git\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.UControl.UC_Menu_History.resources
+D:\ToolTCB_Git\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.UControl.UC_NewTemplate.resources
+E:\Project\NPS\ToolTCB\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.UControl.UC_Menu_History.resources
+E:\Project\NPS\ToolTCB\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.UControl.UC_NewTemplate.resources
+D:\ToolTCB_Git\ToolTCB\Transaction Statistical\bin\Debug\Transaction Statistical.exe.manifest
+D:\ToolTCB_Git\ToolTCB\Transaction Statistical\bin\Debug\Transaction Statistical.application
+D:\ToolTCB_Git\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.AddOn.ButtonSetColor.resources
+D:\ToolTCB_Git\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.UControl.GUI_Custom.resources
+D:\ToolTCB_Git\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.UControl.UC_Menu_About.resources
+D:\ToolTCB_Git\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.UControl.UC_RegisterLicense.resources
+D:\ToolTCB_Git\ToolTCB\Transaction Statistical\obj\Debug\Transaction Statistical.exe.manifest
+D:\ToolTCB_Git\ToolTCB\Transaction Statistical\obj\Debug\Transaction Statistical.application
+D:\ToolTCB_Git\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.UC_Access.resources
+D:\ToolTCB_Git\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.UControl.UC_Licensing.resources
+D:\ToolTCB_Git\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.UControl.UC_USBKey.resources
+E:\Project\NPS\ToolTCB_Back_up\Back_up_15\ToolTCB\ToolTCB\Transaction Statistical\bin\Debug\Transaction Statistical.exe.config
+E:\Project\NPS\ToolTCB_Back_up\Back_up_15\ToolTCB\ToolTCB\Transaction Statistical\bin\Debug\Transaction Statistical.exe
+E:\Project\NPS\ToolTCB_Back_up\Back_up_15\ToolTCB\ToolTCB\Transaction Statistical\bin\Debug\Transaction Statistical.pdb
+E:\Project\NPS\ToolTCB_Back_up\Back_up_15\ToolTCB\ToolTCB\Transaction Statistical\bin\Debug\EntityFramework.dll
+E:\Project\NPS\ToolTCB_Back_up\Back_up_15\ToolTCB\ToolTCB\Transaction Statistical\bin\Debug\EntityFramework.SqlServer.dll
+E:\Project\NPS\ToolTCB_Back_up\Back_up_15\ToolTCB\ToolTCB\Transaction Statistical\bin\Debug\EPPlus.dll
+E:\Project\NPS\ToolTCB_Back_up\Back_up_15\ToolTCB\ToolTCB\Transaction Statistical\bin\Debug\FastColoredTextBox.dll
+E:\Project\NPS\ToolTCB_Back_up\Back_up_15\ToolTCB\ToolTCB\Transaction Statistical\bin\Debug\System.Data.SQLite.dll
+E:\Project\NPS\ToolTCB_Back_up\Back_up_15\ToolTCB\ToolTCB\Transaction Statistical\bin\Debug\System.Data.SQLite.EF6.dll
+E:\Project\NPS\ToolTCB_Back_up\Back_up_15\ToolTCB\ToolTCB\Transaction Statistical\bin\Debug\System.Data.SQLite.Linq.dll
+E:\Project\NPS\ToolTCB_Back_up\Back_up_15\ToolTCB\ToolTCB\Transaction Statistical\bin\Debug\FastColoredTextBox.pdb
+E:\Project\NPS\ToolTCB_Back_up\Back_up_15\ToolTCB\ToolTCB\Transaction Statistical\bin\Debug\FastColoredTextBox.xml
+E:\Project\NPS\ToolTCB_Back_up\Back_up_15\ToolTCB\ToolTCB\Transaction Statistical\bin\Debug\EntityFramework.xml
+E:\Project\NPS\ToolTCB_Back_up\Back_up_15\ToolTCB\ToolTCB\Transaction Statistical\bin\Debug\EntityFramework.SqlServer.xml
+E:\Project\NPS\ToolTCB_Back_up\Back_up_15\ToolTCB\ToolTCB\Transaction Statistical\bin\Debug\EPPlus.xml
+E:\Project\NPS\ToolTCB_Back_up\Back_up_15\ToolTCB\ToolTCB\Transaction Statistical\bin\Debug\System.Data.SQLite.xml
+E:\Project\NPS\ToolTCB_Back_up\Back_up_15\ToolTCB\ToolTCB\Transaction Statistical\bin\Debug\System.Data.SQLite.dll.config
+E:\Project\NPS\ToolTCB_Back_up\Back_up_15\ToolTCB\ToolTCB\Transaction Statistical\obj\Debug\Transaction Statistical.csprojAssemblyReference.cache
+E:\Project\NPS\ToolTCB_Back_up\Back_up_15\ToolTCB\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.AddOn.ButtonMenu.resources
+E:\Project\NPS\ToolTCB_Back_up\Back_up_15\ToolTCB\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.AddOn.ButtonSetColor.resources
+E:\Project\NPS\ToolTCB_Back_up\Back_up_15\ToolTCB\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.AddOn.TabControlX.resources
+E:\Project\NPS\ToolTCB_Back_up\Back_up_15\ToolTCB\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.AddOn.TabPanelControl.resources
+E:\Project\NPS\ToolTCB_Back_up\Back_up_15\ToolTCB\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.Frm_TemplateDefault.resources
+E:\Project\NPS\ToolTCB_Back_up\Back_up_15\ToolTCB\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.Frm_Main.resources
+E:\Project\NPS\ToolTCB_Back_up\Back_up_15\ToolTCB\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.Frm_LoadingApp.resources
+E:\Project\NPS\ToolTCB_Back_up\Back_up_15\ToolTCB\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.Frm.test.resources
+E:\Project\NPS\ToolTCB_Back_up\Back_up_15\ToolTCB\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.Properties.Resources.resources
+E:\Project\NPS\ToolTCB_Back_up\Back_up_15\ToolTCB\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.UC_Access.resources
+E:\Project\NPS\ToolTCB_Back_up\Back_up_15\ToolTCB\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.UC_CfgTemplate.resources
+E:\Project\NPS\ToolTCB_Back_up\Back_up_15\ToolTCB\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.UControl.GUI_Custom.resources
+E:\Project\NPS\ToolTCB_Back_up\Back_up_15\ToolTCB\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.UC_Explorer.resources
+E:\Project\NPS\ToolTCB_Back_up\Back_up_15\ToolTCB\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.UControl.UC_ExportCus.resources
+E:\Project\NPS\ToolTCB_Back_up\Back_up_15\ToolTCB\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.UControl.UC_Licensing.resources
+E:\Project\NPS\ToolTCB_Back_up\Back_up_15\ToolTCB\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.UControl.UC_Menu_About.resources
+E:\Project\NPS\ToolTCB_Back_up\Back_up_15\ToolTCB\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.UControl.UC_Menu_History.resources
+E:\Project\NPS\ToolTCB_Back_up\Back_up_15\ToolTCB\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.UC_Info.resources
+E:\Project\NPS\ToolTCB_Back_up\Back_up_15\ToolTCB\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.UControl.UC_Menu.resources
+E:\Project\NPS\ToolTCB_Back_up\Back_up_15\ToolTCB\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.UControl.UC_Menu_Dashboard.resources
+E:\Project\NPS\ToolTCB_Back_up\Back_up_15\ToolTCB\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.UControl.UC_Menu_Overview.resources
+E:\Project\NPS\ToolTCB_Back_up\Back_up_15\ToolTCB\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.UC_Menu_Startup.resources
+E:\Project\NPS\ToolTCB_Back_up\Back_up_15\ToolTCB\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.UControl.UC_NewTemplate.resources
+E:\Project\NPS\ToolTCB_Back_up\Back_up_15\ToolTCB\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.UControl.UC_RegisterLicense.resources
+E:\Project\NPS\ToolTCB_Back_up\Back_up_15\ToolTCB\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.UControl.UC_Transaction.resources
+E:\Project\NPS\ToolTCB_Back_up\Back_up_15\ToolTCB\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.UControl.UC_USBKey.resources
+E:\Project\NPS\ToolTCB_Back_up\Back_up_15\ToolTCB\ToolTCB\Transaction Statistical\obj\Debug\Transaction Statistical.csproj.GenerateResource.cache
+E:\Project\NPS\ToolTCB_Back_up\Back_up_15\ToolTCB\ToolTCB\Transaction Statistical\obj\Debug\Transaction Statistical.csproj.CopyComplete
+E:\Project\NPS\ToolTCB_Back_up\Back_up_15\ToolTCB\ToolTCB\Transaction Statistical\obj\Debug\Transaction Statistical.exe
+E:\Project\NPS\ToolTCB_Back_up\Back_up_15\ToolTCB\ToolTCB\Transaction Statistical\obj\Debug\Transaction Statistical.pdb
+E:\Project\NPS\ToolTCB_Back_up\Back_up_16\ToolTCB\Transaction Statistical\bin\Debug\Transaction Statistical.exe.config
+E:\Project\NPS\ToolTCB_Back_up\Back_up_16\ToolTCB\Transaction Statistical\bin\Debug\Transaction Statistical.exe
+E:\Project\NPS\ToolTCB_Back_up\Back_up_16\ToolTCB\Transaction Statistical\bin\Debug\Transaction Statistical.pdb
+E:\Project\NPS\ToolTCB_Back_up\Back_up_16\ToolTCB\Transaction Statistical\bin\Debug\EntityFramework.dll
+E:\Project\NPS\ToolTCB_Back_up\Back_up_16\ToolTCB\Transaction Statistical\bin\Debug\EntityFramework.SqlServer.dll
+E:\Project\NPS\ToolTCB_Back_up\Back_up_16\ToolTCB\Transaction Statistical\bin\Debug\EPPlus.dll
+E:\Project\NPS\ToolTCB_Back_up\Back_up_16\ToolTCB\Transaction Statistical\bin\Debug\FastColoredTextBox.dll
+E:\Project\NPS\ToolTCB_Back_up\Back_up_16\ToolTCB\Transaction Statistical\bin\Debug\System.Data.SQLite.dll
+E:\Project\NPS\ToolTCB_Back_up\Back_up_16\ToolTCB\Transaction Statistical\bin\Debug\System.Data.SQLite.EF6.dll
+E:\Project\NPS\ToolTCB_Back_up\Back_up_16\ToolTCB\Transaction Statistical\bin\Debug\System.Data.SQLite.Linq.dll
+E:\Project\NPS\ToolTCB_Back_up\Back_up_16\ToolTCB\Transaction Statistical\bin\Debug\FastColoredTextBox.pdb
+E:\Project\NPS\ToolTCB_Back_up\Back_up_16\ToolTCB\Transaction Statistical\bin\Debug\FastColoredTextBox.xml
+E:\Project\NPS\ToolTCB_Back_up\Back_up_16\ToolTCB\Transaction Statistical\bin\Debug\EntityFramework.xml
+E:\Project\NPS\ToolTCB_Back_up\Back_up_16\ToolTCB\Transaction Statistical\bin\Debug\EntityFramework.SqlServer.xml
+E:\Project\NPS\ToolTCB_Back_up\Back_up_16\ToolTCB\Transaction Statistical\bin\Debug\EPPlus.xml
+E:\Project\NPS\ToolTCB_Back_up\Back_up_16\ToolTCB\Transaction Statistical\bin\Debug\System.Data.SQLite.xml
+E:\Project\NPS\ToolTCB_Back_up\Back_up_16\ToolTCB\Transaction Statistical\bin\Debug\System.Data.SQLite.dll.config
+E:\Project\NPS\ToolTCB_Back_up\Back_up_16\ToolTCB\Transaction Statistical\obj\Debug\Transaction Statistical.csprojAssemblyReference.cache
+E:\Project\NPS\ToolTCB_Back_up\Back_up_16\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.AddOn.ButtonMenu.resources
+E:\Project\NPS\ToolTCB_Back_up\Back_up_16\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.AddOn.ButtonSetColor.resources
+E:\Project\NPS\ToolTCB_Back_up\Back_up_16\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.AddOn.TabControlX.resources
+E:\Project\NPS\ToolTCB_Back_up\Back_up_16\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.AddOn.TabPanelControl.resources
+E:\Project\NPS\ToolTCB_Back_up\Back_up_16\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.Frm_TemplateDefault.resources
+E:\Project\NPS\ToolTCB_Back_up\Back_up_16\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.Frm_Main.resources
+E:\Project\NPS\ToolTCB_Back_up\Back_up_16\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.Frm_LoadingApp.resources
+E:\Project\NPS\ToolTCB_Back_up\Back_up_16\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.Frm.test.resources
+E:\Project\NPS\ToolTCB_Back_up\Back_up_16\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.Properties.Resources.resources
+E:\Project\NPS\ToolTCB_Back_up\Back_up_16\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.UC_Access.resources
+E:\Project\NPS\ToolTCB_Back_up\Back_up_16\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.UC_CfgTemplate.resources
+E:\Project\NPS\ToolTCB_Back_up\Back_up_16\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.UControl.GUI_Custom.resources
+E:\Project\NPS\ToolTCB_Back_up\Back_up_16\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.UC_Explorer.resources
+E:\Project\NPS\ToolTCB_Back_up\Back_up_16\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.UControl.UC_ExportCus.resources
+E:\Project\NPS\ToolTCB_Back_up\Back_up_16\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.UControl.UC_Licensing.resources
+E:\Project\NPS\ToolTCB_Back_up\Back_up_16\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.UControl.UC_Menu_About.resources
+E:\Project\NPS\ToolTCB_Back_up\Back_up_16\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.UControl.UC_Menu_History.resources
+E:\Project\NPS\ToolTCB_Back_up\Back_up_16\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.UC_Info.resources
+E:\Project\NPS\ToolTCB_Back_up\Back_up_16\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.UControl.UC_Menu.resources
+E:\Project\NPS\ToolTCB_Back_up\Back_up_16\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.UControl.UC_Menu_Dashboard.resources
+E:\Project\NPS\ToolTCB_Back_up\Back_up_16\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.UControl.UC_Menu_Overview.resources
+E:\Project\NPS\ToolTCB_Back_up\Back_up_16\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.UC_Menu_Startup.resources
+E:\Project\NPS\ToolTCB_Back_up\Back_up_16\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.UControl.UC_NewTemplate.resources
+E:\Project\NPS\ToolTCB_Back_up\Back_up_16\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.UControl.UC_RegisterLicense.resources
+E:\Project\NPS\ToolTCB_Back_up\Back_up_16\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.UControl.UC_Transaction.resources
+E:\Project\NPS\ToolTCB_Back_up\Back_up_16\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.UControl.UC_USBKey.resources
+E:\Project\NPS\ToolTCB_Back_up\Back_up_16\ToolTCB\Transaction Statistical\obj\Debug\Transaction Statistical.csproj.GenerateResource.cache
+E:\Project\NPS\ToolTCB_Back_up\Back_up_16\ToolTCB\Transaction Statistical\obj\Debug\Transaction Statistical.csproj.CopyComplete
+E:\Project\NPS\ToolTCB_Back_up\Back_up_16\ToolTCB\Transaction Statistical\obj\Debug\Transaction Statistical.exe
+E:\Project\NPS\ToolTCB_Back_up\Back_up_16\ToolTCB\Transaction Statistical\obj\Debug\Transaction Statistical.pdb
+E:\Project\NPS\TCB\ToolTCB\Transaction Statistical\bin\Debug\Transaction Statistical.exe
+E:\Project\NPS\TCB\ToolTCB\Transaction Statistical\bin\Debug\EPPlus.dll
+E:\Project\NPS\TCB\ToolTCB\Transaction Statistical\bin\Debug\FastColoredTextBox.dll
+E:\Project\NPS\TCB\ToolTCB\Transaction Statistical\bin\Debug\System.Data.SQLite.dll
+E:\Project\NPS\TCB\ToolTCB\Transaction Statistical\bin\Debug\DeltaCompressionDotNet.dll
+E:\Project\NPS\TCB\ToolTCB\Transaction Statistical\bin\Debug\DeltaCompressionDotNet.MsDelta.dll
+E:\Project\NPS\TCB\ToolTCB\Transaction Statistical\bin\Debug\DeltaCompressionDotNet.PatchApi.dll
+E:\Project\NPS\TCB\ToolTCB\Transaction Statistical\bin\Debug\EntityFramework.dll
+E:\Project\NPS\TCB\ToolTCB\Transaction Statistical\bin\Debug\EntityFramework.SqlServer.dll
+E:\Project\NPS\TCB\ToolTCB\Transaction Statistical\bin\Debug\Mono.Cecil.dll
+E:\Project\NPS\TCB\ToolTCB\Transaction Statistical\bin\Debug\Mono.Cecil.Mdb.dll
+E:\Project\NPS\TCB\ToolTCB\Transaction Statistical\bin\Debug\Mono.Cecil.Pdb.dll
+E:\Project\NPS\TCB\ToolTCB\Transaction Statistical\bin\Debug\Mono.Cecil.Rocks.dll
+E:\Project\NPS\TCB\ToolTCB\Transaction Statistical\bin\Debug\SharpCompress.dll
+E:\Project\NPS\TCB\ToolTCB\Transaction Statistical\bin\Debug\Splat.dll
+E:\Project\NPS\TCB\ToolTCB\Transaction Statistical\bin\Debug\System.Data.SQLite.EF6.dll
+E:\Project\NPS\TCB\ToolTCB\Transaction Statistical\bin\Debug\System.Data.SQLite.Linq.dll
+E:\Project\NPS\TCB\ToolTCB\Transaction Statistical\bin\Debug\FastColoredTextBox.pdb
+E:\Project\NPS\TCB\ToolTCB\Transaction Statistical\bin\Debug\FastColoredTextBox.xml
+E:\Project\NPS\TCB\ToolTCB\Transaction Statistical\bin\Debug\EntityFramework.xml
+E:\Project\NPS\TCB\ToolTCB\Transaction Statistical\bin\Debug\EntityFramework.SqlServer.xml
+E:\Project\NPS\TCB\ToolTCB\Transaction Statistical\bin\Debug\EPPlus.xml
+E:\Project\NPS\TCB\ToolTCB\Transaction Statistical\bin\Debug\Splat.pdb
+E:\Project\NPS\TCB\ToolTCB\Transaction Statistical\bin\Debug\System.Data.SQLite.xml
+E:\Project\NPS\TCB\ToolTCB\Transaction Statistical\bin\Debug\System.Data.SQLite.dll.config
+E:\Project\NPS\TCB\ToolTCB\Transaction Statistical\obj\Debug\Transaction Statistical.csprojAssemblyReference.cache
+E:\Project\NPS\TCB\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.AddOn.ButtonMenu.resources
+E:\Project\NPS\TCB\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.AddOn.ButtonSetColor.resources
+E:\Project\NPS\TCB\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.AddOn.TabControlX.resources
+E:\Project\NPS\TCB\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.AddOn.TabPanelControl.resources
+E:\Project\NPS\TCB\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.Frm_TemplateDefault.resources
+E:\Project\NPS\TCB\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.Frm_Main.resources
+E:\Project\NPS\TCB\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.Frm_LoadingApp.resources
+E:\Project\NPS\TCB\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.Frm.test.resources
+E:\Project\NPS\TCB\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.Properties.Resources.resources
+E:\Project\NPS\TCB\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.UC_Access.resources
+E:\Project\NPS\TCB\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.UC_CfgTemplate.resources
+E:\Project\NPS\TCB\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.UControl.GUI_Custom.resources
+E:\Project\NPS\TCB\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.UC_Explorer.resources
+E:\Project\NPS\TCB\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.UControl.UC_ExportCus.resources
+E:\Project\NPS\TCB\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.UControl.UC_Licensing.resources
+E:\Project\NPS\TCB\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.UControl.UC_Menu_About.resources
+E:\Project\NPS\TCB\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.UControl.UC_Menu_History.resources
+E:\Project\NPS\TCB\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.UC_Info.resources
+E:\Project\NPS\TCB\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.UControl.UC_Menu.resources
+E:\Project\NPS\TCB\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.UControl.UC_Menu_Dashboard.resources
+E:\Project\NPS\TCB\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.UControl.UC_Menu_Overview.resources
+E:\Project\NPS\TCB\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.UC_Menu_Startup.resources
+E:\Project\NPS\TCB\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.UControl.UC_NewTemplate.resources
+E:\Project\NPS\TCB\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.UControl.UC_RegisterLicense.resources
+E:\Project\NPS\TCB\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.UControl.UC_Search.resources
+E:\Project\NPS\TCB\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.UControl.UC_Transaction.resources
+E:\Project\NPS\TCB\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.UControl.UC_USBKey.resources
+E:\Project\NPS\TCB\ToolTCB\Transaction Statistical\obj\Debug\Transaction Statistical.csproj.GenerateResource.cache
+E:\Project\NPS\TCB\ToolTCB\Transaction Statistical\obj\Debug\Transaction Statistical.exe
+E:\Project\NPS\TCB\ToolTCB\Transaction Statistical\obj\Debug\Transaction Statistical.pdb
+E:\Project\NPS\TCB\ToolTCB\Transaction Statistical\bin\Debug\Transaction Statistical.exe.config
+E:\Project\NPS\TCB\ToolTCB\Transaction Statistical\bin\Debug\Transaction Statistical.pdb
+E:\Project\NPS\TCB\ToolTCB\Transaction Statistical\obj\Debug\Transaction Statistical.csproj.CopyComplete
+C:\Users\Thanh Dat\Documents\GitHub\ToolTCB\Transaction Statistical\bin\Debug\Transaction Statistical.exe.config
+C:\Users\Thanh Dat\Documents\GitHub\ToolTCB\Transaction Statistical\bin\Debug\Transaction Statistical.exe
+C:\Users\Thanh Dat\Documents\GitHub\ToolTCB\Transaction Statistical\bin\Debug\Transaction Statistical.pdb
+C:\Users\Thanh Dat\Documents\GitHub\ToolTCB\Transaction Statistical\bin\Debug\DeltaCompressionDotNet.dll
+C:\Users\Thanh Dat\Documents\GitHub\ToolTCB\Transaction Statistical\bin\Debug\DeltaCompressionDotNet.MsDelta.dll
+C:\Users\Thanh Dat\Documents\GitHub\ToolTCB\Transaction Statistical\bin\Debug\DeltaCompressionDotNet.PatchApi.dll
+C:\Users\Thanh Dat\Documents\GitHub\ToolTCB\Transaction Statistical\bin\Debug\EntityFramework.dll
+C:\Users\Thanh Dat\Documents\GitHub\ToolTCB\Transaction Statistical\bin\Debug\EntityFramework.SqlServer.dll
+C:\Users\Thanh Dat\Documents\GitHub\ToolTCB\Transaction Statistical\bin\Debug\EPPlus.dll
+C:\Users\Thanh Dat\Documents\GitHub\ToolTCB\Transaction Statistical\bin\Debug\FastColoredTextBox.dll
+C:\Users\Thanh Dat\Documents\GitHub\ToolTCB\Transaction Statistical\bin\Debug\Mono.Cecil.dll
+C:\Users\Thanh Dat\Documents\GitHub\ToolTCB\Transaction Statistical\bin\Debug\Mono.Cecil.Mdb.dll
+C:\Users\Thanh Dat\Documents\GitHub\ToolTCB\Transaction Statistical\bin\Debug\Mono.Cecil.Pdb.dll
+C:\Users\Thanh Dat\Documents\GitHub\ToolTCB\Transaction Statistical\bin\Debug\Mono.Cecil.Rocks.dll
+C:\Users\Thanh Dat\Documents\GitHub\ToolTCB\Transaction Statistical\bin\Debug\SharpCompress.dll
+C:\Users\Thanh Dat\Documents\GitHub\ToolTCB\Transaction Statistical\bin\Debug\Splat.dll
+C:\Users\Thanh Dat\Documents\GitHub\ToolTCB\Transaction Statistical\bin\Debug\System.Data.SQLite.dll
+C:\Users\Thanh Dat\Documents\GitHub\ToolTCB\Transaction Statistical\bin\Debug\System.Data.SQLite.EF6.dll
+C:\Users\Thanh Dat\Documents\GitHub\ToolTCB\Transaction Statistical\bin\Debug\System.Data.SQLite.Linq.dll
+C:\Users\Thanh Dat\Documents\GitHub\ToolTCB\Transaction Statistical\bin\Debug\FastColoredTextBox.pdb
+C:\Users\Thanh Dat\Documents\GitHub\ToolTCB\Transaction Statistical\bin\Debug\FastColoredTextBox.xml
+C:\Users\Thanh Dat\Documents\GitHub\ToolTCB\Transaction Statistical\bin\Debug\EntityFramework.xml
+C:\Users\Thanh Dat\Documents\GitHub\ToolTCB\Transaction Statistical\bin\Debug\EntityFramework.SqlServer.xml
+C:\Users\Thanh Dat\Documents\GitHub\ToolTCB\Transaction Statistical\bin\Debug\EPPlus.xml
+C:\Users\Thanh Dat\Documents\GitHub\ToolTCB\Transaction Statistical\bin\Debug\Splat.pdb
+C:\Users\Thanh Dat\Documents\GitHub\ToolTCB\Transaction Statistical\bin\Debug\System.Data.SQLite.xml
+C:\Users\Thanh Dat\Documents\GitHub\ToolTCB\Transaction Statistical\bin\Debug\System.Data.SQLite.dll.config
+C:\Users\Thanh Dat\Documents\GitHub\ToolTCB\Transaction Statistical\obj\Debug\Transaction Statistical.csprojResolveAssemblyReference.cache
+C:\Users\Thanh Dat\Documents\GitHub\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.AddOn.ButtonMenu.resources
+C:\Users\Thanh Dat\Documents\GitHub\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.AddOn.ButtonSetColor.resources
+C:\Users\Thanh Dat\Documents\GitHub\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.AddOn.TabControlX.resources
+C:\Users\Thanh Dat\Documents\GitHub\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.AddOn.TabPanelControl.resources
+C:\Users\Thanh Dat\Documents\GitHub\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.Frm_TemplateDefault.resources
+C:\Users\Thanh Dat\Documents\GitHub\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.Frm_Main.resources
+C:\Users\Thanh Dat\Documents\GitHub\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.Frm_LoadingApp.resources
+C:\Users\Thanh Dat\Documents\GitHub\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.Frm.test.resources
+C:\Users\Thanh Dat\Documents\GitHub\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.Properties.Resources.resources
+C:\Users\Thanh Dat\Documents\GitHub\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.UC_Access.resources
+C:\Users\Thanh Dat\Documents\GitHub\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.UC_CfgTemplate.resources
+C:\Users\Thanh Dat\Documents\GitHub\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.UControl.GUI_Custom.resources
+C:\Users\Thanh Dat\Documents\GitHub\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.UC_Explorer.resources
+C:\Users\Thanh Dat\Documents\GitHub\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.UControl.UC_ExportCus.resources
+C:\Users\Thanh Dat\Documents\GitHub\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.UControl.UC_Licensing.resources
+C:\Users\Thanh Dat\Documents\GitHub\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.UControl.UC_Menu_About.resources
+C:\Users\Thanh Dat\Documents\GitHub\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.UControl.UC_Menu_History.resources
+C:\Users\Thanh Dat\Documents\GitHub\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.UC_Info.resources
+C:\Users\Thanh Dat\Documents\GitHub\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.UControl.UC_Menu.resources
+C:\Users\Thanh Dat\Documents\GitHub\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.UControl.UC_Menu_Dashboard.resources
+C:\Users\Thanh Dat\Documents\GitHub\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.UControl.UC_Menu_Overview.resources
+C:\Users\Thanh Dat\Documents\GitHub\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.UC_Menu_Startup.resources
+C:\Users\Thanh Dat\Documents\GitHub\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.UControl.UC_NewTemplate.resources
+C:\Users\Thanh Dat\Documents\GitHub\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.UControl.UC_RegisterLicense.resources
+C:\Users\Thanh Dat\Documents\GitHub\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.UControl.UC_Search.resources
+C:\Users\Thanh Dat\Documents\GitHub\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.UControl.UC_Transaction.resources
+C:\Users\Thanh Dat\Documents\GitHub\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.UControl.UC_USBKey.resources
+C:\Users\Thanh Dat\Documents\GitHub\ToolTCB\Transaction Statistical\obj\Debug\Transaction Statistical.csproj.GenerateResource.cache
+C:\Users\Thanh Dat\Documents\GitHub\ToolTCB\Transaction Statistical\obj\Debug\Transaction Statistical.csproj.CoreCompileInputs.cache
+C:\Users\Thanh Dat\Documents\GitHub\ToolTCB\Transaction Statistical\obj\Debug\Transaction Statistical.csproj.CopyComplete
+C:\Users\Thanh Dat\Documents\GitHub\ToolTCB\Transaction Statistical\obj\Debug\Transaction Statistical.exe
+C:\Users\Thanh Dat\Documents\GitHub\ToolTCB\Transaction Statistical\obj\Debug\Transaction Statistical.pdb
+E:\Project\Git\GitHub TCB\ToolTCB\Transaction Statistical\obj\Debug\Transaction Statistical.csprojAssemblyReference.cache
+E:\Project\Git\GitHub TCB\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.AddOn.ButtonMenu.resources
+E:\Project\Git\GitHub TCB\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.AddOn.ButtonSetColor.resources
+E:\Project\Git\GitHub TCB\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.AddOn.TabControlX.resources
+E:\Project\Git\GitHub TCB\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.AddOn.TabPanelControl.resources
+E:\Project\Git\GitHub TCB\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.Frm_TemplateDefault.resources
+E:\Project\Git\GitHub TCB\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.Frm_Main.resources
+E:\Project\Git\GitHub TCB\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.Frm_LoadingApp.resources
+E:\Project\Git\GitHub TCB\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.Frm.test.resources
+E:\Project\Git\GitHub TCB\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.Properties.Resources.resources
+E:\Project\Git\GitHub TCB\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.UC_Access.resources
+E:\Project\Git\GitHub TCB\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.UC_CfgTemplate.resources
+E:\Project\Git\GitHub TCB\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.UControl.GUI_Custom.resources
+E:\Project\Git\GitHub TCB\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.UC_Explorer.resources
+E:\Project\Git\GitHub TCB\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.UControl.UC_ExportCus.resources
+E:\Project\Git\GitHub TCB\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.UControl.UC_Licensing.resources
+E:\Project\Git\GitHub TCB\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.UControl.UC_Menu_About.resources
+E:\Project\Git\GitHub TCB\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.UControl.UC_Menu_History.resources
+E:\Project\Git\GitHub TCB\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.UC_Info.resources
+E:\Project\Git\GitHub TCB\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.UControl.UC_Menu.resources
+E:\Project\Git\GitHub TCB\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.UControl.UC_Menu_Dashboard.resources
+E:\Project\Git\GitHub TCB\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.UControl.UC_Menu_Overview.resources
+E:\Project\Git\GitHub TCB\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.UC_Menu_Startup.resources
+E:\Project\Git\GitHub TCB\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.UControl.UC_NewTemplate.resources
+E:\Project\Git\GitHub TCB\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.UControl.UC_RegisterLicense.resources
+E:\Project\Git\GitHub TCB\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.UControl.UC_Search.resources
+E:\Project\Git\GitHub TCB\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.UControl.UC_Transaction.resources
+E:\Project\Git\GitHub TCB\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.UControl.UC_USBKey.resources
+E:\Project\Git\GitHub TCB\ToolTCB\Transaction Statistical\obj\Debug\Transaction Statistical.csproj.GenerateResource.cache
+E:\Project\Git\GitHub TCB\ToolTCB\Transaction Statistical\obj\Debug\Transaction Statistical.exe
+E:\Project\Git\GitHub TCB\ToolTCB\Transaction Statistical\obj\Debug\Transaction Statistical.pdb
+E:\Project\Git\GitHub TCB\ToolTCB\Transaction Statistical\bin\Debug\Transaction Statistical.exe.config
+E:\Project\Git\GitHub TCB\ToolTCB\Transaction Statistical\bin\Debug\Transaction Statistical.exe
+E:\Project\Git\GitHub TCB\ToolTCB\Transaction Statistical\bin\Debug\Transaction Statistical.pdb
+E:\Project\Git\GitHub TCB\ToolTCB\Transaction Statistical\bin\Debug\DeltaCompressionDotNet.dll
+E:\Project\Git\GitHub TCB\ToolTCB\Transaction Statistical\bin\Debug\DeltaCompressionDotNet.MsDelta.dll
+E:\Project\Git\GitHub TCB\ToolTCB\Transaction Statistical\bin\Debug\DeltaCompressionDotNet.PatchApi.dll
+E:\Project\Git\GitHub TCB\ToolTCB\Transaction Statistical\bin\Debug\EntityFramework.dll
+E:\Project\Git\GitHub TCB\ToolTCB\Transaction Statistical\bin\Debug\EntityFramework.SqlServer.dll
+E:\Project\Git\GitHub TCB\ToolTCB\Transaction Statistical\bin\Debug\EPPlus.dll
+E:\Project\Git\GitHub TCB\ToolTCB\Transaction Statistical\bin\Debug\FastColoredTextBox.dll
+E:\Project\Git\GitHub TCB\ToolTCB\Transaction Statistical\bin\Debug\Mono.Cecil.dll
+E:\Project\Git\GitHub TCB\ToolTCB\Transaction Statistical\bin\Debug\Mono.Cecil.Mdb.dll
+E:\Project\Git\GitHub TCB\ToolTCB\Transaction Statistical\bin\Debug\Mono.Cecil.Pdb.dll
+E:\Project\Git\GitHub TCB\ToolTCB\Transaction Statistical\bin\Debug\Mono.Cecil.Rocks.dll
+E:\Project\Git\GitHub TCB\ToolTCB\Transaction Statistical\bin\Debug\SharpCompress.dll
+E:\Project\Git\GitHub TCB\ToolTCB\Transaction Statistical\bin\Debug\Splat.dll
+E:\Project\Git\GitHub TCB\ToolTCB\Transaction Statistical\bin\Debug\System.Data.SQLite.dll
+E:\Project\Git\GitHub TCB\ToolTCB\Transaction Statistical\bin\Debug\System.Data.SQLite.EF6.dll
+E:\Project\Git\GitHub TCB\ToolTCB\Transaction Statistical\bin\Debug\System.Data.SQLite.Linq.dll
+E:\Project\Git\GitHub TCB\ToolTCB\Transaction Statistical\bin\Debug\FastColoredTextBox.pdb
+E:\Project\Git\GitHub TCB\ToolTCB\Transaction Statistical\bin\Debug\FastColoredTextBox.xml
+E:\Project\Git\GitHub TCB\ToolTCB\Transaction Statistical\bin\Debug\EntityFramework.xml
+E:\Project\Git\GitHub TCB\ToolTCB\Transaction Statistical\bin\Debug\EntityFramework.SqlServer.xml
+E:\Project\Git\GitHub TCB\ToolTCB\Transaction Statistical\bin\Debug\EPPlus.xml
+E:\Project\Git\GitHub TCB\ToolTCB\Transaction Statistical\bin\Debug\Splat.pdb
+E:\Project\Git\GitHub TCB\ToolTCB\Transaction Statistical\bin\Debug\System.Data.SQLite.xml
+E:\Project\Git\GitHub TCB\ToolTCB\Transaction Statistical\bin\Debug\System.Data.SQLite.dll.config
+E:\Project\Git\GitHub TCB\ToolTCB\Transaction Statistical\obj\Debug\Transaction Statistical.csproj.CopyComplete
+E:\Project\NPS\ToolTCB_Back_up\back_up_20\ToolTCB\ToolTCB\Transaction Statistical\obj\Debug\Transaction Statistical.csprojAssemblyReference.cache
+E:\Project\NPS\ToolTCB_Back_up\back_up_20\ToolTCB\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.AddOn.ButtonMenu.resources
+E:\Project\NPS\ToolTCB_Back_up\back_up_20\ToolTCB\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.AddOn.ButtonSetColor.resources
+E:\Project\NPS\ToolTCB_Back_up\back_up_20\ToolTCB\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.AddOn.TabControlX.resources
+E:\Project\NPS\ToolTCB_Back_up\back_up_20\ToolTCB\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.AddOn.TabPanelControl.resources
+E:\Project\NPS\ToolTCB_Back_up\back_up_20\ToolTCB\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.Frm_TemplateDefault.resources
+E:\Project\NPS\ToolTCB_Back_up\back_up_20\ToolTCB\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.Frm_Main.resources
+E:\Project\NPS\ToolTCB_Back_up\back_up_20\ToolTCB\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.Frm_LoadingApp.resources
+E:\Project\NPS\ToolTCB_Back_up\back_up_20\ToolTCB\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.Frm.test.resources
+E:\Project\NPS\ToolTCB_Back_up\back_up_20\ToolTCB\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.Properties.Resources.resources
+E:\Project\NPS\ToolTCB_Back_up\back_up_20\ToolTCB\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.UC_Access.resources
+E:\Project\NPS\ToolTCB_Back_up\back_up_20\ToolTCB\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.UC_CfgTemplate.resources
+E:\Project\NPS\ToolTCB_Back_up\back_up_20\ToolTCB\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.UControl.GUI_Custom.resources
+E:\Project\NPS\ToolTCB_Back_up\back_up_20\ToolTCB\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.UC_Explorer.resources
+E:\Project\NPS\ToolTCB_Back_up\back_up_20\ToolTCB\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.UControl.UC_ExportCus.resources
+E:\Project\NPS\ToolTCB_Back_up\back_up_20\ToolTCB\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.UControl.UC_Licensing.resources
+E:\Project\NPS\ToolTCB_Back_up\back_up_20\ToolTCB\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.UControl.UC_Menu_About.resources
+E:\Project\NPS\ToolTCB_Back_up\back_up_20\ToolTCB\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.UControl.UC_Menu_History.resources
+E:\Project\NPS\ToolTCB_Back_up\back_up_20\ToolTCB\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.UC_Info.resources
+E:\Project\NPS\ToolTCB_Back_up\back_up_20\ToolTCB\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.UControl.UC_Menu.resources
+E:\Project\NPS\ToolTCB_Back_up\back_up_20\ToolTCB\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.UControl.UC_Menu_Dashboard.resources
+E:\Project\NPS\ToolTCB_Back_up\back_up_20\ToolTCB\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.UControl.UC_Menu_Overview.resources
+E:\Project\NPS\ToolTCB_Back_up\back_up_20\ToolTCB\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.UC_Menu_Startup.resources
+E:\Project\NPS\ToolTCB_Back_up\back_up_20\ToolTCB\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.UControl.UC_NewTemplate.resources
+E:\Project\NPS\ToolTCB_Back_up\back_up_20\ToolTCB\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.UControl.UC_RegisterLicense.resources
+E:\Project\NPS\ToolTCB_Back_up\back_up_20\ToolTCB\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.UControl.UC_Search.resources
+E:\Project\NPS\ToolTCB_Back_up\back_up_20\ToolTCB\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.UControl.UC_Transaction.resources
+E:\Project\NPS\ToolTCB_Back_up\back_up_20\ToolTCB\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.UControl.UC_USBKey.resources
+E:\Project\NPS\ToolTCB_Back_up\back_up_20\ToolTCB\ToolTCB\Transaction Statistical\obj\Debug\Transaction Statistical.csproj.GenerateResource.cache
+E:\Project\NPS\ToolTCB_Back_up\back_up_20\ToolTCB\ToolTCB\Transaction Statistical\obj\Debug\Transaction Statistical.exe
+E:\Project\NPS\ToolTCB_Back_up\back_up_20\ToolTCB\ToolTCB\Transaction Statistical\obj\Debug\Transaction Statistical.pdb
+E:\Project\NPS\ToolTCB_Back_up\back_up_20\ToolTCB\ToolTCB\Transaction Statistical\bin\Debug\Transaction Statistical.exe.config
+E:\Project\NPS\ToolTCB_Back_up\back_up_20\ToolTCB\ToolTCB\Transaction Statistical\bin\Debug\Transaction Statistical.exe
+E:\Project\NPS\ToolTCB_Back_up\back_up_20\ToolTCB\ToolTCB\Transaction Statistical\bin\Debug\Transaction Statistical.pdb
+E:\Project\NPS\ToolTCB_Back_up\back_up_20\ToolTCB\ToolTCB\Transaction Statistical\bin\Debug\DeltaCompressionDotNet.dll
+E:\Project\NPS\ToolTCB_Back_up\back_up_20\ToolTCB\ToolTCB\Transaction Statistical\bin\Debug\DeltaCompressionDotNet.MsDelta.dll
+E:\Project\NPS\ToolTCB_Back_up\back_up_20\ToolTCB\ToolTCB\Transaction Statistical\bin\Debug\DeltaCompressionDotNet.PatchApi.dll
+E:\Project\NPS\ToolTCB_Back_up\back_up_20\ToolTCB\ToolTCB\Transaction Statistical\bin\Debug\EntityFramework.dll
+E:\Project\NPS\ToolTCB_Back_up\back_up_20\ToolTCB\ToolTCB\Transaction Statistical\bin\Debug\EntityFramework.SqlServer.dll
+E:\Project\NPS\ToolTCB_Back_up\back_up_20\ToolTCB\ToolTCB\Transaction Statistical\bin\Debug\EPPlus.dll
+E:\Project\NPS\ToolTCB_Back_up\back_up_20\ToolTCB\ToolTCB\Transaction Statistical\bin\Debug\FastColoredTextBox.dll
+E:\Project\NPS\ToolTCB_Back_up\back_up_20\ToolTCB\ToolTCB\Transaction Statistical\bin\Debug\Mono.Cecil.dll
+E:\Project\NPS\ToolTCB_Back_up\back_up_20\ToolTCB\ToolTCB\Transaction Statistical\bin\Debug\Mono.Cecil.Mdb.dll
+E:\Project\NPS\ToolTCB_Back_up\back_up_20\ToolTCB\ToolTCB\Transaction Statistical\bin\Debug\Mono.Cecil.Pdb.dll
+E:\Project\NPS\ToolTCB_Back_up\back_up_20\ToolTCB\ToolTCB\Transaction Statistical\bin\Debug\Mono.Cecil.Rocks.dll
+E:\Project\NPS\ToolTCB_Back_up\back_up_20\ToolTCB\ToolTCB\Transaction Statistical\bin\Debug\SharpCompress.dll
+E:\Project\NPS\ToolTCB_Back_up\back_up_20\ToolTCB\ToolTCB\Transaction Statistical\bin\Debug\Splat.dll
+E:\Project\NPS\ToolTCB_Back_up\back_up_20\ToolTCB\ToolTCB\Transaction Statistical\bin\Debug\System.Data.SQLite.dll
+E:\Project\NPS\ToolTCB_Back_up\back_up_20\ToolTCB\ToolTCB\Transaction Statistical\bin\Debug\System.Data.SQLite.EF6.dll
+E:\Project\NPS\ToolTCB_Back_up\back_up_20\ToolTCB\ToolTCB\Transaction Statistical\bin\Debug\System.Data.SQLite.Linq.dll
+E:\Project\NPS\ToolTCB_Back_up\back_up_20\ToolTCB\ToolTCB\Transaction Statistical\bin\Debug\FastColoredTextBox.pdb
+E:\Project\NPS\ToolTCB_Back_up\back_up_20\ToolTCB\ToolTCB\Transaction Statistical\bin\Debug\FastColoredTextBox.xml
+E:\Project\NPS\ToolTCB_Back_up\back_up_20\ToolTCB\ToolTCB\Transaction Statistical\bin\Debug\EntityFramework.xml
+E:\Project\NPS\ToolTCB_Back_up\back_up_20\ToolTCB\ToolTCB\Transaction Statistical\bin\Debug\EntityFramework.SqlServer.xml
+E:\Project\NPS\ToolTCB_Back_up\back_up_20\ToolTCB\ToolTCB\Transaction Statistical\bin\Debug\EPPlus.xml
+E:\Project\NPS\ToolTCB_Back_up\back_up_20\ToolTCB\ToolTCB\Transaction Statistical\bin\Debug\Splat.pdb
+E:\Project\NPS\ToolTCB_Back_up\back_up_20\ToolTCB\ToolTCB\Transaction Statistical\bin\Debug\System.Data.SQLite.xml
+E:\Project\NPS\ToolTCB_Back_up\back_up_20\ToolTCB\ToolTCB\Transaction Statistical\bin\Debug\System.Data.SQLite.dll.config
+E:\Project\NPS\ToolTCB_Back_up\back_up_20\ToolTCB\ToolTCB\Transaction Statistical\obj\Debug\Transaction Statistical.csproj.CopyComplete
+E:\Project\NPS\ToolTCB_Back_up\Back_up_21\ToolTCB\ToolTCB\Transaction Statistical\bin\Debug\Transaction Statistical.exe.config
+E:\Project\NPS\ToolTCB_Back_up\Back_up_21\ToolTCB\ToolTCB\Transaction Statistical\bin\Debug\Transaction Statistical.exe
+E:\Project\NPS\ToolTCB_Back_up\Back_up_21\ToolTCB\ToolTCB\Transaction Statistical\bin\Debug\Transaction Statistical.pdb
+E:\Project\NPS\ToolTCB_Back_up\Back_up_21\ToolTCB\ToolTCB\Transaction Statistical\bin\Debug\DeltaCompressionDotNet.dll
+E:\Project\NPS\ToolTCB_Back_up\Back_up_21\ToolTCB\ToolTCB\Transaction Statistical\bin\Debug\DeltaCompressionDotNet.MsDelta.dll
+E:\Project\NPS\ToolTCB_Back_up\Back_up_21\ToolTCB\ToolTCB\Transaction Statistical\bin\Debug\DeltaCompressionDotNet.PatchApi.dll
+E:\Project\NPS\ToolTCB_Back_up\Back_up_21\ToolTCB\ToolTCB\Transaction Statistical\bin\Debug\EntityFramework.dll
+E:\Project\NPS\ToolTCB_Back_up\Back_up_21\ToolTCB\ToolTCB\Transaction Statistical\bin\Debug\EntityFramework.SqlServer.dll
+E:\Project\NPS\ToolTCB_Back_up\Back_up_21\ToolTCB\ToolTCB\Transaction Statistical\bin\Debug\EPPlus.dll
+E:\Project\NPS\ToolTCB_Back_up\Back_up_21\ToolTCB\ToolTCB\Transaction Statistical\bin\Debug\FastColoredTextBox.dll
+E:\Project\NPS\ToolTCB_Back_up\Back_up_21\ToolTCB\ToolTCB\Transaction Statistical\bin\Debug\Mono.Cecil.dll
+E:\Project\NPS\ToolTCB_Back_up\Back_up_21\ToolTCB\ToolTCB\Transaction Statistical\bin\Debug\Mono.Cecil.Mdb.dll
+E:\Project\NPS\ToolTCB_Back_up\Back_up_21\ToolTCB\ToolTCB\Transaction Statistical\bin\Debug\Mono.Cecil.Pdb.dll
+E:\Project\NPS\ToolTCB_Back_up\Back_up_21\ToolTCB\ToolTCB\Transaction Statistical\bin\Debug\Mono.Cecil.Rocks.dll
+E:\Project\NPS\ToolTCB_Back_up\Back_up_21\ToolTCB\ToolTCB\Transaction Statistical\bin\Debug\SharpCompress.dll
+E:\Project\NPS\ToolTCB_Back_up\Back_up_21\ToolTCB\ToolTCB\Transaction Statistical\bin\Debug\Splat.dll
+E:\Project\NPS\ToolTCB_Back_up\Back_up_21\ToolTCB\ToolTCB\Transaction Statistical\bin\Debug\System.Data.SQLite.dll
+E:\Project\NPS\ToolTCB_Back_up\Back_up_21\ToolTCB\ToolTCB\Transaction Statistical\bin\Debug\System.Data.SQLite.EF6.dll
+E:\Project\NPS\ToolTCB_Back_up\Back_up_21\ToolTCB\ToolTCB\Transaction Statistical\bin\Debug\System.Data.SQLite.Linq.dll
+E:\Project\NPS\ToolTCB_Back_up\Back_up_21\ToolTCB\ToolTCB\Transaction Statistical\bin\Debug\FastColoredTextBox.pdb
+E:\Project\NPS\ToolTCB_Back_up\Back_up_21\ToolTCB\ToolTCB\Transaction Statistical\bin\Debug\FastColoredTextBox.xml
+E:\Project\NPS\ToolTCB_Back_up\Back_up_21\ToolTCB\ToolTCB\Transaction Statistical\bin\Debug\EntityFramework.xml
+E:\Project\NPS\ToolTCB_Back_up\Back_up_21\ToolTCB\ToolTCB\Transaction Statistical\bin\Debug\EntityFramework.SqlServer.xml
+E:\Project\NPS\ToolTCB_Back_up\Back_up_21\ToolTCB\ToolTCB\Transaction Statistical\bin\Debug\EPPlus.xml
+E:\Project\NPS\ToolTCB_Back_up\Back_up_21\ToolTCB\ToolTCB\Transaction Statistical\bin\Debug\Splat.pdb
+E:\Project\NPS\ToolTCB_Back_up\Back_up_21\ToolTCB\ToolTCB\Transaction Statistical\bin\Debug\System.Data.SQLite.xml
+E:\Project\NPS\ToolTCB_Back_up\Back_up_21\ToolTCB\ToolTCB\Transaction Statistical\bin\Debug\System.Data.SQLite.dll.config
+E:\Project\NPS\ToolTCB_Back_up\Back_up_21\ToolTCB\ToolTCB\Transaction Statistical\obj\Debug\Transaction Statistical.csprojAssemblyReference.cache
+E:\Project\NPS\ToolTCB_Back_up\Back_up_21\ToolTCB\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.AddOn.ButtonMenu.resources
+E:\Project\NPS\ToolTCB_Back_up\Back_up_21\ToolTCB\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.AddOn.ButtonSetColor.resources
+E:\Project\NPS\ToolTCB_Back_up\Back_up_21\ToolTCB\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.AddOn.TabControlX.resources
+E:\Project\NPS\ToolTCB_Back_up\Back_up_21\ToolTCB\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.AddOn.TabPanelControl.resources
+E:\Project\NPS\ToolTCB_Back_up\Back_up_21\ToolTCB\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.Frm_TemplateDefault.resources
+E:\Project\NPS\ToolTCB_Back_up\Back_up_21\ToolTCB\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.Frm_Main.resources
+E:\Project\NPS\ToolTCB_Back_up\Back_up_21\ToolTCB\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.Frm_LoadingApp.resources
+E:\Project\NPS\ToolTCB_Back_up\Back_up_21\ToolTCB\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.Frm.test.resources
+E:\Project\NPS\ToolTCB_Back_up\Back_up_21\ToolTCB\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.Properties.Resources.resources
+E:\Project\NPS\ToolTCB_Back_up\Back_up_21\ToolTCB\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.UC_Access.resources
+E:\Project\NPS\ToolTCB_Back_up\Back_up_21\ToolTCB\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.UC_CfgTemplate.resources
+E:\Project\NPS\ToolTCB_Back_up\Back_up_21\ToolTCB\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.UControl.GUI_Custom.resources
+E:\Project\NPS\ToolTCB_Back_up\Back_up_21\ToolTCB\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.UC_Explorer.resources
+E:\Project\NPS\ToolTCB_Back_up\Back_up_21\ToolTCB\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.UControl.UC_ExportCus.resources
+E:\Project\NPS\ToolTCB_Back_up\Back_up_21\ToolTCB\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.UControl.UC_Feedback.resources
+E:\Project\NPS\ToolTCB_Back_up\Back_up_21\ToolTCB\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.UControl.UC_Licensing.resources
+E:\Project\NPS\ToolTCB_Back_up\Back_up_21\ToolTCB\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.UControl.UC_Menu_About.resources
+E:\Project\NPS\ToolTCB_Back_up\Back_up_21\ToolTCB\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.UControl.UC_Menu_History.resources
+E:\Project\NPS\ToolTCB_Back_up\Back_up_21\ToolTCB\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.UC_Info.resources
+E:\Project\NPS\ToolTCB_Back_up\Back_up_21\ToolTCB\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.UControl.UC_Menu.resources
+E:\Project\NPS\ToolTCB_Back_up\Back_up_21\ToolTCB\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.UControl.UC_Menu_Dashboard.resources
+E:\Project\NPS\ToolTCB_Back_up\Back_up_21\ToolTCB\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.UControl.UC_Menu_Overview.resources
+E:\Project\NPS\ToolTCB_Back_up\Back_up_21\ToolTCB\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.UC_Menu_Startup.resources
+E:\Project\NPS\ToolTCB_Back_up\Back_up_21\ToolTCB\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.UControl.UC_NewTemplate.resources
+E:\Project\NPS\ToolTCB_Back_up\Back_up_21\ToolTCB\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.UControl.UC_RegisterLicense.resources
+E:\Project\NPS\ToolTCB_Back_up\Back_up_21\ToolTCB\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.UControl.UC_Search.resources
+E:\Project\NPS\ToolTCB_Back_up\Back_up_21\ToolTCB\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.UControl.UC_Transaction.resources
+E:\Project\NPS\ToolTCB_Back_up\Back_up_21\ToolTCB\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.UControl.UC_USBKey.resources
+E:\Project\NPS\ToolTCB_Back_up\Back_up_21\ToolTCB\ToolTCB\Transaction Statistical\obj\Debug\Transaction Statistical.csproj.GenerateResource.cache
+E:\Project\NPS\ToolTCB_Back_up\Back_up_21\ToolTCB\ToolTCB\Transaction Statistical\obj\Debug\Transaction Statistical.csproj.CopyComplete
+E:\Project\NPS\ToolTCB_Back_up\Back_up_21\ToolTCB\ToolTCB\Transaction Statistical\obj\Debug\Transaction Statistical.exe
+E:\Project\NPS\ToolTCB_Back_up\Back_up_21\ToolTCB\ToolTCB\Transaction Statistical\obj\Debug\Transaction Statistical.pdb
+E:\Project\NPS\TCB\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.UControl.UC_Feedback.resources
+E:\Project\NPS\TCB\ToolTCB\Transaction Statistical\bin\Debug\DifferenceEngine.pdb
+E:\Project\NPS\TCB\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.UControl.UC_Text.resources
+D:\05-TEMP\Source\GitHub\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.AddOn.ButtonMenu.resources
+D:\05-TEMP\Source\GitHub\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.AddOn.ButtonSetColor.resources
+D:\05-TEMP\Source\GitHub\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.AddOn.TabControlX.resources
+D:\05-TEMP\Source\GitHub\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.AddOn.TabPanelControl.resources
+D:\05-TEMP\Source\GitHub\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.Frm_TemplateDefault.resources
+D:\05-TEMP\Source\GitHub\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.Frm_Main.resources
+D:\05-TEMP\Source\GitHub\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.Frm_LoadingApp.resources
+D:\05-TEMP\Source\GitHub\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.Properties.Resources.resources
+D:\05-TEMP\Source\GitHub\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.UC_Access.resources
+D:\05-TEMP\Source\GitHub\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.UControl.GUI_Custom.resources
+D:\05-TEMP\Source\GitHub\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.UC_Explorer.resources
+D:\05-TEMP\Source\GitHub\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.UControl.UC_ExportCus.resources
+D:\05-TEMP\Source\GitHub\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.UControl.UC_Feedback.resources
+D:\05-TEMP\Source\GitHub\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.UControl.UC_Menu.resources
+D:\05-TEMP\Source\GitHub\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.UControl.UC_Menu_Dashboard.resources
+D:\05-TEMP\Source\GitHub\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.UControl.UC_Menu_Overview.resources
+D:\05-TEMP\Source\GitHub\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.UC_Menu_Startup.resources
+D:\05-TEMP\Source\GitHub\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.UControl.UC_NewTemplate.resources
+D:\05-TEMP\Source\GitHub\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.UControl.UC_RegisterLicense.resources
+D:\05-TEMP\Source\GitHub\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.UControl.UC_Search.resources
+D:\05-TEMP\Source\GitHub\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.UControl.UC_USBKey.resources
+D:\05-TEMP\Source\GitHub\ToolTCB\Transaction Statistical\obj\Debug\Transaction Statistical.csproj.GenerateResource.cache
+D:\05-TEMP\Source\GitHub\ToolTCB\Transaction Statistical\bin\Debug\Transaction Statistical.exe.config
+D:\05-TEMP\Source\GitHub\ToolTCB\Transaction Statistical\bin\Debug\Transaction Statistical.exe
+D:\05-TEMP\Source\GitHub\ToolTCB\Transaction Statistical\bin\Debug\Transaction Statistical.pdb
+D:\05-TEMP\Source\GitHub\ToolTCB\Transaction Statistical\bin\Debug\DeltaCompressionDotNet.dll
+D:\05-TEMP\Source\GitHub\ToolTCB\Transaction Statistical\bin\Debug\DeltaCompressionDotNet.MsDelta.dll
+D:\05-TEMP\Source\GitHub\ToolTCB\Transaction Statistical\bin\Debug\DeltaCompressionDotNet.PatchApi.dll
+D:\05-TEMP\Source\GitHub\ToolTCB\Transaction Statistical\bin\Debug\EntityFramework.dll
+D:\05-TEMP\Source\GitHub\ToolTCB\Transaction Statistical\bin\Debug\EntityFramework.SqlServer.dll
+D:\05-TEMP\Source\GitHub\ToolTCB\Transaction Statistical\bin\Debug\EPPlus.dll
+D:\05-TEMP\Source\GitHub\ToolTCB\Transaction Statistical\bin\Debug\FastColoredTextBox.dll
+D:\05-TEMP\Source\GitHub\ToolTCB\Transaction Statistical\bin\Debug\Mono.Cecil.dll
+D:\05-TEMP\Source\GitHub\ToolTCB\Transaction Statistical\bin\Debug\Mono.Cecil.Mdb.dll
+D:\05-TEMP\Source\GitHub\ToolTCB\Transaction Statistical\bin\Debug\Mono.Cecil.Pdb.dll
+D:\05-TEMP\Source\GitHub\ToolTCB\Transaction Statistical\bin\Debug\Mono.Cecil.Rocks.dll
+D:\05-TEMP\Source\GitHub\ToolTCB\Transaction Statistical\bin\Debug\SharpCompress.dll
+D:\05-TEMP\Source\GitHub\ToolTCB\Transaction Statistical\bin\Debug\Splat.dll
+D:\05-TEMP\Source\GitHub\ToolTCB\Transaction Statistical\bin\Debug\System.Data.SQLite.dll
+D:\05-TEMP\Source\GitHub\ToolTCB\Transaction Statistical\bin\Debug\System.Data.SQLite.EF6.dll
+D:\05-TEMP\Source\GitHub\ToolTCB\Transaction Statistical\bin\Debug\System.Data.SQLite.Linq.dll
+D:\05-TEMP\Source\GitHub\ToolTCB\Transaction Statistical\bin\Debug\EntityFramework.xml
+D:\05-TEMP\Source\GitHub\ToolTCB\Transaction Statistical\bin\Debug\EntityFramework.SqlServer.xml
+D:\05-TEMP\Source\GitHub\ToolTCB\Transaction Statistical\bin\Debug\EPPlus.xml
+D:\05-TEMP\Source\GitHub\ToolTCB\Transaction Statistical\bin\Debug\FastColoredTextBox.pdb
+D:\05-TEMP\Source\GitHub\ToolTCB\Transaction Statistical\bin\Debug\FastColoredTextBox.xml
+D:\05-TEMP\Source\GitHub\ToolTCB\Transaction Statistical\bin\Debug\Splat.pdb
+D:\05-TEMP\Source\GitHub\ToolTCB\Transaction Statistical\bin\Debug\System.Data.SQLite.xml
+D:\05-TEMP\Source\GitHub\ToolTCB\Transaction Statistical\bin\Debug\System.Data.SQLite.dll.config
+D:\05-TEMP\Source\GitHub\ToolTCB\Transaction Statistical\obj\Debug\Transaction Statistical.csprojAssemblyReference.cache
+D:\05-TEMP\Source\GitHub\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.UC_CfgTemplate.resources
+D:\05-TEMP\Source\GitHub\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.UControl.UC_Licensing.resources
+D:\05-TEMP\Source\GitHub\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.UControl.UC_Menu_About.resources
+D:\05-TEMP\Source\GitHub\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.UControl.UC_Menu_History.resources
+D:\05-TEMP\Source\GitHub\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.UC_Info.resources
+D:\05-TEMP\Source\GitHub\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.UControl.UC_Text.resources
+D:\05-TEMP\Source\GitHub\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.UControl.UC_Transaction.resources
+D:\05-TEMP\Source\GitHub\ToolTCB\Transaction Statistical\obj\Debug\Transaction Statistical.csproj.CoreCompileInputs.cache
+D:\05-TEMP\Source\GitHub\ToolTCB\Transaction Statistical\obj\Debug\Transaction Statistical.csproj.CopyComplete
+D:\05-TEMP\Source\GitHub\ToolTCB\Transaction Statistical\obj\Debug\Transaction Statistical.exe
+D:\05-TEMP\Source\GitHub\ToolTCB\Transaction Statistical\obj\Debug\Transaction Statistical.pdb
+D:\05-TEMP\Source\GitHub\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.UControl.UC_Banks.resources
+D:\05-TEMP\Source\GitHub\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.UControl.UC_Terminals.resources
+D:\05-TEMP\Source\GitHub\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.UControl.UC_Terminal_Update.resources
+D:\05-TEMP\Source\GitHub\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.UControl.UC_ImportTransaction.resources
+D:\05-TEMP\Source\GitHub\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.UControl.UC_ExportOption.resources
+D:\05-TEMP\Source\GitHub\ToolTCB\Transaction Statistical\obj\Debug\Transaction_Statistical.UControl.UC_ExportOptionSelect.resources

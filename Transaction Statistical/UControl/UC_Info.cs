@@ -17,11 +17,20 @@ namespace Transaction_Statistical
         string rowID;
         public UC_Info()
         {
-            InitializeComponent();
+            InitializeComponent2();
         }
+        #region Component Designer generated code
+
+        /// <summary> 
+        /// Required method for Designer support - do not modify 
+        /// the contents of this method with the code editor.
+        /// </summary>
+     
+
+        #endregion
         public UC_Info(string DataName, string RowID, string ColummShow)
         {
-            InitializeComponent();
+            InitializeComponent2();
             dataName = DataName;
             rowID = RowID;
             sqlite = new SQLiteHelper();
@@ -32,7 +41,7 @@ namespace Transaction_Statistical
         }
         public UC_Info(string sString)
         {
-            InitializeComponent();
+            InitializeComponent2();
             TextCustom.Text = sString;
         }
         private void LoadHelp()
